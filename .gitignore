@@ -12,6 +12,9 @@ CS336_Rutgers/.idea/**
 CS336_Rutgers/lib
 CS336_Rutgers/out
 
+# Allow
+#!CS336_Rutgers/WebContent/WEB-INF/classes
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -89,7 +92,7 @@ fabric.properties
 
 ### Java ###
 # Compiled class file
-*.class
+#*.class
 
 # Log file
 *.log
