@@ -1,0 +1,26 @@
+DROP DATABASE IF EXISTS BuyMe;
+CREATE DATABASE IF NOT EXISTS BuyMe;
+USE BuyMe;
+
+
+DROP USER IF EXISTS 'cs336'@'%';
+CREATE USER 'cs336'@'%' IDENTIFIED BY 'cs336_password';
+GRANT ALL PRIVILEGES ON BuyMe.* TO 'cs336'@'%';
+FLUSH PRIVILEGES;
+
+
+
+DROP TABLE IF EXISTS User;
+CREATE TABLE User
+(
+  username  VARCHAR(64),
+  password  VARCHAR(64)  NOT NULL,
+  email     VARCHAR(128) NOT NULL,
+  firstname VARCHAR(64)  NOT NULL,
+  lastname  VARCHAR(64)  NOT NULL,
+  address   VARCHAR(128) NOT NULL,
+  active    BOOLEAN      NOT NULL,
+  usertype  INT          NOT NULL,
+  PRIMARY KEY (username)
+);
+
