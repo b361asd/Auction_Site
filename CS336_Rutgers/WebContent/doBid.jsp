@@ -5,7 +5,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>BuyMe - Home</title>
+    <title>BuyMe - Bid</title>
     <link rel="stylesheet" href="style.css?v=1.0"/>
 
     <%@ page language="java"
@@ -29,11 +29,6 @@
 %>
 <h1><%=message%></h1>
 
-<h2><A href="${pageContext.request.contextPath}/searchBid.jsp">doBid</A></h2>
-<h2><A href="${pageContext.request.contextPath}/doBid.jsp">doBid</A></h2>
-<h2><A href="${pageContext.request.contextPath}/viewBidHistory.jsp">doBid</A></h2>
-<h2><A href="${pageContext.request.contextPath}/logout">Logout</A></h2>
-v
 </body>
 
 </html>

@@ -18,7 +18,7 @@
         <!--URL-->
         <param-name>DBURL</param-name>
         <!--MySQL IP Address-->
-        <param-value>jdbc:mysql://192.168.86.180:3306/BuyMe</param-value>
+        <param-value>jdbc:mysql://localhost:3306/BuyMe</param-value>
     </context-param>
 
 
@@ -34,6 +34,17 @@
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>RegisterServlet</servlet-name>
+        <servlet-class>rutgers.cs336.servlet.RegisterServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RegisterServlet</servlet-name>
+        <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+
 
     <filter>
         <filter-name>LoginFilter</filter-name>

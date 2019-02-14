@@ -79,7 +79,7 @@ public class VerifyLogin extends DaoBase implements IDaoConstant {
 
 	public static void main(String[] args) {
 		// JDBC Connector URL
-		init("jdbc:mysql://192.168.86.180:3306/BuyMe", "cs336", "cs336_password");
+		init("jdbc:mysql://localhost:3306/BuyMe", "cs336", "cs336_password");
 		//
 		Map map = doVerifyLogin("admin", "admin_pwd");
 		//
