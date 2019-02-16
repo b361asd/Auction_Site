@@ -65,9 +65,6 @@ public class AddUser extends DaoBase implements IDaoConstant {
 
 
 	public static void main(String[] args) {
-		// JDBC Connector URL
-		init("jdbc:mysql://localhost:3306/BuyMe", "cs336", "cs336_password");
-		//
 		Map map = doAddUser("abc", "123", "email", "fN", "lN", "123 St", "Pearl", "NJ", "01010", "39239033", 3);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));

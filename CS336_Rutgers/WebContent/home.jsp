@@ -4,36 +4,33 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>BuyMe - Home</title>
-    <link rel="stylesheet" href="style.css?v=1.0"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>BuyMe - Home</title>
+	<link rel="stylesheet" href="style.css?v=1.0"/>
 
-    <%@ page language="java"
-             contentType="text/html; charset=windows-1256"
-             pageEncoding="windows-1256"
-    %>
+	<%@ page language="java"
+				contentType="text/html; charset=windows-1256"
+				pageEncoding="windows-1256"
+	%>
 </head>
 
 <body>
 
 <%
-    String message = "Welcome to BuyMe!";
-    if (session == null) {
-    }
-    else {
-        message = (String) session.getAttribute("message");
-        if (message == null) {
-            message = "Welcome to BuyMe.";
-        }
-    }
+	String message = "Welcome to BuyMe!";
+	if (session == null) {
+	} else {
+		message = (String) session.getAttribute("message");
+		if (message == null) {
+			message = "Welcome to BuyMe.";
+		}
+	}
 %>
-<h1><%=message%></h1>
+<h1><%=message%>
+</h1>
 
-<h2><A href="${pageContext.request.contextPath}/searchBid.jsp">doBid</A></h2>
-<h2><A href="${pageContext.request.contextPath}/doBid.jsp">doBid</A></h2>
-<h2><A href="${pageContext.request.contextPath}/viewBidHistory.jsp">doBid</A></h2>
-<h2><A href="${pageContext.request.contextPath}/logout">Logout</A></h2>
-v
+<%@include file="userNav.jsp" %>
+
 </body>
 
 </html>

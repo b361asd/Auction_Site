@@ -23,4 +23,10 @@ public class DaoBase {
 		//
 		return conn;
 	}
+
+	static {
+		// JDBC Connector URL
+		init("jdbc:mysql://localhost:3306/BuyMe", "cs336", "cs336_password");
+		//
+	}
 }
