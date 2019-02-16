@@ -1,10 +1,10 @@
-package rutgers.cs336.dao;
+package rutgers.cs336.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DaoBase {
+public class DBBase {
 	private static String dbURL;
 	private static String user;
 	private static String pwd;

@@ -1,4 +1,4 @@
-package rutgers.cs336.dao;
+package rutgers.cs336.db;
 
 public interface IDaoConstant {
 

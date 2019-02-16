@@ -1,7 +1,7 @@
 package rutgers.cs336.servlet;
 
-import rutgers.cs336.dao.AddUser;
-import rutgers.cs336.dao.IDaoConstant;
+import rutgers.cs336.db.AddUser;
+import rutgers.cs336.db.IDaoConstant;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

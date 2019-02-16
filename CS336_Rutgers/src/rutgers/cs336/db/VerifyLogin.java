@@ -1,4 +1,4 @@
-package rutgers.cs336.dao;
+package rutgers.cs336.db;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VerifyLogin extends DaoBase implements IDaoConstant {
+public class VerifyLogin extends DBBase implements IDaoConstant {
 
 	public static Map doVerifyLogin(String userID, String pwd) {
 		Map output = new HashMap();

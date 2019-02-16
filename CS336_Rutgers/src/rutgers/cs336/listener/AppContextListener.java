@@ -1,6 +1,6 @@
 package rutgers.cs336.listener;
 
-import rutgers.cs336.dao.DaoBase;
+import rutgers.cs336.db.DBBase;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -16,7 +16,7 @@ public class AppContextListener implements ServletContextListener {
 		String username = ctx.getInitParameter("DBUSER");
 		String password = ctx.getInitParameter("DBPWD");
 		//
-		DaoBase.init(url, username, password);
+		DBBase.init(url, username, password);
 		//
 		System.out.println("Database connection initialized for Application.");
 	}

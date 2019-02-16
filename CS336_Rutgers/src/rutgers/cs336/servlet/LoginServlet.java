@@ -1,7 +1,7 @@
 package rutgers.cs336.servlet;
 
-import rutgers.cs336.dao.IDaoConstant;
-import rutgers.cs336.dao.VerifyLogin;
+import rutgers.cs336.db.IDaoConstant;
+import rutgers.cs336.db.VerifyLogin;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,11 +33,9 @@ public class LoginServlet extends HttpServlet implements IDaoConstant {
 			//
 			if ((request.getSession().getAttribute("userType")).toString().equals("1")) {
 				response.sendRedirect(request.getContextPath() + "/homeAdmin.jsp");
-			}
-			else if ((request.getSession().getAttribute("userType")).toString().equals("2")) {
+			} else if ((request.getSession().getAttribute("userType")).toString().equals("2")) {
 				response.sendRedirect(request.getContextPath() + "/homeRep.jsp");
-			}
-			else {
+			} else {
 				response.sendRedirect(request.getContextPath() + "/home.jsp");
 			}
 			//

@@ -1,4 +1,4 @@
-package rutgers.cs336.dao;
+package rutgers.cs336.db;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddUser extends DaoBase implements IDaoConstant {
+public class AddUser extends DBBase implements IDaoConstant {
 
 	private static final String query = "insert User (username, password, email, firstname, lastname, address, phone, active, usertype) VALUES (?, ?, ?, ?, ?, ?, ?, true, ?)";
 
