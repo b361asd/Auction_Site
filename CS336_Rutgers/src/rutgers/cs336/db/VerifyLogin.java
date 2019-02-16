@@ -12,8 +12,8 @@ public class VerifyLogin extends DBBase implements IDaoConstant {
 	public static Map doVerifyLogin(String userID, String pwd) {
 		Map output = new HashMap();
 		//
-		Connection con = null;
-		Statement stmt = null;
+		Connection con  = null;
+		Statement  stmt = null;
 		try {
 			con = getConnection();
 			//
@@ -23,40 +23,47 @@ public class VerifyLogin extends DBBase implements IDaoConstant {
 					  "select password, firstname, lastname, active, usertype from User where username='" + userID + "'");
 			//
 			if (rs.next()) {
-				Object password = rs.getObject(1);
+				Object password  = rs.getObject(1);
 				Object firstname = rs.getObject(2);
-				Object lastname = rs.getObject(3);
-				Object active = rs.getObject(4);
-				Object usertype = rs.getObject(5);
+				Object lastname  = rs.getObject(3);
+				Object active    = rs.getObject(4);
+				Object usertype  = rs.getObject(5);
 				//
 				if (!pwd.equals(password)) {
 					output.put(DATA_NAME_STATUS, false);
 					output.put(DATA_NAME_MESSAGE, "Wrong Password. Please try again.");
-				} else if (!(Boolean) active) {
+				}
+				else if (!(Boolean) active) {
 					output.put(DATA_NAME_STATUS, false);
 					output.put(DATA_NAME_MESSAGE, "User not active. Contact a customer representative.");
-				} else {
+				}
+				else {
 					output.put(DATA_NAME_STATUS, true);
 					output.put(DATA_NAME_MESSAGE, "Welcome, " + firstname.toString() + " " + lastname.toString() + "!");
 					output.put(DATA_NAME_USER_TYPE, usertype);
 				}
-			} else {
+			}
+			else {
 				output.put(DATA_NAME_STATUS, false);
 				output.put(DATA_NAME_MESSAGE, "User does not exist. Try again.");
 			}
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState());
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		}
+		catch (ClassNotFoundException e) {
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage());
 			e.printStackTrace();
-		} finally {
+		}
+		finally {
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (Throwable e) {
+				}
+				catch (Throwable e) {
 					e.printStackTrace();
 				}
 			}
@@ -64,7 +71,8 @@ public class VerifyLogin extends DBBase implements IDaoConstant {
 			if (con != null) {
 				try {
 					con.close();
-				} catch (Throwable e) {
+				}
+				catch (Throwable e) {
 					e.printStackTrace();
 				}
 			}

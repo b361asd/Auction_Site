@@ -35,7 +35,8 @@
 <%
 	String message = "Welcome to BuyMe!";
 	if (session == null) {
-	} else {
+	}
+	else {
 		message = (String) session.getAttribute("message");
 		if (message == null) {
 			message = "Welcome to BuyMe.";
@@ -62,7 +63,7 @@
 		List lstField = (List) data.get(GetCategoryField.DATA_FIELD_LIST);
 		for (Object o : lstField) {
 			String categoryName = ((GetCategoryField.Field) o).getCategoryName();
-			String fieldName = ((GetCategoryField.Field) o).getFieldName();
+			String fieldName    = ((GetCategoryField.Field) o).getFieldName();
 			out.println(
 					  "<div class= \"allField " + categoryName + "\" >" + fieldName + "<input type = \"text\" name = \"" + fieldName + "\" / ></div><br >");
 		}

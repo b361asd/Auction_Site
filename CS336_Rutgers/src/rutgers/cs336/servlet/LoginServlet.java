@@ -33,15 +33,18 @@ public class LoginServlet extends HttpServlet implements IDaoConstant {
 			//
 			if ((request.getSession().getAttribute("userType")).toString().equals("1")) {
 				response.sendRedirect(request.getContextPath() + "/homeAdmin.jsp");
-			} else if ((request.getSession().getAttribute("userType")).toString().equals("2")) {
+			}
+			else if ((request.getSession().getAttribute("userType")).toString().equals("2")) {
 				response.sendRedirect(request.getContextPath() + "/homeRep.jsp");
-			} else {
+			}
+			else {
 				response.sendRedirect(request.getContextPath() + "/home.jsp");
 			}
 			//
 			//request.setAttribute("JSP_DATA", map);
 			//request.getRequestDispatcher("/home.jsp").forward(request, response);
-		} else {
+		}
+		else {
 			request.getSession().setAttribute("message", map.get(DATA_NAME_MESSAGE).toString());
 			//
 			response.sendRedirect(request.getContextPath() + "/login.jsp");

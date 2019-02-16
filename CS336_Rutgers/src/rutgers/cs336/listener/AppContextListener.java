@@ -12,7 +12,7 @@ public class AppContextListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
 		ServletContext ctx = servletContextEvent.getServletContext();
 		//
-		String url = ctx.getInitParameter("DBURL");
+		String url      = ctx.getInitParameter("DBURL");
 		String username = ctx.getInitParameter("DBUSER");
 		String password = ctx.getInitParameter("DBPWD");
 		//

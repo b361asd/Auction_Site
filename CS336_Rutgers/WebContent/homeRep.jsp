@@ -18,7 +18,8 @@
 <%
 	String message = "Welcome to BuyMe!";
 	if (session == null) {
-	} else {
+	}
+	else {
 		message = (String) session.getAttribute("message");
 		if (message == null) {
 			message = "Welcome to BuyMe.";

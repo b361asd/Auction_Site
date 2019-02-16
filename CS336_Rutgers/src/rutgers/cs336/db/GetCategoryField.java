@@ -11,11 +11,11 @@ import java.util.Map;
 
 public class GetCategoryField extends DBBase implements IDaoConstant {
 	public static final String DATA_CATEGORY_LIST = "DATA_CATEGORY_LIST";
-	public static final String DATA_FIELD_LIST = "DATA_FIELD_LIST";
+	public static final String DATA_FIELD_LIST    = "DATA_FIELD_LIST";
 
 	public static class Field {
 		String categoryName;
-		int fieldID;
+		int    fieldID;
 		String fieldName;
 
 		//
@@ -45,8 +45,8 @@ public class GetCategoryField extends DBBase implements IDaoConstant {
 	public static Map getCategoryField() {
 		Map output = new HashMap();
 		//
-		Connection con = null;
-		Statement stmt = null;
+		Connection con  = null;
+		Statement  stmt = null;
 		try {
 			con = getConnection();
 			//
@@ -54,7 +54,7 @@ public class GetCategoryField extends DBBase implements IDaoConstant {
 			//
 			ResultSet rs = stmt.executeQuery(queryGetCategoryField);
 			//
-			List lstField = new ArrayList();
+			List lstField    = new ArrayList();
 			List lstCategory = new ArrayList();
 			//
 			output.put(DATA_CATEGORY_LIST, lstCategory);
@@ -62,12 +62,12 @@ public class GetCategoryField extends DBBase implements IDaoConstant {
 			//
 			while (rs.next()) {
 				Object categoryName = rs.getObject(1);
-				Object fieldID = rs.getObject(2);
-				Object fieldName = rs.getObject(3);
+				Object fieldID      = rs.getObject(2);
+				Object fieldName    = rs.getObject(3);
 				//
 				String sz_categoryName = categoryName.toString();
-				int i_fieldID = (Integer) fieldID;
-				String sz_fieldName = fieldName.toString();
+				int    i_fieldID       = (Integer) fieldID;
+				String sz_fieldName    = fieldName.toString();
 				//
 				lstField.add(new Field(sz_categoryName, i_fieldID, sz_fieldName));
 				//
@@ -80,19 +80,23 @@ public class GetCategoryField extends DBBase implements IDaoConstant {
 			//
 			output.put(DATA_NAME_STATUS, true);
 			output.put(DATA_NAME_MESSAGE, "OK");
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState());
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		}
+		catch (ClassNotFoundException e) {
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage());
 			e.printStackTrace();
-		} finally {
+		}
+		finally {
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (Throwable e) {
+				}
+				catch (Throwable e) {
 					e.printStackTrace();
 				}
 			}
@@ -100,7 +104,8 @@ public class GetCategoryField extends DBBase implements IDaoConstant {
 			if (con != null) {
 				try {
 					con.close();
-				} catch (Throwable e) {
+				}
+				catch (Throwable e) {
 					e.printStackTrace();
 				}
 			}

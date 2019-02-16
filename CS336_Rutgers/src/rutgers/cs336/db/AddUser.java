@@ -13,7 +13,7 @@ public class AddUser extends DBBase implements IDaoConstant {
 	public static Map doAddUser(String username, String password, String email, String firstName, String lastName, String street, String city, String state, String zipCode, String phone, int usertype) {
 		Map output = new HashMap();
 		//
-		Connection con = null;
+		Connection        con          = null;
 		PreparedStatement preparedStmt = null;
 		try {
 			con = getConnection();
@@ -34,19 +34,23 @@ public class AddUser extends DBBase implements IDaoConstant {
 			output.put(DATA_NAME_STATUS, true);
 			output.put(DATA_NAME_MESSAGE, "User registered");
 			//
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState());
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		}
+		catch (ClassNotFoundException e) {
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage());
 			e.printStackTrace();
-		} finally {
+		}
+		finally {
 			if (preparedStmt != null) {
 				try {
 					preparedStmt.close();
-				} catch (Throwable e) {
+				}
+				catch (Throwable e) {
 					e.printStackTrace();
 				}
 			}
@@ -54,7 +58,8 @@ public class AddUser extends DBBase implements IDaoConstant {
 			if (con != null) {
 				try {
 					con.close();
-				} catch (Throwable e) {
+				}
+				catch (Throwable e) {
 					e.printStackTrace();
 				}
 			}
