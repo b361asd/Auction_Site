@@ -8,11 +8,8 @@ import java.io.IOException;
 
 public class LoginFilter implements Filter {
 
-	private FilterConfig filterConfig;
-
 	@Override
 	public void init(FilterConfig filterConfig) {
-		this.filterConfig = filterConfig;
 	}
 
 	@Override

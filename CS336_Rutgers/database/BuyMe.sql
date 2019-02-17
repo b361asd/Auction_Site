@@ -64,14 +64,14 @@ CREATE TABLE CategoryField
 DROP TABLE IF EXISTS Offer;
 CREATE TABLE Offer
 (
-	offerId      INT AUTO_INCREMENT,
+	offerId      VARCHAR(32)    NOT NULL,
 	categoryName VARCHAR(64)    NOT NULL,
 	--
 	seller       VARCHAR(64)    NOT NULL,
 	min_price    DECIMAL(20, 2) NOT NULL,
 	startDate    DATETIME,
 	endDate      DATETIME,
-	status       INT, -- 0:Active, 1:Withdrawal, 2:Completed, 3:NoBid
+	status       INT, -- 1:Active, 2:Withdrawal, 3:Completed, 4:NoBid
 	--
 	FOREIGN KEY (seller) REFERENCES User (username) ON DELETE CASCADE,
 	PRIMARY KEY (offerId)
@@ -82,7 +82,7 @@ CREATE TABLE Offer
 DROP TABLE IF EXISTS OfferField;
 CREATE TABLE OfferField
 (
-	offerId   INT AUTO_INCREMENT,
+	offerId   VARCHAR(32) NOT NULL,
 	fieldID   INT,
 	--
 	fieldText VARCHAR(64) NOT NULL,
@@ -97,8 +97,8 @@ CREATE TABLE OfferField
 DROP TABLE IF EXISTS Bid;
 CREATE TABLE Bid
 (
-	bidId             INT AUTO_INCREMENT,
-	offerId           INT,
+	bidId             VARCHAR(32) NOT NULL,
+	offerId           VARCHAR(32) NOT NULL,
 	buyer             VARCHAR(64),
 	price             DECIMAL(20, 2),
 	isAutoRebid       BOOLEAN,
@@ -116,9 +116,9 @@ CREATE TABLE Bid
 DROP TABLE IF EXISTS Trade;
 CREATE TABLE Trade
 (
-	tradeId INT AUTO_INCREMENT,
-	offerId INT,
-	bidId   INT,
+	tradeId VARCHAR(32) NOT NULL,
+	offerId VARCHAR(32) NOT NULL,
+	bidId   VARCHAR(32) NOT NULL,
 	date    DATETIME,
 	--
 	FOREIGN KEY (offerId) REFERENCES Offer (offerId) ON DELETE CASCADE,

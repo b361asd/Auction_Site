@@ -54,13 +54,10 @@
 		<%
 			List lstCategory = (List) data.get(GetCategoryField.DATA_CATEGORY_LIST);
 			for (Object o : lstCategory) {
-				out.println("<option value=\"categoryName_" + o + "\">" + o + "</option>");
+				out.println("<option value=\"" + o + "\">" + o + "</option>");
 			}
 		%>
 	</select><br>
-
-	<div>Auction Days<input type="number" name="auction_days" min="1" max="30"></div>
-	<div>Reserved Price<input type="number" name="min_price" min="0.01"></div>
 
 	<%
 		List lstField = (List) data.get(GetCategoryField.DATA_FIELD_LIST);
@@ -68,7 +65,7 @@
 			String categoryName = ((GetCategoryField.Field) o).getCategoryName();
 			String fieldName    = ((GetCategoryField.Field) o).getFieldName();
 			out.println(
-					  "<div class=\"allField categoryName_" + categoryName + "\" >" + fieldName + "<input type = \"text\" name = \"" + fieldName + "\" / ></div><br >");
+					  "<div class= \"allField " + categoryName + "\" >" + fieldName + "<input type = \"text\" name = \"" + fieldName + "\" / ></div><br >");
 		}
 	%>
 

@@ -42,6 +42,7 @@ public class GetCategoryField extends DBBase implements IDaoConstant {
 
 	private static final String queryGetCategoryField = "select categoryName, categoryfield.fieldID, fieldName from categoryfield inner join field on categoryfield.fieldID = field.fieldID order by categoryName, categoryfield.fieldID";
 
+
 	public static Map getCategoryField() {
 		Map output = new HashMap();
 		//
@@ -116,6 +117,8 @@ public class GetCategoryField extends DBBase implements IDaoConstant {
 
 
 	public static void main(String[] args) {
+		initTest();
+		//
 		Map map = getCategoryField();
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));

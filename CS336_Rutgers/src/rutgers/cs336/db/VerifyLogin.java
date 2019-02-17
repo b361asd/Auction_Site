@@ -1,26 +1,29 @@
 package rutgers.cs336.db;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
 public class VerifyLogin extends DBBase implements IDaoConstant {
 
+	private static final String query = "select password, firstname, lastname, active, usertype from User where username=?";
+
 	public static Map doVerifyLogin(String userID, String pwd) {
 		Map output = new HashMap();
 		//
-		Connection con  = null;
-		Statement  stmt = null;
+		Connection        con          = null;
+		PreparedStatement preparedStmt = null;
 		try {
 			con = getConnection();
 			//
-			stmt = con.createStatement();
+			preparedStmt = con.prepareStatement(query);
 			//
-			ResultSet rs = stmt.executeQuery(
-					  "select password, firstname, lastname, active, usertype from User where username='" + userID + "'");
+			preparedStmt.setString(1, userID);
+			//
+			ResultSet rs = preparedStmt.executeQuery();
 			//
 			if (rs.next()) {
 				Object password  = rs.getObject(1);
@@ -59,9 +62,9 @@ public class VerifyLogin extends DBBase implements IDaoConstant {
 			e.printStackTrace();
 		}
 		finally {
-			if (stmt != null) {
+			if (preparedStmt != null) {
 				try {
-					stmt.close();
+					preparedStmt.close();
 				}
 				catch (Throwable e) {
 					e.printStackTrace();
@@ -83,6 +86,8 @@ public class VerifyLogin extends DBBase implements IDaoConstant {
 
 
 	public static void main(String[] args) {
+		initTest();
+		//
 		Map map = doVerifyLogin("admin", "admin_pwd");
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
