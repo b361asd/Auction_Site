@@ -9,7 +9,8 @@ import java.io.IOException;
 public class LoginFilter implements Filter {
 
 	@Override
-	public void init(FilterConfig filterConfig) {
+	public void init(FilterConfig filterConfig) throws ServletException {
+
 	}
 
 	@Override
@@ -19,7 +20,7 @@ public class LoginFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) res;
 		//
 		String loginURI        = request.getContextPath() + "/login.jsp";
-		String loginURLServlet = request.getContextPath() + "/login";
+		String loginURLServlet = request.getContextPath() + "/home";
 		//
 		String registerURI        = request.getContextPath() + "/register.jsp";
 		String registerURLServlet = request.getContextPath() + "/register";

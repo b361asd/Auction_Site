@@ -30,7 +30,7 @@
 <h1><%=message%>
 </h1>
 
-<form action="${pageContext.request.contextPath}/login" method="post">
+<form action="${pageContext.request.contextPath}/home" method="post">
 	Please enter your username<input type="text" name="username"/><br>
 	Please enter your password<input type="text" name="password"/>
 	<input type="submit" value="submit">

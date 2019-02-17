@@ -9,9 +9,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static rutgers.cs336.db.CreateOffer.PREFIX_CATEGORY_NAME;
+
 public class GetCategoryField extends DBBase implements IDaoConstant {
 	public static final String DATA_CATEGORY_LIST = "DATA_CATEGORY_LIST";
 	public static final String DATA_FIELD_LIST    = "DATA_FIELD_LIST";
+
+	public static class Category {
+		String  categoryName;
+		boolean isCurr;
+
+		//
+		public Category(String categoryName, boolean isCurr) {
+			this.categoryName = categoryName;
+			this.isCurr = isCurr;
+		}
+
+		//
+		public String getCategoryName() {
+			return categoryName;
+		}
+
+		//
+		public boolean isCurr() {
+			return isCurr;
+		}
+	}
 
 	public static class Field {
 		String categoryName;
@@ -43,8 +66,10 @@ public class GetCategoryField extends DBBase implements IDaoConstant {
 	private static final String queryGetCategoryField = "select categoryName, categoryfield.fieldID, fieldName from categoryfield inner join field on categoryfield.fieldID = field.fieldID order by categoryName, categoryfield.fieldID";
 
 
-	public static Map getCategoryField() {
+	public static Map getCategoryField(Map<String, String[]> parameters) {
 		Map output = new HashMap();
+		//
+		String categoryNameFromParam = getStringFromParamMap(PREFIX_CATEGORY_NAME, parameters);
 		//
 		Connection con  = null;
 		Statement  stmt = null;
@@ -70,12 +95,25 @@ public class GetCategoryField extends DBBase implements IDaoConstant {
 				int    i_fieldID       = (Integer) fieldID;
 				String sz_fieldName    = fieldName.toString();
 				//
-				lstField.add(new Field(sz_categoryName, i_fieldID, sz_fieldName));
+				if (categoryNameFromParam.equals("")) {
+					categoryNameFromParam = sz_categoryName;
+				}
 				//
-				String currCategory = (lstCategory.size() == 0) ? "" : lstCategory.get(lstCategory.size() - 1).toString();
+				if (categoryNameFromParam.equals(sz_categoryName)) {
+					lstField.add(new Field(sz_categoryName, i_fieldID, sz_fieldName));
+				}
+				//
+				String currCategory;
+				if (lstCategory.size() == 0) {
+					currCategory = "";
+				}
+				else {
+					Category temp = (Category) lstCategory.get(lstCategory.size() - 1);
+					currCategory = temp.getCategoryName();
+				}
 				//
 				if (!currCategory.equals(sz_categoryName)) {
-					lstCategory.add(sz_categoryName);
+					lstCategory.add(new Category(sz_categoryName, categoryNameFromParam.equals(sz_categoryName)));
 				}
 			}
 			//
@@ -119,7 +157,7 @@ public class GetCategoryField extends DBBase implements IDaoConstant {
 	public static void main(String[] args) {
 		initTest();
 		//
-		Map map = getCategoryField();
+		Map map = getCategoryField(null);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));

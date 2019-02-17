@@ -69,6 +69,7 @@ CREATE TABLE Offer
 	--
 	seller       VARCHAR(64)    NOT NULL,
 	min_price    DECIMAL(20, 2) NOT NULL,
+	description  VARCHAR(128)   NULL,
 	startDate    DATETIME,
 	endDate      DATETIME,
 	status       INT, -- 1:Active, 2:Withdrawal, 3:Completed, 4:NoBid
