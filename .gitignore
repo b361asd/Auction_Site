@@ -12,8 +12,6 @@ CS336_Rutgers/.idea/**
 CS336_Rutgers/lib
 CS336_Rutgers/out
 
-# Allow
-#!CS336_Rutgers/WebContent/WEB-INF/classes
 
 # User-specific stuff
 .idea/**/workspace.xml
@@ -133,5 +131,8 @@ gradle-app.setting
 
 ### Gradle Patch ###
 **/build/
+
+# Kotlin Module
+*.kotlin_module
 
 # End of https://www.gitignore.io/api/java,gradle,intellij
