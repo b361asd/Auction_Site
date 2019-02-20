@@ -18,7 +18,7 @@
         <!--URL-->
         <param-name>DBURL</param-name>
         <!--JDBC Connector URL-->
-        <param-value>jdbc:mysql://localhost:3306/BuyMe</param-value>
+        <param-value>jdbc:mysql://cs336-buyme.cf7jfkoilx7f.us-east-1.rds.amazonaws.com:3306/cs336buyme</param-value>
     </context-param>
 
 

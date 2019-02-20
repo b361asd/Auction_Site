@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VerifyLogin extends DBBase implements IDaoConstant {
+public class VerifyLogin extends DBBase implements IConstant {
 
 	private static final String query = "select password, firstname, lastname, active, usertype from User where username=?";
 

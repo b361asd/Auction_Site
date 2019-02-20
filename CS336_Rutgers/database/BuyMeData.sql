@@ -1,4 +1,4 @@
-USE BuyMe;
+USE cs336buyme;
 
 -- delete from User;
 

@@ -1,7 +1,7 @@
 package rutgers.cs336.servlet;
 
 import rutgers.cs336.db.AddUser;
-import rutgers.cs336.db.IDaoConstant;
+import rutgers.cs336.db.IConstant;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
-public class RegisterServlet extends HttpServlet implements IDaoConstant {
+public class RegisterServlet extends HttpServlet implements IConstant {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -20,7 +20,8 @@ public class DBBase {
 
 	public static void initTest() {
 		// JDBC Connector URL
-		init("jdbc:mysql://localhost:3306/BuyMe", "cs336", "cs336_password");
+		//init("jdbc:mysql://localhost:3306/BuyMe", "cs336", "cs336_password");
+		init("jdbc:mysql://cs336-buyme.cf7jfkoilx7f.us-east-1.rds.amazonaws.com:3306/cs336buyme", "cs336", "cs336_password");
 	}
 
 
@@ -52,10 +53,15 @@ public class DBBase {
 
 
 	public static String getStringFromParamMap(String name, Map<String, String[]> parameters) {
-		String[] temps = parameters.get(name);
-		//
-		if (temps != null && temps.length > 0) {
-			return temps[0];
+		if (parameters!=null) {
+			String[] temps = parameters.get(name);
+			//
+			if (temps != null && temps.length > 0) {
+				return temps[0];
+			}
+			else {
+				return "";
+			}
 		}
 		else {
 			return "";

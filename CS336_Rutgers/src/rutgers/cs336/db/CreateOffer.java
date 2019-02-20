@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CreateOffer extends DBBase implements IDaoConstant {
+public class CreateOffer extends DBBase implements IConstant {
 	public static final String PREFIX_CATEGORY_NAME      = "categoryName";
 	public static final String PREFIX_FIELD_ID           = "fieldID_";
 	//

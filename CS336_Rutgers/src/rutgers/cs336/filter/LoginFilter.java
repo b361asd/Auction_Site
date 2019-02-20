@@ -1,12 +1,14 @@
 package rutgers.cs336.filter;
 
+import rutgers.cs336.db.IConstant;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class LoginFilter implements Filter {
+public class LoginFilter implements Filter, IConstant {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -38,7 +40,7 @@ public class LoginFilter implements Filter {
 		else {
 			HttpSession session = request.getSession(true);
 			//
-			boolean isLoggedIn = session != null && session.getAttribute("user") != null;
+			boolean isLoggedIn = session != null && session.getAttribute(SESSION_ATTRIBUTE_USER) != null;
 			//
 			boolean isLoginRequest        = request.getRequestURI().equals(loginURI);
 			boolean isLoginRequestServlet = request.getRequestURI().equals(loginURLServlet);

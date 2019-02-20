@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static rutgers.cs336.db.CreateOffer.PREFIX_CATEGORY_NAME;
 
-public class GetCategoryField extends DBBase implements IDaoConstant {
+public class GetCategoryField extends DBBase implements IConstant {
 	public static final String DATA_CATEGORY_LIST = "DATA_CATEGORY_LIST";
 	public static final String DATA_FIELD_LIST    = "DATA_FIELD_LIST";
 
@@ -63,7 +63,7 @@ public class GetCategoryField extends DBBase implements IDaoConstant {
 	}
 
 
-	private static final String queryGetCategoryField = "select categoryName, categoryfield.fieldID, fieldName from categoryfield inner join field on categoryfield.fieldID = field.fieldID order by categoryName, categoryfield.fieldID";
+	private static final String queryGetCategoryField = "select categoryName, CategoryField.fieldID, fieldName from CategoryField inner join Field on CategoryField.fieldID = Field.fieldID order by categoryName, CategoryField.fieldID";
 
 
 	public static Map getCategoryField(Map<String, String[]> parameters) {

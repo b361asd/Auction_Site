@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddUser extends DBBase implements IDaoConstant {
+public class AddUser extends DBBase implements IConstant {
 
 	private static final String query = "insert User (username, password, email, firstname, lastname, address, phone, active, usertype) VALUES (?, ?, ?, ?, ?, ?, ?, true, ?)";
 

@@ -1,12 +1,12 @@
-DROP DATABASE IF EXISTS BuyMe;
-CREATE DATABASE IF NOT EXISTS BuyMe;
-USE BuyMe;
+DROP DATABASE IF EXISTS cs336buyme;
+CREATE DATABASE IF NOT EXISTS cs336buyme;
+USE cs336buyme;
 
 
 
-DROP USER IF EXISTS 'cs336'@'%';
+DROP USER 'cs336'@'%';
 CREATE USER 'cs336'@'%' IDENTIFIED BY 'cs336_password';
-GRANT ALL PRIVILEGES ON BuyMe.* TO 'cs336'@'%';
+GRANT ALL PRIVILEGES ON cs336buyme.* TO 'cs336'@'%';
 FLUSH PRIVILEGES;
 
 
@@ -100,12 +100,12 @@ CREATE TABLE Bid
 (
 	bidId             VARCHAR(32) NOT NULL,
 	offerId           VARCHAR(32) NOT NULL,
-	buyer             VARCHAR(64),
-	price             DECIMAL(20, 2),
-	isAutoRebid       BOOLEAN,
-	autoRebidLimit    DECIMAL(20, 2),
-	autoRebidPriceInc DECIMAL(20, 2),
-	date              DATETIME,
+	buyer             VARCHAR(64) NOT NULL,
+	price             DECIMAL(20, 2) NOT NULL,
+	isAutoRebid       BOOLEAN NOT NULL,
+	autoRebidLimit    DECIMAL(20, 2) NULL,
+	autoRebidIncrement DECIMAL(20, 2) NULL,
+	date              DATETIME NOT NULL,
 	--
 	FOREIGN KEY (buyer) REFERENCES User (username) ON DELETE CASCADE,
 	FOREIGN KEY (offerId) REFERENCES Offer (offerId) ON DELETE CASCADE,
