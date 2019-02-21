@@ -98,14 +98,14 @@ CREATE TABLE OfferField
 DROP TABLE IF EXISTS Bid;
 CREATE TABLE Bid
 (
-	bidId             VARCHAR(32) NOT NULL,
-	offerId           VARCHAR(32) NOT NULL,
-	buyer             VARCHAR(64) NOT NULL,
-	price             DECIMAL(20, 2) NOT NULL,
-	isAutoRebid       BOOLEAN NOT NULL,
-	autoRebidLimit    DECIMAL(20, 2) NULL,
+	bidId              VARCHAR(32)    NOT NULL,
+	offerId            VARCHAR(32)    NOT NULL,
+	buyer              VARCHAR(64)    NOT NULL,
+	price              DECIMAL(20, 2) NOT NULL,
+	isAutoRebid        BOOLEAN        NOT NULL,
+	autoRebidLimit     DECIMAL(20, 2) NULL,
 	autoRebidIncrement DECIMAL(20, 2) NULL,
-	date              DATETIME NOT NULL,
+	date               DATETIME       NOT NULL,
 	--
 	FOREIGN KEY (buyer) REFERENCES User (username) ON DELETE CASCADE,
 	FOREIGN KEY (offerId) REFERENCES Offer (offerId) ON DELETE CASCADE,

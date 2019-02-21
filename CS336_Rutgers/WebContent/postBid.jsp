@@ -1,14 +1,14 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+
 <%@ page import="rutgers.cs336.db.GetOffer" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="static rutgers.cs336.db.CreateOffer.PREFIX_CATEGORY_NAME" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<meta charset="utf-8">
 	<title>BuyMe - Post a Bid</title>
 	<link rel="stylesheet" href="style.css?v=1.0"/>
 
@@ -18,11 +18,6 @@
            value.submit();
        }
 	</script>
-
-	<%@ page language="java"
-				contentType="text/html; charset=windows-1256"
-				pageEncoding="windows-1256"
-	%>
 </head>
 
 <body>
@@ -38,8 +33,7 @@
 		}
 	}
 	//
-	//String offerID = getStringFromParamMap("offerID", request.getParameterMap());
-	String offerID = "5642babcb54a4872b15353bed3712824";
+	String offerID = getStringFromParamMap("offerid", request.getParameterMap());
 	Map data = GetOffer.getOffer(offerID);
 %>
 
@@ -54,12 +48,16 @@
 %>
 
 
-<form action="${pageContext.request.contextPath}/listOffer.jsp" method="post">
+<form action="${pageContext.request.contextPath}/bidResult.jsp" method="post">
 
+	<%
+		out.println("<input type=\"hidden\" name=\"offerId\" value=\"" + offerID + "\"/>");
+	%>
 
-	<div>Auction Days<input type="number" name="auction_days" min="1" max="30"></div>
-	<div>Reserved Price<input type="number" name="reserved_price" min="0.01"></div>
-	<div>Item Description<input type="text" name="description"></div>
+	<div>Price<input type="number" name="price" min="0.00"></div>
+	<div>Auto Rebid<input type="checkbox" name="isAutoRebid"></div>
+	<div>Auto Rebid Limit<input type="number" name="autoRebidLimit" min="0.00"></div>
+	<div>Auto Rebid Increment<input type="number" name="autoRebidIncrement" min="0.01"></div>
 
 	<input type="submit" value="submit">
 </form>
