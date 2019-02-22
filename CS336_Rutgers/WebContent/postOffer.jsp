@@ -38,7 +38,7 @@
 	String categoryNameFromParam = "CAT=" + getStringFromParamMap(PREFIX_CATEGORY_NAME, request.getParameterMap());
 	String paramMap = getParamMap(request.getParameterMap());
 	//
-	Map data = GetCategoryField.getCategoryField(request.getParameterMap());
+	Map data = GetCategoryField.getCategoryField(getStringFromParamMap(PREFIX_CATEGORY_NAME, request.getParameterMap()));
 %>
 <h1><%=message%>
 </h1>

@@ -9,11 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static rutgers.cs336.db.CreateOffer.PREFIX_CATEGORY_NAME;
-
 public class GetCategoryField extends DBBase implements IConstant {
+
 	public static final String DATA_CATEGORY_LIST = "DATA_CATEGORY_LIST";
-	public static final String DATA_FIELD_LIST    = "DATA_FIELD_LIST";
+
+	public static final String DATA_FIELD_LIST = "DATA_FIELD_LIST";
+
 
 	public static class Category {
 		String  categoryName;
@@ -36,16 +37,19 @@ public class GetCategoryField extends DBBase implements IConstant {
 		}
 	}
 
+
 	public static class Field {
 		String categoryName;
 		int    fieldID;
 		String fieldName;
+		int    fieldType;
 
 		//
-		public Field(String categoryName, int fieldID, String fieldName) {
+		public Field(String categoryName, int fieldID, String fieldName, int fieldType) {
 			this.categoryName = categoryName;
 			this.fieldID = fieldID;
 			this.fieldName = fieldName;
+			this.fieldType = fieldType;
 		}
 
 		//
@@ -60,16 +64,18 @@ public class GetCategoryField extends DBBase implements IConstant {
 		public String getFieldName() {
 			return fieldName;
 		}
+
+		public int getFieldType() {
+			return fieldType;
+		}
 	}
 
 
-	private static final String queryGetCategoryField = "select categoryName, CategoryField.fieldID, fieldName from CategoryField inner join Field on CategoryField.fieldID = Field.fieldID order by categoryName, CategoryField.fieldID";
+	private static final String queryGetCategoryField = "select categoryName, CategoryField.fieldID, fieldName, fieldType from CategoryField inner join Field on CategoryField.fieldID = Field.fieldID order by categoryName, CategoryField.fieldID";
 
 
-	public static Map getCategoryField(Map<String, String[]> parameters) {
+	public static Map getCategoryField(String categoryNameFromParam) {
 		Map output = new HashMap();
-		//
-		String categoryNameFromParam = getStringFromParamMap(PREFIX_CATEGORY_NAME, parameters);
 		//
 		Connection con  = null;
 		Statement  stmt = null;
@@ -90,17 +96,19 @@ public class GetCategoryField extends DBBase implements IConstant {
 				Object categoryName = rs.getObject(1);
 				Object fieldID      = rs.getObject(2);
 				Object fieldName    = rs.getObject(3);
+				Object fieldType    = rs.getObject(4);
 				//
 				String sz_categoryName = categoryName.toString();
 				int    i_fieldID       = (Integer) fieldID;
 				String sz_fieldName    = fieldName.toString();
+				int    i_fieldType     = (Integer) fieldType;
 				//
 				if (categoryNameFromParam.equals("")) {
 					categoryNameFromParam = sz_categoryName;
 				}
 				//
 				if (categoryNameFromParam.equals(sz_categoryName)) {
-					lstField.add(new Field(sz_categoryName, i_fieldID, sz_fieldName));
+					lstField.add(new Field(sz_categoryName, i_fieldID, sz_fieldName, i_fieldType));
 				}
 				//
 				String currCategory;

@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GetOffer extends DBBase implements IConstant {
-	public static final String DATA_OFFER_ID = "DATA_OFFER_ID";
 
+	public static final String DATA_OFFER_ID = "DATA_OFFER_ID";
 
 	private static final String SQL_GET_OFFER = "select categoryName, seller, min_price, description, startDate, endDate, status from Offer where offerId = ?";
 

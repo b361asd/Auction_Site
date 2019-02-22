@@ -10,7 +10,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class SearchOffer extends DBBase implements IConstant {
+	private static final String PARAM_NAME_DESCRIPTION_OP = "description_op";
+	private static final String PARAM_NAME_DESCRIPTION    = "description";
+	private static final String PARAM_NAME_CATEGORY_NAME  = "categoryName";
+
+	private static final String OP_STRING_EQUALS     = "equals";
+	private static final String OP_STRING_START_WITH = "start_with";
+	private static final String OP_STRING_CONTAINS   = "contains";
+
 	public static final String DATA_OFFER_ID = "DATA_OFFER_ID";
 
 	public static class OfferItem {
@@ -67,9 +76,9 @@ public class SearchOffer extends DBBase implements IConstant {
 	}
 
 
-	private static final String SQL_GET_OFFER = "select offerId, categoryName, seller, min_price, description, startDate, endDate from Offer where status = 1 and offerId like ?";
+	private static final String SQL_GET_OFFER = "select offerId, categoryName, seller, min_price, description, startDate, endDate from Offer where status = 1 and categoryName = ? and description like ?";
 
-	private static final String SQL_GET_OFFER_FIELD = "select OfferField.offerId, OfferField.fieldID, fieldName, fieldType, fieldText from OfferField inner join Field on OfferField.fieldID = Field.fieldID where OfferField.offerId in (select offerId from Offer where status = 1 and offerId like ?)";
+	private static final String SQL_GET_OFFER_FIELD = "select OfferField.offerId, OfferField.fieldID, fieldName, fieldType, fieldText from OfferField inner join Field on OfferField.fieldID = Field.fieldID where OfferField.offerId in (select offerId from Offer where status = 1 and categoryName = ? and description like ?)";
 
 	public static Map doSearchOffer(Map<String, String[]> parameters) {
 		Map output = new HashMap();
@@ -82,8 +91,14 @@ public class SearchOffer extends DBBase implements IConstant {
 		try {
 			con = getConnection();
 			//
+			String paramCategoryName = getStringFromParamMap(PARAM_NAME_CATEGORY_NAME, parameters);
+			String paramCriteria = formatStringSearchCriteria(getStringFromParamMap(PARAM_NAME_DESCRIPTION, parameters),
+			                                                  getStringFromParamMap(PARAM_NAME_DESCRIPTION_OP,
+			                                                                        parameters));
+			//
 			preparedStmt = con.prepareStatement(SQL_GET_OFFER);
-			preparedStmt.setString(1, "%");
+			preparedStmt.setString(1, paramCategoryName);
+			preparedStmt.setString(2, paramCriteria);
 			//
 			ResultSet rs = preparedStmt.executeQuery();
 			//
@@ -102,7 +117,8 @@ public class SearchOffer extends DBBase implements IConstant {
 			}
 			//
 			preparedStmt = con.prepareStatement(SQL_GET_OFFER_FIELD);
-			preparedStmt.setString(1, "%");
+			preparedStmt.setString(1, paramCategoryName);
+			preparedStmt.setString(2, paramCriteria);
 			//
 			rs = preparedStmt.executeQuery();
 			//
@@ -151,6 +167,23 @@ public class SearchOffer extends DBBase implements IConstant {
 					e.printStackTrace();
 				}
 			}
+		}
+		//
+		return output;
+	}
+
+
+	private static String formatStringSearchCriteria(String input, String op) {
+		String output;
+		//
+		if (op.equalsIgnoreCase(OP_STRING_EQUALS)) {
+			output = input;
+		}
+		else if (op.equalsIgnoreCase(OP_STRING_START_WITH)) {
+			output = input + "%";
+		}
+		else {         // OP_STRING_CONTAINS
+			output = "%" + input + "%";
 		}
 		//
 		return output;
