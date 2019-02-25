@@ -7,14 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CreateBid extends DBBase implements IConstant {
-	public static final String PARAM_NAME_OFFER_ID             = "offerId";
-	public static final String PARAM_NAME_PRICE                = "price";
-	public static final String PARAM_NAME_AUTO_REBID           = "isAutoRebid";
-	public static final String PARAM_NAME_AUTO_REBID_LIMIT     = "autoRebidLimit";
-	public static final String PARAM_NAME_AUTO_REBID_INCREMENT = "autoRebidIncrement";
+	public static final String PARAM_NAME_OFFER_ID         = "offerId";
+	public static final String PARAM_NAME_PRICE            = "price";
+	public static final String PARAM_NAME_AUTO_REBID       = "isAutoRebid";
+	public static final String PARAM_NAME_AUTO_REBID_LIMIT = "autoRebidLimit";
 
 
-	private static final String sqlInsertBid = "insert Bid (bidId, offerId, buyer, price, isAutoRebid, autoRebidLimit, autoRebidIncrement, date) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
+	private static final String sqlInsertBid = "insert Bid (bidId, offerId, buyer, price, isAutoRebid, autoRebidLimit, date) VALUES (?, ?, ?, ?, ?, ?, NOW())";
 
 	public static Map doCreateBid(String userID, Map<String, String[]> parameters) {
 		Map output = new HashMap();
@@ -33,7 +32,6 @@ public class CreateBid extends DBBase implements IConstant {
 			pStmtInsertBid.setBigDecimal(4, getBigDecimalFromParamMap(PARAM_NAME_PRICE, parameters));
 			pStmtInsertBid.setBoolean(5, getBooleanFromParamMap(PARAM_NAME_AUTO_REBID, parameters));
 			pStmtInsertBid.setBigDecimal(6, getBigDecimalFromParamMap(PARAM_NAME_AUTO_REBID_LIMIT, parameters));
-			pStmtInsertBid.setBigDecimal(7, getBigDecimalFromParamMap(PARAM_NAME_AUTO_REBID_INCREMENT, parameters));
 			//
 			pStmtInsertBid.execute();
 			//
