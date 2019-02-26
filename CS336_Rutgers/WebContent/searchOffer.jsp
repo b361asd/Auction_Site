@@ -81,14 +81,14 @@
 			if (fieldType == 1) {
 				out.println("<div class='allField " + categoryName + "'>" + fieldName);
 				out.println(
-						  "<select name='categoryName'><option value='equals'>equals</option><option value='start_with'>start_with</option><option value='contains'>contains</option></select>");
+						  "<select name='categoryName'><option value='any'>any</option><option value='equals'>equals</option><option value='start_with'>start_with</option><option value='contains'>contains</option></select>");
 				out.println("<input type = 'text' name = 'fieldID_" + fieldID + "' / ></div><br >");
 			}
 			// Integer
 			else if (fieldType == 2) {
 				out.println("<div class='allField " + categoryName + "'>" + fieldName);
 				out.println(
-						  "<select name='categoryName' onchange='onIntegerOPChange(this);'><option value='equals'>equals</option><option value='larger_than'>larger_than</option><option value='less_than'>less_than</option><option value='larger_equal'>larger_equal</option><option value='less_equal'>less_equal</option><option value='between'>between</option></select>");
+						  "<select name='categoryName' onchange='onIntegerOPChange(this);'><option value='any'>any</option><option value='equals'>equals</option><option value='no_less_than'>no_less_than</option><option value='no_greater_than'>no_greater_than</option><option value='between'>between</option></select>");
 				out.println("<input type = 'text' name = 'fieldID_" + fieldID + "' / ></div><br >");
 				out.println(
 						  "<input id='fieldID_" + fieldID + "' type='text' name='fieldID_" + fieldID + "' / ></div><br >");
@@ -96,7 +96,7 @@
 			// Boolean
 			else {
 				out.println(
-						  "<div class='allField " + categoryName + "'>" + fieldName + "<input type = 'checkbox' name = 'fieldID_" + fieldID + "' / ></div><br >");
+						  "<select name='categoryName' onchange='onIntegerOPChange(this);'><option value='any'>any</option><option value='yes'>yes</option><option value='no'>no</option></select>");
 			}
 		}
 	%>

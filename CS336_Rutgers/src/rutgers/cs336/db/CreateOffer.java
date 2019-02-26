@@ -7,16 +7,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CreateOffer extends DBBase implements IConstant {
-	public static final String PREFIX_CATEGORY_NAME      = "categoryName";
-	public static final String PREFIX_FIELD_ID           = "fieldID_";
-	//
-	public static final String PARAM_NAME_AUCTION_DAYS   = "auction_days";
-	public static final String PARAM_NAME_RESERVED_PRICE = "reserved_price";
-	//
-	public static final String PARAM_NAME_DESCRIPTION    = "description";
+
+	public static final String PREFIX_FIELD_ID      = "fieldID_";
+	public static final String PREFIX_CATEGORY_NAME = "categoryName";
 
 
-	private static final String sqlInsertOffer = "insert Offer (offerId, categoryName, seller, min_price, description, startDate, endDate, status) VALUES (?, ?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL + ? DAY), 1)";
+	private static final String sqlInsertOffer = "insert Offer (offerId, categoryName, seller, initPrice, increment, minPrice, conditionCode, description, startDate, endDate, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL + ? DAY), 1)";
 
 	private static final String sqlInsertOfferField = "insert OfferField (offerId, fieldID, fieldText) VALUES (?, ?, ?)";
 
@@ -36,11 +32,15 @@ public class CreateOffer extends DBBase implements IConstant {
 			//
 			pStmtInsertOffer = con.prepareStatement(sqlInsertOffer);
 			pStmtInsertOffer.setString(1, offerID);
-			pStmtInsertOffer.setString(2, getStringFromParamMap(PREFIX_CATEGORY_NAME, parameters));
+			pStmtInsertOffer.setString(2, getStringFromParamMap("categoryName", parameters));
 			pStmtInsertOffer.setString(3, userID);
-			pStmtInsertOffer.setBigDecimal(4, getBigDecimalFromParamMap(PARAM_NAME_RESERVED_PRICE, parameters));
-			pStmtInsertOffer.setString(5, getStringFromParamMap(PARAM_NAME_DESCRIPTION, parameters));
-			pStmtInsertOffer.setInt(6, getIntFromParamMap(PARAM_NAME_AUCTION_DAYS, parameters));
+			pStmtInsertOffer.setBigDecimal(4, getBigDecimalFromParamMap("initPrice", parameters));
+			pStmtInsertOffer.setBigDecimal(5, getBigDecimalFromParamMap("increment", parameters));
+			pStmtInsertOffer.setBigDecimal(6, getBigDecimalFromParamMap("minPrice", parameters));
+			pStmtInsertOffer.setInt(7, getPrefixIntFromParamMap("conditionCode", parameters, '_'));
+			pStmtInsertOffer.setString(8, getStringFromParamMap("description", parameters));
+			pStmtInsertOffer.setInt(9, getIntFromParamMap("auction_days", parameters));
+			//
 			pStmtInsertOffer.execute();
 			//
 			pStmtInsertOfferField = con.prepareStatement(sqlInsertOfferField);

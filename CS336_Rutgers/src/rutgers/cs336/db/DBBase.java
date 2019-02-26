@@ -70,6 +70,26 @@ public class DBBase {
 	}
 
 
+	public static int getPrefixIntFromParamMap(String name, Map<String, String[]> parameters, char delimiter) {
+		int out = -1;
+		//
+		String temp  = getStringFromParamMap(name, parameters);
+		int    index = temp.indexOf(delimiter);
+		if (index >= 0) {
+			temp = temp.substring(index + 1);
+			//
+			try {
+				out = Integer.parseInt(temp);
+			}
+			catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+		}
+		//
+		return out;
+	}
+
+
 	public static int getIntFromParamMap(String name, Map<String, String[]> parameters) {
 		String[] temps = parameters.get(name);
 		//

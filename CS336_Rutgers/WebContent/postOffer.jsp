@@ -72,9 +72,19 @@
 		}
 	%>
 
-	<div>Auction Days<input type="number" name="auction_days" min="1" max="30"></div>
-	<div>Reserved Price<input type="number" name="reserved_price" min="0.01"></div>
+	<div>Auction Days<input type="initPrice" name="initPrice" min="1" max="30"></div>
+	<div>Auction Days<input type="increment" name="increment" min="1" max="30"></div>
+	<div>Auction Days<input type="minPrice" name="minPrice" min="1" max="30"></div>
+	<div><select name="conditionCode" onchange="onCategoryChange(this.parentElement);">
+		<option value='conditionCode_1'>New</option>
+		<option value='conditionCode_2'>Like New</option>
+		<option value='conditionCode_3'>Manufacturer Refurbished</option>
+		<option value='conditionCode_4'>Seller Refurbished</option>
+		<option value='conditionCode_5'>Used</option>
+		<option value='conditionCode_6'>For parts or Not Working</option>
+	</select></div>
 	<div>Item Description<input type="text" name="description"></div>
+	<div>Auction Days<input type="number" name="auction_days" min="1" max="30"></div>
 
 	<input type="submit" value="submit">
 </form>
