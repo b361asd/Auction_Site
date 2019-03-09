@@ -1,7 +1,6 @@
 package rutgers.cs336.servlet;
 
 import rutgers.cs336.db.AddUser;
-import rutgers.cs336.db.IConstant;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

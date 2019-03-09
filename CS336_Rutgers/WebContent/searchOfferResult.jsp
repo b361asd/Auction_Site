@@ -3,7 +3,7 @@
 
 <%@ page import="rutgers.cs336.db.SearchOffer" %>
 <%@ page import="java.util.List" %>
-<%@ page import="static rutgers.cs336.db.IConstant.*" %>
+<%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 <%@ page import="java.util.Map" %>
 
 <html>

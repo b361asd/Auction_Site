@@ -7,9 +7,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VerifyLogin extends DBBase implements IConstant {
-
-	private static final String query = "select password, firstname, lastname, active, usertype from User where username=?";
+public class VerifyLogin extends DBBase {
 
 	public static Map doVerifyLogin(String userID, String pwd) {
 		Map output = new HashMap();
@@ -19,7 +17,7 @@ public class VerifyLogin extends DBBase implements IConstant {
 		try {
 			con = getConnection();
 			//
-			preparedStmt = con.prepareStatement(query);
+			preparedStmt = con.prepareStatement(SQL_USER_SELECT);
 			//
 			preparedStmt.setString(1, userID);
 			//

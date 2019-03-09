@@ -1,6 +1,5 @@
 package rutgers.cs336.servlet;
 
-import rutgers.cs336.db.IConstant;
 import rutgers.cs336.db.VerifyLogin;
 
 import javax.servlet.ServletException;

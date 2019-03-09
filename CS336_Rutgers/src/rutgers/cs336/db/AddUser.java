@@ -6,9 +6,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddUser extends DBBase implements IConstant {
-
-	private static final String query = "insert User (username, password, email, firstname, lastname, address, phone, active, usertype) VALUES (?, ?, ?, ?, ?, ?, ?, true, ?)";
+public class AddUser extends DBBase {
 
 	public static Map doAddUser(String username, String password, String email, String firstName, String lastName, String street, String city, String state, String zipCode, String phone, int usertype) {
 		Map output = new HashMap();
@@ -18,7 +16,7 @@ public class AddUser extends DBBase implements IConstant {
 		try {
 			con = getConnection();
 			//
-			preparedStmt = con.prepareStatement(query);
+			preparedStmt = con.prepareStatement(SQL_USER_INSERT);
 			//
 			preparedStmt.setString(1, username);
 			preparedStmt.setString(2, password);

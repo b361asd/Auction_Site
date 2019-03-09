@@ -1,6 +1,5 @@
 package rutgers.cs336.db;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,8 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+public class SearchOffer extends DBBase {
 
-public class SearchOffer extends DBBase implements IConstant {
 	private static final String PARAM_NAME_DESCRIPTION_OP = "description_op";
 	private static final String PARAM_NAME_DESCRIPTION    = "description";
 	private static final String PARAM_NAME_CATEGORY_NAME  = "categoryName";
@@ -30,7 +29,6 @@ public class SearchOffer extends DBBase implements IConstant {
 		String details;
 		String startDate;
 		String endDate;
-
 		//
 		public OfferItem(Object obj_offerId, Object obj_categoryName, Object obj_seller, Object obj_min_price, Object obj_description, Object obj_startDate, Object obj_endDate) {
 			this.offerId = obj_offerId.toString();
@@ -76,10 +74,6 @@ public class SearchOffer extends DBBase implements IConstant {
 	}
 
 
-	private static final String SQL_GET_OFFER = "select offerId, categoryName, seller, min_price, description, startDate, endDate from Offer where status = 1 and categoryName = ? and description like ?";
-
-	private static final String SQL_GET_OFFER_FIELD = "select OfferField.offerId, OfferField.fieldID, fieldName, fieldType, fieldText from OfferField inner join Field on OfferField.fieldID = Field.fieldID where OfferField.offerId in (select offerId from Offer where status = 1 and categoryName = ? and description like ?)";
-
 	public static Map doSearchOffer(Map<String, String[]> parameters) {
 		Map output = new HashMap();
 		//
@@ -96,7 +90,7 @@ public class SearchOffer extends DBBase implements IConstant {
 			                                                  getStringFromParamMap(PARAM_NAME_DESCRIPTION_OP,
 			                                                                        parameters));
 			//
-			preparedStmt = con.prepareStatement(SQL_GET_OFFER);
+			preparedStmt = con.prepareStatement(SQL_OFFER_SEARCH);
 			preparedStmt.setString(1, paramCategoryName);
 			preparedStmt.setString(2, paramCriteria);
 			//
@@ -116,7 +110,7 @@ public class SearchOffer extends DBBase implements IConstant {
 				mapOffer.put(offerId.toString(), one);
 			}
 			//
-			preparedStmt = con.prepareStatement(SQL_GET_OFFER_FIELD);
+			preparedStmt = con.prepareStatement(SQL_OFFERFIELD_SEARCH);
 			preparedStmt.setString(1, paramCategoryName);
 			preparedStmt.setString(2, paramCriteria);
 			//

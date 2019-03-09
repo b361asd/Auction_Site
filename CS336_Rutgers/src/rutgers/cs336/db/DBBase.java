@@ -1,5 +1,7 @@
 package rutgers.cs336.db;
 
+import rutgers.cs336.servlet.IConstant;
+
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,7 +9,8 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.UUID;
 
-public class DBBase {
+public class DBBase implements ISQLConstant, IConstant {
+
 	private static String dbURL;
 	private static String user;
 	private static String pwd;
@@ -19,10 +22,7 @@ public class DBBase {
 	}
 
 	public static void initTest() {
-		// JDBC Connector URL
-		//init("jdbc:mysql://localhost:3306/BuyMe", "cs336", "cs336_password");
-		init("jdbc:mysql://cs336-buyme.cf7jfkoilx7f.us-east-1.rds.amazonaws.com:3306/cs336buyme", "cs336",
-		     "cs336_password");
+		init(MySQL_URL, MySQL_USER_ID, MySQL_PASSWORD);
 	}
 
 

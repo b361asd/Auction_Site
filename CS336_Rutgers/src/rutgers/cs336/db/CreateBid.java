@@ -6,14 +6,12 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CreateBid extends DBBase implements IConstant {
+public class CreateBid extends DBBase {
+
 	public static final String PARAM_NAME_OFFER_ID         = "offerId";
 	public static final String PARAM_NAME_PRICE            = "price";
 	public static final String PARAM_NAME_AUTO_REBID       = "isAutoRebid";
 	public static final String PARAM_NAME_AUTO_REBID_LIMIT = "autoRebidLimit";
-
-
-	private static final String sqlInsertBid = "insert Bid (bidId, offerId, buyer, price, isAutoRebid, autoRebidLimit, date) VALUES (?, ?, ?, ?, ?, ?, NOW())";
 
 	public static Map doCreateBid(String userID, Map<String, String[]> parameters) {
 		Map output = new HashMap();
@@ -25,7 +23,7 @@ public class CreateBid extends DBBase implements IConstant {
 		try {
 			con = getConnection();
 			//
-			pStmtInsertBid = con.prepareStatement(sqlInsertBid);
+			pStmtInsertBid = con.prepareStatement(SQL_BID_INSERT);
 			pStmtInsertBid.setString(1, bidId);
 			pStmtInsertBid.setString(2, getStringFromParamMap(PARAM_NAME_OFFER_ID, parameters));
 			pStmtInsertBid.setString(3, userID);

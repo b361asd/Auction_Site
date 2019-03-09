@@ -29,6 +29,8 @@ CREATE TABLE User
 
 
 
+
+-- List of possible categories
 DROP TABLE IF EXISTS Category;
 CREATE TABLE Category
 (
@@ -38,177 +40,211 @@ CREATE TABLE Category
 );
 
 
+
+
+-- All possible fields for all categories. Multiple categories can have the same and/or different fields.
 DROP TABLE IF EXISTS Field;
 CREATE TABLE Field
 (
 	fieldID   INT AUTO_INCREMENT,
 	fieldName VARCHAR(64) NOT NULL,
-	fieldType INT NOT NULL, 			-- 1 string 2 int 3 boolean
+	fieldType INT NOT NULL, 			-- 1:string, 2:int, 3:boolean
 	--
 	PRIMARY KEY (fieldID)
 );
 
 
+
+
+-- Fields for categories. sortOrder help present these fields in GUI.
 DROP TABLE IF EXISTS CategoryField;
 CREATE TABLE CategoryField
 (
-	categoryName VARCHAR(64) NOT NULL,
-	fieldID      INT NOT NULL,
-    sortOrder  INT NOT NULL,
+	categoryName 	VARCHAR(64) NOT NULL,
+	fieldID      	INT NOT NULL,
+    sortOrder  		INT NOT NULL,
 	--
-	FOREIGN KEY (categoryName) REFERENCES Category (categoryName) ON DELETE CASCADE,
-	FOREIGN KEY (fieldID) REFERENCES Field (fieldID) ON DELETE CASCADE,
+	FOREIGN KEY (categoryName) REFERENCES Category (categoryName) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (fieldID) REFERENCES Field (fieldID) ON UPDATE CASCADE ON DELETE CASCADE,
+    --
 	PRIMARY KEY (categoryName, fieldID)
 );
 
 
+
+
+-- Offer of an item for sale. Fields of the offer in seperate table so that new categories can be created without recompiling the code. 
 DROP TABLE IF EXISTS Offer;
 CREATE TABLE Offer
 (
-	offerId      VARCHAR(32)    NOT NULL,
-	categoryName VARCHAR(64)    NOT NULL,
+	offerID      VARCHAR(32)    NOT NULL,
 	--
 	seller       VARCHAR(64)    NOT NULL,
     --
+	categoryName VARCHAR(64)    NOT NULL,
+    conditionCode	INT	NOT NULL, 	-- 1:New, 2:Like New, 3:Manufacturer Refurbished, 
+									-- 4:Seller Refurbished, 5:Used, 6:For parts or Not Working.
+                                    -- Ref.: https://www.ebay.com/pages/help/sell/contextual/condition_1.html
+	description  VARCHAR(128)   NULL,
+    --
 	initPrice	DECIMAL(20, 2)	NOT NULL,	
     increment	DECIMAL(20, 2)	NOT NULL,
-	minPrice    DECIMAL(20, 2) NOT NULL,
+	minPrice    DECIMAL(20, 2) 	NULL,		-- NULL if user has not set a min price	
     --
-    conditionCode	INT	NOT NULL, -- 1:New, 2:Like New, 3:Manufacturer Refurbished, 4:Seller Refurbished, 5:Used, 6:For parts or Not Working. Found: https://www.ebay.com/pages/help/sell/contextual/condition_1.html
-	description  VARCHAR(128)   NULL,
-	startDate    DATETIME,
-	endDate      DATETIME,
-	status       INT, -- 1:Active, 2:Withdrawal, 3:Completed, 4:NoBid
+	startDate    DATETIME		NOT NULL,
+	endDate      DATETIME		NOT NULL,
+    --
+	status       INT			NOT NULL,	-- 1:Active, 2:Withdrawal, 3:Completed, 4:No bid, 5:Min not met
 	--
-	FOREIGN KEY (seller) REFERENCES User (username) ON DELETE CASCADE,
-	PRIMARY KEY (offerId)
+	FOREIGN KEY (seller) REFERENCES User(username) ON UPDATE CASCADE ON DELETE CASCADE,
+    --
+	PRIMARY KEY (offerID)
 );
 
 
 
+
+-- Fields for an Offer
 DROP TABLE IF EXISTS OfferField;
 CREATE TABLE OfferField
 (
-	offerId   VARCHAR(32) NOT NULL,
+	offerID   VARCHAR(32) NOT NULL,
 	fieldID   INT NOT NULL,
 	--
 	fieldText VARCHAR(64) NOT NULL,
 	--
-	FOREIGN KEY (offerId) REFERENCES Offer (offerId) ON DELETE CASCADE,
-	FOREIGN KEY (fieldID) REFERENCES Field (fieldID) ON DELETE CASCADE,
-	PRIMARY KEY (offerId, fieldID)
-);
-
-
-
-
-
-
-DROP TABLE IF EXISTS OfferAlertCriteria;
-CREATE TABLE OfferAlertCriteria
-(
-	criteriaId      VARCHAR(32)    NOT NULL,
+	FOREIGN KEY (offerID) REFERENCES Offer (offerID) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (fieldID) REFERENCES Field (fieldID) ON UPDATE CASCADE ON DELETE CASCADE,
     --
-	categoryName 	VARCHAR(256)     NULL,
-	--
-	seller       	VARCHAR(256)     NULL,
-    --
-    conditionCode	VARCHAR(256)	NULL,
-	description  	VARCHAR(128)   NULL,
-	startDate    	VARCHAR(256) NULL,
-	endDate      	VARCHAR(256) NULL,
-	--
-	PRIMARY KEY (criteriaId)
-);
-
-
-
-DROP TABLE IF EXISTS OfferAlertCriteriaField;
-CREATE TABLE OfferAlertCriteriaField
-(
-	criteriaId   VARCHAR(32) NOT NULL,
-	fieldID   INT NOT NULL,
-	--
-	fieldText VARCHAR(256) NOT NULL,		-- Criteria
-	--
-	FOREIGN KEY (criteriaId) REFERENCES OfferAlertCriteria (criteriaId) ON DELETE CASCADE,
-	FOREIGN KEY (fieldID) REFERENCES Field (fieldID) ON DELETE CASCADE,
-	PRIMARY KEY (criteriaId, fieldID)
+	PRIMARY KEY (offerID, fieldID)
 );
 
 
 
 
-
-
-
-
-
-
-
+-- Bid
 DROP TABLE IF EXISTS Bid;
 CREATE TABLE Bid
 (
-	bidId              VARCHAR(32)    NOT NULL,
-	offerId            VARCHAR(32)    NOT NULL,
+	bidID              VARCHAR(32)    NOT NULL,
+    --
+	offerID            VARCHAR(32)    NOT NULL,
+    --
 	buyer              VARCHAR(64)    NOT NULL,
 	price              DECIMAL(20, 2) NOT NULL,
-	isAutoRebid        BOOLEAN        NOT NULL,
-	autoRebidLimit     DECIMAL(20, 2) NOT NULL,
+	autoRebIDLimit     DECIMAL(20, 2) NULL,		-- NULL if not auto rebid
 	bidDate            DATETIME       NOT NULL,
 	--
-	FOREIGN KEY (buyer) REFERENCES User (username) ON DELETE CASCADE,
-	FOREIGN KEY (offerId) REFERENCES Offer (offerId) ON DELETE CASCADE,
-	PRIMARY KEY (bidId)
+	FOREIGN KEY (buyer) REFERENCES User (username) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (offerID) REFERENCES Offer (offerID) ON UPDATE CASCADE ON DELETE CASCADE,
+    --
+	PRIMARY KEY (bidID)
 );
 
 
 
+
+-- Transaction happens at the end of the Offer endDate
 DROP TABLE IF EXISTS Trade;
 CREATE TABLE Trade
 (
-	tradeId VARCHAR(32) NOT NULL,
-	offerId VARCHAR(32) NOT NULL,
-	bidId   VARCHAR(32) NOT NULL,
-	tradeDate    DATETIME NOT NULL,
+	tradeID 	VARCHAR(32) NOT NULL,
+	offerID 	VARCHAR(32) NOT NULL,
+	bidID   	VARCHAR(32) NOT NULL,
+	tradeDate   DATETIME NOT NULL,
 	--
-	FOREIGN KEY (offerId) REFERENCES Offer (offerId) ON DELETE CASCADE,
-	FOREIGN KEY (bidId) REFERENCES Bid (bidId) ON DELETE CASCADE,
-	PRIMARY KEY (tradeId)
+	FOREIGN KEY (offerID) REFERENCES Offer (offerID) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (bidID) REFERENCES Bid (bidID) ON UPDATE CASCADE ON DELETE CASCADE,
+    --
+	PRIMARY KEY (tradeID)
 );
 
 
 
+
+-- Store the SQL statement that will be run against new offers to generate an alert
+DROP TABLE IF EXISTS OfferAlertCriterion;
+CREATE TABLE OfferAlertCriterion
+(
+	criterionID      	VARCHAR(32)    	NOT NULL,
+    --
+	buyer       	VARCHAR(64)    	NOT NULL,
+    --
+    categoryName 	VARCHAR(64) 	NOT NULL,
+	triggerTxt 		VARCHAR(2048)	NOT NULL,
+	--
+	PRIMARY KEY (criterionID)
+);
+
+
+
+
+-- Alerts for outbidded auto-rebid and new offers met offer alert criteria. 
 DROP TABLE IF EXISTS Alert;
 CREATE TABLE Alert
 (
-	alertId 	INT AUTO_INCREMENT,
-	receiver  	VARCHAR(64)  NOT NULL,
-	message 	VARCHAR(256) NOT NULL,
+	alertID 		INT AUTO_INCREMENT,
+	receiver  		VARCHAR(64)  NOT NULL,
+	message 		VARCHAR(256) NOT NULL,
 	--
-    alertDate 	DATETIME NOT NULL,
-    dismissedDate DATETIME NULL,	-- Default NULL. NOT NULL means dismissed.
+    offerID     	VARCHAR(32) NULL,		-- Will be not null for offer alert
+    bidID     		VARCHAR(32) NULL,		-- Will be not null for auto-rebid outbid alert.
+    --
+    alertDate 		DATETIME NOT NULL,
+    dismissedDate 	DATETIME NULL,			-- Default NULL. NOT NULL means dismissed.
     --
 	FOREIGN KEY (receiver) REFERENCES User (username) ON DELETE CASCADE,
-	PRIMARY KEY (alertId)
+	FOREIGN KEY (offerID) REFERENCES Offer (offerID) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (bidID) REFERENCES Bid (bidID) ON UPDATE CASCADE ON DELETE CASCADE,
+    --
+	PRIMARY KEY (alertID)
 );
 
 
 
+
+-- Message from users to BuyMe company.
 DROP TABLE IF EXISTS Question;
 CREATE TABLE Question
 (
-	questionId INT AUTO_INCREMENT,
-	userId     VARCHAR(64),
-	question   VARCHAR(250) NOT NULL,
-	answer     VARCHAR(250) DEFAULT NULL,
+	questionID 			INT AUTO_INCREMENT,
+	userID     			VARCHAR(64) 	NOT NULL,
+    --
+	question		   	VARCHAR(1024) 	NOT NULL,
 	--
-	FOREIGN KEY (userId) REFERENCES User (username) ON DELETE CASCADE,
-	PRIMARY KEY (questionId)
+    questionDate		DATETIME		NOT NULL, 
+    --
+	FOREIGN KEY (userID) REFERENCES User (username) ON DELETE CASCADE,
+    --
+	PRIMARY KEY (questionID)
 );
 
 
 
+
+-- Answer for questions.
+DROP TABLE IF EXISTS Answer;
+CREATE TABLE Answer
+(
+	answerID 					INT AUTO_INCREMENT,
+	userID     					VARCHAR(64) NOT NULL,
+    --
+	questionID 	INT NULL,								-- The question to answer.
+    --
+	answer     	VARCHAR(1024) 	NOT NULL,
+	--
+    answerDate	DATETIME		NOT NULL,
+    --
+	FOREIGN KEY (userID) REFERENCES User (username) ON DELETE CASCADE,
+	FOREIGN KEY (questionID) REFERENCES Question (questionID) ON DELETE CASCADE,
+    --
+	PRIMARY KEY (answerID)
+);
+
+
+
+
+-- Simulated Emails
 DROP TABLE IF EXISTS Email;
 CREATE TABLE Email
 (
@@ -217,7 +253,7 @@ CREATE TABLE Email
     receiver VARCHAR(250) NOT NULL,		-- to
     sub		VARCHAR(250) NOT NULL,		-- subject
     sendDate	DATETIME NOT NULL,		-- date_time
-    content	VARCHAR(250) NOT NULL,		-- content
+    content	VARCHAR(1024) NOT NULL,		-- content
     --
     PRIMARY KEY (emailID)
 );

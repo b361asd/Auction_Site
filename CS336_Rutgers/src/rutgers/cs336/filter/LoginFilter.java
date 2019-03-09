@@ -1,6 +1,6 @@
 package rutgers.cs336.filter;
 
-import rutgers.cs336.db.IConstant;
+import rutgers.cs336.servlet.IConstant;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

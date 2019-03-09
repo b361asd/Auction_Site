@@ -1,6 +1,5 @@
 package rutgers.cs336.db;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,13 +7,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GetOffer extends DBBase implements IConstant {
+public class GetOffer extends DBBase {
 
 	public static final String DATA_OFFER_ID = "DATA_OFFER_ID";
-
-	private static final String SQL_GET_OFFER = "select categoryName, seller, min_price, description, startDate, endDate, status from Offer where offerId = ?";
-
-	private static final String SQL_GET_OFFER_FIELD = "select OfferField.fieldID, fieldName, fieldType, fieldText from OfferField inner join Field on OfferField.fieldID = Field.fieldID where OfferField.offerId = ? order by OfferField.fieldID";
 
 	public static Map getOffer(String offerID) {
 		Map output = new HashMap();
@@ -24,7 +19,7 @@ public class GetOffer extends DBBase implements IConstant {
 		try {
 			con = getConnection();
 			//
-			preparedStmt = con.prepareStatement(SQL_GET_OFFER);
+			preparedStmt = con.prepareStatement(SQL_OFFER_SELECT);
 			preparedStmt.setString(1, offerID);
 			//
 			ResultSet rs = preparedStmt.executeQuery();
@@ -47,7 +42,7 @@ public class GetOffer extends DBBase implements IConstant {
 				output.put("status", status.toString());
 			}
 			//
-			preparedStmt = con.prepareStatement(SQL_GET_OFFER_FIELD);
+			preparedStmt = con.prepareStatement(SQL_OFFERFIELD_SELECT);
 			preparedStmt.setString(1, offerID);
 			//
 			rs = preparedStmt.executeQuery();

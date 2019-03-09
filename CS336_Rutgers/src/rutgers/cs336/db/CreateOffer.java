@@ -6,15 +6,10 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CreateOffer extends DBBase implements IConstant {
+public class CreateOffer extends DBBase {
 
 	public static final String PREFIX_FIELD_ID      = "fieldID_";
 	public static final String PREFIX_CATEGORY_NAME = "categoryName";
-
-
-	private static final String sqlInsertOffer = "insert Offer (offerId, categoryName, seller, initPrice, increment, minPrice, conditionCode, description, startDate, endDate, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL + ? DAY), 1)";
-
-	private static final String sqlInsertOfferField = "insert OfferField (offerId, fieldID, fieldText) VALUES (?, ?, ?)";
 
 	public static Map doCreateOffer(String userID, Map<String, String[]> parameters) {
 		String debugInfo = "START";
@@ -30,7 +25,7 @@ public class CreateOffer extends DBBase implements IConstant {
 			con = getConnection();
 			con.setAutoCommit(false);
 			//
-			pStmtInsertOffer = con.prepareStatement(sqlInsertOffer);
+			pStmtInsertOffer = con.prepareStatement(SQL_OFFER_INSERT);
 			pStmtInsertOffer.setString(1, offerID);
 			pStmtInsertOffer.setString(2, getStringFromParamMap("categoryName", parameters));
 			pStmtInsertOffer.setString(3, userID);
@@ -43,7 +38,7 @@ public class CreateOffer extends DBBase implements IConstant {
 			//
 			pStmtInsertOffer.execute();
 			//
-			pStmtInsertOfferField = con.prepareStatement(sqlInsertOfferField);
+			pStmtInsertOfferField = con.prepareStatement(SQL_OFFERFIELD_INSERT);
 			//
 			for (String s : parameters.keySet()) {
 				if (s.startsWith(PREFIX_FIELD_ID)) {

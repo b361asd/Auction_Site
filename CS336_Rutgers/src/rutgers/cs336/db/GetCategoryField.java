@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GetCategoryField extends DBBase implements IConstant {
+public class GetCategoryField extends DBBase {
 
 	public static final String DATA_CATEGORY_LIST = "DATA_CATEGORY_LIST";
 
@@ -71,9 +71,6 @@ public class GetCategoryField extends DBBase implements IConstant {
 	}
 
 
-	private static final String queryGetCategoryField = "select categoryName, CategoryField.fieldID, fieldName, fieldType from CategoryField inner join Field on CategoryField.fieldID = Field.fieldID order by categoryName, CategoryField.fieldID";
-
-
 	public static Map getCategoryField(String categoryNameFromParam) {
 		Map output = new HashMap();
 		//
@@ -84,7 +81,7 @@ public class GetCategoryField extends DBBase implements IConstant {
 			//
 			stmt = con.createStatement();
 			//
-			ResultSet rs = stmt.executeQuery(queryGetCategoryField);
+			ResultSet rs = stmt.executeQuery(SQL_CATEGORYFIELD_SELECT);
 			//
 			List lstField    = new ArrayList();
 			List lstCategory = new ArrayList();

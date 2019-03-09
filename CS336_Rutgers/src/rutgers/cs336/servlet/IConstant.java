@@ -1,4 +1,4 @@
-package rutgers.cs336.db;
+package rutgers.cs336.servlet;
 
 public interface IConstant {
 	// DB output map
