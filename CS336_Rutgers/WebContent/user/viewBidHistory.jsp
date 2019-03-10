@@ -3,8 +3,8 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Representative Navigation</title>
-	<link rel="stylesheet" href="style.css?v=1.0"/>
+	<title>BuyMe - View Bid History</title>
+	<link rel="stylesheet" href="../style.css?v=1.0"/>
 </head>
 <body>
 

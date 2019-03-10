@@ -12,7 +12,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Post an Offer</title>
-	<link rel="stylesheet" href="style.css?v=1.0"/>
+	<link rel="stylesheet" href="../style.css?v=1.0"/>
 
 	<script type="text/javascript">
        function onCategoryChange(value) {
@@ -47,7 +47,7 @@
 <h1><%=paramMap%>
 </h1>
 
-<form action="${pageContext.request.contextPath}/offerResult.jsp" method="post">
+<form action="${pageContext.request.contextPath}/user/offerResult.jsp" method="post">
 
 	<select name="categoryName" onchange="onCategoryChange(this.parentElement);">
 		<%

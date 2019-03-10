@@ -11,7 +11,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Search Offer Result</title>
-	<link rel="stylesheet" href="style.css?v=1.0"/>
+	<link rel="stylesheet" href="../style.css?v=1.0"/>
 
 </head>
 
@@ -55,7 +55,7 @@
 		<td>Action</td>
 	</tr>
 
-	<form id="form-id" action="${pageContext.request.contextPath}/postBid.jsp" method="post">
+	<form id="form-id" action="${pageContext.request.contextPath}/user/postBid.jspd.jsp" method="post">
 		<input id="input-id" type="hidden" name="offerid" value="_"/>
 	</form>
 

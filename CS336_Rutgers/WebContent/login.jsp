@@ -31,7 +31,7 @@
 	<input type="submit" value="submit">
 </form>
 
-<h2><A href="${pageContext.request.contextPath}/register.jsp">Register</A></h2>
+<h2><A href="${pageContext.request.contextPath}/user/register.jsp">Register</A></h2>
 
 
 </body>

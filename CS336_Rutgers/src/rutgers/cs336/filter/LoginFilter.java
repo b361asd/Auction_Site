@@ -10,9 +10,12 @@ import java.io.IOException;
 
 public class LoginFilter implements Filter, IConstant {
 
+	public static final String USER_PATH  = "user";
+	public static final String ADMIN_PATH = "admin";
+	public static final String REP_PATH   = "rep";
+
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-
 	}
 
 	@Override
@@ -21,44 +24,66 @@ public class LoginFilter implements Filter, IConstant {
 		HttpServletRequest  request  = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		//
-		String loginURI        = request.getContextPath() + "/login.jsp";
-		String loginURLServlet = request.getContextPath() + "/home";
+		String loginURL = request.getContextPath() + "/login.jsp";
+		//
+		String homeURL = request.getContextPath() + "/home";
 		//
 		String registerURI        = request.getContextPath() + "/register.jsp";
 		String registerURLServlet = request.getContextPath() + "/register";
 		//
-		String logoutURLServlet = request.getContextPath() + "/logout";
-		//
-		boolean isLogoutRequest = request.getRequestURI().equals(logoutURLServlet);
+		String  logoutURLServlet = request.getContextPath() + "/logout";
+		boolean isLogoutRequest  = request.getRequestURI().equals(logoutURLServlet);
 		//
 		if (isLogoutRequest) {
 			HttpSession session = request.getSession(true);
 			session.invalidate();
 			//
-			response.sendRedirect(loginURI);
+			response.sendRedirect(loginURL);
 		}
 		else {
 			HttpSession session = request.getSession(true);
 			//
 			boolean isLoggedIn = session != null && session.getAttribute(SESSION_ATTRIBUTE_USER) != null;
 			//
-			boolean isLoginRequest        = request.getRequestURI().equals(loginURI);
-			boolean isLoginRequestServlet = request.getRequestURI().equals(loginURLServlet);
+			boolean isLoginRequest = request.getRequestURI().equals(loginURL);
+			boolean isHomeRequest  = request.getRequestURI().equals(homeURL);
 			//
 			boolean isRegisterRequest        = request.getRequestURI().equals(registerURI);
 			boolean isRegisterRequestServlet = request.getRequestURI().equals(registerURLServlet);
 			//
-			if (isLoggedIn || isLoginRequest || isLoginRequestServlet || isRegisterRequest || isRegisterRequestServlet) {
-				chain.doFilter(request, response);
+			if (isLoggedIn || isLoginRequest || isHomeRequest || isRegisterRequest || isRegisterRequestServlet) {
+				String szUserType = session == null ? "" : (String) session.getAttribute(SESSION_ATTRIBUTE_USERTYPE);
+				szUserType = szUserType == null ? "" : szUserType;
+				//
+				boolean isAdminURL = request.getRequestURI().startsWith(request.getContextPath() + "/" + ADMIN_PATH);
+				boolean isRepURL   = request.getRequestURI().startsWith(request.getContextPath() + "/" + REP_PATH);
+				boolean isUserURL  = request.getRequestURI().startsWith(request.getContextPath() + "/" + USER_PATH);
+				//
+				if (szUserType.equalsIgnoreCase("1") && isAdminURL) {
+					chain.doFilter(request, response);
+				}
+				else if (szUserType.equalsIgnoreCase("2") && isRepURL) {
+					chain.doFilter(request, response);
+				}
+				else if (szUserType.equalsIgnoreCase("3") && isUserURL) {
+					chain.doFilter(request, response);
+				}
+				else {
+					if (isLoginRequest || isHomeRequest || isRegisterRequest || isRegisterRequestServlet) {
+						chain.doFilter(request, response);
+					}
+					else {
+						response.sendRedirect(homeURL);
+					}
+				}
 			}
 			else {
-				response.sendRedirect(loginURI);
+				response.sendRedirect(loginURL);
 			}
 		}
 	}
 
 	@Override
 	public void destroy() {
-
 	}
 }

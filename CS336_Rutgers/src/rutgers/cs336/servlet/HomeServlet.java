@@ -7,9 +7,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
-public class LoginServlet extends HttpServlet implements IConstant {
+public class HomeServlet extends HttpServlet implements IConstant {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -19,35 +20,48 @@ public class LoginServlet extends HttpServlet implements IConstant {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			  throws IOException, ServletException {
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
+		Map map = null;
 		//
-		Map map = VerifyLogin.doVerifyLogin(username, password);
+		boolean isLoggedIn = request.getSession() != null && request.getSession().getAttribute(SESSION_ATTRIBUTE_USER) != null;
+		if (!isLoggedIn) {
+			String username = request.getParameter("username");
+			String password = request.getParameter("password");
+			map = VerifyLogin.doVerifyLogin(username, password);
+			//
+			if ((Boolean) map.get(DATA_NAME_STATUS)) {
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, username);
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, map.get(DATA_NAME_MESSAGE).toString());
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_USERTYPE, map.get(DATA_NAME_USER_TYPE).toString());
+			}
+		}
+		else {
+			map = new HashMap();
+			map.put(DATA_NAME_STATUS, true);
+			map.put(DATA_NAME_MESSAGE, "Already logon.");
+		}
+		//
+		String szUserType = request.getSession() == null ? "3" : (String) request.getSession().getAttribute(SESSION_ATTRIBUTE_USERTYPE);
 		//
 		boolean isOK = (Boolean) map.get(DATA_NAME_STATUS);
 		if (isOK) {
-			request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, username);
 			//
-			request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, map.get(DATA_NAME_MESSAGE).toString());
-			request.getSession().setAttribute(SESSION_ATTRIBUTE_USERTYPE, map.get(DATA_NAME_USER_TYPE).toString());
-			//
-			if ((request.getSession().getAttribute(SESSION_ATTRIBUTE_USERTYPE)).toString().equals("1")) {
+			if (szUserType.equals("1")) {
 				//response.sendRedirect(request.getContextPath() + "/homeAdmin.jsp");
 				//
 				//request.setAttribute("JSP_DATA", map);
-				request.getRequestDispatcher("/homeAdmin.jsp").forward(request, response);
+				request.getRequestDispatcher("/admin/homeAdmin.jsp").forward(request, response);
 			}
-			else if ((request.getSession().getAttribute(SESSION_ATTRIBUTE_USERTYPE)).toString().equals("2")) {
+			else if (szUserType.equals("2")) {
 				//response.sendRedirect(request.getContextPath() + "/homeRep.jsp");
 				//
 				//request.setAttribute("JSP_DATA", map);
-				request.getRequestDispatcher("/homeRep.jsp").forward(request, response);
+				request.getRequestDispatcher("/rep/homeRep.jsp").forward(request, response);
 			}
 			else {
 				//response.sendRedirect(request.getContextPath() + "/home.jsp");
 				//
 				//request.setAttribute("JSP_DATA", map);
-				request.getRequestDispatcher("/home.jsp").forward(request, response);
+				request.getRequestDispatcher("/user/home.jsp").forward(request, response);
 			}
 		}
 		else {

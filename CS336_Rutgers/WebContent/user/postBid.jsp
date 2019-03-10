@@ -10,7 +10,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Post a Bid</title>
-	<link rel="stylesheet" href="style.css?v=1.0"/>
+	<link rel="stylesheet" href="../style.css?v=1.0"/>
 
 	<script type="text/javascript">
        function onCategoryChange(value) {
@@ -48,7 +48,7 @@
 %>
 
 
-<form action="${pageContext.request.contextPath}/bidResult.jsp" method="post">
+<form action="${pageContext.request.contextPath}/user/bidResult.jspt.jsp" method="post">
 
 	<%
 		out.println("<input type=\"hidden\" name=\"offerId\" value=\"" + offerID + "\"/>");
