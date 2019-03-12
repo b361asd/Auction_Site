@@ -10,20 +10,7 @@
 
 <body>
 
-<%
-	String message = "Welcome to BuyMe!";
-	if (session == null) {
-	}
-	else {
-		message = (String) session.getAttribute("message");
-		if (message == null) {
-			message = "Welcome to BuyMe.";
-		}
-	}
-%>
-<h1><%=message%>
-</h1>
-
+<%@include file="userHeader.jsp" %>
 <%@include file="userNav.jsp" %>
 
 </body>

@@ -41,7 +41,11 @@ public class VerifyLogin extends DBBase {
 				else {
 					output.put(DATA_NAME_STATUS, true);
 					output.put(DATA_NAME_MESSAGE, "Welcome, " + firstname.toString() + " " + lastname.toString() + "!");
+					//
 					output.put(DATA_NAME_USER_TYPE, usertype);
+					output.put(DATA_NAME_FIRST_NAME, firstname);
+					output.put(DATA_NAME_LAST_NAME, lastname);
+
 				}
 			}
 			else {

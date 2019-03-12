@@ -30,8 +30,11 @@ public class HomeServlet extends HttpServlet implements IConstant {
 			//
 			if ((Boolean) map.get(DATA_NAME_STATUS)) {
 				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, username);
-				request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, map.get(DATA_NAME_MESSAGE).toString());
 				request.getSession().setAttribute(SESSION_ATTRIBUTE_USERTYPE, map.get(DATA_NAME_USER_TYPE).toString());
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_FNAME, map.get(DATA_NAME_FIRST_NAME).toString());
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_LNAME, map.get(DATA_NAME_LAST_NAME).toString());
+				//
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, map.get(DATA_NAME_MESSAGE).toString());
 			}
 		}
 		else {
