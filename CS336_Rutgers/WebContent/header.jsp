@@ -1,8 +1,16 @@
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
+<%@ page import="java.util.Map" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
 <%
+	Map dataMap = (Map) session.getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
+	if (dataMap!=null && !(Boolean)dataMap.get(DATA_NAME_STATUS)) {
+		String message = (String) dataMap.get(DATA_NAME_MESSAGE);
+		out.println("<h1>" + message + "</h1>");
+	}
+	//
 	String sessionMessage;
 	{
 		String userID    = (String) session.getAttribute(SESSION_ATTRIBUTE_USER);
@@ -18,5 +26,4 @@
 		}
 	}
 %>
-<h1><%=sessionMessage%>
-</h1>
+<h1><%=sessionMessage%></h1>

@@ -28,6 +28,8 @@ public class HomeServlet extends HttpServlet implements IConstant {
 			String password = request.getParameter("password");
 			map = VerifyLogin.doVerifyLogin(username, password);
 			//
+			request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, map);
+			//
 			if ((Boolean) map.get(DATA_NAME_STATUS)) {
 				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, username);
 				request.getSession().setAttribute(SESSION_ATTRIBUTE_USERTYPE, map.get(DATA_NAME_USER_TYPE).toString());

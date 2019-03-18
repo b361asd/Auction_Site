@@ -24,16 +24,10 @@ public class LoginFilter implements Filter, IConstant {
 		HttpServletRequest  request  = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		//
-		String loginURL = request.getContextPath() + "/login.jsp";
-		//
-		String homeURL = request.getContextPath() + "/home";
-		//
-		String registerURI        = request.getContextPath() + "/register.jsp";
-		String registerURLServlet = request.getContextPath() + "/register";
+		String  loginURL         = request.getContextPath() + "/login.jsp";
 		//
 		String  logoutURLServlet = request.getContextPath() + "/logout";
 		boolean isLogoutRequest  = request.getRequestURI().equals(logoutURLServlet);
-		//
 		if (isLogoutRequest) {
 			HttpSession session = request.getSession(true);
 			session.invalidate();
@@ -41,18 +35,13 @@ public class LoginFilter implements Filter, IConstant {
 			response.sendRedirect(loginURL);
 		}
 		else {
-			HttpSession session = request.getSession(true);
+			HttpSession session    = request.getSession(true);
+			boolean     isLoggedIn = session != null && session.getAttribute(SESSION_ATTRIBUTE_USER) != null;
 			//
-			boolean isLoggedIn = session != null && session.getAttribute(SESSION_ATTRIBUTE_USER) != null;
+			String homeURL = request.getContextPath() + "/home";
 			//
-			boolean isLoginRequest = request.getRequestURI().equals(loginURL);
-			boolean isHomeRequest  = request.getRequestURI().equals(homeURL);
-			//
-			boolean isRegisterRequest        = request.getRequestURI().equals(registerURI);
-			boolean isRegisterRequestServlet = request.getRequestURI().equals(registerURLServlet);
-			//
-			if (isLoggedIn || isLoginRequest || isHomeRequest || isRegisterRequest || isRegisterRequestServlet) {
-				String szUserType = session == null ? "" : (String) session.getAttribute(SESSION_ATTRIBUTE_USERTYPE);
+			if (isLoggedIn) {                     // Already Login
+				String szUserType = (String) session.getAttribute(SESSION_ATTRIBUTE_USERTYPE);
 				szUserType = szUserType == null ? "" : szUserType;
 				//
 				boolean isAdminURL = request.getRequestURI().startsWith(request.getContextPath() + "/" + ADMIN_PATH);
@@ -68,17 +57,25 @@ public class LoginFilter implements Filter, IConstant {
 				else if (szUserType.equalsIgnoreCase("3") && isUserURL) {
 					chain.doFilter(request, response);
 				}
-				else {
-					if (isLoginRequest || isHomeRequest || isRegisterRequest || isRegisterRequestServlet) {
-						chain.doFilter(request, response);
-					}
-					else {
-						response.sendRedirect(homeURL);
-					}
+				else {                           // Including login.jsp
+					response.sendRedirect(homeURL);
 				}
 			}
 			else {
-				response.sendRedirect(loginURL);
+				String registerURI        = request.getContextPath() + "/register.jsp";
+				String registerURLServlet = request.getContextPath() + "/register";
+				//
+				boolean isLoginRequest           = request.getRequestURI().equals(loginURL);
+				boolean isHomeRequest           = request.getRequestURI().equals(homeURL);
+				boolean isRegisterRequest        = request.getRequestURI().equals(registerURI);
+				boolean isRegisterRequestServlet = request.getRequestURI().equals(registerURLServlet);
+				//
+				if (isLoginRequest || isHomeRequest || isRegisterRequest || isRegisterRequestServlet) {        //want to login, want to register
+					chain.doFilter(request, response);
+				}
+				else {
+					response.sendRedirect(loginURL);
+				}
 			}
 		}
 	}

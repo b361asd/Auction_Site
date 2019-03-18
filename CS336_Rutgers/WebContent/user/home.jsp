@@ -10,7 +10,7 @@
 
 <body>
 
-<%@include file="userHeader.jsp" %>
+<%@include file="../header.jsp" %>
 <%@include file="userNav.jsp" %>
 
 </body>

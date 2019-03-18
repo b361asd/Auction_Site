@@ -93,7 +93,6 @@ public class CreateBid extends DBBase {
 
 
 	public static void main(String[] args) {
-		initTest();
 		//
 		Map<String, String[]> parameters = new HashMap<>();
 	}

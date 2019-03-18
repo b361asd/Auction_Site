@@ -89,8 +89,6 @@
 	<input type="submit" value="submit">
 </form>
 
-<%@include file="userNav.jsp" %>
-
 </body>
 
 </html>

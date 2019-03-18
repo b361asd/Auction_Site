@@ -8,9 +8,9 @@ public interface ISQLConstant {
 	String MySQL_PASSWORD = "cs336_password";
 
 	// User
-	String SQL_USER_INSERT = "insert User (username, password, email, firstname, lastname, address, phone, active, usertype) VALUES (?, ?, ?, ?, ?, ?, ?, true, ?)";
+	String SQL_USER_INSERT = "insert User (username, password, email, firstname, lastname, address, phone, active, userType) VALUES (?, ?, ?, ?, ?, ?, ?, true, ?)";
 	//
-	String SQL_USER_SELECT = "select password, firstname, lastname, active, usertype from User where username=?";
+	String SQL_USER_SELECT = "select password, firstname, lastname, active, userType from User where username=?";
 
 	// Bid
 	String SQL_BID_INSERT = "insert Bid (bidId, offerId, buyer, price, isAutoRebid, autoRebidLimit, date) VALUES (?, ?, ?, ?, ?, ?, NOW())";
@@ -53,13 +53,13 @@ II. Auctions
 	[] Seller creates auctions and posts items for sale
 		[] Set all the characteristics of the item
 		[] Set closing date and time
-		[] Set a hidden minimum price (reserve)
+		[*] Set a hidden minimum price (reserve)
 	[] A buyer should be able to bid
 		[] Manually
 			[] Let the buyer set a new bid
-		[] [] With automatic bidding
-			[] Set a secret upper limit
-			[] Put in a higher bid automatically for the user in case someone bids higher
+			[*] With automatic bidding
+				[*] Set a secret upper limit
+				[*] Put in a higher bid automatically for the user in case someone bids higher
 	[] Define the winner of the auction
 		[] When the closing time has come, check if the seller has set a reserve
 			[] If yes: if the reserve is higher than the last bid none is the winner.
@@ -85,7 +85,7 @@ SIMILAR_ITEM
 
 IV. Alerts and messaging functions
 	[] Alert the buyer that a higher bid has been placed
-	[] Alert the buyer in case someone bids more than your upper limit (for automatic bidding)
+	[*] Alert the buyer in case someone bids more than your upper limit (for automatic bidding)
 	[] Let user set an alert for specific items s/he is interested
 		[] Get an alert when the item becomes available
 	[] User can post questions

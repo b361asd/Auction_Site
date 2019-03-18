@@ -90,8 +90,6 @@ public class GetOffer extends DBBase {
 	}
 
 	public static void main(String[] args) {
-		initTest();
-		//
 		Map map = getOffer("5642babcb54a4872b15353bed3712824");
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));

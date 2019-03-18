@@ -125,8 +125,6 @@ public class CreateOffer extends DBBase {
 
 
 	public static void main(String[] args) {
-		initTest();
-		//
 		Map<String, String[]> parameters = new HashMap<>();
 	}
 }

@@ -11,19 +11,7 @@
 
 <body>
 
-<%
-	String message = "Welcome to BuyMe!";
-	if (session == null) {
-	}
-	else {
-		message = (String) session.getAttribute("message");
-		if (message == null) {
-			message = "Welcome to BuyMe.";
-		}
-	}
-%>
-<h1><%=message%>
-</h1>
+<%@include file="header.jsp" %>
 
 <form action="${pageContext.request.contextPath}/home" method="post">
 	Please enter your username<input type="text" name="username"/><br>
@@ -31,7 +19,7 @@
 	<input type="submit" value="submit">
 </form>
 
-<h2><A href="${pageContext.request.contextPath}/user/register.jsp">Register</A></h2>
+<h2><A href="${pageContext.request.contextPath}/user/home">Register</A></h2>
 
 
 </body>

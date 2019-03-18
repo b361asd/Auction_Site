@@ -68,7 +68,6 @@ public class AddUser extends DBBase {
 
 
 	public static void main(String[] args) {
-		initTest();
 		//
 		Map map = doAddUser("abc", "123", "email", "fN", "lN", "123 St", "Pearl", "NJ", "01010", "39239033", 3);
 		//

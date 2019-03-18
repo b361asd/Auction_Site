@@ -9,28 +9,14 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.UUID;
 
-public class DBBase implements ISQLConstant, IConstant {
-
-	private static String dbURL;
-	private static String user;
-	private static String pwd;
-
-	public static void init(String url, String username, String password) {
-		dbURL = url;
-		user = username;
-		pwd = password;
-	}
-
-	public static void initTest() {
-		init(MySQL_URL, MySQL_USER_ID, MySQL_PASSWORD);
-	}
+public class DBBase extends Utils implements ISQLConstant, IConstant {
 
 
 	public static Connection getConnection() throws ClassNotFoundException, SQLException {
 		// JDBC driver for MySQL. Latest: https://dev.mysql.com/downloads/connector/j/
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//
-		Connection conn = DriverManager.getConnection(dbURL, user, pwd);
+		Connection conn = DriverManager.getConnection(MySQL_URL, MySQL_USER_ID, MySQL_PASSWORD);
 		//
 		return conn;
 	}

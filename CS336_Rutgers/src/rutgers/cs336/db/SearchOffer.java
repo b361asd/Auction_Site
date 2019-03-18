@@ -184,8 +184,6 @@ public class SearchOffer extends DBBase {
 	}
 
 	public static void main(String[] args) {
-		initTest();
-		//
 		Map map = doSearchOffer(null);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));

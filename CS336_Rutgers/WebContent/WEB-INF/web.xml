@@ -5,28 +5,6 @@
     <display-name>CS336 BuyMe Project</display-name>
 
 
-    <context-param>
-        <!--Username-->
-        <param-name>DBUSER</param-name>
-        <param-value>cs336</param-value>
-    </context-param>
-    <context-param>
-        <!--Password-->
-        <param-name>DBPWD</param-name>
-        <param-value>cs336_password</param-value>
-    </context-param>
-    <context-param>
-        <!--URL-->
-        <param-name>DBURL</param-name>
-        <!--JDBC Connector URL-->
-        <param-value>jdbc:mysql://cs336-buyme.cf7jfkoilx7f.us-east-1.rds.amazonaws.com:3306/cs336buyme</param-value>
-    </context-param>
-
-
-    <listener>
-        <listener-class>rutgers.cs336.listener.AppContextListener</listener-class>
-    </listener>
-
     <servlet>
         <servlet-name>HomeServlet</servlet-name>
         <servlet-class>rutgers.cs336.servlet.HomeServlet</servlet-class>

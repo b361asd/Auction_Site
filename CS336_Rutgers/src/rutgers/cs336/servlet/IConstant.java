@@ -18,4 +18,6 @@ public interface IConstant {
 	String SESSION_ATTRIBUTE_USER       = "user";
 	String SESSION_ATTRIBUTE_USER_FNAME = "userFirstName";
 	String SESSION_ATTRIBUTE_USER_LNAME = "userLastName";
+	//
+	String SESSION_ATTRIBUTE_DATA_MAP 	= "DataMap";
 }
