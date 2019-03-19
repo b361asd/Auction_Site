@@ -6,18 +6,17 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="static rutgers.cs336.db.CreateOffer.PREFIX_CATEGORY_NAME" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
-<%@ page import="static rutgers.cs336.db.AddUser.*" %>
 
 <html>
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Post an Offer</title>
+	<title>BuyMe - Post a Question</title>
 	<link rel="stylesheet" href="../style.css?v=1.0"/>
 
 	<script type="text/javascript">
        function onCategoryChange(value) {
-           value.action = "${pageContext.request.contextPath}/user/postOffer.jsp";
+           value.action = "${pageContext.request.contextPath}/user/postQuestion.jsp";
            value.submit();
        }
 	</script>
@@ -48,7 +47,7 @@
 <h1><%=paramMap%>
 </h1>
 
-<form action="${pageContext.request.contextPath}/user/offerResult.jsp" method="post">
+<form action="${pageContext.request.contextPath}/user/postQuestionResult.jsp" method="post">
 
 	<select name="categoryName" onchange="onCategoryChange(this.parentElement);">
 		<%

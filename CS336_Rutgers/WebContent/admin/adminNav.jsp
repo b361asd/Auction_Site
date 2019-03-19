@@ -8,5 +8,9 @@
 </head>
 <body>
 
+<h2>
+	<A href="${pageContext.request.contextPath}/admin/registerRep.jsp">Post an Offer</A>
+</h2>
+
 </body>
 </html>

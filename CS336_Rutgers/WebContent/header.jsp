@@ -5,9 +5,9 @@
 <!DOCTYPE html>
 
 <%
-	Map dataMap = (Map) session.getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
-	if (dataMap!=null && !(Boolean)dataMap.get(DATA_NAME_STATUS)) {
-		String message = (String) dataMap.get(DATA_NAME_MESSAGE);
+	Map dataMapHeader = (Map) session.getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
+	if (dataMapHeader!=null && !(Boolean)dataMapHeader.get(DATA_NAME_STATUS)) {
+		String message = (String) dataMapHeader.get(DATA_NAME_MESSAGE);
 		out.println("<h1>" + message + "</h1>");
 	}
 	//

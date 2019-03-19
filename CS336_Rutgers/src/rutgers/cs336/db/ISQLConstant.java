@@ -72,7 +72,7 @@ III. Browsing and advanced search functionality
 	[] An user should be able to:
 		[] View all the history of bids for any specific auction
 		[] View the list of all auctions a specific buyer or seller has participated in
-		[] View the list of “similar” items on auctions in the preceding month (and auction information about them)
+		[] View the list of "similar" items on auctions in the preceding month (and auction information about them)
 
 
 BROWSE_OPEN_OFFER (including current bid, sorted by different criteria)

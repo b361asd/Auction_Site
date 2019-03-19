@@ -9,32 +9,10 @@
 </head>
 
 <body>
-<%
-	String message = "Welcome to BuyMe!";
-	if (session == null) {
-	}
-	else {
-		message = (String) session.getAttribute("message");
-		if (message == null) {
-			message = "Welcome to BuyMe.";
-		}
-	}
-%>
-<h1><%=message%>
-</h1>
 
-<form action="${pageContext.request.contextPath}/login">
+<%@include file="../header.jsp" %>
+<%@include file="adminNav.jsp" %>
 
-
-	Please enter 1 your username
-	<input type="text" name="username"/><br>
-
-	Please enter 2 your password
-	<input type="text" name="password"/>
-
-	<input type="submit" value="submit">
-
-</form>
 </body>
 
 </html>
