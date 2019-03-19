@@ -16,7 +16,7 @@
 
 	<script type="text/javascript">
        function onCategoryChange(value) {
-           value.action = "${pageContext.request.contextPath}/postOffer.jsp";
+           value.action = "${pageContext.request.contextPath}/user/postOffer.jsp";
            value.submit();
        }
 	</script>
