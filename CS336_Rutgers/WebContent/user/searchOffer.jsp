@@ -20,8 +20,8 @@
            value.action = "${pageContext.request.contextPath}/user/searchOffer.jsp";	// Post to itself
            value.submit();
        }
-
        function onIntegerOPChange(value) {
+           //nextElementSibling
        }
 	</script>
 </head>
@@ -53,37 +53,44 @@
 
 	<%
 		out.println("<div class='allField'>offerID");
-		out.println(getOPSZSelection("offerID"));
-		out.println("<input type='text' name='offerID'/></div><br/>");
+		out.println(getOPSZSelection("offerIDOP"));
+		out.println("<input type='text' name='offerIDVal'/></div><br/>");
 
 		out.println("<div class='allField'>seller");
-		out.println(getOPSZSelection("seller"));
-		out.println("<input type='text' name='seller'/></div><br/>");
+		out.println(getOPSZSelection("sellerOP"));
+		out.println("<input type='text' name='sellerVal'/></div><br/>");
 		
 		out.println("<div class='allField'>conditionCode");
-		out.println(getConditionCodeSelection("conditionCode"));
+		out.println(getConditionCodeSelection("conditionCodeVal"));
 
 		out.println("<div class='allField'>description");
-		out.println(getOPSZSelection("description"));
-		out.println("<input type='text' name='description'/></div><br/>");
+		out.println(getOPSZSelection("descriptionOP"));
+		out.println("<input type='text' name='descriptionVal'/></div><br/>");
 
 		out.println("<div class='allField'>currentBidPrice");
-		out.println(getOPIntSelection("currentBidPrice"));
-		out.println("<input type='number' name='currentBidPrice1'/>");
-		out.println("<input type='number' name='currentBidPrice2'/></div><br/>");
+		out.println(getOPIntSelection("currentBidPriceOP"));
+		out.println("<input type='number' name='currentBidPriceVal1'/>");
+		out.println("<input type='number' name='currentBidPriceVal2'/></div><br/>");
 		
 		List lstField = (List) data.get(GetCategoryField.DATA_FIELD_LIST);
+		String lstFieldIDs = null;
 		for (Object o : lstField) {
 			String categoryName = ((GetCategoryField.Field) o).getCategoryName();
 			String fieldName    = ((GetCategoryField.Field) o).getFieldName();
 			int    fieldID      = ((GetCategoryField.Field) o).getFieldID();
 			int    fieldType    = ((GetCategoryField.Field) o).getFieldType();
 			//
+			if (lstFieldIDs==null) {
+				lstFieldIDs = "" + fieldID;
+			}
+			else {
+				lstFieldIDs = lstFieldIDs + "," + fieldID;
+			}
 			// String
 			if (fieldType == 1) {
 				out.println("<div class='allField'>" + fieldName);
 				out.println(getOPSZSelection("fieldop_" + fieldID));
-				out.println("<input type='text' name='fieldval_" + fieldID + "'/></div><br/>");
+				out.println("<input type='text' name='fieldval1_" + fieldID + "'/></div><br/>");
 			}
 			// Integer
 			else if (fieldType == 2) {
@@ -99,6 +106,8 @@
 				out.println("</div><br/>");
 			}
 		}
+		//
+		out.println("<input name='lstFieldIDs' type='hidden' value='" + lstFieldIDs + "'/>");
 	%>
 
 	<input type="submit" value="submit">

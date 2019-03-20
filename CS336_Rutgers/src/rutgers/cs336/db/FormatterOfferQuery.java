@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 public class FormatterOfferQuery {
 	private static String OP_ANY = "any";
 	//
-	private static String OP_SZ_EQUAL = "szequal";
+	public static String OP_SZ_EQUAL = "szequal";
 	private static String OP_SZ_NOT_EQUAL = "sznotequal";
 	private static String OP_SZ_START_WITH = "startwith";
 	private static String OP_SZ_CONTAIN = "contain";
@@ -71,61 +71,79 @@ public class FormatterOfferQuery {
 	
 	private static String oneCondition(String columnName, String op, String value, String valueAdd, boolean isCasting) {
 		String output = "";
+		//
 		if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_NOT_EQUAL) 
 		|| op.equals(OP_SZ_START_WITH) || op.equals(OP_SZ_CONTAIN)) {		// String
-			value = escape(value).toUpperCase();
-			if (op.equals(OP_SZ_EQUAL)) {
-				output = "(UPPER(" + columnName + ") = '" + value + "')";
+			value = escape((value==null?"":value.trim())).toUpperCase();
+			if (value.equals("")) {
+				output = "";
 			}
-			else if (op.equals(OP_SZ_NOT_EQUAL)) {
-				output = "(NOT UPPER(" + columnName + ") = '" + value + "')";
-			}
-			else if (op.equals(OP_SZ_START_WITH)) {
-				output = "(UPPER(" + columnName + ") LIKE '" + value + "%')";
-			}
-			else if (op.equals(OP_SZ_CONTAIN)) {
-				output = "(UPPER(" + columnName + ") LIKE '%" + value + "%')";
+			else {
+				if (op.equals(OP_SZ_EQUAL)) {
+					output = "(UPPER(" + columnName + ") = '" + value + "')";
+				}
+				else if (op.equals(OP_SZ_NOT_EQUAL)) {
+					output = "(NOT UPPER(" + columnName + ") = '" + value + "')";
+				}
+				else if (op.equals(OP_SZ_START_WITH)) {
+					output = "(UPPER(" + columnName + ") LIKE '" + value + "%')";
+				}
+				else if (op.equals(OP_SZ_CONTAIN)) {
+					output = "(UPPER(" + columnName + ") LIKE '%" + value + "%')";
+				}
 			}
 		}
 		else if (op.equals(OP_INT_EQUAL) || op.equals(OP_INT_NOT_EQUAL) || op.equals(OP_INT_EQUAL_OR_OVER) || op.equals(OP_INT_EQUAL_OR_UNDER) || op.equals(OP_INT_BETWEEN)) {		// Integer
-			if (op.equals(OP_INT_EQUAL)) {
-				if (isCasting) {
-					output = "(CAST(" + columnName + " AS SIGNED) = CAST(" + value + " AS SIGNED))";
-				}
-				else {
-					output = "(" + columnName + " = " + value + ")";
-				}
+			value = escape((value==null?"":value.trim())).toUpperCase();
+			if (value.equals("")) {
+				output = "";
 			}
-			else if (op.equals(OP_INT_NOT_EQUAL)) {
-				if (isCasting) {
-					output = "(NOT CAST(" + columnName + " AS SIGNED) = CAST(" + value + " AS SIGNED))";
+			else {
+				if (op.equals(OP_INT_EQUAL)) {
+					if (isCasting) {
+						output = "(CAST(" + columnName + " AS SIGNED) = CAST(" + value + " AS SIGNED))";
+					}
+					else {
+						output = "(" + columnName + " = " + value + ")";
+					}
 				}
-				else {
-					output = "(NOT " + columnName + " = " + value + ")";
+				else if (op.equals(OP_INT_NOT_EQUAL)) {
+					if (isCasting) {
+						output = "(NOT CAST(" + columnName + " AS SIGNED) = CAST(" + value + " AS SIGNED))";
+					}
+					else {
+						output = "(NOT " + columnName + " = " + value + ")";
+					}
 				}
-			}
-			else if (op.equals(OP_INT_EQUAL_OR_OVER)) {
-				if (isCasting) {
-					output = "(CAST(" + columnName + " AS SIGNED) >= CAST(" + value + " AS SIGNED))";
+				else if (op.equals(OP_INT_EQUAL_OR_OVER)) {
+					if (isCasting) {
+						output = "(CAST(" + columnName + " AS SIGNED) >= CAST(" + value + " AS SIGNED))";
+					}
+					else {
+						output = "(" + columnName + " >= " + value + ")";
+					}
 				}
-				else {
-					output = "(" + columnName + " >= " + value + ")";
+				else if (op.equals(OP_INT_EQUAL_OR_UNDER)) {
+					if (isCasting) {
+						output = "(CAST("+ columnName + " AS SIGNED) <= CAST(" + value + " AS SIGNED))";
+					}
+					else {
+						output = "("+ columnName + " <= " + value + ")";
+					}
 				}
-			}
-			else if (op.equals(OP_INT_EQUAL_OR_UNDER)) {
-				if (isCasting) {
-					output = "(CAST("+ columnName + " AS SIGNED) <= CAST(" + value + " AS SIGNED))";
-				}
-				else {
-					output = "("+ columnName + " <= " + value + ")";
-				}
-			}
-			else if (op.equals(OP_INT_BETWEEN)) {
-				if (isCasting) {
-					output = "(CAST(" + columnName + " AS SIGNED) BETWEEN CAST(" + value + " AS SIGNED) AND CAST(" + valueAdd + " AS SIGNED))";
-				}
-				else {
-					output = "(" + columnName + " BETWEEN " + value + " AND " + valueAdd + ")";
+				else if (op.equals(OP_INT_BETWEEN)) {
+					valueAdd = escape((valueAdd==null?"":valueAdd.trim())).toUpperCase();
+					if (valueAdd.equals("")) {
+						output = "";
+					}
+					else {
+						if (isCasting) {
+							output = "(CAST(" + columnName + " AS SIGNED) BETWEEN CAST(" + value + " AS SIGNED) AND CAST(" + valueAdd + " AS SIGNED))";
+						}
+						else {
+							output = "(" + columnName + " BETWEEN " + value + " AND " + valueAdd + ")";
+						}
+					}
 				}
 			}
 		}
@@ -158,7 +176,10 @@ public class FormatterOfferQuery {
 			//do nothing
 		}
 		else {
-			sb.append(" and ").append(oneCondition("o."+columnName, op, value, valueAdd, false));
+			String temp = oneCondition("o."+columnName, op, value, valueAdd, false);
+			if (temp.length()>0) {
+				sb.append(" and ").append(temp);
+			}
 		}
 		//
 		return sb;
@@ -168,12 +189,15 @@ public class FormatterOfferQuery {
 	public static StringBuilder initFieldCondition(StringBuilder sb) {
 		return sb.append(" and (not exists (select * from OfferField of2 where of2.offerId = o.offerId and (false");
 	}
-	public static StringBuilder addFieldCondition(StringBuilder sb, int fieldId, String op, String value, String valueAdd) {
+	public static StringBuilder addFieldCondition(StringBuilder sb, String fieldId, String op, String value, String valueAdd) {
 		if (op.equals(OP_ANY)) {
 			//do nothing
 		}
 		else {
-			sb.append(" or (of2.fieldID = " + fieldId + " and (not ").append(oneCondition("of2.fieldText", op, value, valueAdd, true)).append("))");
+			String temp = oneCondition("of2.fieldText", op, value, valueAdd, true);
+			if (temp.length()>0) {
+				sb.append(" or (of2.fieldID = " + fieldId + " and (not ").append(temp).append("))");
+			}
 		}
 		//
 		return sb;
@@ -199,11 +223,11 @@ public class FormatterOfferQuery {
 		addCondition(sb, "status", OP_INT_EQUAL_OR_OVER, "5", null);
 		//
 		initFieldCondition(sb);
-		addFieldCondition(sb, 1, OP_INT_BETWEEN, "23", "56");
-		addFieldCondition(sb, 2, OP_BOOL_TRUE, "toyota", "");
-		addFieldCondition(sb, 3, OP_BOOL_FALSE, "400", "");
-		addFieldCondition(sb, 4, OP_INT_EQUAL_OR_UNDER, "400", "");
-		addFieldCondition(sb, 5, OP_INT_NOT_EQUAL, "400", "");
+		addFieldCondition(sb, "1", OP_INT_BETWEEN, "23", "56");
+		addFieldCondition(sb, "2", OP_BOOL_TRUE, "toyota", "");
+		addFieldCondition(sb, "3", OP_BOOL_FALSE, "400", "");
+		addFieldCondition(sb, "4", OP_INT_EQUAL_OR_UNDER, "400", "");
+		addFieldCondition(sb, "5", OP_INT_NOT_EQUAL, "400", "");
 		doneFieldCondition(sb);
 		//
 		System.out.println(sb.toString());

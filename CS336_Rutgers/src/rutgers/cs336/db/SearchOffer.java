@@ -1,9 +1,9 @@
 package rutgers.cs336.db;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +29,7 @@ public class SearchOffer extends DBBase {
 		String details;
 		String startDate;
 		String endDate;
+
 		//
 		public OfferItem(Object obj_offerId, Object obj_categoryName, Object obj_seller, Object obj_min_price, Object obj_description, Object obj_startDate, Object obj_endDate) {
 			this.offerId = obj_offerId.toString();
@@ -80,21 +81,63 @@ public class SearchOffer extends DBBase {
 		List<OfferItem>        lstOffer = new ArrayList<>();
 		Map<String, OfferItem> mapOffer = new HashMap<>();
 		//
-		Connection        con          = null;
-		PreparedStatement preparedStmt = null;
+		Connection con       = null;
+		Statement  statement = null;
 		try {
 			con = getConnection();
 			//
-			String paramCategoryName = getStringFromParamMap(PARAM_NAME_CATEGORY_NAME, parameters);
-			String paramCriteria = formatStringSearchCriteria(getStringFromParamMap(PARAM_NAME_DESCRIPTION, parameters),
-			                                                  getStringFromParamMap(PARAM_NAME_DESCRIPTION_OP,
-			                                                                        parameters));
+			StringBuilder sb = FormatterOfferQuery.initQuery();
 			//
-			preparedStmt = con.prepareStatement(SQL_OFFER_SEARCH);
-			preparedStmt.setString(1, paramCategoryName);
-			preparedStmt.setString(2, paramCriteria);
+			{
+				String offerIDOP  = getStringFromParamMap("offerIDOP", parameters);
+				String offerIDVal = getStringFromParamMap("offerIDVal", parameters);
+				FormatterOfferQuery.addCondition(sb, "offerID", offerIDOP, offerIDVal, null);
+			}
 			//
-			ResultSet rs = preparedStmt.executeQuery();
+			{
+				String sellerOP  = getStringFromParamMap("sellerOP", parameters);
+				String sellerVal = getStringFromParamMap("sellerVal", parameters);
+				FormatterOfferQuery.addCondition(sb, "seller", sellerOP, sellerVal, null);
+			}
+			//
+			{
+				String conditionCodeOP  = FormatterOfferQuery.OP_SZ_EQUAL;
+				String conditionCodeVal = getStringFromParamMap("conditionCodeVal", parameters);
+				FormatterOfferQuery.addCondition(sb, "conditionCode", conditionCodeOP, conditionCodeVal, null);
+			}
+			//
+			{
+				String descriptionOP  = getStringFromParamMap("descriptionOP", parameters);
+				String descriptionVal = getStringFromParamMap("descriptionVal", parameters);
+				FormatterOfferQuery.addCondition(sb, "description", descriptionOP, descriptionVal, null);
+			}
+			//
+			{
+				//String currentBidPriceOP = getStringFromParamMap("currentBidPriceOP", parameters);
+				//String currentBidPriceVal1 = getStringFromParamMap("currentBidPriceVal1", parameters);
+				//String currentBidPriceVal2 = getStringFromParamMap("currentBidPriceVal2", parameters);
+				//FormatterOfferQuery.addCondition(sb, "currentBidPrice", currentBidPriceOP, currentBidPriceVal1, currentBidPriceVal2);
+			}
+			//
+			String   lstFieldIDs = getStringFromParamMap("lstFieldIDs", parameters);
+			String[] fieldIDs    = lstFieldIDs.split("\\,");
+			//
+			FormatterOfferQuery.initFieldCondition(sb);
+			//
+			for (int i = 0; i < fieldIDs.length; i++) {
+				String fieldID = fieldIDs[i];
+				//
+				String fieldOP   = getStringFromParamMap("fieldop_" + fieldID, parameters);
+				String fieldVal1 = getStringFromParamMap("fieldval1_" + fieldID, parameters);
+				String fieldVal2 = getStringFromParamMap("fieldval2_" + fieldID, parameters);
+				FormatterOfferQuery.addFieldCondition(sb, fieldID, fieldOP, fieldVal1, fieldVal2);
+			}
+			//
+			FormatterOfferQuery.doneFieldCondition(sb);
+			//
+			statement = con.createStatement();
+			//
+			ResultSet rs = statement.executeQuery(sb.toString());
 			//
 			while (rs.next()) {
 				Object offerId      = rs.getObject(1);
@@ -108,24 +151,6 @@ public class SearchOffer extends DBBase {
 				OfferItem one = new OfferItem(offerId, categoryName, seller, min_price, description, startDate, endDate);
 				lstOffer.add(one);
 				mapOffer.put(offerId.toString(), one);
-			}
-			//
-			preparedStmt = con.prepareStatement(SQL_OFFERFIELD_SEARCH);
-			preparedStmt.setString(1, paramCategoryName);
-			preparedStmt.setString(2, paramCriteria);
-			//
-			rs = preparedStmt.executeQuery();
-			//
-			while (rs.next()) {
-				Object offerId = rs.getObject(1);
-				//Object fieldID = rs.getObject(2);
-				Object fieldName = rs.getObject(3);
-				Object fieldType = rs.getObject(4);
-				Object fieldText = rs.getObject(5);
-				//
-				OfferItem one = mapOffer.get(offerId.toString());
-				//
-				one.addDetails(fieldName, fieldText, fieldType);
 			}
 			//
 			output.put(DATA_NAME_DATA, lstOffer);
@@ -144,9 +169,9 @@ public class SearchOffer extends DBBase {
 			e.printStackTrace();
 		}
 		finally {
-			if (preparedStmt != null) {
+			if (statement != null) {
 				try {
-					preparedStmt.close();
+					statement.close();
 				}
 				catch (Throwable e) {
 					e.printStackTrace();
