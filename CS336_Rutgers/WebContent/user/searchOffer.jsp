@@ -61,7 +61,8 @@
 		out.println("<input type='text' name='sellerVal'/></div><br/>");
 		
 		out.println("<div class='allField'>conditionCode");
-		out.println(getConditionCodeSelection("conditionCodeVal"));
+		out.println(getConditionCodeCheckBox("conditionCode"));
+		out.println("</div><br/>");
 
 		out.println("<div class='allField'>description");
 		out.println(getOPSZSelection("descriptionOP"));

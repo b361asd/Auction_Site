@@ -31,10 +31,6 @@ public class SearchOffer extends DBBase {
 			this.endDate = obj_endDate.toString();
 		}
 
-		public void addDetails(Object key, Object value, Object type) {
-			details += ", " + key + " is " + value;
-		}
-
 		public String getOfferId() {
 			return offerId;
 		}
@@ -76,7 +72,9 @@ public class SearchOffer extends DBBase {
 		try {
 			con = getConnection();
 			//
-			StringBuilder sb = FormatterOfferQuery.initQuery();
+			String category_Name  = getStringFromParamMap("categoryName", parameters);
+			//
+			StringBuilder sb = FormatterOfferQuery.initQuery(category_Name);
 			//
 			{
 				String offerIDOP  = getStringFromParamMap("offerIDOP", parameters);
@@ -90,10 +88,22 @@ public class SearchOffer extends DBBase {
 				FormatterOfferQuery.addCondition(sb, "seller", sellerOP, sellerVal, null);
 			}
 			//
+			//		out.println(getConditionCodeCheckBox("conditionCode"));
+
 			{
-				String conditionCodeOP  = FormatterOfferQuery.OP_SZ_EQUAL;
-				String conditionCodeVal = getStringFromParamMap("conditionCodeVal", parameters);
-				FormatterOfferQuery.addCondition(sb, "conditionCode", conditionCodeOP, conditionCodeVal, null);
+				String lstConditionCode = "";
+				for (int i = 1; i <= 6; i++) {
+					String temp = getStringFromParamMap("conditionCode_" + i, parameters);
+					if (temp != null && temp.length() > 0) {
+						if (lstConditionCode.equals("")) {
+							lstConditionCode = "" + i;
+						}
+						else {
+							lstConditionCode = lstConditionCode + "," + i;
+						}
+					}
+				}
+				FormatterOfferQuery.addCondition(sb, "conditionCode", FormatterOfferQuery.OP_INT_EQUAL_MULTI, lstConditionCode, null);
 			}
 			//
 			{

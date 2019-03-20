@@ -43,27 +43,29 @@ or (of2.fieldID = 4 and (not (of2.fieldText = 'yes')))
 ))) order by o.offerId, of1.fieldID;
 
 
+-- Largest Bid Price
 
--- SELECT o.offerId, o.categoryName, o.seller, o.initPrice, o.increment, o.minPrice, o.conditionCode, o.description, o.startDate, o.endDate, o.status, f.fieldID, f.fieldText FROM Offer o inner join OfferField f on o.offerId = f.offerId AND (o.categoryName='car') AND (o.seller='user') AND (o.initPrice=2) AND (o.increment=4) AND (o.minPrice=5) AND (o.conditionCode=2) AND (o.description='Scratcges') AND (not exists (SELECT * FROM OfferField f2 WHERE f2.offerId = o.offerId AND ( (f2.fieldID = 1 AND (not (f2.fieldText = 'blue'))) or (f2.fieldID = 2 AND (not (f2.fieldText = 'toyota'))) or (f2.fieldID = 3 AND (not (f2.fieldText = '400'))) or (f2.fieldID = 4 AND (not (f2.fieldText = 'yes'))) ))) order by o.offerId, f.fieldID
+SELECT MAX(price) FROM Bid b where b.offerId = 'fad64df32a6a4d3f91000a1d50e28696';
+
+SELECT * FROM Bid b1 WHERE b1.offerId = 'fad64df32a6a4d3f91000a1d50e28696';
+
+
+SELECT * FROM Bid b1 WHERE b1.offerId = 'fad64df32a6a4d3f91000a1d50e28696'
+and b1.price = 1000;
+
+select * from 
+(
+SELECT * FROM Bid b1 WHERE b1.offerId = 'fad64df32a6a4d3f91000a1d50e28696'
+and b1.price = (SELECT MAX(price) FROM Bid b where b.offerId = 'fad64df32a6a4d3f91000a1d50e28696')
+) bb
+;
 
 
 
-/*
-SELECT o.offerId, o.categoryName, o.seller, o.initPrice, o.increment, o.minPrice, o.conditionCode, o.description, o.startDate, o.endDate, o.status, f.fieldID, f.fieldText FROM Offer o inner join OfferField f on o.offerId = f.offerId
-AND (o.categoryName='car')
-AND (o.seller='user')
-AND (o.initPrice=2)
-AND (o.increment=4)
-AND (o.minPrice=5)
-AND (o.conditionCode=2)
-AND (o.description='Scratcges')
-AND (o.startDate < NOW() )
-AND (o.endDate > NOW())
-AND (o.status=1)
-AND (not exists (SELECT * FROM OfferField f2 WHERE f2.offerId = o.offerId AND (
-(f2.fieldID = 1 AND (not (f2.fieldText = 'blue')))
-or (f2.fieldID = 2 AND (not (f2.fieldText = 'toyota')))
--- or (f2.fieldID = 3 AND (not (f2.fieldText = '400')))
--- or (f2.fieldID = 4 AND (not (f2.fieldText = 'yes')))
-))) order by o.offerId, f.fieldID;
-*/
+SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerId FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerId = b1.offerId)) b ON o1.offerId = b.offerId;
+
+
+
+
+
+select * from Offer o left outer join Bid b on o.offerID = b.offerID and o.offerID='fad64df32a6a4d3f91000a1d50e28696';

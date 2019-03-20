@@ -16,8 +16,7 @@ public class Helper implements IConstant {
 		return SELECT_OP_BOOL_TYPE.replaceAll("\\?", name);
 	}
 
-	public static String getConditionCodeSelection(String name) {
-		return SELECT_CONDITION_CODE.replaceAll("\\?", name);
+	public static String getConditionCodeCheckBox(String name) {
+		return CONDITION_CODE_CHECKBOX.replaceAll("\\?", name);
 	}
-
 }
