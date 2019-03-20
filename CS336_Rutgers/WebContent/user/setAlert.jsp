@@ -9,8 +9,15 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Post a Bid</title>
+	<title>BuyMe - Set an Alert</title>
 	<link rel="stylesheet" href="../style.css?v=1.0"/>
+
+	<script type="text/javascript">
+       function onCategoryChange(value) {
+           value.action = "${pageContext.request.contextPath}/searchOffer.jsp";
+           value.submit();
+       }
+	</script>
 </head>
 
 <body>
@@ -41,7 +48,7 @@
 %>
 
 
-<form action="${pageContext.request.contextPath}/user/postBidResult.jsp" method="post">
+<form action="${pageContext.request.contextPath}/user/setAlertResult.jsp" method="post">
 
 	<%
 		out.println("<input type=\"hidden\" name=\"offerId\" value=\"" + offerID + "\"/>");

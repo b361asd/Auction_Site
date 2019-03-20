@@ -8,7 +8,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Register a Representative</title>
+	<title>BuyMe - Generate Sales Report</title>
 	<link rel="stylesheet" href="../style.css?v=1.0"/>
 </head>
 

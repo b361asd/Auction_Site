@@ -5,7 +5,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Register a Representative</title>
+	<title>BuyMe - Remove Bid</title>
 	<link rel="stylesheet" href="../style.css?v=1.0"/>
 
 </head>
@@ -26,7 +26,7 @@
 <h1><%=message%>
 </h1>
 
-<form action="${pageContext.request.contextPath}/admin/registerRepResult.jsp" method="post">
+<form action="${pageContext.request.contextPath}/rep/editAuctionResult.jsp" method="post">
 	<input name="register" type="hidden" value="YES">
 	Username<input type="text" name="username"/><br/>
 	Password<input type="text" name="password"/><br/>

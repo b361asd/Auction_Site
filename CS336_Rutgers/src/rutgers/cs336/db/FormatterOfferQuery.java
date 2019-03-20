@@ -5,14 +5,29 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FormatterOfferQuery {
+	private static String OP_ANY = "any";
+	//
+	private static String OP_SZ_EQUAL = "szequal";
+	private static String OP_SZ_NOT_EQUAL = "sznotequal";
+	private static String OP_SZ_START_WITH = "startwith";
+	private static String OP_SZ_CONTAIN = "contain";
+	//
+	private static String OP_INT_EQUAL = "intequal";
+	private static String OP_INT_NOT_EQUAL = "intnotequal";
+	private static String OP_INT_EQUAL_OR_OVER = "equalorover";
+	private static String OP_INT_EQUAL_OR_UNDER = "equalorunder";
+	private static String OP_INT_BETWEEN = "between";
+	//
+	private static String OP_BOOL_TRUE = "true";
+	private static String OP_BOOL_FALSE = "false";
+	//
 	private static final HashMap<String, String> sqlTokens;
 	private static       Pattern                 sqlTokenPattern;
 
 	static {
 		// MySQL escape sequences: https://dev.mysql.com/doc/refman/8.0/en/string-literals.html
 		String[][] search_regex_replacement = new String[][]
-				  {
-				  		  // Search string     Search regex        SQL replacement regex
+					  {	//   Search string       Search regex        SQL replacement regex
 						    {   "\u0000"    ,       "\\x00"     ,       "\\\\0"     },
 						    {   "'"         ,       "'"         ,       "\\\\'"     },
 							 {   "\""        ,       "\""        ,       "\\\\\""    },
@@ -33,7 +48,6 @@ public class FormatterOfferQuery {
 		sqlTokenPattern = Pattern.compile('(' + patternStr.toString() + ')');
 	}
 
-
 	public static String escape(String s) {
 		Matcher      matcher = sqlTokenPattern.matcher(s);
 		StringBuffer sb      = new StringBuffer();
@@ -44,80 +58,174 @@ public class FormatterOfferQuery {
 		return sb.toString();
 	}
 
+	
 
 	public static StringBuilder initQuery() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(
-				  "select o.offerId, o.categoryName, o.seller, o.initPrice, o.increment, o.minPrice, o.conditionCode, o.description, o.startDate, o.endDate, o.status, f.fieldID, f.fieldText from Offer o inner join OfferField f on o.offerId = f.offerId");
+		sb.append("select o.offerId, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, of1.fieldID, of1.fieldText from Offer o inner join OfferField of1 on o.offerId = of1.offerId");
 		//
 		return sb;
 	}
 
-	public static StringBuilder addStringEqualCondition(StringBuilder sb, String columnName, String value) {
-		return sb.append(" and (o.").append(columnName).append("='").append(escape(value)).append("')");
-	}
 
-	public static StringBuilder addIntEqualCondition(StringBuilder sb, String columnName, int value) {
-		return sb.append(" and (o.").append(columnName).append("=").append(value).append(")");
-	}
-
-	public static StringBuilder initFieldCondition(StringBuilder sb) {
-		return sb.append(" and (not exists (select * from OfferField f2 where f2.offerId = o.offerId and (");
-	}
-
-	public static StringBuilder doneFieldCondition(StringBuilder sb) {
-		return sb.append(" ))) order by o.offerId, f.fieldID");
-	}
-
-	public static StringBuilder addFieldEqualCondition(StringBuilder sb, int fieldId, String value, boolean isFirst) {
-		if (!isFirst) {
-			sb.append(" or");
+	
+	private static String oneCondition(String columnName, String op, String value, String valueAdd, boolean isCasting) {
+		String output = "";
+		if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_NOT_EQUAL) 
+		|| op.equals(OP_SZ_START_WITH) || op.equals(OP_SZ_CONTAIN)) {		// String
+			value = escape(value).toUpperCase();
+			if (op.equals(OP_SZ_EQUAL)) {
+				output = "(UPPER(" + columnName + ") = '" + value + "')";
+			}
+			else if (op.equals(OP_SZ_NOT_EQUAL)) {
+				output = "(NOT UPPER(" + columnName + ") = '" + value + "')";
+			}
+			else if (op.equals(OP_SZ_START_WITH)) {
+				output = "(UPPER(" + columnName + ") LIKE '" + value + "%')";
+			}
+			else if (op.equals(OP_SZ_CONTAIN)) {
+				output = "(UPPER(" + columnName + ") LIKE '%" + value + "%')";
+			}
 		}
-		return sb.append(" (f2.fieldID = ")
-				  .append(fieldId)
-				  .append(" and (not (f2.fieldText = '")
-				  .append(escape(value))
-				  .append("')))");
+		else if (op.equals(OP_INT_EQUAL) || op.equals(OP_INT_NOT_EQUAL) || op.equals(OP_INT_EQUAL_OR_OVER) || op.equals(OP_INT_EQUAL_OR_UNDER) || op.equals(OP_INT_BETWEEN)) {		// Integer
+			if (op.equals(OP_INT_EQUAL)) {
+				if (isCasting) {
+					output = "(CAST(" + columnName + " AS SIGNED) = CAST(" + value + " AS SIGNED))";
+				}
+				else {
+					output = "(" + columnName + " = " + value + ")";
+				}
+			}
+			else if (op.equals(OP_INT_NOT_EQUAL)) {
+				if (isCasting) {
+					output = "(NOT CAST(" + columnName + " AS SIGNED) = CAST(" + value + " AS SIGNED))";
+				}
+				else {
+					output = "(NOT " + columnName + " = " + value + ")";
+				}
+			}
+			else if (op.equals(OP_INT_EQUAL_OR_OVER)) {
+				if (isCasting) {
+					output = "(CAST(" + columnName + " AS SIGNED) >= CAST(" + value + " AS SIGNED))";
+				}
+				else {
+					output = "(" + columnName + " >= " + value + ")";
+				}
+			}
+			else if (op.equals(OP_INT_EQUAL_OR_UNDER)) {
+				if (isCasting) {
+					output = "(CAST("+ columnName + " AS SIGNED) <= CAST(" + value + " AS SIGNED))";
+				}
+				else {
+					output = "("+ columnName + " <= " + value + ")";
+				}
+			}
+			else if (op.equals(OP_INT_BETWEEN)) {
+				if (isCasting) {
+					output = "(CAST(" + columnName + " AS SIGNED) BETWEEN CAST(" + value + " AS SIGNED) AND CAST(" + valueAdd + " AS SIGNED))";
+				}
+				else {
+					output = "(" + columnName + " BETWEEN " + value + " AND " + valueAdd + ")";
+				}
+			}
+		}
+		else if (op.equals(OP_BOOL_TRUE) || op.equals(OP_BOOL_FALSE)) {						// Boolean
+			if (op.equals(OP_BOOL_TRUE)) {
+				if (isCasting) {
+					output = "(UPPER(" + columnName + ") = 'TRUE')";
+				}
+				else {
+					output = "(" + columnName + ")";
+				}
+			}
+			else if (op.equals(OP_BOOL_FALSE)) {
+				if (isCasting) {
+					output = "(UPPER(" + columnName + ") = 'FALSE')";
+				}
+				else {
+					output = "(NOT " + columnName + ")";
+				}
+			}
+		}
+		//
+		return output;
+	}
+	
+	
+	
+	public static StringBuilder addCondition(StringBuilder sb, String columnName, String op, String value, String valueAdd) {
+		if (op.equals(OP_ANY)) {
+			//do nothing
+		}
+		else {
+			sb.append(" and ").append(oneCondition("o."+columnName, op, value, valueAdd, false));
+		}
+		//
+		return sb;
+	}
+	
+	
+	public static StringBuilder initFieldCondition(StringBuilder sb) {
+		return sb.append(" and (not exists (select * from OfferField of2 where of2.offerId = o.offerId and (false");
+	}
+	public static StringBuilder addFieldCondition(StringBuilder sb, int fieldId, String op, String value, String valueAdd) {
+		if (op.equals(OP_ANY)) {
+			//do nothing
+		}
+		else {
+			sb.append(" or (of2.fieldID = " + fieldId + " and (not ").append(oneCondition("of2.fieldText", op, value, valueAdd, true)).append("))");
+		}
+		//
+		return sb;
+	}
+	public static StringBuilder doneFieldCondition(StringBuilder sb) {
+		return sb.append(" ))) order by o.offerId, of1.fieldID");
 	}
 
 
+	
 	public static void main(String[] args) {
 		System.out.println(escape("%\"'blue"));
+		//
 		StringBuilder sb = initQuery();
-		sb = addStringEqualCondition(sb, "categoryName", "car");
-		sb = addStringEqualCondition(sb, "seller", "user");
-		sb = addIntEqualCondition(sb, "initPrice", 2);
-		sb = addIntEqualCondition(sb, "increment", 4);
-		sb = addIntEqualCondition(sb, "minPrice", 5);
-		sb = addIntEqualCondition(sb, "conditionCode", 2);
-		sb = addStringEqualCondition(sb, "description", "Scratcges");
+		addCondition(sb, "offerID", OP_SZ_START_WITH, "Scratcges", null);
+		addCondition(sb, "seller", OP_SZ_NOT_EQUAL, "us'er", null);
+		addCondition(sb, "categoryName", OP_SZ_NOT_EQUAL, "car", null);
+		addCondition(sb, "conditionCode", OP_INT_EQUAL, "2", null);
+		addCondition(sb, "description", OP_SZ_CONTAIN, "Scratcges", null);
+		addCondition(sb, "initPrice", OP_INT_EQUAL_OR_OVER, "2", null);
+		addCondition(sb, "increment", OP_INT_EQUAL_OR_OVER, "4", null);
+		addCondition(sb, "minPrice", OP_ANY, "5", null);
+		addCondition(sb, "status", OP_INT_EQUAL_OR_OVER, "5", null);
 		//
 		initFieldCondition(sb);
-		addFieldEqualCondition(sb, 1, "blue", true);
-		addFieldEqualCondition(sb, 2, "toyota", false);
-		addFieldEqualCondition(sb, 3, "400", false);
-		addFieldEqualCondition(sb, 4, "yes", false);
+		addFieldCondition(sb, 1, OP_INT_BETWEEN, "23", "56");
+		addFieldCondition(sb, 2, OP_BOOL_TRUE, "toyota", "");
+		addFieldCondition(sb, 3, OP_BOOL_FALSE, "400", "");
+		addFieldCondition(sb, 4, OP_INT_EQUAL_OR_UNDER, "400", "");
+		addFieldCondition(sb, 5, OP_INT_NOT_EQUAL, "400", "");
 		doneFieldCondition(sb);
 		//
 		System.out.println(sb.toString());
 	}
 }
 /*
-select o.offerId, o.categoryName, o.seller, o.initPrice, o.increment, o.minPrice, o.conditionCode, o.description, o.startDate, o.endDate, o.status, f.fieldID, f.fieldText from Offer o inner join OfferField f on o.offerId = f.offerId
-and (o.categoryName='car')
+select o.offerId, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, of1.fieldID, of1.fieldText from Offer o inner join OfferField of1 on o.offerId = of1.offerId
+and (o.offerID='aaa')
 and (o.seller='user')
+and (o.categoryName='car')
+and (o.conditionCode=1)
+and (o.description='Scratcges')
 and (o.initPrice=2)
 and (o.increment=4)
 and (o.minPrice=5)
-and (o.conditionCode=2)
-and (o.description='Scratcges')
 and (o.startDate < NOW() )
 and (o.endDate > NOW())
 and (o.status=1)
-and (not exists (select * from OfferField f2 where f2.offerId = o.offerId and (
-(f2.fieldID = 1 and (not (f2.fieldText = 'blue')))
-or (f2.fieldID = 2 and (not (f2.fieldText = 'toyota')))
-or (f2.fieldID = 3 and (not (f2.fieldText = '400')))
-or (f2.fieldID = 4 and (not (f2.fieldText = 'yes')))
-))) order by o.offerId, f.fieldID;
+and (not exists (select * from OfferField of2 where of2.offerId = o.offerId and (false
+or (of2.fieldID = 1 and (not (of2.fieldText = 'blue')))
+or (of2.fieldID = 2 and (not (of2.fieldText = 'toyota')))
+or (of2.fieldID = 3 and (not (of2.fieldText = '400')))
+or (of2.fieldID = 4 and (not (of2.fieldText = 'yes')))
+))) order by o.offerId, of1.fieldID;
 */

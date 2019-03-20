@@ -48,7 +48,7 @@
 <h1><%=paramMap%>
 </h1>
 
-<form action="${pageContext.request.contextPath}/user/offerResult.jsp" method="post">
+<form action="${pageContext.request.contextPath}/user/postOfferResult.jsp" method="post">
 
 	<select name="categoryName" onchange="onCategoryChange(this.parentElement);">
 		<%

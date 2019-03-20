@@ -6,17 +6,18 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="static rutgers.cs336.db.CreateOffer.PREFIX_CATEGORY_NAME" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
+<%@ page import="static rutgers.cs336.gui.Helper.*" %>
 
 <html>
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Post an Offer</title>
+	<title>BuyMe - Search Offers</title>
 	<link rel="stylesheet" href="../style.css?v=1.0"/>
 
 	<script type="text/javascript">
        function onCategoryChange(value) {
-           value.action = "${pageContext.request.contextPath}/searchOffer.jsp";	// Post to itself
+           value.action = "${pageContext.request.contextPath}/user/searchOffer.jsp";	// Post to itself
            value.submit();
        }
 
@@ -28,48 +29,49 @@
 <body>
 
 <%
-	String message = "Welcome to BuyMe!";
-	if (session == null) {
-	}
-	else {
-		message = (String) session.getAttribute("message");
-		if (message == null) {
-			message = "Welcome to BuyMe.";
-		}
-	}
-	//
-	String categoryNameFromParam = "CAT=" + getStringFromParamMap(PREFIX_CATEGORY_NAME, request.getParameterMap());
 	String paramMap = getParamMap(request.getParameterMap());
 	//
 	Map data = GetCategoryField.getCategoryField(getStringFromParamMap(PREFIX_CATEGORY_NAME, request.getParameterMap()));
 %>
-<h1><%=message%>
-</h1>
-<h1><%=categoryNameFromParam%>
-</h1>
-<h1><%=paramMap%>
-</h1>
+
+<%@include file="../header.jsp" %>
+<%@include file="userNav.jsp" %>
 
 <form action="${pageContext.request.contextPath}/user/searchOfferResult.jsp" method="post">
 
+
+	<div class='allField'>categoryName
 	<select name="categoryName" onchange="onCategoryChange(this.parentElement);">
 		<%
 			List lstCategory = (List) data.get(GetCategoryField.DATA_CATEGORY_LIST);
 			for (Object o : lstCategory) {
 				GetCategoryField.Category temp = (GetCategoryField.Category) o;
-				out.println(
-						  "<option " + (temp.isCurr() ? "selected " : "") + "value='" + temp.getCategoryName() + "'>" + temp.getCategoryName() + "</option>");
+				out.println("<option " + (temp.isCurr() ? "selected " : "") + "value='" + temp.getCategoryName() + "'>" + temp.getCategoryName() + "</option>");
 			}
 		%>
-	</select><br>
+	</select></div><br/>
 
 	<%
+		out.println("<div class='allField'>offerID");
+		out.println(getOPSZSelection("offerID"));
+		out.println("<input type='text' name='offerID'/></div><br/>");
 
-		out.println("<div class='allField description'>description");
-		out.println(
-				  "<select name='description_op'><option value='equals'>equals</option><option value='start_with'>start_with</option><option value='contains'>contains</option></select>");
-		out.println("<input type = 'text' name = 'description' / ></div><br >");
+		out.println("<div class='allField'>seller");
+		out.println(getOPSZSelection("seller"));
+		out.println("<input type='text' name='seller'/></div><br/>");
+		
+		out.println("<div class='allField'>conditionCode");
+		out.println(getConditionCodeSelection("conditionCode"));
 
+		out.println("<div class='allField'>description");
+		out.println(getOPSZSelection("description"));
+		out.println("<input type='text' name='description'/></div><br/>");
+
+		out.println("<div class='allField'>currentBidPrice");
+		out.println(getOPIntSelection("currentBidPrice"));
+		out.println("<input type='number' name='currentBidPrice1'/>");
+		out.println("<input type='number' name='currentBidPrice2'/></div><br/>");
+		
 		List lstField = (List) data.get(GetCategoryField.DATA_FIELD_LIST);
 		for (Object o : lstField) {
 			String categoryName = ((GetCategoryField.Field) o).getCategoryName();
@@ -79,36 +81,28 @@
 			//
 			// String
 			if (fieldType == 1) {
-				out.println("<div class='allField " + categoryName + "'>" + fieldName);
-				out.println(
-						  "<select name='categoryName'><option value='any'>any</option><option value='equals'>equals</option><option value='start_with'>start_with</option><option value='contains'>contains</option></select>");
-				out.println("<input type = 'text' name = 'fieldID_" + fieldID + "' / ></div><br >");
+				out.println("<div class='allField'>" + fieldName);
+				out.println(getOPSZSelection("fieldop_" + fieldID));
+				out.println("<input type='text' name='fieldval_" + fieldID + "'/></div><br/>");
 			}
 			// Integer
 			else if (fieldType == 2) {
-				out.println("<div class='allField " + categoryName + "'>" + fieldName);
-				out.println(
-						  "<select name='categoryName' onchange='onIntegerOPChange(this);'><option value='any'>any</option><option value='equals'>equals</option><option value='no_less_than'>no_less_than</option><option value='no_greater_than'>no_greater_than</option><option value='between'>between</option></select>");
-				out.println("<input type = 'text' name = 'fieldID_" + fieldID + "' / ></div><br >");
-				out.println(
-						  "<input id='fieldID_" + fieldID + "' type='text' name='fieldID_" + fieldID + "' / ></div><br >");
+				out.println("<div class='allField'>" + fieldName);
+				out.println(getOPIntSelection("fieldop_" + fieldID));
+				out.println("<input type='number' name = 'fieldval1_" + fieldID + "' / >");
+				out.println("<input type='number' name = 'fieldval2_" + fieldID + "' / ></div><br/>");
 			}
 			// Boolean
 			else {
-				out.println(
-						  "<select name='categoryName' onchange='onIntegerOPChange(this);'><option value='any'>any</option><option value='yes'>yes</option><option value='no'>no</option></select>");
+				out.println("<div class='allField'>" + fieldName);
+				out.println(getOPBoolSelection("fieldop_" + fieldID));
+				out.println("</div><br/>");
 			}
 		}
 	%>
 
-	<div>Auction Days<input type="number" name="auction_days" min="1" max="30"></div>
-	<div>Reserved Price<input type="number" name="reserved_price" min="0.01"></div>
-	<div>Item Description<input type="text" name="description"></div>
-
 	<input type="submit" value="submit">
 </form>
-
-<%@include file="userNav.jsp" %>
 
 </body>
 
