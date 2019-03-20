@@ -22,6 +22,25 @@ SELECT Offer.offerId FROM Offer inner join OfferField f1 on Offer.offerId = f1.o
 
 
 
+select o.offerId, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerId FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerId = b1.offerId)) b ON o1.offerId = b.offerId) o inner join OfferField of1 on o.offerId = of1.offerId
+and (o.offerID='aaa')
+and (o.seller='user')
+and (o.categoryName='car')
+and (o.conditionCode=1)
+and (o.description='Scratcges')
+and (o.initPrice=2)
+and (o.increment=4)
+and (o.minPrice=5)
+and (o.startDate < NOW() )
+and (o.endDate > NOW())
+and (o.status=1)
+and (o.price=2)
+and (not exists (select * from OfferField of2 where of2.offerId = o.offerId and (false
+or (of2.fieldID = 1 and (not (of2.fieldText = 'blue')))
+or (of2.fieldID = 2 and (not (of2.fieldText = 'toyota')))
+or (of2.fieldID = 3 and (not (of2.fieldText = '400')))
+or (of2.fieldID = 4 and (not (of2.fieldText = 'yes')))
+))) order by o.offerId, of1.fieldID;
 
 
 

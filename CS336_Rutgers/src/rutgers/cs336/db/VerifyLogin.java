@@ -45,7 +45,6 @@ public class VerifyLogin extends DBBase {
 					output.put(DATA_NAME_USER_TYPE, usertype);
 					output.put(DATA_NAME_FIRST_NAME, firstname);
 					output.put(DATA_NAME_LAST_NAME, lastname);
-
 				}
 			}
 			else {
@@ -55,12 +54,14 @@ public class VerifyLogin extends DBBase {
 		}
 		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
+			output.put(DATA_NAME_MESSAGE,
+			           "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
+			output.put(DATA_NAME_MESSAGE,
+			           "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
 			e.printStackTrace();
 		}
 		finally {

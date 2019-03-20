@@ -11,16 +11,6 @@ import java.util.Map;
 
 public class SearchOffer extends DBBase {
 
-	private static final String PARAM_NAME_DESCRIPTION_OP = "description_op";
-	private static final String PARAM_NAME_DESCRIPTION    = "description";
-	private static final String PARAM_NAME_CATEGORY_NAME  = "categoryName";
-
-	private static final String OP_STRING_EQUALS     = "equals";
-	private static final String OP_STRING_START_WITH = "start_with";
-	private static final String OP_STRING_CONTAINS   = "contains";
-
-	public static final String DATA_OFFER_ID = "DATA_OFFER_ID";
-
 	public static class OfferItem {
 		String offerId;
 		String categoryName;
@@ -113,19 +103,24 @@ public class SearchOffer extends DBBase {
 			}
 			//
 			{
-				//String currentBidPriceOP = getStringFromParamMap("currentBidPriceOP", parameters);
-				//String currentBidPriceVal1 = getStringFromParamMap("currentBidPriceVal1", parameters);
-				//String currentBidPriceVal2 = getStringFromParamMap("currentBidPriceVal2", parameters);
-				//FormatterOfferQuery.addCondition(sb, "currentBidPrice", currentBidPriceOP, currentBidPriceVal1, currentBidPriceVal2);
+				String priceOP   = getStringFromParamMap("priceOP", parameters);
+				String priceVal1 = getStringFromParamMap("priceVal1", parameters);
+				String priceVal2 = getStringFromParamMap("priceVal2", parameters);
+				FormatterOfferQuery.addCondition(sb, "price", priceOP, priceVal1, priceVal2);
+			}
+			//
+			{
+				String statusOP  = FormatterOfferQuery.OP_INT_EQUAL;
+				String statusVal = "1";    // Active
+				FormatterOfferQuery.addCondition(sb, "status", statusOP, statusVal, null);
 			}
 			//
 			String   lstFieldIDs = getStringFromParamMap("lstFieldIDs", parameters);
-			String[] fieldIDs    = lstFieldIDs.split("\\,");
+			String[] fieldIDs    = lstFieldIDs.split(",");
 			//
 			FormatterOfferQuery.initFieldCondition(sb);
 			//
-			for (int i = 0; i < fieldIDs.length; i++) {
-				String fieldID = fieldIDs[i];
+			for (String fieldID : fieldIDs) {
 				//
 				String fieldOP   = getStringFromParamMap("fieldop_" + fieldID, parameters);
 				String fieldVal1 = getStringFromParamMap("fieldval1_" + fieldID, parameters);
@@ -186,23 +181,6 @@ public class SearchOffer extends DBBase {
 					e.printStackTrace();
 				}
 			}
-		}
-		//
-		return output;
-	}
-
-
-	private static String formatStringSearchCriteria(String input, String op) {
-		String output;
-		//
-		if (op.equalsIgnoreCase(OP_STRING_EQUALS)) {
-			output = input;
-		}
-		else if (op.equalsIgnoreCase(OP_STRING_START_WITH)) {
-			output = input + "%";
-		}
-		else {         // OP_STRING_CONTAINS
-			output = "%" + input + "%";
 		}
 		//
 		return output;

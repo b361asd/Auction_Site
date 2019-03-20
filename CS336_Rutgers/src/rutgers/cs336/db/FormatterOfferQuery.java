@@ -12,7 +12,7 @@ public class FormatterOfferQuery {
 	private static String OP_SZ_START_WITH = "startwith";
 	private static String OP_SZ_CONTAIN = "contain";
 	//
-	private static String OP_INT_EQUAL = "intequal";
+	public static String OP_INT_EQUAL = "intequal";
 	private static String OP_INT_NOT_EQUAL = "intnotequal";
 	private static String OP_INT_EQUAL_OR_OVER = "equalorover";
 	private static String OP_INT_EQUAL_OR_UNDER = "equalorunder";
@@ -62,7 +62,7 @@ public class FormatterOfferQuery {
 
 	public static StringBuilder initQuery() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select o.offerId, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, of1.fieldID, of1.fieldText from Offer o inner join OfferField of1 on o.offerId = of1.offerId");
+		sb.append("select o.offerId, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerId FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerId = b1.offerId)) b ON o1.offerId = b.offerId) o inner join OfferField of1 on o.offerId = of1.offerId ");
 		//
 		return sb;
 	}
@@ -72,8 +72,7 @@ public class FormatterOfferQuery {
 	private static String oneCondition(String columnName, String op, String value, String valueAdd, boolean isCasting) {
 		String output = "";
 		//
-		if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_NOT_EQUAL) 
-		|| op.equals(OP_SZ_START_WITH) || op.equals(OP_SZ_CONTAIN)) {		// String
+		if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_NOT_EQUAL) || op.equals(OP_SZ_START_WITH) || op.equals(OP_SZ_CONTAIN)) {		// String
 			value = escape((value==null?"":value.trim())).toUpperCase();
 			if (value.equals("")) {
 				output = "";
@@ -94,7 +93,7 @@ public class FormatterOfferQuery {
 			}
 		}
 		else if (op.equals(OP_INT_EQUAL) || op.equals(OP_INT_NOT_EQUAL) || op.equals(OP_INT_EQUAL_OR_OVER) || op.equals(OP_INT_EQUAL_OR_UNDER) || op.equals(OP_INT_BETWEEN)) {		// Integer
-			value = escape((value==null?"":value.trim())).toUpperCase();
+			value = escape((value == null ? "" : value.trim())).toUpperCase();
 			if (value.equals("")) {
 				output = "";
 			}
@@ -132,7 +131,7 @@ public class FormatterOfferQuery {
 					}
 				}
 				else if (op.equals(OP_INT_BETWEEN)) {
-					valueAdd = escape((valueAdd==null?"":valueAdd.trim())).toUpperCase();
+					valueAdd = escape((valueAdd == null ? "" : valueAdd.trim())).toUpperCase();
 					if (valueAdd.equals("")) {
 						output = "";
 					}
@@ -156,7 +155,7 @@ public class FormatterOfferQuery {
 					output = "(" + columnName + ")";
 				}
 			}
-			else if (op.equals(OP_BOOL_FALSE)) {
+			else {   // op.equals(OP_BOOL_FALSE)
 				if (isCasting) {
 					output = "(UPPER(" + columnName + ") = 'FALSE')";
 				}
@@ -173,11 +172,11 @@ public class FormatterOfferQuery {
 	
 	public static StringBuilder addCondition(StringBuilder sb, String columnName, String op, String value, String valueAdd) {
 		if (op.equals(OP_ANY)) {
-			//do nothing
+			// Do Nothing
 		}
 		else {
-			String temp = oneCondition("o."+columnName, op, value, valueAdd, false);
-			if (temp.length()>0) {
+			String temp = oneCondition("o." + columnName, op, value, valueAdd, false);
+			if (temp.length() > 0) {
 				sb.append(" and ").append(temp);
 			}
 		}
@@ -191,12 +190,12 @@ public class FormatterOfferQuery {
 	}
 	public static StringBuilder addFieldCondition(StringBuilder sb, String fieldId, String op, String value, String valueAdd) {
 		if (op.equals(OP_ANY)) {
-			//do nothing
+			// Do Nothing
 		}
 		else {
 			String temp = oneCondition("of2.fieldText", op, value, valueAdd, true);
-			if (temp.length()>0) {
-				sb.append(" or (of2.fieldID = " + fieldId + " and (not ").append(temp).append("))");
+			if (temp.length() > 0) {
+				sb.append(" or (of2.fieldID = ").append(fieldId).append(" and (not ").append(temp).append("))");
 			}
 		}
 		//
@@ -234,7 +233,7 @@ public class FormatterOfferQuery {
 	}
 }
 /*
-select o.offerId, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, of1.fieldID, of1.fieldText from Offer o inner join OfferField of1 on o.offerId = of1.offerId
+select o.offerId, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerId FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerId = b1.offerId)) b ON o1.offerId = b.offerId) o inner join OfferField of1 on o.offerId = of1.offerId
 and (o.offerID='aaa')
 and (o.seller='user')
 and (o.categoryName='car')
@@ -246,6 +245,7 @@ and (o.minPrice=5)
 and (o.startDate < NOW() )
 and (o.endDate > NOW())
 and (o.status=1)
+and (o.price=2)
 and (not exists (select * from OfferField of2 where of2.offerId = o.offerId and (false
 or (of2.fieldID = 1 and (not (of2.fieldText = 'blue')))
 or (of2.fieldID = 2 and (not (of2.fieldText = 'toyota')))

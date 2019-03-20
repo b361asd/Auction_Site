@@ -35,11 +35,11 @@ public interface ISQLConstant {
 
 
 	// Browse
-//	String BROWSE_OPEN_OFFER (including current bid, sorted by different criteria)
-//	String SEARCH_BY_CRITERIA
-//	String SHOW_BID_HISTORY (just for one)
-//	String OFFER_BID_BY_USER
-//	String SIMILAR_ITEM
+	//	String BROWSE_OPEN_OFFER (including current bid, sorted by different criteria)
+	//	String SEARCH_BY_CRITERIA
+	//	String SHOW_BID_HISTORY (just for one)
+	//	String OFFER_BID_BY_USER
+	//	String SIMILAR_ITEM
 
 
 }

@@ -24,7 +24,7 @@ public class LoginFilter implements Filter, IConstant {
 		HttpServletRequest  request  = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		//
-		String  loginURL         = request.getContextPath() + "/login.jsp";
+		String loginURL = request.getContextPath() + "/login.jsp";
 		//
 		String  logoutURLServlet = request.getContextPath() + "/logout";
 		boolean isLogoutRequest  = request.getRequestURI().equals(logoutURLServlet);
@@ -66,7 +66,7 @@ public class LoginFilter implements Filter, IConstant {
 				String registerURLServlet = request.getContextPath() + "/register";
 				//
 				boolean isLoginRequest           = request.getRequestURI().equals(loginURL);
-				boolean isHomeRequest           = request.getRequestURI().equals(homeURL);
+				boolean isHomeRequest            = request.getRequestURI().equals(homeURL);
 				boolean isRegisterRequest        = request.getRequestURI().equals(registerURI);
 				boolean isRegisterRequestServlet = request.getRequestURI().equals(registerURLServlet);
 				//

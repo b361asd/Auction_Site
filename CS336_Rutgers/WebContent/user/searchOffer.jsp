@@ -68,9 +68,9 @@
 		out.println("<input type='text' name='descriptionVal'/></div><br/>");
 
 		out.println("<div class='allField'>currentBidPrice");
-		out.println(getOPIntSelection("currentBidPriceOP"));
-		out.println("<input type='number' name='currentBidPriceVal1'/>");
-		out.println("<input type='number' name='currentBidPriceVal2'/></div><br/>");
+		out.println(getOPIntSelection("priceOP"));
+		out.println("<input type='number' name='priceVal1'/>");
+		out.println("<input type='number' name='priceVal2'/></div><br/>");
 		
 		List lstField = (List) data.get(GetCategoryField.DATA_FIELD_LIST);
 		String lstFieldIDs = null;
