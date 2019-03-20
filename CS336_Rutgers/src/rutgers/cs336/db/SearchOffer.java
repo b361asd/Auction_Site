@@ -4,10 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SearchOffer extends DBBase {
 
@@ -64,17 +61,19 @@ public class SearchOffer extends DBBase {
 	public static Map doSearchOffer(Map<String, String[]> parameters) {
 		Map output = new HashMap();
 		//
-		List<OfferItem>        lstOffer = new ArrayList<>();
-		Map<String, OfferItem> mapOffer = new HashMap<>();
+		List lstRows   = new ArrayList();
+		List lstHeader = new ArrayList();
+		//
+		StringBuilder sb = null;
 		//
 		Connection con       = null;
 		Statement  statement = null;
 		try {
 			con = getConnection();
 			//
-			String category_Name  = getStringFromParamMap("categoryName", parameters);
+			String category_Name = getStringFromParamMap("categoryName", parameters);
 			//
-			StringBuilder sb = FormatterOfferQuery.initQuery(category_Name);
+			sb = FormatterOfferQuery.initQuery(category_Name);
 			//
 			{
 				String offerIDOP  = getStringFromParamMap("offerIDOP", parameters);
@@ -88,8 +87,6 @@ public class SearchOffer extends DBBase {
 				FormatterOfferQuery.addCondition(sb, "seller", sellerOP, sellerVal, null);
 			}
 			//
-			//		out.println(getConditionCodeCheckBox("conditionCode"));
-
 			{
 				String lstConditionCode = "";
 				for (int i = 1; i <= 6; i++) {
@@ -125,11 +122,10 @@ public class SearchOffer extends DBBase {
 				FormatterOfferQuery.addCondition(sb, "status", statusOP, statusVal, null);
 			}
 			//
-			String   lstFieldIDs = getStringFromParamMap("lstFieldIDs", parameters);
-			String[] fieldIDs    = lstFieldIDs.split(",");
-			//
 			FormatterOfferQuery.initFieldCondition(sb);
 			//
+			String   lstFieldIDs = getStringFromParamMap("lstFieldIDs", parameters);
+			String[] fieldIDs    = lstFieldIDs.split(",");
 			for (String fieldID : fieldIDs) {
 				//
 				String fieldOP   = getStringFromParamMap("fieldop_" + fieldID, parameters);
@@ -144,33 +140,89 @@ public class SearchOffer extends DBBase {
 			//
 			ResultSet rs = statement.executeQuery(sb.toString());
 			//
+			String currentofferId = "";
+			int    rowIndex       = -1;
 			while (rs.next()) {
-				Object offerId      = rs.getObject(1);
-				Object categoryName = rs.getObject(2);
-				Object seller       = rs.getObject(3);
-				Object min_price    = rs.getObject(4);
-				Object description  = rs.getObject(5);
-				Object startDate    = rs.getObject(6);
-				Object endDate      = rs.getObject(7);
+				Object offerId       = rs.getObject(1);
+				Object seller        = rs.getObject(2);
+				Object categoryName  = rs.getObject(3);
+				Object conditionCode = rs.getObject(4);
+				Object description   = rs.getObject(5);
+				Object initPrice     = rs.getObject(6);
+				Object increment     = rs.getObject(7);
+				Object minPrice      = rs.getObject(8);
+				Object startDate     = rs.getObject(9);
+				Object endDate       = rs.getObject(10);
+				Object status        = rs.getObject(11);
+				Object price         = rs.getObject(12);
 				//
-				OfferItem one = new OfferItem(offerId, categoryName, seller, min_price, description, startDate, endDate);
-				lstOffer.add(one);
-				mapOffer.put(offerId.toString(), one);
+				Object fieldID   = rs.getObject(13);
+				Object fieldText = rs.getObject(14);
+				Object fieldName = rs.getObject(15);
+				Object fieldType = rs.getObject(16);
+				//
+				if (currentofferId.equals(offerId.toString())) {   // Continue with current row
+					List currentRow = (List) lstRows.get(rowIndex);
+					//
+					currentRow.add(fieldText);
+					//
+					if (rowIndex == 0) {
+						lstHeader.add(fieldName.toString());
+					}
+				}
+				else {   // New Row
+					List currentRow = new LinkedList();
+					lstRows.add(currentRow);
+					rowIndex++;
+					//
+					currentofferId = offerId.toString();
+					//
+					currentRow.add(offerId);
+					currentRow.add(seller);
+					currentRow.add(categoryName);
+					currentRow.add(conditionCode);
+					currentRow.add(description);
+					currentRow.add(initPrice);
+					currentRow.add(increment);
+					currentRow.add(minPrice);
+					currentRow.add(startDate);
+					currentRow.add(endDate);
+					currentRow.add(status);
+					currentRow.add(price);
+					currentRow.add(fieldText);
+					//
+					if (rowIndex == 0) {
+						lstHeader.add("offerId");
+						lstHeader.add("seller");
+						lstHeader.add("categoryName");
+						lstHeader.add("conditionCode");
+						lstHeader.add("description");
+						lstHeader.add("initPrice");
+						lstHeader.add("increment");
+						lstHeader.add("minPrice");
+						lstHeader.add("startDate");
+						lstHeader.add("endDate");
+						lstHeader.add("status");
+						lstHeader.add("price");
+						lstHeader.add(fieldName.toString());
+					}
+				}
 			}
 			//
-			output.put(DATA_NAME_DATA, lstOffer);
+			output.put(DATA_NAME_DATA, lstRows);
+			output.put(DATA_NAME_DATA_ADD, lstHeader);
 			//
 			output.put(DATA_NAME_STATUS, true);
 			output.put(DATA_NAME_MESSAGE, "OK");
 		}
 		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState());
+			output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sb != null ? sb.toString() : null));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage());
+			output.put(DATA_NAME_MESSAGE, "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
 			e.printStackTrace();
 		}
 		finally {

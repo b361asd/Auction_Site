@@ -4,7 +4,6 @@
 <%@ page import="rutgers.cs336.db.SearchOffer" %>
 <%@ page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
-<%@ page import="java.util.Map" %>
 
 <html>
 
@@ -18,37 +17,48 @@
 
 <%
 	Map data = SearchOffer.doSearchOffer(request.getParameterMap());
+	//
+	request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+	//
+	List lstHeader = (List) (data.get(DATA_NAME_DATA_ADD));
+	List lstRows = (List) (data.get(DATA_NAME_DATA));
 %>
 
 <%@include file="../header.jsp" %>
 <%@include file="userNav.jsp" %>
 
+<form id="form-id" action="${pageContext.request.contextPath}/user/postOfferResult.jsp" method="post">
+	<input id="input-id" type="hidden" name="offerid" value="_"/>
+</form>
+
 <table>
 	<tr>
-		<td>Category</td>
-		<td>Seller</td>
-		<td>Reserved Price</td>
-		<td>Start Date</td>
-		<td>End Date</td>
-		<td>Description</td>
+		<%
+			// Header
+			if (lstHeader != null) {
+				for (Object one : lstHeader) {
+					out.println("<td>" + one.toString() + "</td>");
+				}
+			}
+		%>
 		<td>Action</td>
 	</tr>
 
-	<form id="form-id" action="${pageContext.request.contextPath}/user/postBid.jspd.jsp" method="post">
-		<input id="input-id" type="hidden" name="offerid" value="_"/>
-	</form>
-
 	<%
-		List<SearchOffer.OfferItem> lstOffer = (List<SearchOffer.OfferItem>) data.get(DATA_NAME_DATA);
-		for (SearchOffer.OfferItem one : lstOffer) {
-			out.println("<tr><td>" + one.getCategoryName() + "</td>");
-			out.println("<td>" + one.getSeller() + "</td>");
-			out.println("<td>" + one.getMin_price() + "</td>");
-			out.println("<td>" + one.getStartDate() + "</td>");
-			out.println("<td>" + one.getEndDate() + "</td>");
-			out.println("<td>" + one.getDetails() + "</td></tr>");
-			out.println(
-					  "<td>" + "<button onclick=\"document.getElementById('input-id').value='" + one.getOfferId() + "'; document.getElementById('form-id').submit();\" class=\"favorite styled\" type=\"button\">Bid</button>" + "</td></tr>");
+		if (lstRows != null) {
+			for (Object oneRow : lstRows) {
+				List lstOneRow = (List) oneRow;
+				//
+				out.println("<tr>");
+				for (Object oneField : lstOneRow) {
+					String oneItem = oneField == null ? "" : oneField.toString();
+					out.println("<td>" + oneItem + "</td>");
+				}
+				//
+				out.println("<td>" + "<button onclick=\"document.getElementById('input-id').value='" + lstOneRow.get(0) + "'; document.getElementById('form-id').submit();\" class=\"favorite styled\" type=\"button\">Bid</button>" + "</td>");
+				//
+				out.println("</tr>");
+			}
 		}
 	%>
 

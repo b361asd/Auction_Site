@@ -63,7 +63,7 @@ public class FormatterOfferQuery {
 
 	public static StringBuilder initQuery(String categoryName) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select o.offerId, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerId FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerId = b1.offerId)) b ON o1.offerId = b.offerId) o inner join (SELECT of1.*, cf1.sortOrder FROM OfferField of1 INNER JOIN CategoryField cf1 ON of1.fieldID = cf1.fieldID AND cf1.categoryName = '").append(categoryName).append("') of1 on o.offerId = of1.offerId");
+		sb.append("select o.offerId, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerId FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerId = b1.offerId)) b ON o1.offerId = b.offerId) o inner join (SELECT of.*, cf1.sortOrder, f1.fieldName, f1.fieldType FROM OfferField of, CategoryField cf1, Field f1 WHERE of.fieldID = cf1.fieldID AND of.fieldID = f1.fieldID AND cf1.categoryName = '" + categoryName + "') of1 on o.offerId = of1.offerId");
 		//
 		return sb;
 	}
@@ -221,8 +221,8 @@ public class FormatterOfferQuery {
 		//addCondition(sb, "offerID", OP_SZ_START_WITH, "Scratcges", null);
 		//addCondition(sb, "seller", OP_SZ_NOT_EQUAL, "us'er", null);
 		//addCondition(sb, "categoryName", OP_SZ_NOT_EQUAL, "car", null);
-		//addCondition(sb, "conditionCode", OP_INT_EQUAL, "2", null);
-		addCondition(sb, "description", OP_SZ_CONTAIN, "Scratcges", null);
+		addCondition(sb, "conditionCode", OP_INT_EQUAL_MULTI, "1,3,4,5,6", null);
+		//addCondition(sb, "description", OP_SZ_CONTAIN, "Scratcges", null);
 		//addCondition(sb, "initPrice", OP_INT_EQUAL_OR_OVER, "2", null);
 		//addCondition(sb, "increment", OP_INT_EQUAL_OR_OVER, "4", null);
 		//addCondition(sb, "minPrice", OP_ANY, "5", null);
@@ -244,7 +244,7 @@ public class FormatterOfferQuery {
 	}
 }
 /*
-select o.offerId, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerId FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerId = b1.offerId)) b ON o1.offerId = b.offerId) o inner join (SELECT of1.*, cf1.sortOrder FROM OfferField of1 INNER JOIN CategoryField cf1 ON of1.fieldID = cf1.fieldID AND cf1.categoryName = 'truck') of1 on o.offerId = of1.offerId
+select o.offerId, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerId FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerId = b1.offerId)) b ON o1.offerId = b.offerId) o inner join (SELECT of.*, cf1.sortOrder, f1.fieldName, f1.fieldType FROM OfferField of, CategoryField cf1, Field f1 WHERE of.fieldID = cf1.fieldID AND of.fieldID = f1.fieldID AND cf1.categoryName = 'truck') of1 on o.offerId = of1.offerId
 and (o.offerID='aaa')
 and (o.seller='user')
 and (o.categoryName='car')
