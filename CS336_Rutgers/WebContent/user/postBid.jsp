@@ -1,9 +1,10 @@
+<%@page import="rutgers.cs336.db.SearchOffer"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.GetOffer" %>
-<%@ page import="java.util.Map" %>
+<%@ page import="java.util.*" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
+<%@ page import="rutgers.cs336.gui.Helper" %>
 
 <html>
 
@@ -16,46 +17,70 @@
 <body>
 
 <%
-	String message = "Welcome to BuyMe!";
-	if (session == null) {
-	}
-	else {
-		message = (String) session.getAttribute("message");
-		if (message == null) {
-			message = "Welcome to BuyMe.";
-		}
-	}
+	Map data = SearchOffer.doSearchOfferByID(request.getParameterMap());
 	//
-	String offerID = getStringFromParamMap("offerid", request.getParameterMap());
-	Map data = GetOffer.getOffer(offerID);
+	request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+	//
+	List lstHeader = (List) (data.get(DATA_NAME_DATA_ADD));
+	List lstRows = (List) (data.get(DATA_NAME_DATA));
 %>
 
 
-<%
-	for (Object one : data.entrySet()) {
-		Map.Entry item  = (Map.Entry) one;
-		String    key   = (String) item.getKey();
-		String    value = (String) item.getValue();
-		out.println("<h1>" + key + "=" + value + "</h1>");
-	}
-%>
+<%@include file="../header.jsp" %>
+<%@include file="userNav.jsp" %>
+
+<table>
+	<tr>
+		<%
+			// Header
+			if (lstHeader != null && lstHeader.size() > 0) {
+				for (int i = 1; i < lstHeader.size(); i++) {
+					Object one = lstHeader.get(i);
+					out.println("<td>" + one.toString() + "</td>");
+				}
+			}
+		%>
+	</tr>
+
+	<%
+		String offerID = "";
+		if (lstRows != null) {
+			for (Object oneRow : lstRows) {
+				List lstOneRow = (List) oneRow;
+				//
+				offerID = (String) lstOneRow.get(0);
+				//
+				out.println("<tr>");
+				for (int i = 1; i < lstOneRow.size(); i++) {	// Skip offerID
+					Object oneField = lstOneRow.get(i);
+					//
+					String oneItem = oneField == null ? "" : oneField.toString();
+					if (i == 3) {
+						out.println("<td>" + Helper.getConditionFromCode(oneItem) + "</td>");
+					}
+					else {
+						out.println("<td>" + oneItem + "</td>");
+					}
+				}
+				//
+				out.println("</tr>");
+			}
+		}
+	%>
+
+</table>
 
 
 <form action="${pageContext.request.contextPath}/user/postBidResult.jsp" method="post">
 
 	<%
-		out.println("<input type=\"hidden\" name=\"offerId\" value=\"" + offerID + "\"/>");
+		out.println("<input type='hidden' name='offerId' value='" + offerID + "'/>");
 	%>
 
-	<div>Price<input type="number" name="price" min="0.00"></div>
-	<div>Auto Rebid<input type="checkbox" name="isAutoRebid"></div>
-	<div>Auto Rebid Limit<input type="number" name="autoRebidLimit" min="0.00"></div>
-	<div>Auto Rebid Increment<input type="number" name="autoRebidIncrement" min="0.01"></div>
-
-	<input type="submit" value="submit">
+	<div>Price<input type="number" name="price" min="1"></div>
+	<div>Auto Rebid Limit<input type="number" name="autoRebidLimit" min="1"></div>
+	<input type="submit" value="Submit">
 </form>
-
-<%@include file="userNav.jsp" %>
 
 </body>
 

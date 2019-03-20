@@ -13,7 +13,7 @@ public interface ISQLConstant {
 	String SQL_USER_SELECT = "select password, firstname, lastname, active, userType from User where username=?";
 
 	// Bid
-	String SQL_BID_INSERT = "insert Bid (bidId, offerId, buyer, price, isAutoRebid, autoRebidLimit, date) VALUES (?, ?, ?, ?, ?, ?, NOW())";
+	String SQL_BID_INSERT = "insert Bid (bidId, offerId, buyer, price, autoRebidLimit, bidDate) VALUES (?, ?, ?, ?, ?, NOW())";
 
 	// CategoryField
 	String SQL_CATEGORYFIELD_SELECT = "select categoryName, CategoryField.fieldID, fieldName, fieldType from CategoryField inner join Field on CategoryField.fieldID = Field.fieldID order by categoryName, CategoryField.fieldID";

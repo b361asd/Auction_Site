@@ -10,7 +10,6 @@ public class CreateBid extends DBBase {
 
 	public static final String PARAM_NAME_OFFER_ID         = "offerId";
 	public static final String PARAM_NAME_PRICE            = "price";
-	public static final String PARAM_NAME_AUTO_REBID       = "isAutoRebid";
 	public static final String PARAM_NAME_AUTO_REBID_LIMIT = "autoRebidLimit";
 
 	public static Map doCreateBid(String userID, Map<String, String[]> parameters) {
@@ -28,8 +27,7 @@ public class CreateBid extends DBBase {
 			pStmtInsertBid.setString(2, getStringFromParamMap(PARAM_NAME_OFFER_ID, parameters));
 			pStmtInsertBid.setString(3, userID);
 			pStmtInsertBid.setBigDecimal(4, getBigDecimalFromParamMap(PARAM_NAME_PRICE, parameters));
-			pStmtInsertBid.setBoolean(5, getBooleanFromParamMap(PARAM_NAME_AUTO_REBID, parameters));
-			pStmtInsertBid.setBigDecimal(6, getBigDecimalFromParamMap(PARAM_NAME_AUTO_REBID_LIMIT, parameters));
+			pStmtInsertBid.setBigDecimal(5, getBigDecimalFromParamMap(PARAM_NAME_AUTO_REBID_LIMIT, parameters));
 			//
 			pStmtInsertBid.execute();
 			//

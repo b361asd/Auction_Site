@@ -38,7 +38,7 @@
 	State<input type="text" name="state"/><br/>
 	Zip Code<input type="text" name="zipCode"/><br/>
 	Phone Number<input type="text" name="phoneNumber"/><br/>
-	<input type="submit" value="submit">
+	<input type="submit" value="Submit">
 </form>
 
 </body>

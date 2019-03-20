@@ -125,7 +125,7 @@ CREATE TABLE Bid
 	--
 	buyer          VARCHAR(64)    NOT NULL,
 	price          DECIMAL(20, 2) NOT NULL,
-	autoRebIDLimit DECIMAL(20, 2) NULL, -- NULL if not auto rebid
+	autoRebidLimit DECIMAL(20, 2) NULL, -- NULL if not auto rebid
 	bidDate        DATETIME       NOT NULL,
 	--
 	FOREIGN KEY (buyer) REFERENCES User (username) ON UPDATE CASCADE ON DELETE CASCADE,

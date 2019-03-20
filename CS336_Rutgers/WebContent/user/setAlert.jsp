@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.GetOffer" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
 
@@ -59,7 +58,7 @@
 	<div>Auto Rebid Limit<input type="number" name="autoRebidLimit" min="0.00"></div>
 	<div>Auto Rebid Increment<input type="number" name="autoRebidIncrement" min="0.01"></div>
 
-	<input type="submit" value="submit">
+	<input type="submit" value="Submit">
 </form>
 
 <%@include file="userNav.jsp" %>

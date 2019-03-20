@@ -29,15 +29,15 @@
 <%@include file="userNav.jsp" %>
 
 <form id="form-id-doBid" action="${pageContext.request.contextPath}/user/postBid.jsp" method="post">
-	<input id="input-id-doBid" type="hidden" name="offeridcategoryname" value="_"/>
+	<input id="input-id" type="hidden" name="offerid" value="_"/>
 </form>
 
 <form id="form-id-listBid" action="${pageContext.request.contextPath}/user/listBid.jsp" method="post">
-	<input id="input-id-listBid" type="hidden" name="offeridcategoryname" value="_"/>
+	<input id="input-id" type="hidden" name="offerid" value="_"/>
 </form>
 
 <form id="form-id-listSimilar" action="${pageContext.request.contextPath}/user/listSimilar.jsp" method="post">
-	<input id="input-id-listSimilar" type="hidden" name="offeridcategoryname" value="_"/>
+	<input id="input-id" type="hidden" name="offerid" value="_"/>
 </form>
 
 <table>
@@ -73,9 +73,9 @@
 				}
 				//
 				out.println("<td>");
-				out.println("<button onclick=\"document.getElementById('input-id-doBid').value='" + lstOneRow.get(0) + "," + lstOneRow.get(1) + "'; document.getElementById('form-id-doBid').submit();\" class=\"favorite styled\" type=\"button\">Bid</button>");
-				out.println("<button onclick=\"document.getElementById('input-id-listBid').value='" + lstOneRow.get(0) + "," + lstOneRow.get(1) + "'; document.getElementById('form-id-listBid').submit();\" class=\"favorite styled\" type=\"button\">List Bid</button>");
-				out.println("<button onclick=\"document.getElementById('input-id-listSimilar').value='" + lstOneRow.get(0) + "," + lstOneRow.get(1) + "'; document.getElementById('form-id-listSimilar').submit();\" class=\"favorite styled\" type=\"button\">List Similar</button>");
+				out.println("<button onclick=\"document.getElementById('input-id').value='" + lstOneRow.get(0) + "'; document.getElementById('form-id').submit();\" class=\"favorite styled\" type=\"button\">Bid</button>");
+				out.println("<button onclick=\"document.getElementById('input-id').value='" + lstOneRow.get(0) + "'; document.getElementById('form-id').submit();\" class=\"favorite styled\" type=\"button\">Bid</button>");
+				out.println("<button onclick=\"document.getElementById('input-id').value='" + lstOneRow.get(0) + "'; document.getElementById('form-id').submit();\" class=\"favorite styled\" type=\"button\">Bid</button>");
 				out.println("</td>");
 				//
 				out.println("</tr>");

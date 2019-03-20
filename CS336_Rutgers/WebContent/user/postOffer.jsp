@@ -87,7 +87,7 @@
 	<div>Item Description<input type="text" name="description"></div>
 	<div>Auction Days<input type="number" name="auction_days" min="1" max="30"></div>
 
-	<input type="submit" value="submit">
+	<input type="submit" value="Submit">
 </form>
 
 </body>
