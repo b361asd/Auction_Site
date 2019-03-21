@@ -8,7 +8,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Create a Representative</title>
+	<title>BuyMe - Register a Representative</title>
 	<link rel="stylesheet" href="../style.css?v=1.0"/>
 </head>
 
@@ -34,7 +34,7 @@
 %>
 
 <%@include file="../header.jsp" %>
-<%@include file="adminNav.jsp" %>
+<%@include file="/admin/adminNav.jsp" %>
 
 </body>
 

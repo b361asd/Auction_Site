@@ -24,19 +24,23 @@ public class LoginFilter implements Filter, IConstant {
 		HttpServletRequest  request  = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		//
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "filter!!!");
+		//
+		HttpSession session = request.getSession(true);
+		session.setAttribute(SESSION_ATTRIBUTE_MESSAGE, null);
+		//
 		String loginURL = request.getContextPath() + "/login.jsp";
 		//
 		String  logoutURLServlet = request.getContextPath() + "/logout";
 		boolean isLogoutRequest  = request.getRequestURI().equals(logoutURLServlet);
 		if (isLogoutRequest) {
-			HttpSession session = request.getSession(true);
 			session.invalidate();
 			//
+			request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "redirect to login 0");
 			response.sendRedirect(loginURL);
 		}
 		else {
-			HttpSession session    = request.getSession(true);
-			boolean     isLoggedIn = session != null && session.getAttribute(SESSION_ATTRIBUTE_USER) != null;
+			boolean isLoggedIn = session.getAttribute(SESSION_ATTRIBUTE_USER) != null;
 			//
 			String homeURL = request.getContextPath() + "/home";
 			//
@@ -58,7 +62,15 @@ public class LoginFilter implements Filter, IConstant {
 					chain.doFilter(request, response);
 				}
 				else {                           // Including login.jsp
-					response.sendRedirect(homeURL);
+					boolean isHomeRequest = request.getRequestURI().equals(homeURL);
+					boolean isCSSRequest  = request.getRequestURI().toLowerCase().endsWith(".css");
+					if (isHomeRequest || isCSSRequest) {
+						chain.doFilter(request, response);
+					}
+					else {
+						request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "home 0. " + "HomeURL: " + homeURL + "-" + request.getRequestURI());
+						response.sendRedirect(homeURL);
+					}
 				}
 			}
 			else {
@@ -74,6 +86,7 @@ public class LoginFilter implements Filter, IConstant {
 					chain.doFilter(request, response);
 				}
 				else {
+					request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "redirect to login 1");
 					response.sendRedirect(loginURL);
 				}
 			}

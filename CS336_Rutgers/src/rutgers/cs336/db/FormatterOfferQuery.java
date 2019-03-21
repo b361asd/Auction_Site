@@ -5,22 +5,22 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FormatterOfferQuery {
-	private static String OP_ANY = "any";
+	private static       String                  OP_ANY                = "any";
 	//
-	public static String OP_SZ_EQUAL = "szequal";
-	private static String OP_SZ_NOT_EQUAL = "sznotequal";
-	private static String OP_SZ_START_WITH = "startwith";
-	private static String OP_SZ_CONTAIN = "contain";
+	public static        String                  OP_SZ_EQUAL           = "szequal";
+	private static       String                  OP_SZ_NOT_EQUAL       = "sznotequal";
+	private static       String                  OP_SZ_START_WITH      = "startwith";
+	private static       String                  OP_SZ_CONTAIN         = "contain";
 	//
-	public static String OP_INT_EQUAL = "intequal";
-	public static String OP_INT_EQUAL_MULTI = "intequalmulti";
-	private static String OP_INT_NOT_EQUAL = "intnotequal";
-	private static String OP_INT_EQUAL_OR_OVER = "equalorover";
-	private static String OP_INT_EQUAL_OR_UNDER = "equalorunder";
-	private static String OP_INT_BETWEEN = "between";
+	public static        String                  OP_INT_EQUAL          = "intequal";
+	public static        String                  OP_INT_EQUAL_MULTI    = "intequalmulti";
+	private static       String                  OP_INT_NOT_EQUAL      = "intnotequal";
+	private static       String                  OP_INT_EQUAL_OR_OVER  = "equalorover";
+	private static       String                  OP_INT_EQUAL_OR_UNDER = "equalorunder";
+	private static       String                  OP_INT_BETWEEN        = "between";
 	//
-	private static String OP_BOOL_TRUE = "true";
-	private static String OP_BOOL_FALSE = "false";
+	private static       String                  OP_BOOL_TRUE          = "true";
+	private static       String                  OP_BOOL_FALSE         = "false";
 	//
 	private static final HashMap<String, String> sqlTokens;
 	private static       Pattern                 sqlTokenPattern;
@@ -28,9 +28,9 @@ public class FormatterOfferQuery {
 	static {
 		// MySQL escape sequences: https://dev.mysql.com/doc/refman/8.0/en/string-literals.html
 		String[][] search_regex_replacement = new String[][]
-					  {	//   Search string       Search regex        SQL replacement regex
-						    {   "\u0000"    ,       "\\x00"     ,       "\\\\0"     },
-						    {   "'"         ,       "'"         ,       "\\\\'"     },
+				  {	//   Search string       Search regex        SQL replacement regex
+							 {   "\u0000"    ,       "\\x00"     ,       "\\\\0"     },
+							 {   "'"         ,       "'"         ,       "\\\\'"     },
 							 {   "\""        ,       "\""        ,       "\\\\\""    },
 							 {   "\b"        ,       "\\x08"     ,       "\\\\b"     },
 							 {   "\n"        ,       "\\n"       ,       "\\\\n"     },
@@ -49,6 +49,7 @@ public class FormatterOfferQuery {
 		sqlTokenPattern = Pattern.compile('(' + patternStr.toString() + ')');
 	}
 
+
 	public static String escape(String s) {
 		Matcher      matcher = sqlTokenPattern.matcher(s);
 		StringBuffer sb      = new StringBuffer();
@@ -59,22 +60,20 @@ public class FormatterOfferQuery {
 		return sb.toString();
 	}
 
-	
 
 	public static StringBuilder initQuery(String categoryName) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select o.offerId, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerId FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerId = b1.offerId)) b ON o1.offerId = b.offerId) o inner join (SELECT of.*, cf1.sortOrder, f1.fieldName, f1.fieldType FROM OfferField of, CategoryField cf1, Field f1 WHERE of.fieldID = cf1.fieldID AND of.fieldID = f1.fieldID AND cf1.categoryName = '" + categoryName + "') of1 on o.offerId = of1.offerId");
+		sb.append("select o.offerId, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerId FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerId = b1.offerId)) b ON o1.offerId = b.offerId) o inner join (SELECT of.*, cf1.sortOrder, f1.fieldName, f1.fieldType FROM OfferField of, CategoryField cf1, Field f1 WHERE of.fieldID = cf1.fieldID AND of.fieldID = f1.fieldID AND cf1.categoryName = '").append(categoryName).append("') of1 on o.offerId = of1.offerId");
 		//
 		return sb;
 	}
 
 
-	
 	private static String oneCondition(String columnName, String op, String value, String valueAdd, boolean isCasting) {
 		String output = "";
 		//
-		if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_NOT_EQUAL) || op.equals(OP_SZ_START_WITH) || op.equals(OP_SZ_CONTAIN)) {		// String
-			value = escape((value==null?"":value.trim())).toUpperCase();
+		if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_NOT_EQUAL) || op.equals(OP_SZ_START_WITH) || op.equals(OP_SZ_CONTAIN)) {      // String
+			value = escape((value == null ? "" : value.trim())).toUpperCase();
 			if (value.equals("")) {
 				output = "";
 			}
@@ -93,7 +92,7 @@ public class FormatterOfferQuery {
 				}
 			}
 		}
-		else if (op.equals(OP_INT_EQUAL) || op.equals(OP_INT_EQUAL_MULTI) || op.equals(OP_INT_NOT_EQUAL) || op.equals(OP_INT_EQUAL_OR_OVER) || op.equals(OP_INT_EQUAL_OR_UNDER) || op.equals(OP_INT_BETWEEN)) {		// Integer
+		else if (op.equals(OP_INT_EQUAL) || op.equals(OP_INT_EQUAL_MULTI) || op.equals(OP_INT_NOT_EQUAL) || op.equals(OP_INT_EQUAL_OR_OVER) || op.equals(OP_INT_EQUAL_OR_UNDER) || op.equals(OP_INT_BETWEEN)) {      // Integer
 			value = escape((value == null ? "" : value.trim())).toUpperCase();
 			if (value.equals("")) {
 				output = "";
@@ -133,10 +132,10 @@ public class FormatterOfferQuery {
 				}
 				else if (op.equals(OP_INT_EQUAL_OR_UNDER)) {
 					if (isCasting) {
-						output = "(CAST("+ columnName + " AS SIGNED) <= CAST(" + value + " AS SIGNED))";
+						output = "(CAST(" + columnName + " AS SIGNED) <= CAST(" + value + " AS SIGNED))";
 					}
 					else {
-						output = "("+ columnName + " <= " + value + ")";
+						output = "(" + columnName + " <= " + value + ")";
 					}
 				}
 				else if (op.equals(OP_INT_BETWEEN)) {
@@ -155,7 +154,7 @@ public class FormatterOfferQuery {
 				}
 			}
 		}
-		else if (op.equals(OP_BOOL_TRUE) || op.equals(OP_BOOL_FALSE)) {						// Boolean
+		else if (op.equals(OP_BOOL_TRUE) || op.equals(OP_BOOL_FALSE)) {                  // Boolean
 			if (op.equals(OP_BOOL_TRUE)) {
 				if (isCasting) {
 					output = "(UPPER(" + columnName + ") = 'TRUE')";
@@ -176,9 +175,8 @@ public class FormatterOfferQuery {
 		//
 		return output;
 	}
-	
-	
-	
+
+
 	public static StringBuilder addCondition(StringBuilder sb, String columnName, String op, String value, String valueAdd) {
 		if (op.equals(OP_ANY)) {
 			// Do Nothing
@@ -192,11 +190,12 @@ public class FormatterOfferQuery {
 		//
 		return sb;
 	}
-	
-	
+
+
 	public static StringBuilder initFieldCondition(StringBuilder sb) {
 		return sb.append(" and (not exists (select * from OfferField of2 where of2.offerId = o.offerId and (false");
 	}
+
 	public static StringBuilder addFieldCondition(StringBuilder sb, String fieldId, String op, String value, String valueAdd) {
 		if (op.equals(OP_ANY)) {
 			// Do Nothing
@@ -210,12 +209,12 @@ public class FormatterOfferQuery {
 		//
 		return sb;
 	}
+
 	public static StringBuilder doneFieldCondition(StringBuilder sb) {
 		return sb.append(" ))) order by o.offerId, of1.fieldID");
 	}
 
 
-	
 	public static void main(String[] args) {
 		StringBuilder sb = initQuery("truck");
 		//addCondition(sb, "offerID", OP_SZ_START_WITH, "Scratcges", null);

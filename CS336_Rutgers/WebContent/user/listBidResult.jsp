@@ -19,7 +19,7 @@
 <%
 	String offeridcategoryname = DBBase.getStringFromParamMap("offeridcategoryname", request.getParameterMap());
 	//
-	String[] temp = offeridcategoryname.split("\\,");
+	String[] temp = offeridcategoryname.split(",");
 	//
 	Map data = ListBid.getBidsForOffer(temp[0]);
 	//

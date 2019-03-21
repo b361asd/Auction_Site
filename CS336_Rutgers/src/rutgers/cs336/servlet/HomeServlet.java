@@ -15,14 +15,16 @@ public class HomeServlet extends HttpServlet implements IConstant {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/login.jsp").forward(request, response);
+		doPost(request, response);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			  throws IOException, ServletException {
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "home!!!");
+		//
 		String  register   = request.getParameter("register");
-		boolean isRegister = (register != null) && register.equalsIgnoreCase("YES");
+		boolean isRegister = register != null && register.equalsIgnoreCase("YES");
 		//
 		Map map;
 		//
@@ -58,11 +60,10 @@ public class HomeServlet extends HttpServlet implements IConstant {
 				if ((Boolean) map.get(DATA_NAME_STATUS)) {
 					request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, username);
 					request.getSession().setAttribute(SESSION_ATTRIBUTE_USERTYPE, map.get(DATA_NAME_USER_TYPE).toString());
-					request.getSession()
-							  .setAttribute(SESSION_ATTRIBUTE_USER_FNAME, map.get(DATA_NAME_FIRST_NAME).toString());
+					request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_FNAME, map.get(DATA_NAME_FIRST_NAME).toString());
 					request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_LNAME, map.get(DATA_NAME_LAST_NAME).toString());
 					//
-					request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, map.get(DATA_NAME_MESSAGE).toString());
+					request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "no not OK");
 				}
 			}
 			else {
@@ -82,24 +83,29 @@ public class HomeServlet extends HttpServlet implements IConstant {
 			if (szUserType.equals("1")) {
 				//response.sendRedirect(request.getContextPath() + "/homeAdmin.jsp");
 				//
+				map.put(DATA_NAME_MESSAGE, map.get(DATA_NAME_MESSAGE) + " Admin Login!");
 				//request.setAttribute("JSP_DATA", map);
 				request.getRequestDispatcher("/admin/homeAdmin.jsp").forward(request, response);
 			}
 			else if (szUserType.equals("2")) {
 				//response.sendRedirect(request.getContextPath() + "/homeRep.jsp");
 				//
+				map.put(DATA_NAME_MESSAGE, map.get(DATA_NAME_MESSAGE) + " Rep Login!");
 				//request.setAttribute("JSP_DATA", map);
 				request.getRequestDispatcher("/rep/homeRep.jsp").forward(request, response);
 			}
 			else {
 				//response.sendRedirect(request.getContextPath() + "/home.jsp");
 				//
+				map.put(DATA_NAME_MESSAGE, map.get(DATA_NAME_MESSAGE) + " User Login!");
 				//request.setAttribute("JSP_DATA", map);
 				request.getRequestDispatcher("/user/home.jsp").forward(request, response);
 			}
 		}
 		else {
-			request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, map.get(DATA_NAME_MESSAGE).toString());
+			request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "not OK");
+			//
+			map.put(DATA_NAME_MESSAGE, map.get(DATA_NAME_MESSAGE) + " Login!");
 			//
 			response.sendRedirect(request.getContextPath() + "/login.jsp");
 			//

@@ -5,28 +5,17 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Create a Representative</title>
+	<title>BuyMe - Register a Representative</title>
 	<link rel="stylesheet" href="../style.css?v=1.0"/>
 
 </head>
 
 <body>
 
-<%
-	String message = "Welcome to BuyMe!";
-	if (session == null) {
-	}
-	else {
-		message = (String) session.getAttribute("message");
-		if (message == null) {
-			message = "Welcome to BuyMe.";
-		}
-	}
-%>
-<h1><%=message%>
-</h1>
+<%@include file="../header.jsp" %>
+<%@include file="/admin/adminNav.jsp" %>
 
-<form action="${pageContext.request.contextPath}/admin/createRepResult.jsp" method="post">
+<form action="${pageContext.request.contextPath}/admin/registerRepResult.jsp" method="post">
 	<input name="register" type="hidden" value="YES">
 	Username<input type="text" name="username"/><br/>
 	Password<input type="text" name="password"/><br/>

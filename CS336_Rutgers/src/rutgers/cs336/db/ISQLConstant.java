@@ -7,15 +7,18 @@ public interface ISQLConstant {
 	String MySQL_USER_ID  = "cs336";
 	String MySQL_PASSWORD = "cs336_password";
 
+
 	// User
 	String SQL_USER_INSERT = "insert User (username, password, email, firstname, lastname, address, phone, active, userType) VALUES (?, ?, ?, ?, ?, ?, ?, true, ?)";
 	//
 	String SQL_USER_SELECT = "select password, firstname, lastname, active, userType from User where username=?";
 
+
 	// Bid
 	String SQL_BID_INSERT = "insert Bid (bidId, offerId, buyer, price, autoRebidLimit, bidDate) SELECT ?, o.offerId, ?, ?, ?, NOW() FROM Offer o WHERE o.endDate >= NOW() AND (NOT o.minPrice > ?) AND o.offerId = ? AND o.status = 1 AND ? > (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = ?)";
 	//
 	String SQL_BID_SELECT = "select bidID, buyer, price, bidDate from Bid b where b.offerID = ?";
+
 
 	// CategoryField
 	String SQL_CATEGORYFIELD_SELECT = "select categoryName, CategoryField.fieldID, fieldName, fieldType from CategoryField inner join Field on CategoryField.fieldID = Field.fieldID order by categoryName, CategoryField.fieldID";
