@@ -32,7 +32,7 @@
 	<input id="input-id-doBid" type="hidden" name="offeridcategoryname" value="_"/>
 </form>
 
-<form id="form-id-listBid" action="${pageContext.request.contextPath}/user/listBid.jsp" method="post">
+<form id="form-id-listBid" action="${pageContext.request.contextPath}/user/listBidResult.jsp" method="post">
 	<input id="input-id-listBid" type="hidden" name="offeridcategoryname" value="_"/>
 </form>
 

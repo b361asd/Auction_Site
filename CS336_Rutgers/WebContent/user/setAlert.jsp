@@ -33,7 +33,7 @@
 	}
 	//
 	String offerID = getStringFromParamMap("offerid", request.getParameterMap());
-	Map data = GetOffer.getOffer(offerID);
+	Map data = null;
 %>
 
 

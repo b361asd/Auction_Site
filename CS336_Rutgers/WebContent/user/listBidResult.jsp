@@ -1,9 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.CreateBid" %>
+<%@ page import="rutgers.cs336.db.DBBase" %>
+<%@ page import="rutgers.cs336.db.ListBid" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
-<%@ page import="java.util.Map" %>
+<%@ page import="java.util.List" %>
 
 <html>
 
@@ -16,31 +17,53 @@
 <body>
 
 <%
-	String userID = (String) request.getSession().getAttribute("user");
-	Map data = CreateBid.doCreateBid(userID, request.getParameterMap());
+	String offeridcategoryname = DBBase.getStringFromParamMap("offeridcategoryname", request.getParameterMap());
 	//
-	String status = data.get(DATA_NAME_STATUS).toString();
-	String message = (String) data.get(DATA_NAME_MESSAGE);
+	String[] temp = offeridcategoryname.split("\\,");
 	//
-	String sessionMessage = "Welcome to BuyMe!";
-	if (request.getSession() == null) {
-		sessionMessage = "Welcome to BuyMe no session!";
-	}
-	else {
-		sessionMessage = (String) request.getSession().getAttribute("message");
-		if (sessionMessage == null) {
-			sessionMessage = "Welcome to BuyMe.";
-		}
-	}
+	Map data = ListBid.getBidsForOffer(temp[0]);
+	//
+	request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+	//
+	List lstHeader = (List) (data.get(DATA_NAME_DATA_ADD));
+	List lstRows = (List) (data.get(DATA_NAME_DATA));
 %>
-<h1><%=sessionMessage%>
-</h1>
-<h1><%=status%>
-</h1>
-<h1><%=message%>
-</h1>
 
+<%@include file="../header.jsp" %>
 <%@include file="userNav.jsp" %>
+
+<table>
+	<tr>
+		<%
+			// Header
+			if (lstHeader != null && lstHeader.size() > 0) {
+				for (int i = 1; i < lstHeader.size(); i++) {
+					Object one = lstHeader.get(i);
+					out.println("<td>" + one.toString() + "</td>");
+				}
+			}
+		%>
+	</tr>
+
+	<%
+		if (lstRows != null) {
+			for (Object oneRow : lstRows) {
+				List lstOneRow = (List) oneRow;
+				//
+				out.println("<tr>");
+				for (int i = 1; i < lstOneRow.size(); i++) {   // Skip offerID
+					Object oneField = lstOneRow.get(i);
+					//
+					String oneItem = oneField == null ? "" : oneField.toString();
+					out.println("<td>" + oneItem + "</td>");
+				}
+				//
+				out.println("</tr>");
+			}
+		}
+	%>
+
+</table>
 
 </body>
 

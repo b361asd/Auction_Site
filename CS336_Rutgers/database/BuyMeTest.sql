@@ -69,3 +69,6 @@ SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerId 
 
 
 select * from Offer o left outer join Bid b on o.offerID = b.offerID and o.offerID='fad64df32a6a4d3f91000a1d50e28696';
+
+
+SHOW EVENTS;

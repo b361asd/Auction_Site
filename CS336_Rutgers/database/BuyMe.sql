@@ -238,3 +238,26 @@ CREATE TABLE Email
 	--
 	PRIMARY KEY (emailID)
 );
+
+
+-- An event that processes trades / matches offers and bids
+DROP EVENT IF EXISTS ProcessTrade;
+DELIMITER $$
+	CREATE EVENT ProcessTrade 
+	ON SCHEDULE EVERY 1 MINUTE STARTS NOW()
+	COMMENT 'Process trades'
+	DO
+		BEGIN
+			UPDATE Offer o SET o.status = 4 WHERE o.status = 1 AND NOW() > endDate AND NOT EXISTS (SELECT * FROM Bid b WHERE b.offerID = o.offerID);
+
+			UPDATE Offer o SET o.status = 5 WHERE o.status = 1 AND NOW() > endDate AND NOT EXISTS (SELECT * FROM Bid b WHERE b.offerID = o.offerID AND b.price >= o.minPrice);
+            
+            UPDATE Offer SET status = 13 WHERE status = 1 AND NOW() > endDate AND EXISTS (SELECT * FROM Bid b WHERE b.offerID = o.offerID AND b.price >= o.minPrice);
+
+			INSERT INTO Trade (tradeID, offerID, bidID, tradeDate) SELECT REPLACE(UUID(),'-',''), o.offerID, b.bidID, NOW() FROM Offer o, Bid b WHERE o.status = 13 AND o.offerID = b.offerID AND b.price = (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = o.offerID ) LIMIT 0, 1;
+            
+            UPDATE Offer SET status = 3 WHERE status = 13;
+		END; $$
+DELIMITER ;
+
+

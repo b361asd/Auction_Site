@@ -3,7 +3,7 @@
 <h2>
 	<A href="${pageContext.request.contextPath}/user/postOffer.jsp">Post an Offer</A>
 	<A href="${pageContext.request.contextPath}/user/postBid.jsp">Post a Bid</A>
-	<A href="${pageContext.request.contextPath}/user/listBid.jsp">List Bids</A>
+	<A href="${pageContext.request.contextPath}/user/listBidResult.jsp">List Bids</A>
 	<A href="${pageContext.request.contextPath}/user/searchOffer.jsp">Search Offer</A>
 	<A href="${pageContext.request.contextPath}/user/viewBidHistory.jsp">View Bid History</A>
 	<A href="${pageContext.request.contextPath}/user/postQuestion.jsp">Ask a Question</A>
