@@ -24,15 +24,26 @@ public class CreateBid extends DBBase {
 			//
 			pStmtInsertBid = con.prepareStatement(SQL_BID_INSERT);
 			pStmtInsertBid.setString(1, bidId);
-			pStmtInsertBid.setString(2, getStringFromParamMap(PARAM_NAME_OFFER_ID, parameters));
-			pStmtInsertBid.setString(3, userID);
-			pStmtInsertBid.setBigDecimal(4, getBigDecimalFromParamMap(PARAM_NAME_PRICE, parameters));
-			pStmtInsertBid.setBigDecimal(5, getBigDecimalFromParamMap(PARAM_NAME_AUTO_REBID_LIMIT, parameters));
+			pStmtInsertBid.setString(2, userID);
+			pStmtInsertBid.setBigDecimal(3, getBigDecimalFromParamMap(PARAM_NAME_PRICE, parameters));
+			pStmtInsertBid.setBigDecimal(4, getBigDecimalFromParamMap(PARAM_NAME_AUTO_REBID_LIMIT, parameters));
+			pStmtInsertBid.setBigDecimal(5, getBigDecimalFromParamMap(PARAM_NAME_PRICE, parameters));
+			pStmtInsertBid.setString(6, getStringFromParamMap(PARAM_NAME_OFFER_ID, parameters));
+			pStmtInsertBid.setBigDecimal(7, getBigDecimalFromParamMap(PARAM_NAME_PRICE, parameters));
+			pStmtInsertBid.setString(8, getStringFromParamMap(PARAM_NAME_OFFER_ID, parameters));
 			//
 			pStmtInsertBid.execute();
 			//
-			output.put(DATA_NAME_STATUS, true);
-			output.put(DATA_NAME_MESSAGE, "OK CreateBid");
+			int count = pStmtInsertBid.getUpdateCount();
+			//
+			if (count == 1) {
+				output.put(DATA_NAME_STATUS, true);
+				output.put(DATA_NAME_MESSAGE, "Bid Created!");
+			}
+			else {
+				output.put(DATA_NAME_STATUS, false);
+				output.put(DATA_NAME_MESSAGE, "No bid created.");
+			}
 		}
 		catch (SQLException e) {
 			if (con != null) {
@@ -62,8 +73,7 @@ public class CreateBid extends DBBase {
 			//
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE,
-			           "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", ParamMap=" + getParamMap(
-					             parameters));
+			           "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", ParamMap=" + getParamMap(parameters));
 			e.printStackTrace();
 		}
 		finally {

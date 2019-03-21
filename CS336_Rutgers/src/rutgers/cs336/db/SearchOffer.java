@@ -118,7 +118,8 @@ public class SearchOffer extends DBBase {
 		}
 		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sb != null ? sb.toString() : null));
+			output.put(DATA_NAME_MESSAGE,
+			           "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sb != null ? sb.toString() : null));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
@@ -182,7 +183,8 @@ public class SearchOffer extends DBBase {
 					}
 				}
 			}
-			FormatterOfferQuery.addCondition(sb, "conditionCode", FormatterOfferQuery.OP_INT_EQUAL_MULTI, lstConditionCode, null);
+			FormatterOfferQuery.addCondition(sb, "conditionCode", FormatterOfferQuery.OP_INT_EQUAL_MULTI, lstConditionCode,
+			                                 null);
 		}
 		//
 		{
@@ -223,7 +225,7 @@ public class SearchOffer extends DBBase {
 
 
 	private static StringBuilder formatSQLWithOfferID(Map<String, String[]> parameters) {
-		StringBuilder sb = null;
+		StringBuilder sb;
 		//
 		String offeridcategoryname = getStringFromParamMap("offeridcategoryname", parameters);
 		//
