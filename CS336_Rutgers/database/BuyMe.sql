@@ -259,21 +259,22 @@ DELIMITER $$
         IF ((SELECT COUNT(*) FROM Temp) = 0) -- Either New is 1st bid or last is not auto rebid
 		THEN
 			BEGIN
+            --
 			END;
         ELSEIF	((SELECT autoRebidLimit FROM Temp) >= @priceAdjust) 	-- Auto rebid and autoRebidLimit >= New.price + increment. Do a rebid
 		THEN
 			BEGIN
 				INSERT Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) SELECT bidID, offerID, buyer, @priceAdjust, autoRebidLimit, @timeNow FROM Temp WHERE @timeNow <= (SELECT endDate from Offer o1 where o1.offerID = NEW.offerID);
 			END;
-        ELSE	-- Price >= auto Rebid. Send Alert.
+        ELSE	-- Price >= Auto Rebid. Send Alert.
 			BEGIN
 				INSERT Alert (alertID, receiver, message, offerID, bidID, alertDate, dismissedDate) SELECT REPLACE(UUID(),'-',''), buyer, 'Item Price Exceeded Auto Rebid Limit', offerID, bidID, @timeNow, NULL FROM Temp;
             END;
         END IF;
         
         DROP TEMPORARY TABLE Temp;
-	END; $$
-DELIMITER;
+	END $$
+DELIMITER ;
 
 
 
@@ -295,7 +296,32 @@ DELIMITER $$
 			INSERT INTO Trade (tradeID, offerID, bidID, tradeDate) SELECT REPLACE(UUID(),'-',''), o.offerID, b.bidID, NOW() FROM Offer o, Bid b WHERE o.status = 13 AND o.offerID = b.offerID AND b.price = (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = o.offerID ) LIMIT 0, 1;
             
             UPDATE Offer SET status = 3 WHERE status = 13;
-		END; $$
+		END $$
 DELIMITER ;
 
 
+
+-- Procedure
+
+
+DELIMITER $$
+CREATE PROCEDURE GenerateNewOfferAlert(IN offerID VARCHAR(32), IN categoryName VARCHAR(32))
+BEGIN
+	DECLARE sqlTxt VARCHAR(2048);
+	DECLARE  criteriaCursor CURSOR FOR SELECT criterionID, buyer, categoryName, triggerTxt FROM OfferAlertCriterion;
+
+	Open criteriaCursor;
+    WHILE HAS DO
+		BEGIN
+			IF (criteriaCursor.categoryName = categoryName)
+				SET @sqlTxt = REPLACE (triggerTxt, '$offerID$', offerID)
+				PREPARE stmt = ;
+                stmt EXECUTE triggerTxt;
+            BEGIN
+            END;
+        END;
+	END WHILE
+       --
+	CLOSE criteriaCursor;
+END $$
+DELIMITER ;
