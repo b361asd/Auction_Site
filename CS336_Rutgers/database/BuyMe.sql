@@ -125,7 +125,7 @@ CREATE TABLE Bid
 	--
 	buyer          VARCHAR(64)    NOT NULL,
 	price          DECIMAL(20, 2) NOT NULL,
-	autoRebidLimit DECIMAL(20, 2) NULL, -- NULL if not auto rebid
+	autoRebidLimit DECIMAL(20, 2) NULL, -- NULL or 0 if not auto rebid
 	bidDate        DATETIME       NOT NULL,
 	--
 	FOREIGN KEY (buyer) REFERENCES User (username) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -170,7 +170,7 @@ CREATE TABLE OfferAlertCriterion
 DROP TABLE IF EXISTS Alert;
 CREATE TABLE Alert
 (
-	alertID       INT AUTO_INCREMENT,
+	alertID       VARCHAR(32) NOT NULL,
 	receiver      VARCHAR(64)  NOT NULL,
 	message       VARCHAR(256) NOT NULL,
 	--
@@ -238,6 +238,44 @@ CREATE TABLE Email
 	--
 	PRIMARY KEY (emailID)
 );
+
+
+
+-- Handles Auto Rebid and outbid alert when a row is inserted into Bid table
+DROP TRIGGER IF EXISTS AutoRebidAndOutbidAlert;
+DELIMITER $$
+	CREATE TRIGGER AutoRebidAndOutbidAlert AFTER INSERT ON Bid
+	FOR EACH ROW
+	BEGIN
+		DECLARE priceAdjust DECIMAL(20, 2);
+        DECLARE timeNow DATETIME;
+        --
+		CREATE TEMPORARY TABLE Temp		-- Latest Bid before insert
+		SELECT * FROM Bid b1 WHERE b1.price = (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = NEW.offerID AND NOT b1.bidID = NEW.bidID) AND b1.autoRebidLimit > 0 AND b1.offerID = NEW.offerID AND NOT b1.bidID = NEW.bidID LIMIT 0,1;
+        --
+        SET priceAdjust = (NEW.price + (SELECT o.increment FROM Offer o WHERE o.offerID = NEW.offerID));
+        SET timeNow = NOW();
+        --
+        IF ((SELECT COUNT(*) FROM Temp) = 0) -- Either New is 1st bid or last is not auto rebid
+		THEN
+			BEGIN
+			END;
+        ELSEIF	((SELECT autoRebidLimit FROM Temp) >= @priceAdjust) 	-- Auto rebid and autoRebidLimit >= New.price + increment. Do a rebid
+		THEN
+			BEGIN
+				INSERT Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) SELECT bidID, offerID, buyer, @priceAdjust, autoRebidLimit, @timeNow FROM Temp WHERE @timeNow <= (SELECT endDate from Offer o1 where o1.offerID = NEW.offerID);
+			END;
+        ELSE	-- Price >= auto Rebid. Send Alert.
+			BEGIN
+				INSERT Alert (alertID, receiver, message, offerID, bidID, alertDate, dismissedDate) SELECT REPLACE(UUID(),'-',''), buyer, 'Item Price Exceeded Auto Rebid Limit', offerID, bidID, @timeNow, NULL FROM Temp;
+            END;
+        END IF;
+        
+        DROP TEMPORARY TABLE Temp;
+	END; $$
+DELIMITER;
+
+
 
 
 -- An event that processes trades / matches offers and bids
