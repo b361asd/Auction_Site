@@ -9,34 +9,34 @@ public interface ISQLConstant {
 
 
 	// User
-	String SQL_USER_INSERT = "insert User (username, password, email, firstname, lastname, address, phone, active, userType) VALUES (?, ?, ?, ?, ?, ?, ?, true, ?)";
+	String SQL_USER_INSERT = "INSERT INTO User (username, password, email, firstname, lastname, address, phone, active, userType) VALUES (?, ?, ?, ?, ?, ?, ?, true, ?)";
 	//
-	String SQL_USER_SELECT = "select password, firstname, lastname, active, userType from User where username=?";
+	String SQL_USER_SELECT = "SELECT password, firstname, lastname, active, userType from User where username=?";
 
 
 	// Bid
-	String SQL_BID_INSERT = "insert Bid (bidId, offerId, buyer, price, autoRebidLimit, bidDate) SELECT ?, o.offerId, ?, ?, ?, NOW() FROM Offer o WHERE o.endDate >= NOW() AND (NOT o.minPrice > ?) AND o.offerId = ? AND o.status = 1 AND ? > (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = ?)";
+	String SQL_BID_INSERT = "INSERT INTO Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) SELECT ?, o.offerID, ?, ?, ?, NOW() FROM Offer o WHERE o.endDate >= NOW() AND (NOT o.minPrice > ?) AND o.offerID = ? AND o.status = 1 AND ? > (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = ?)";
 	//
-	String SQL_BID_SELECT = "select bidID, buyer, price, bidDate from Bid b where b.offerID = ?";
+	String SQL_BID_SELECT = "SELECT bidID, buyer, price, bidDate from Bid b where b.offerID = ?";
 
 
 	// CategoryField
-	String SQL_CATEGORYFIELD_SELECT = "select categoryName, CategoryField.fieldID, fieldName, fieldType from CategoryField inner join Field on CategoryField.fieldID = Field.fieldID order by categoryName, CategoryField.fieldID";
+	String SQL_CATEGORYFIELD_SELECT = "SELECT categoryName, CategoryField.fieldID, fieldName, fieldType from CategoryField inner JOIN Field ON CategoryField.fieldID = Field.fieldID order by categoryName, CategoryField.fieldID";
 
 	// Offer
-	String SQL_OFFER_INSERT = "insert Offer (offerId, categoryName, seller, initPrice, increment, minPrice, conditionCode, description, startDate, endDate, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL + ? DAY), 1)";
+	String SQL_OFFER_INSERT = "INSERT INTO Offer (offerID, categoryName, seller, initPrice, increment, minPrice, conditionCode, description, startDate, endDate, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL + ? DAY), 1)";
 
-	String SQL_OFFER_SELECT = "select categoryName, seller, min_price, description, startDate, endDate, status from Offer where offerId = ?";
+	String SQL_OFFER_SELECT = "SELECT categoryName, seller, min_price, description, startDate, endDate, status from Offer where offerID = ?";
 
-	String SQL_OFFER_SEARCH = "select offerId, categoryName, seller, min_price, description, startDate, endDate from Offer where status = 1 and categoryName = ? and description like ?";
+	String SQL_OFFER_SEARCH = "SELECT offerID, categoryName, seller, min_price, description, startDate, endDate from Offer where status = 1 and categoryName = ? and description like ?";
 
 
 	// OfferField
-	String SQL_OFFERFIELD_INSERT = "insert OfferField (offerId, fieldID, fieldText) VALUES (?, ?, ?)";
+	String SQL_OFFERFIELD_INSERT = "INSERT INTO OfferField (offerID, fieldID, fieldText) VALUES (?, ?, ?)";
 
-	String SQL_OFFERFIELD_SELECT = "select OfferField.fieldID, fieldName, fieldType, fieldText from OfferField inner join Field on OfferField.fieldID = Field.fieldID where OfferField.offerId = ? order by OfferField.fieldID";
+	String SQL_OFFERFIELD_SELECT = "SELECT OfferField.fieldID, fieldName, fieldType, fieldText from OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID where OfferField.offerID = ? order by OfferField.fieldID";
 
-	String SQL_OFFERFIELD_SEARCH = "select OfferField.offerId, OfferField.fieldID, fieldName, fieldType, fieldText from OfferField inner join Field on OfferField.fieldID = Field.fieldID where OfferField.offerId in (select offerId from Offer where status = 1 and categoryName = ? and description like ?)";
+	String SQL_OFFERFIELD_SEARCH = "SELECT OfferField.offerID, OfferField.fieldID, fieldName, fieldType, fieldText from OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID where OfferField.offerID in (SELECT offerID from Offer where status = 1 and categoryName = ? and description like ?)";
 
 
 	// Browse
@@ -46,7 +46,8 @@ public interface ISQLConstant {
 	//	String OFFER_BID_BY_USER
 	//	String SIMILAR_ITEM
 
-
+	String SQL_INSERT_OFFER_ALERT_CRITERION = "INSERT INTO OfferAlertCriterion (criterionID, buyer, categoryName, triggerTxt, generateDate) VALUES (?, ?, ?, ?, NOW())";
+	
 }
 
 /*

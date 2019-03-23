@@ -3,7 +3,6 @@
 
 <%@ page import="rutgers.cs336.db.GetCategoryField" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Map" %>
 <%@ page import="static rutgers.cs336.db.CreateOffer.PREFIX_CATEGORY_NAME" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
 <%@ page import="static rutgers.cs336.gui.Helper.*" %>
@@ -12,14 +11,15 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Search Offers</title>
+	<title>BuyMe - Generate Alert</title>
 	<link rel="stylesheet" href="../style.css?v=1.0"/>
 
 	<script type="text/javascript">
        function onCategoryChange(value) {
-           value.action = "${pageContext.request.contextPath}/user/searchOffer.jsp";	// Post to itself
+           value.action = "${pageContext.request.contextPath}/user/generateNewOfferAlertCriterion.jsp";	// Post to itself
            value.submit();
        }
+
        function onIntegerOPChange(value) {
            //nextElementSibling
        }
@@ -37,29 +37,27 @@
 <%@include file="../header.jsp" %>
 <%@include file="userNav.jsp" %>
 
-<form action="${pageContext.request.contextPath}/user/searchOfferResult.jsp" method="post">
+<form action="${pageContext.request.contextPath}/user/generateNewOfferAlertCriterionResult.jsp" method="post">
 
 
 	<div class='allField'>categoryName
-	<select name="categoryName" onchange="onCategoryChange(this.parentElement.parentElement);">
-		<%
-			List lstCategory = (List) data.get(GetCategoryField.DATA_CATEGORY_LIST);
-			for (Object o : lstCategory) {
-				GetCategoryField.Category temp = (GetCategoryField.Category) o;
-				out.println("<option " + (temp.isCurr() ? "selected " : "") + "value='" + temp.getCategoryName() + "'>" + temp.getCategoryName() + "</option>");
-			}
-		%>
-	</select></div><br/>
+		<select name="categoryName" onchange="onCategoryChange(this.parentElement.parentElement);">
+			<%
+				List lstCategory = (List) data.get(GetCategoryField.DATA_CATEGORY_LIST);
+				for (Object o : lstCategory) {
+					GetCategoryField.Category temp = (GetCategoryField.Category) o;
+					out.println(
+							  "<option " + (temp.isCurr() ? "selected " : "") + "value='" + temp.getCategoryName() + "'>" + temp.getCategoryName() + "</option>");
+				}
+			%>
+		</select></div>
+	<br/>
 
 	<%
-		out.println("<div class='allField'>offerID");
-		out.println(getOPSZSelection("offerIDOP"));
-		out.println("<input type='text' name='offerIDVal'/></div><br/>");
-
 		out.println("<div class='allField'>seller");
 		out.println(getOPSZSelection("sellerOP"));
 		out.println("<input type='text' name='sellerVal'/></div><br/>");
-		
+
 		out.println("<div class='allField'>conditionCode");
 		out.println(getConditionCodeCheckBox("conditionCode"));
 		out.println("</div><br/>");
@@ -68,11 +66,6 @@
 		out.println(getOPSZSelection("descriptionOP"));
 		out.println("<input type='text' name='descriptionVal'/></div><br/>");
 
-		out.println("<div class='allField'>currentBidPrice");
-		out.println(getOPIntSelection("priceOP"));
-		out.println("<input type='number' name='priceVal1'/>");
-		out.println("<input type='number' name='priceVal2'/></div><br/>");
-		
 		List lstField = (List) data.get(GetCategoryField.DATA_FIELD_LIST);
 		String lstFieldIDs = null;
 		for (Object o : lstField) {
@@ -81,7 +74,7 @@
 			int    fieldID      = ((GetCategoryField.Field) o).getFieldID();
 			int    fieldType    = ((GetCategoryField.Field) o).getFieldType();
 			//
-			if (lstFieldIDs==null) {
+			if (lstFieldIDs == null) {
 				lstFieldIDs = "" + fieldID;
 			}
 			else {

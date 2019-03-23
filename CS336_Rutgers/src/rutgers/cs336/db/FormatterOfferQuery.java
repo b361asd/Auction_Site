@@ -61,9 +61,15 @@ public class FormatterOfferQuery {
 	}
 
 
-	public static StringBuilder initQuery(String categoryName) {
+	public static StringBuilder initQuerySearch(String categoryName) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select o.offerId, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerId FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerId = b1.offerId)) b ON o1.offerId = b.offerId) o inner join (SELECT of.*, cf1.sortOrder, f1.fieldName, f1.fieldType FROM OfferField of, CategoryField cf1, Field f1 WHERE of.fieldID = cf1.fieldID AND of.fieldID = f1.fieldID AND cf1.categoryName = '").append(categoryName).append("') of1 on o.offerId = of1.offerId");
+		sb.append("select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, cf1.sortOrder, f1.fieldName, f1.fieldType FROM OfferField of, CategoryField cf1, Field f1 WHERE of.fieldID = cf1.fieldID AND of.fieldID = f1.fieldID AND cf1.categoryName = '").append(categoryName).append("') of1 on o.offerID = of1.offerID");
+		//
+		return sb;
+	}
+	public static StringBuilder initQueryAlert(String receiver, String categoryName) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("insert Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) select REPLACE(UUID(),'-',''), '").append(receiver).append("', o.offerID, NULL, NOW(), NULL from Offer o WHERE (o.offerID='$offerID$') and (o.categoryName='").append(categoryName).append("')");
 		//
 		return sb;
 	}
@@ -193,57 +199,113 @@ public class FormatterOfferQuery {
 
 
 	public static StringBuilder initFieldCondition(StringBuilder sb) {
-		return sb.append(" and (not exists (select * from OfferField of2 where of2.offerId = o.offerId and (false");
+		return sb.append(" and (not exists (select * from OfferField of2 where of2.offerID = o.offerID and (false");
 	}
 
-	public static StringBuilder addFieldCondition(StringBuilder sb, String fieldId, String op, String value, String valueAdd) {
+	
+	public static StringBuilder addFieldCondition(StringBuilder sb, String fieldID, String op, String value, String valueAdd) {
 		if (op.equals(OP_ANY)) {
 			// Do Nothing
 		}
 		else {
 			String temp = oneCondition("of2.fieldText", op, value, valueAdd, true);
 			if (temp.length() > 0) {
-				sb.append(" or (of2.fieldID = ").append(fieldId).append(" and (not ").append(temp).append("))");
+				sb.append(" or (of2.fieldID = ").append(fieldID).append(" and (not ").append(temp).append("))");
 			}
 		}
 		//
 		return sb;
 	}
 
-	public static StringBuilder doneFieldCondition(StringBuilder sb) {
-		return sb.append(" ))) order by o.offerId, of1.fieldID");
+	public static StringBuilder doneFieldConditionSearch(StringBuilder sb) {
+		return sb.append(" ))) order by o.offerID, of1.fieldID");
+	}
+	public static StringBuilder doneFieldConditionAlert(StringBuilder sb) {
+		return sb.append(" )))");
 	}
 
 
 	public static void main(String[] args) {
-		StringBuilder sb = initQuery("truck");
-		//addCondition(sb, "offerID", OP_SZ_START_WITH, "Scratcges", null);
-		//addCondition(sb, "seller", OP_SZ_NOT_EQUAL, "us'er", null);
-		//addCondition(sb, "categoryName", OP_SZ_NOT_EQUAL, "car", null);
-		addCondition(sb, "conditionCode", OP_INT_EQUAL_MULTI, "1,3,4,5,6", null);
-		//addCondition(sb, "description", OP_SZ_CONTAIN, "Scratcges", null);
-		//addCondition(sb, "initPrice", OP_INT_EQUAL_OR_OVER, "2", null);
-		//addCondition(sb, "increment", OP_INT_EQUAL_OR_OVER, "4", null);
-		//addCondition(sb, "minPrice", OP_ANY, "5", null);
-		//addCondition(sb, "status", OP_INT_EQUAL_OR_OVER, "5", null);
-		//addCondition(sb, "price", OP_INT_EQUAL_OR_OVER, "5", null);
+		if (false) {
+			StringBuilder sb = initQuerySearch("truck");
+			//addCondition(sb, "offerID", OP_SZ_START_WITH, "Scratcges", null);
+			//addCondition(sb, "seller", OP_SZ_NOT_EQUAL, "us'er", null);
+			//addCondition(sb, "categoryName", OP_SZ_NOT_EQUAL, "car", null);
+			addCondition(sb, "conditionCode", OP_INT_EQUAL_MULTI, "1,3,4,5,6", null);
+			//addCondition(sb, "description", OP_SZ_CONTAIN, "Scratcges", null);
+			//addCondition(sb, "initPrice", OP_INT_EQUAL_OR_OVER, "2", null);
+			//addCondition(sb, "increment", OP_INT_EQUAL_OR_OVER, "4", null);
+			//addCondition(sb, "minPrice", OP_ANY, "5", null);
+			//addCondition(sb, "status", OP_INT_EQUAL_OR_OVER, "5", null);
+			//addCondition(sb, "price", OP_INT_EQUAL_OR_OVER, "5", null);
+			//
+			initFieldCondition(sb);
+			//addFieldCondition(sb, "1", OP_INT_BETWEEN, "23", "56");
+			//addFieldCondition(sb, "2", OP_BOOL_TRUE, "toyota", "");
+			//addFieldCondition(sb, "3", OP_BOOL_FALSE, "400", "");
+			//addFieldCondition(sb, "4", OP_INT_EQUAL_OR_UNDER, "400", "");
+			//addFieldCondition(sb, "5", OP_INT_NOT_EQUAL, "400", "");
+			//addFieldCondition(sb, "6", OP_INT_NOT_EQUAL, "400", "");
+			//addFieldCondition(sb, "7", OP_INT_NOT_EQUAL, "400", "");
+			//addFieldCondition(sb, "8", OP_INT_NOT_EQUAL, "400", "");
+			doneFieldConditionSearch(sb);
+			//
+			System.out.println(sb.toString());
+		}
 		//
-		initFieldCondition(sb);
-		//addFieldCondition(sb, "1", OP_INT_BETWEEN, "23", "56");
-		//addFieldCondition(sb, "2", OP_BOOL_TRUE, "toyota", "");
-		//addFieldCondition(sb, "3", OP_BOOL_FALSE, "400", "");
-		//addFieldCondition(sb, "4", OP_INT_EQUAL_OR_UNDER, "400", "");
-		//addFieldCondition(sb, "5", OP_INT_NOT_EQUAL, "400", "");
-		//addFieldCondition(sb, "6", OP_INT_NOT_EQUAL, "400", "");
-		//addFieldCondition(sb, "7", OP_INT_NOT_EQUAL, "400", "");
-		//addFieldCondition(sb, "8", OP_INT_NOT_EQUAL, "400", "");
-		doneFieldCondition(sb);
 		//
-		System.out.println(sb.toString());
+		if (true) {
+			StringBuilder sb = initQueryAlert("creator", "truck");
+			//addCondition(sb, "offerID", OP_SZ_START_WITH, "Scratcges", null);
+			//addCondition(sb, "seller", OP_SZ_NOT_EQUAL, "us'er", null);
+			//addCondition(sb, "categoryName", OP_SZ_NOT_EQUAL, "car", null);
+			addCondition(sb, "conditionCode", OP_INT_EQUAL_MULTI, "1,3,4,5,6", null);
+			//addCondition(sb, "description", OP_SZ_CONTAIN, "Scratcges", null);
+			//addCondition(sb, "initPrice", OP_INT_EQUAL_OR_OVER, "2", null);
+			//addCondition(sb, "increment", OP_INT_EQUAL_OR_OVER, "4", null);
+			//addCondition(sb, "minPrice", OP_ANY, "5", null);
+			//addCondition(sb, "status", OP_INT_EQUAL_OR_OVER, "5", null);
+			//addCondition(sb, "price", OP_INT_EQUAL_OR_OVER, "5", null);
+			//
+			initFieldCondition(sb);
+			//addFieldCondition(sb, "1", OP_INT_BETWEEN, "23", "56");
+			//addFieldCondition(sb, "2", OP_BOOL_TRUE, "toyota", "");
+			//addFieldCondition(sb, "3", OP_BOOL_FALSE, "400", "");
+			//addFieldCondition(sb, "4", OP_INT_EQUAL_OR_UNDER, "400", "");
+			//addFieldCondition(sb, "5", OP_INT_NOT_EQUAL, "400", "");
+			//addFieldCondition(sb, "6", OP_INT_NOT_EQUAL, "400", "");
+			//addFieldCondition(sb, "7", OP_INT_NOT_EQUAL, "400", "");
+			//addFieldCondition(sb, "8", OP_INT_NOT_EQUAL, "400", "");
+			doneFieldConditionAlert(sb);
+			//
+			System.out.println(sb.toString());
+		}
 	}
 }
+
+
 /*
-select o.offerId, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerId FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerId = b1.offerId)) b ON o1.offerId = b.offerId) o inner join (SELECT of.*, cf1.sortOrder, f1.fieldName, f1.fieldType FROM OfferField of, CategoryField cf1, Field f1 WHERE of.fieldID = cf1.fieldID AND of.fieldID = f1.fieldID AND cf1.categoryName = 'truck') of1 on o.offerId = of1.offerId
+insert Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) select REPLACE(UUID(),'-',''), '$receiver$', o.offerID, NULL, NOW(), NULL from Offer o WHERE (o.offerID='$offerID$') and (o.categoryName='$categoryName$')
+and (o.seller='user')
+and (o.conditionCode in (1,2))
+and (o.description='Scratcges')
+and (o.initPrice=2)
+and (o.increment=4)
+and (o.minPrice=5)
+and (o.startDate < NOW() )
+and (o.endDate > NOW())
+and (o.status=1)
+and (o.price=2)
+and (not exists (select * from OfferField of2 where of2.offerID = o.offerID and (false
+or (of2.fieldID = 1 and (not (of2.fieldText = 'blue')))
+or (of2.fieldID = 2 and (not (of2.fieldText = 'toyota')))
+or (of2.fieldID = 3 and (not (of2.fieldText = '400')))
+or (of2.fieldID = 4 and (not (of2.fieldText = 'yes')))
+)));
+*/
+
+/*
+select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, cf1.sortOrder, f1.fieldName, f1.fieldType FROM OfferField of, CategoryField cf1, Field f1 WHERE of.fieldID = cf1.fieldID AND of.fieldID = f1.fieldID AND cf1.categoryName = '$categoryName$') of1 on o.offerID = of1.offerID
 and (o.offerID='aaa')
 and (o.seller='user')
 and (o.categoryName='car')
@@ -256,10 +318,10 @@ and (o.startDate < NOW() )
 and (o.endDate > NOW())
 and (o.status=1)
 and (o.price=2)
-and (not exists (select * from OfferField of2 where of2.offerId = o.offerId and (false
+and (not exists (select * from OfferField of2 where of2.offerID = o.offerID and (false
 or (of2.fieldID = 1 and (not (of2.fieldText = 'blue')))
 or (of2.fieldID = 2 and (not (of2.fieldText = 'toyota')))
 or (of2.fieldID = 3 and (not (of2.fieldText = '400')))
 or (of2.fieldID = 4 and (not (of2.fieldText = 'yes')))
-))) order by o.offerId, of1.sortOrder;
+))) order by o.offerID, of1.sortOrder;
 */

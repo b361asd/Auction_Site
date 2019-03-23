@@ -6,7 +6,14 @@ SELECT * FROM Offer;
 
 SELECT * FROM OfferField;
 
+SELECT * FROM Alert;
+
+
 SELECT * FROM Bid;
+
+SELECT * FROM OfferAlertCriterion;
+
+delete from OfferAlertCriterion where criterionID='e1ed6eb342194a60b619501d880bed24';
 
 -- DELETE FROM Offer WHERE offerId in ('');
 

@@ -82,7 +82,7 @@ public class LoginFilter implements Filter, IConstant {
 				boolean isRegisterRequest        = request.getRequestURI().equals(registerURI);
 				boolean isRegisterRequestServlet = request.getRequestURI().equals(registerURLServlet);
 				//
-				if (isLoginRequest || isHomeRequest || isRegisterRequest || isRegisterRequestServlet) {        //want to login, want to register
+				if (isLoginRequest || isHomeRequest || isRegisterRequest || isRegisterRequestServlet) {        // Want to either login or register
 					chain.doFilter(request, response);
 				}
 				else {

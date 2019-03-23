@@ -1,13 +1,9 @@
 package rutgers.cs336.db;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
 
 public class SearchOffer extends DBBase {
-
 
 	public static Map doSearchOfferByID(Map<String, String[]> parameters) {
 		return doSearchOfferInternal(parameters, 2);
@@ -151,14 +147,82 @@ public class SearchOffer extends DBBase {
 	}
 
 
+	public static Map doGenerateNewOfferAlertCriterion(String userID, Map<String, String[]> parameters) {
+		Map output = new HashMap();
+		//
+		String        categoryName = getStringFromParamMap("categoryName", parameters);
+		StringBuilder sb           = formatSQLWithParametersForSearchOrAlert(parameters, userID, false);
+		//
+		Connection        con          = null;
+		PreparedStatement preparedStmt = null;
+		try {
+			con = getConnection();
+			//
+			preparedStmt = con.prepareStatement(SQL_INSERT_OFFER_ALERT_CRITERION);
+			//
+			preparedStmt.setString(1, getUUID());
+			preparedStmt.setString(2, userID);
+			preparedStmt.setString(3, categoryName);
+			preparedStmt.setString(4, sb.toString());
+			//
+			preparedStmt.execute();
+			//
+			output.put(DATA_NAME_STATUS, true);
+			output.put(DATA_NAME_MESSAGE, "OK");
+		}
+		catch (SQLException e) {
+			output.put(DATA_NAME_STATUS, false);
+			output.put(DATA_NAME_MESSAGE,
+			           "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sb != null ? sb.toString() : null));
+			e.printStackTrace();
+		}
+		catch (ClassNotFoundException e) {
+			output.put(DATA_NAME_STATUS, false);
+			output.put(DATA_NAME_MESSAGE, "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
+			e.printStackTrace();
+		}
+		finally {
+			if (preparedStmt != null) {
+				try {
+					preparedStmt.close();
+				}
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+			//
+			if (con != null) {
+				try {
+					con.close();
+				}
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		//
+		return output;
+	}
+
+
 	private static StringBuilder formatSQLWithParameters(Map<String, String[]> parameters) {
+		return formatSQLWithParametersForSearchOrAlert(parameters, null, true);
+	}
+
+
+	private static StringBuilder formatSQLWithParametersForSearchOrAlert(Map<String, String[]> parameters, String userID, boolean isSearch) {
 		StringBuilder sb;
 		//
-		String category_Name = getStringFromParamMap("categoryName", parameters);
+		String categoryName = getStringFromParamMap("categoryName", parameters);
 		//
-		sb = FormatterOfferQuery.initQuery(category_Name);
+		if (isSearch) {
+			sb = FormatterOfferQuery.initQuerySearch(categoryName);
+		}
+		else {
+			sb = FormatterOfferQuery.initQueryAlert(userID, categoryName);
+		}
 		//
-		{
+		if (isSearch) {                        // In alert, offerID placeholder will be replaced with real one
 			String offerIDOP  = getStringFromParamMap("offerIDOP", parameters);
 			String offerIDVal = getStringFromParamMap("offerIDVal", parameters);
 			FormatterOfferQuery.addCondition(sb, "offerID", offerIDOP, offerIDVal, null);
@@ -168,6 +232,12 @@ public class SearchOffer extends DBBase {
 			String sellerOP  = getStringFromParamMap("sellerOP", parameters);
 			String sellerVal = getStringFromParamMap("sellerVal", parameters);
 			FormatterOfferQuery.addCondition(sb, "seller", sellerOP, sellerVal, null);
+		}
+		//
+		if (isSearch) {                     // In alert, categoryName is handled outside query
+			String categoryNameOP  = FormatterOfferQuery.OP_SZ_EQUAL;
+			String categoryNameVal = categoryName;
+			FormatterOfferQuery.addCondition(sb, "categoryName", categoryNameOP, categoryNameVal, null);
 		}
 		//
 		{
@@ -183,17 +253,15 @@ public class SearchOffer extends DBBase {
 					}
 				}
 			}
-			FormatterOfferQuery.addCondition(sb, "conditionCode", FormatterOfferQuery.OP_INT_EQUAL_MULTI, lstConditionCode,
-			                                 null);
+			FormatterOfferQuery.addCondition(sb, "conditionCode", FormatterOfferQuery.OP_INT_EQUAL_MULTI, lstConditionCode, null);
 		}
-		//
 		{
 			String descriptionOP  = getStringFromParamMap("descriptionOP", parameters);
 			String descriptionVal = getStringFromParamMap("descriptionVal", parameters);
 			FormatterOfferQuery.addCondition(sb, "description", descriptionOP, descriptionVal, null);
 		}
 		//
-		{
+		if (isSearch) {                     // In alert, new offer has no bid / price yet
 			String priceOP   = getStringFromParamMap("priceOP", parameters);
 			String priceVal1 = getStringFromParamMap("priceVal1", parameters);
 			String priceVal2 = getStringFromParamMap("priceVal2", parameters);
@@ -218,7 +286,12 @@ public class SearchOffer extends DBBase {
 			FormatterOfferQuery.addFieldCondition(sb, fieldID, fieldOP, fieldVal1, fieldVal2);
 		}
 		//
-		FormatterOfferQuery.doneFieldCondition(sb);
+		if (isSearch) {
+			FormatterOfferQuery.doneFieldConditionSearch(sb);
+		}
+		else {
+			FormatterOfferQuery.doneFieldConditionAlert(sb);
+		}
 		//
 		return sb;
 	}
@@ -229,11 +302,11 @@ public class SearchOffer extends DBBase {
 		//
 		String offeridcategoryname = getStringFromParamMap("offeridcategoryname", parameters);
 		//
-		String[] temp = offeridcategoryname.split("\\,");
+		String[] temp = offeridcategoryname.split(",");
 		//
 		String category_Name = temp[1];
 		//
-		sb = FormatterOfferQuery.initQuery(category_Name);
+		sb = FormatterOfferQuery.initQuerySearch(category_Name);
 		//
 		{
 			String offerIDOP  = FormatterOfferQuery.OP_SZ_EQUAL;
