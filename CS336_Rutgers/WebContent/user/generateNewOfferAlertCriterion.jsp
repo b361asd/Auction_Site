@@ -3,6 +3,7 @@
 
 <%@ page import="rutgers.cs336.db.GetCategoryField" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
 <%@ page import="static rutgers.cs336.db.CreateOffer.PREFIX_CATEGORY_NAME" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
 <%@ page import="static rutgers.cs336.gui.Helper.*" %>
@@ -19,7 +20,6 @@
            value.action = "${pageContext.request.contextPath}/user/generateNewOfferAlertCriterion.jsp";	// Post to itself
            value.submit();
        }
-
        function onIntegerOPChange(value) {
            //nextElementSibling
        }
@@ -41,23 +41,21 @@
 
 
 	<div class='allField'>categoryName
-		<select name="categoryName" onchange="onCategoryChange(this.parentElement.parentElement);">
-			<%
-				List lstCategory = (List) data.get(GetCategoryField.DATA_CATEGORY_LIST);
-				for (Object o : lstCategory) {
-					GetCategoryField.Category temp = (GetCategoryField.Category) o;
-					out.println(
-							  "<option " + (temp.isCurr() ? "selected " : "") + "value='" + temp.getCategoryName() + "'>" + temp.getCategoryName() + "</option>");
-				}
-			%>
-		</select></div>
-	<br/>
+	<select name="categoryName" onchange="onCategoryChange(this.parentElement.parentElement);">
+		<%
+			List lstCategory = (List) data.get(GetCategoryField.DATA_CATEGORY_LIST);
+			for (Object o : lstCategory) {
+				GetCategoryField.Category temp = (GetCategoryField.Category) o;
+				out.println("<option " + (temp.isCurr() ? "selected " : "") + "value='" + temp.getCategoryName() + "'>" + temp.getCategoryName() + "</option>");
+			}
+		%>
+	</select></div><br/>
 
 	<%
 		out.println("<div class='allField'>seller");
 		out.println(getOPSZSelection("sellerOP"));
 		out.println("<input type='text' name='sellerVal'/></div><br/>");
-
+		
 		out.println("<div class='allField'>conditionCode");
 		out.println(getConditionCodeCheckBox("conditionCode"));
 		out.println("</div><br/>");
@@ -65,7 +63,7 @@
 		out.println("<div class='allField'>description");
 		out.println(getOPSZSelection("descriptionOP"));
 		out.println("<input type='text' name='descriptionVal'/></div><br/>");
-
+		
 		List lstField = (List) data.get(GetCategoryField.DATA_FIELD_LIST);
 		String lstFieldIDs = null;
 		for (Object o : lstField) {
@@ -74,7 +72,7 @@
 			int    fieldID      = ((GetCategoryField.Field) o).getFieldID();
 			int    fieldType    = ((GetCategoryField.Field) o).getFieldType();
 			//
-			if (lstFieldIDs == null) {
+			if (lstFieldIDs==null) {
 				lstFieldIDs = "" + fieldID;
 			}
 			else {

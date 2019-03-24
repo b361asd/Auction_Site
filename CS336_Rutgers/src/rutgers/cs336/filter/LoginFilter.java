@@ -14,9 +14,11 @@ public class LoginFilter implements Filter, IConstant {
 	public static final String ADMIN_PATH = "admin";
 	public static final String REP_PATH   = "rep";
 
+
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 	}
+
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
@@ -24,26 +26,25 @@ public class LoginFilter implements Filter, IConstant {
 		HttpServletRequest  request  = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		//
-		request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "filter!!!");
+		//request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "filter!!!");
 		//
 		HttpSession session = request.getSession(true);
-		session.setAttribute(SESSION_ATTRIBUTE_MESSAGE, null);
+		//session.setAttribute(SESSION_ATTRIBUTE_MESSAGE, null);
 		//
-		String loginURL = request.getContextPath() + "/login.jsp";
+		String loginURL    = request.getContextPath() + "/login.jsp";
+		String homeURL     = request.getContextPath() + "/home";
+		String registerURI = request.getContextPath() + "/register.jsp";
+		String logoutURL   = request.getContextPath() + "/logout";
 		//
-		String  logoutURLServlet = request.getContextPath() + "/logout";
-		boolean isLogoutRequest  = request.getRequestURI().equals(logoutURLServlet);
+		boolean isLogoutRequest = request.getRequestURI().equals(logoutURL);
 		if (isLogoutRequest) {
 			session.invalidate();
 			//
-			request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "redirect to login 0");
+			//request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "redirect to login 0");
 			response.sendRedirect(loginURL);
 		}
 		else {
 			boolean isLoggedIn = session.getAttribute(SESSION_ATTRIBUTE_USER) != null;
-			//
-			String homeURL = request.getContextPath() + "/home";
-			//
 			if (isLoggedIn) {                     // Already Login
 				String szUserType = (String) session.getAttribute(SESSION_ATTRIBUTE_USERTYPE);
 				szUserType = szUserType == null ? "" : szUserType;
@@ -61,37 +62,34 @@ public class LoginFilter implements Filter, IConstant {
 				else if (szUserType.equalsIgnoreCase("3") && isUserURL) {
 					chain.doFilter(request, response);
 				}
-				else {                           // Including login.jsp
+				else {                                                                                    // Including login.jsp
 					boolean isHomeRequest = request.getRequestURI().equals(homeURL);
 					boolean isCSSRequest  = request.getRequestURI().toLowerCase().endsWith(".css");
 					if (isHomeRequest || isCSSRequest) {
 						chain.doFilter(request, response);
 					}
 					else {
-						request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "home 0. " + "HomeURL: " + homeURL + "-" + request.getRequestURI());
+						//request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "home 0. " + "HomeURL: " + homeURL + "-" + request.getRequestURI());
 						response.sendRedirect(homeURL);
 					}
 				}
 			}
 			else {
-				String registerURI        = request.getContextPath() + "/register.jsp";
-				String registerURLServlet = request.getContextPath() + "/register";
+				boolean isLoginRequest    = request.getRequestURI().equals(loginURL);
+				boolean isHomeRequest     = request.getRequestURI().equals(homeURL);
+				boolean isRegisterRequest = request.getRequestURI().equals(registerURI);
 				//
-				boolean isLoginRequest           = request.getRequestURI().equals(loginURL);
-				boolean isHomeRequest            = request.getRequestURI().equals(homeURL);
-				boolean isRegisterRequest        = request.getRequestURI().equals(registerURI);
-				boolean isRegisterRequestServlet = request.getRequestURI().equals(registerURLServlet);
-				//
-				if (isLoginRequest || isHomeRequest || isRegisterRequest || isRegisterRequestServlet) {        // Want to either login or register
+				if (isLoginRequest || isHomeRequest || isRegisterRequest) {        //want to login, want to register
 					chain.doFilter(request, response);
 				}
 				else {
-					request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "redirect to login 1");
+					//request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "redirect to login 1");
 					response.sendRedirect(loginURL);
 				}
 			}
 		}
 	}
+
 
 	@Override
 	public void destroy() {

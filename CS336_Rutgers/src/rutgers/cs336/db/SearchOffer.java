@@ -150,8 +150,8 @@ public class SearchOffer extends DBBase {
 	public static Map doGenerateNewOfferAlertCriterion(String userID, Map<String, String[]> parameters) {
 		Map output = new HashMap();
 		//
-		String        categoryName = getStringFromParamMap("categoryName", parameters);
-		StringBuilder sb           = formatSQLWithParametersForSearchOrAlert(parameters, userID, false);
+		String categoryName = getStringFromParamMap("categoryName", parameters);
+		StringBuilder sb = formatSQLWithParametersForSearchOrAlert(parameters, userID, false);
 		//
 		Connection        con          = null;
 		PreparedStatement preparedStmt = null;
@@ -172,8 +172,7 @@ public class SearchOffer extends DBBase {
 		}
 		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE,
-			           "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sb != null ? sb.toString() : null));
+			output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sb != null ? sb.toString() : null));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {

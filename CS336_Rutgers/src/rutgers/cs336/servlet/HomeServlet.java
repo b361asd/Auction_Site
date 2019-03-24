@@ -1,7 +1,6 @@
 package rutgers.cs336.servlet;
 
-import rutgers.cs336.db.AddUser;
-import rutgers.cs336.db.VerifyLogin;
+import rutgers.cs336.db.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,21 +12,21 @@ import java.util.Map;
 
 public class HomeServlet extends HttpServlet implements IConstant {
 
+	
+	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
 	}
 
+	
+	
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			  throws IOException, ServletException {
-		request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "home!!!");
-		//
-		String  register   = request.getParameter("register");
-		boolean isRegister = register != null && register.equalsIgnoreCase("YES");
-		//
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		//request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "home!!!");
 		Map map;
 		//
+		boolean isRegister = (request.getParameter("register")) != null && (request.getParameter("register")).equalsIgnoreCase("YES");
 		if (isRegister) {
 			String username  = request.getParameter("username");
 			String password  = request.getParameter("password");
@@ -40,14 +39,13 @@ public class HomeServlet extends HttpServlet implements IConstant {
 			String zipCode   = request.getParameter("zipCode");
 			String phone     = request.getParameter("phoneNumber");
 			//
-			map = AddUser.doAddUser(username, password, email, firstName, lastName, street, city, state, zipCode, phone, 3);
+			map = User.doAddUser(username, password, email, firstName, lastName, street, city, state, zipCode, phone, 3);
 			//
-			boolean isOK = (Boolean) map.get(DATA_NAME_STATUS);
-			if (isOK) {
-				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, username);
-				request.getSession().setAttribute(SESSION_ATTRIBUTE_USERTYPE, "3");
-				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_FNAME, firstName);
-				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_LNAME, lastName);
+			if ((Boolean)map.get(DATA_NAME_STATUS)) {															// Register successful also means logged in.
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, 			username);
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_USERTYPE, 		"3");
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_FNAME, 	firstName);
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_LNAME, 	lastName);
 			}
 		}
 		else {
@@ -55,62 +53,55 @@ public class HomeServlet extends HttpServlet implements IConstant {
 			if (!isLoggedIn) {
 				String username = request.getParameter("username");
 				String password = request.getParameter("password");
-				map = VerifyLogin.doVerifyLogin(username, password);
+				map = User.doVerifyLogin(username, password);
 				//
-				if ((Boolean) map.get(DATA_NAME_STATUS)) {
-					request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, username);
-					request.getSession().setAttribute(SESSION_ATTRIBUTE_USERTYPE, map.get(DATA_NAME_USER_TYPE).toString());
-					request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_FNAME, map.get(DATA_NAME_FIRST_NAME).toString());
-					request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_LNAME, map.get(DATA_NAME_LAST_NAME).toString());
+				if ((Boolean)map.get(DATA_NAME_STATUS)) {
+					request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, 			username);
+					request.getSession().setAttribute(SESSION_ATTRIBUTE_USERTYPE, 		map.get(DATA_NAME_USER_TYPE).toString());
+					request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_FNAME, 	map.get(DATA_NAME_FIRST_NAME).toString());
+					request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_LNAME, 	map.get(DATA_NAME_LAST_NAME).toString());
 					//
-					request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "no not OK");
+					//request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "no not OK");
 				}
 			}
 			else {
 				map = new HashMap();
 				map.put(DATA_NAME_STATUS, true);
 				map.put(DATA_NAME_MESSAGE, "Already logon.");
+				//
+				//Session attributes already set
 			}
 		}
 		//
+		//
+		//
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, map);
 		//
-		String szUserType = request.getSession() == null ? "3" : (String) request.getSession().getAttribute(SESSION_ATTRIBUTE_USERTYPE);
-		//
-		boolean isOK = (Boolean) map.get(DATA_NAME_STATUS);
-		if (isOK) {
+		if ((Boolean)map.get(DATA_NAME_STATUS)) {
+			String szUserType = request.getSession() == null ? "3" : (String)request.getSession().getAttribute(SESSION_ATTRIBUTE_USERTYPE);
 			//
 			if (szUserType.equals("1")) {
-				//response.sendRedirect(request.getContextPath() + "/homeAdmin.jsp");
-				//
 				map.put(DATA_NAME_MESSAGE, map.get(DATA_NAME_MESSAGE) + " Admin Login!");
-				//request.setAttribute("JSP_DATA", map);
+				//
 				request.getRequestDispatcher("/admin/homeAdmin.jsp").forward(request, response);
 			}
 			else if (szUserType.equals("2")) {
-				//response.sendRedirect(request.getContextPath() + "/homeRep.jsp");
-				//
 				map.put(DATA_NAME_MESSAGE, map.get(DATA_NAME_MESSAGE) + " Rep Login!");
-				//request.setAttribute("JSP_DATA", map);
+				//
 				request.getRequestDispatcher("/rep/homeRep.jsp").forward(request, response);
 			}
 			else {
-				//response.sendRedirect(request.getContextPath() + "/home.jsp");
-				//
 				map.put(DATA_NAME_MESSAGE, map.get(DATA_NAME_MESSAGE) + " User Login!");
-				//request.setAttribute("JSP_DATA", map);
+				//
 				request.getRequestDispatcher("/user/home.jsp").forward(request, response);
 			}
 		}
 		else {
-			request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "not OK");
+			//request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "not OK");
 			//
-			map.put(DATA_NAME_MESSAGE, map.get(DATA_NAME_MESSAGE) + " Login!");
+			map.put(DATA_NAME_MESSAGE, map.get(DATA_NAME_MESSAGE) + " Login or register failed. Redirect back to login");
 			//
 			response.sendRedirect(request.getContextPath() + "/login.jsp");
-			//
-			//request.setAttribute("JSP_DATA", map);
-			//request.getRequestDispatcher("/login.jsp").forward(request, response);
 		}
 	}
 }

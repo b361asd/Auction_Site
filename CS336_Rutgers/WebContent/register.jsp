@@ -6,28 +6,16 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Register</title>
-	<link rel="stylesheet" href="./style.css?v=1.0"/>
-
+	<link rel="stylesheet" href="../style.css?v=1.0"/>
 </head>
 
 <body>
 
-<%
-	String message = "Welcome to BuyMe!";
-	if (session == null) {
-	}
-	else {
-		message = (String) session.getAttribute("message");
-		if (message == null) {
-			message = "Welcome to BuyMe.";
-		}
-	}
-%>
-<h1><%=message%>
-</h1>
+<%@include file="header.jsp" %>
 
 <form action="${pageContext.request.contextPath}/home" method="post">
 	<input name="register" type="hidden" value="YES">
+	
 	Username<input type="text" name="username"/><br/>
 	Password<input type="text" name="password"/><br/>
 	Email Address<input type="text" name="email"/><br/>
@@ -38,6 +26,7 @@
 	State<input type="text" name="state"/><br/>
 	Zip Code<input type="text" name="zipCode"/><br/>
 	Phone Number<input type="text" name="phoneNumber"/><br/>
+	
 	<input type="submit" value="Submit">
 </form>
 

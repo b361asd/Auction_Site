@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.AddUser" %>
+<%@ page import="rutgers.cs336.db.User" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
 
 <html>
@@ -27,7 +27,7 @@
 		String zipCode   = request.getParameter("zipCode");
 		String phone     = request.getParameter("phoneNumber");
 		//
-		Map dataMap = AddUser.doAddUser(username, password, email, firstName, lastName, street, city, state, zipCode, phone, 2);
+		Map dataMap = User.doAddUser(username, password, email, firstName, lastName, street, city, state, zipCode, phone, 2);
 		//
 		session.setAttribute(SESSION_ATTRIBUTE_DATA_MAP, dataMap);
 	}

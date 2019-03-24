@@ -31,7 +31,7 @@
 
     <error-page>
         <error-code>404</error-code>
-        <location>/login.jsp</location>
+        <location>/home</location>
     </error-page>
 
 </web-app>

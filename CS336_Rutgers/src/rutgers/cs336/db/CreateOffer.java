@@ -71,7 +71,8 @@ public class CreateOffer extends DBBase {
 			//
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE,
-			           "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", ParamMap=" + getParamMap(parameters) + ", DebugInfo=" + debugInfo);
+			           "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", ParamMap=" + getParamMap(
+					             parameters) + ", DebugInfo=" + debugInfo);
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
@@ -86,7 +87,8 @@ public class CreateOffer extends DBBase {
 			//
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE,
-			           "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", ParamMap=" + getParamMap(parameters));
+			           "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", ParamMap=" + getParamMap(
+					             parameters));
 			e.printStackTrace();
 		}
 		finally {
