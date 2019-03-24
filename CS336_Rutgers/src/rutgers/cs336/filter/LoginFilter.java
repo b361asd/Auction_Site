@@ -21,8 +21,7 @@ public class LoginFilter implements Filter, IConstant {
 
 
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
-			  throws ServletException, IOException {
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws ServletException, IOException {
 		HttpServletRequest  request  = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		//

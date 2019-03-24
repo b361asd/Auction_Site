@@ -4,7 +4,8 @@ import java.sql.*;
 import java.util.*;
 
 public class SearchOffer extends DBBase {
-
+	private static final int FIELD_START_INDEX = 11;
+	
 	public static Map doSearchOfferByID(Map<String, String[]> parameters) {
 		return doSearchOfferInternal(parameters, 2);
 	}
@@ -18,6 +19,9 @@ public class SearchOffer extends DBBase {
 		//
 		List lstRows   = new ArrayList();
 		List lstHeader = new ArrayList();
+		//
+		Map<String,String> mapFields = new HashMap<>(); 
+		Map<String,Integer> mapFieldIDToIndex = new HashMap<>();
 		//
 		StringBuilder sb = null;
 		//
@@ -53,19 +57,15 @@ public class SearchOffer extends DBBase {
 				Object status        = rs.getObject(11);
 				Object price         = rs.getObject(12);
 				//
-				Object fieldID   = rs.getObject(13);
-				Object fieldText = rs.getObject(14);
-				Object fieldName = rs.getObject(15);
-				Object fieldType = rs.getObject(16);
+				Object fieldID   		= rs.getObject(13);
+				Object fieldText 		= rs.getObject(14);
+				Object fieldName 		= rs.getObject(15);
+				Object fieldType 		= rs.getObject(16);
 				//
 				if (currentofferId.equals(offerId.toString())) {   // Continue with current row
 					List currentRow = (List) lstRows.get(rowIndex);
 					//
-					currentRow.add(fieldText);
-					//
-					if (rowIndex == 0) {
-						lstHeader.add(fieldName.toString());
-					}
+					mapFields.put(""+rowIndex+"-"+fieldID, (fieldText==null)?"":fieldText.toString());
 				}
 				else {   // New Row
 					List currentRow = new LinkedList();
@@ -79,14 +79,15 @@ public class SearchOffer extends DBBase {
 					currentRow.add(seller);
 					currentRow.add(conditionCode);
 					currentRow.add(description);
-					//currentRow.add(initPrice);
-					//currentRow.add(increment);
-					//currentRow.add(minPrice);
+					currentRow.add(initPrice);
+					currentRow.add(increment);
+					currentRow.add(minPrice);
 					currentRow.add(startDate);
 					currentRow.add(endDate);
 					//currentRow.add(status);
 					currentRow.add(price);
-					currentRow.add(fieldText);
+					//
+					mapFields.put(""+rowIndex+"-"+fieldID, (fieldText==null)?"":fieldText.toString());
 					//
 					if (rowIndex == 0) {
 						lstHeader.add("offerId");
@@ -94,14 +95,40 @@ public class SearchOffer extends DBBase {
 						lstHeader.add("Seller");
 						lstHeader.add("Condition");
 						lstHeader.add("Desc");
-						//lstHeader.add("initPrice");
-						//lstHeader.add("increment");
-						//lstHeader.add("minPrice");
+						lstHeader.add("initPrice");
+						lstHeader.add("increment");
+						lstHeader.add("minPrice");
 						lstHeader.add("Start");
 						lstHeader.add("End");
 						//lstHeader.add("status");
 						lstHeader.add("CurrBid");
-						lstHeader.add(fieldName.toString());
+					}
+					//
+				}
+				//
+				if (mapFieldIDToIndex.get(fieldID.toString())==null) {
+					mapFieldIDToIndex.put(fieldID.toString(), lstHeader.size());
+					//
+					lstHeader.add(fieldName.toString());
+				}
+			}
+			//
+			Map<Integer, String> mapIndexToFieldID = new HashMap<>();
+			for (Map.Entry<String,Integer> entry : mapFieldIDToIndex.entrySet()) {
+				mapIndexToFieldID.put(entry.getValue(), entry.getKey());		// Reverse
+			}
+			//
+			for (int i = 0; i < lstRows.size(); i++) {
+				List rowList = (List) lstRows.get(i);
+				for (int j = FIELD_START_INDEX; j < lstHeader.size(); j++) {
+					String fieldId = mapIndexToFieldID.get(j);
+					String key = "" + i + "-" + fieldId;
+					String item = mapFields.get(key);
+					if (item == null) {
+						rowList.add("");
+					}
+					else {
+						rowList.add(item);
 					}
 				}
 			}
@@ -114,8 +141,7 @@ public class SearchOffer extends DBBase {
 		}
 		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE,
-			           "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sb != null ? sb.toString() : null));
+			output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sb != null ? sb.toString() : null));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
