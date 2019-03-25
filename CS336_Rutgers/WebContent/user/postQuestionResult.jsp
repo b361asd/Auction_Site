@@ -1,3 +1,5 @@
+<%@page import="rutgers.cs336.db.DBBase"%>
+<%@page import="rutgers.cs336.db.Question"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
@@ -17,29 +19,12 @@
 
 <%
 	String userID = (String) request.getSession().getAttribute("user");
-	Map data = CreateOffer.doCreateOffer(userID, request.getParameterMap());
+	Map data = Question.insertQuestion(userID, DBBase.getStringFromParamMap("question", request.getParameterMap()));
 	//
-	String status = data.get(DATA_NAME_STATUS).toString();
-	String message = (String) data.get(DATA_NAME_MESSAGE);
-	//
-	String sessionMessage = "Welcome to BuyMe!";
-	if (request.getSession() == null) {
-		sessionMessage = "Welcome to BuyMe no session!";
-	}
-	else {
-		sessionMessage = (String) request.getSession().getAttribute("message");
-		if (sessionMessage == null) {
-			sessionMessage = "Welcome to BuyMe.";
-		}
-	}
+	request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 %>
-<h1><%=sessionMessage%>
-</h1>
-<h1><%=status%>
-</h1>
-<h1><%=message%>
-</h1>
 
+<%@include file="../header.jsp" %>
 <%@include file="userNav.jsp" %>
 
 </body>

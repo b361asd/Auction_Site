@@ -7,6 +7,6 @@
 	<A href="${pageContext.request.contextPath}/user/searchOffer.jsp">Search Offer</A>
 	<A href="${pageContext.request.contextPath}/user/generateNewOfferAlertCriterion.jsp">Generate New Offer Alert Criterion</A>
 	<A href="${pageContext.request.contextPath}/user/viewBidHistory.jsp">View Bid History</A>
-	<A href="${pageContext.request.contextPath}/user/postQuestion.jsp">Ask a Question</A>
+	<A href="${pageContext.request.contextPath}/user/postQuestion.jsp">Post a Question</A>
 	<A href="${pageContext.request.contextPath}/logout">Logout</A>
 </h2>

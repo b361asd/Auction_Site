@@ -93,7 +93,7 @@ public class User extends DBBase {
 			//
 			ResultSet rs = preparedStmt.executeQuery();
 			//
-			if (rs.next()) {											//Only 1 row
+			if (rs.next()) {											// Only 1 row
 				Object password  = rs.getObject(1);
 				Object firstname = rs.getObject(2);
 				Object lastname  = rs.getObject(3);

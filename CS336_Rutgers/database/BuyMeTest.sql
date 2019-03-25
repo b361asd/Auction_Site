@@ -8,6 +8,8 @@ SELECT * FROM OfferField;
 
 SELECT * FROM Alert;
 
+SELECT * FROM Question;
+
 
 SELECT * FROM Bid;
 

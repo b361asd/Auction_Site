@@ -61,7 +61,7 @@ public class LoginFilter implements Filter, IConstant {
 				else if (szUserType.equalsIgnoreCase("3") && isUserURL) {
 					chain.doFilter(request, response);
 				}
-				else {                                                                                    // Including login.jsp
+				else {      // Including login.jsp
 					boolean isHomeRequest = request.getRequestURI().equals(homeURL);
 					boolean isCSSRequest  = request.getRequestURI().toLowerCase().endsWith(".css");
 					if (isHomeRequest || isCSSRequest) {

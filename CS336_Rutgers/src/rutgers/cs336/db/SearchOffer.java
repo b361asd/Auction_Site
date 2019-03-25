@@ -184,7 +184,7 @@ public class SearchOffer extends DBBase {
 		try {
 			con = getConnection();
 			//
-			preparedStmt = con.prepareStatement(SQL_INSERT_OFFER_ALERT_CRITERION);
+			preparedStmt = con.prepareStatement(SQL_OFFER_ALERT_CRITERION_INSERT);
 			//
 			preparedStmt.setString(1, getUUID());
 			preparedStmt.setString(2, userID);

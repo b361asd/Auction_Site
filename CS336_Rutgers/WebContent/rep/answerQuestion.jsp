@@ -1,3 +1,5 @@
+<%@page import="rutgers.cs336.db.DBBase"%>
+<%@page import="rutgers.cs336.db.Question"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
@@ -7,38 +9,49 @@
 	<meta charset="utf-8">
 	<title>BuyMe - Remove Bid</title>
 	<link rel="stylesheet" href="../style.css?v=1.0"/>
-
 </head>
 
 <body>
 
 <%
-	String message = "Welcome to BuyMe!";
-	if (session == null) {
+	String repID = (String) request.getSession().getAttribute(SESSION_ATTRIBUTE_USER);
+	String questionID = DBBase.getStringFromParamMap("questionID", request.getParameterMap());
+	String answer = DBBase.getStringFromParamMap("answer", request.getParameterMap());
+	//
+	Map dataUpdate;
+	if (questionID != null && !questionID.equals("") && answer != null && !answer.equals("")) {
+		dataUpdate = Question.answerQuestion(questionID, answer, repID);	
 	}
-	else {
-		message = (String) session.getAttribute("message");
-		if (message == null) {
-			message = "Welcome to BuyMe.";
-		}
-	}
+	//
+	Map data = Question.retrieveOneQuestion();
+	//
+	request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 %>
-<h1><%=message%>
-</h1>
 
-<form action="${pageContext.request.contextPath}/rep/editAuctionResult.jsp" method="post">
-	<input name="register" type="hidden" value="YES">
-	Username<input type="text" name="username"/><br/>
-	Password<input type="text" name="password"/><br/>
-	Email Address<input type="text" name="email"/><br/>
-	First Name<input type="text" name="firstName"/><br/>
-	Last Name<input type="text" name="lastName"/><br/>
-	Street<input type="text" name="street"/><br/>
-	City<input type="text" name="city"/><br/>
-	State<input type="text" name="state"/><br/>
-	Zip Code<input type="text" name="zipCode"/><br/>
-	Phone Number<input type="text" name="phoneNumber"/><br/>
-	<input type="submit" value="submit">
+<%@include file="../header.jsp" %>
+<%@include file="repNav.jsp" %>
+
+<form action='${request.getAttribute("javax.servlet.forward.request_uri")}' method='post'>
+	<%
+		out.println("<input type='hidden' name='questionID' value='" + data.get("questionID") + "'/>");
+	%>
+
+	<%
+		out.println("<h1>" + data.get("userID") + "</h1>");
+	%>
+
+	<%
+		out.println("<h1>" + data.get("questionDate") + "</h1>");
+	%>
+
+	<%
+		out.println("<textarea name='textarea' rows='5' cols='33' readonly>" + data.get("question") + "</textarea>");
+	%>
+
+	<label for="answer">Answer a Question:</label>
+	<textarea id="answer" name="answer" rows="5" cols="33"></textarea>
+	
+	<input type="submit" value="Submit">
 </form>
 
 </body>
