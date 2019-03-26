@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.SearchOffer" %>
+<%@ page import="rutgers.cs336.db.Offer" %>
 <%@ page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 <%@ page import="rutgers.cs336.gui.Helper" %>
@@ -17,7 +17,7 @@
 <body>
 
 <%
-	Map data = SearchOffer.doSearchOffer(request.getParameterMap());
+	Map data = Offer.doSearchOffer(request.getParameterMap());
 	//
 	request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 	//

@@ -1,4 +1,4 @@
-<%@page import="rutgers.cs336.db.SearchOffer"%>
+<%@page import="rutgers.cs336.db.Offer"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 

@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.SearchOffer" %>
+<%@ page import="rutgers.cs336.db.Offer" %>
 <%@ page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 <%@ page import="rutgers.cs336.gui.Helper" %>
@@ -17,7 +17,7 @@
 <body>
 
 <%
-	Map data = SearchOffer.doSearchOffer(request.getParameterMap());
+	Map data = Offer.doSearchOffer(request.getParameterMap());
 	//
 	request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 	//
@@ -37,21 +37,16 @@
 </form>
 
 <form id="form-id-listSimilar" action="${pageContext.request.contextPath}/user/listSimilar.jsp" method="post">
-	<input id="input-id-listSimilar" type="hidden" name="offeridcategoryname" value="_"/>
+	<input id="input-id-listSimilar" type="hidden" name="offeridcategorynameconditioncode" value="_"/>
 </form>
 
 <table>
 	<tr>
+		<td>Action</td>
 		<%
 			// Header
-			if (lstHeader != null && lstHeader.size() > 0) {
-				for (int i = 1; i < lstHeader.size(); i++) {
-					Object one = lstHeader.get(i);
-					out.println("<td>" + one.toString() + "</td>");
-				}
-			}
+			out.println(Helper.printOneRowInTable(lstHeader, 1));
 		%>
-		<td>Action</td>
 	</tr>
 
 	<%
@@ -60,29 +55,19 @@
 				List lstOneRow = (List) oneRow;
 				//
 				out.println("<tr>");
-				for (int i = 1; i < lstOneRow.size(); i++) {	// Skip offerID
-					Object oneField = lstOneRow.get(i);
-					//
-					String oneItem = oneField == null ? "" : oneField.toString();
-					if (i == 3) {
-						out.println("<td>" + Helper.getConditionFromCode(oneItem) + "</td>");
-					}
-					else {
-						out.println("<td>" + oneItem + "</td>");
-					}
-				}
 				//
 				out.println("<td>");
 				out.println("<button onclick=\"document.getElementById('input-id-doBid').value='" + lstOneRow.get(0) + "," + lstOneRow.get(1) + "'; document.getElementById('form-id-doBid').submit();\" class=\"favorite styled\" type=\"button\">Bid</button>");
 				out.println("<button onclick=\"document.getElementById('input-id-listBid').value='" + lstOneRow.get(0) + "," + lstOneRow.get(1) + "'; document.getElementById('form-id-listBid').submit();\" class=\"favorite styled\" type=\"button\">List Bid</button>");
-				out.println("<button onclick=\"document.getElementById('input-id-listSimilar').value='" + lstOneRow.get(0) + "," + lstOneRow.get(1) + "'; document.getElementById('form-id-listSimilar').submit();\" class=\"favorite styled\" type=\"button\">List Similar</button>");
+				out.println("<button onclick=\"document.getElementById('input-id-listSimilar').value='" + lstOneRow.get(0) + "," + lstOneRow.get(1) + "," + lstOneRow.get(3) + "'; document.getElementById('form-id-listSimilar').submit();\" class=\"favorite styled\" type=\"button\">List Similar</button>");
 				out.println("</td>");
+				//
+				out.println(Helper.printOneRowInTable(lstOneRow, 1));
 				//
 				out.println("</tr>");
 			}
 		}
 	%>
-
 </table>
 
 </body>

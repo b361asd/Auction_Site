@@ -14,13 +14,15 @@
 <body>
 
 <%
-	String repID = (String) request.getSession().getAttribute(SESSION_ATTRIBUTE_USER);
-	String questionID = DBBase.getStringFromParamMap("questionID", request.getParameterMap());
-	String answer = DBBase.getStringFromParamMap("answer", request.getParameterMap());
-	//
-	Map dataUpdate;
-	if (questionID != null && !questionID.equals("") && answer != null && !answer.equals("")) {
-		dataUpdate = Question.answerQuestion(questionID, answer, repID);	
+	{
+		String repID = (String) request.getSession().getAttribute(SESSION_ATTRIBUTE_USER);
+		String questionID = DBBase.getStringFromParamMap("questionID", request.getParameterMap());
+		String answer = DBBase.getStringFromParamMap("answer", request.getParameterMap());
+		//
+		Map dataUpdate;
+		if (questionID != null && !questionID.equals("") && answer != null && !answer.equals("")) {
+			dataUpdate = Question.answerQuestion(questionID, answer, repID);	
+		}
 	}
 	//
 	Map data = Question.retrieveOneQuestion();

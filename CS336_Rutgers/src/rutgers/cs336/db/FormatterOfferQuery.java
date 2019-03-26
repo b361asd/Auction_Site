@@ -225,6 +225,20 @@ public class FormatterOfferQuery {
 	}
 
 
+	
+	
+	
+	
+	public static StringBuilder buildSQLSimilarOffer(String categoryName, String conditionCode) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, cf1.sortOrder, f1.fieldName, f1.fieldType FROM OfferField of, CategoryField cf1, Field f1 WHERE of.fieldID = cf1.fieldID AND of.fieldID = f1.fieldID AND cf1.categoryName = '").append(categoryName).append("') of1 on o.offerID = of1.offerID and (o.categoryName = '").append(categoryName).append("') and (o.conditionCode = ").append(conditionCode).append(") and (o.status = 1) order by o.offerID, of1.sortOrder");
+		//
+		return sb;
+	}
+	
+	
+	
+	
 	public static void main(String[] args) {
 		if (false) {
 			StringBuilder sb = initQuerySearch("truck");
@@ -254,7 +268,7 @@ public class FormatterOfferQuery {
 		}
 		//
 		//
-		if (true) {
+		if (false) {
 			StringBuilder sb = initQueryAlert("creator", "truck");
 			//addCondition(sb, "offerID", OP_SZ_START_WITH, "Scratcges", null);
 			//addCondition(sb, "seller", OP_SZ_NOT_EQUAL, "us'er", null);
@@ -280,8 +294,23 @@ public class FormatterOfferQuery {
 			//
 			System.out.println(sb.toString());
 		}
+		//
+		//
+		if (true) {
+			StringBuilder sb = buildSQLSimilarOffer("car", "1");
+			//
+			System.out.println(sb.toString());
+		}
 	}
+	
+	
 }
+
+
+/*
+public static final String SQL_OFFER_SIMILAR_STRING = 
+"select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, cf1.sortOrder, f1.fieldName, f1.fieldType FROM OfferField of, CategoryField cf1, Field f1 WHERE of.fieldID = cf1.fieldID AND of.fieldID = f1.fieldID AND cf1.categoryName = ?) of1 on o.offerID = of1.offerID and (o.categoryName = ?) and (o.conditionCode = ?) and (o.status = 1) order by o.offerID, of1.sortOrder";
+*/
 
 
 /*

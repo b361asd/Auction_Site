@@ -1,20 +1,68 @@
 package rutgers.cs336.db;
 
+import rutgers.cs336.gui.Helper;
+
 import java.sql.*;
 import java.util.*;
 
-public class SearchOffer extends DBBase {
+public class Offer extends DBBase {
+	
 	private static final int FIELD_START_INDEX = 11;
 	
+	
+	public static Map doSearchSimilar(Map<String, String[]> parameters) {
+		String offeridcategorynameconditioncode = getStringFromParamMap("offeridcategorynameconditioncode", parameters);
+		//
+		String[] temp = offeridcategorynameconditioncode.split(",");
+		//
+		String categoryName = temp[1];
+		String conditionCode = Helper.getCodeFromCondition(temp[2]);
+		//
+		StringBuilder sb = FormatterOfferQuery.buildSQLSimilarOffer(categoryName, conditionCode);
+		//
+		String sql = sb.toString();
+		//
+		return doSearchOfferInternal(sql);
+	}
+	
+	
+	
 	public static Map doSearchOfferByID(Map<String, String[]> parameters) {
-		return doSearchOfferInternal(parameters, 2);
+		String offeridcategoryname = getStringFromParamMap("offeridcategoryname", parameters);
+		//
+		String[] temp = offeridcategoryname.split(",");
+		//
+		String categoryName = temp[1];
+		//
+		StringBuilder sb = FormatterOfferQuery.initQuerySearch(categoryName);
+		//
+		{
+			String offerIDOP  = FormatterOfferQuery.OP_SZ_EQUAL;
+			String offerIDVal = temp[0];
+			FormatterOfferQuery.addCondition(sb, "offerID", offerIDOP, offerIDVal, null);
+		}
+		//
+		{
+			String statusOP  = FormatterOfferQuery.OP_INT_EQUAL;
+			String statusVal = "1";    // Active
+			FormatterOfferQuery.addCondition(sb, "status", statusOP, statusVal, null);
+		}
+		//
+		String sql = sb.toString();
+		//
+		return doSearchOfferInternal(sql);
 	}
 
+	
+	
 	public static Map doSearchOffer(Map<String, String[]> parameters) {
-		return doSearchOfferInternal(parameters, 1);
+		StringBuilder sb = formatSQLWithParameters(parameters);
+		String sql = sb.toString();
+		//
+		return doSearchOfferInternal(sql);
 	}
 
-	private static Map doSearchOfferInternal(Map<String, String[]> parameters, int searchType) {
+	private static Map doSearchOfferInternal(String sql) {
 		Map output = new HashMap();
 		//
 		List lstRows   = new ArrayList();
@@ -23,23 +71,14 @@ public class SearchOffer extends DBBase {
 		Map<String,String> mapFields = new HashMap<>(); 
 		Map<String,Integer> mapFieldIDToIndex = new HashMap<>();
 		//
-		StringBuilder sb = null;
-		//
 		Connection con       = null;
 		Statement  statement = null;
 		try {
 			con = getConnection();
 			//
-			if (searchType == 1) {
-				sb = formatSQLWithParameters(parameters);
-			}
-			else if (searchType == 2) {
-				sb = formatSQLWithOfferID(parameters);
-			}
-			//
 			statement = con.createStatement();
 			//
-			ResultSet rs = statement.executeQuery(sb.toString());
+			ResultSet rs = statement.executeQuery(sql);
 			//
 			String currentofferId = "";
 			int    rowIndex       = -1;
@@ -77,7 +116,7 @@ public class SearchOffer extends DBBase {
 					currentRow.add(offerId);
 					currentRow.add(categoryName);
 					currentRow.add(seller);
-					currentRow.add(conditionCode);
+					currentRow.add(Helper.getConditionFromCode(conditionCode.toString()));
 					currentRow.add(description);
 					currentRow.add(initPrice);
 					currentRow.add(increment);
@@ -141,7 +180,7 @@ public class SearchOffer extends DBBase {
 		}
 		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sb != null ? sb.toString() : null));
+			output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sql != null ? sql : null));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
@@ -172,6 +211,12 @@ public class SearchOffer extends DBBase {
 		return output;
 	}
 
+	
+	
+	
+	
+	
+	
 
 	public static Map doGenerateNewOfferAlertCriterion(String userID, Map<String, String[]> parameters) {
 		Map output = new HashMap();
@@ -229,13 +274,17 @@ public class SearchOffer extends DBBase {
 		return output;
 	}
 
+	
+	
+	
+	
+	
+	
 
 	private static StringBuilder formatSQLWithParameters(Map<String, String[]> parameters) {
 		return formatSQLWithParametersForSearchOrAlert(parameters, null, true);
 	}
-
-
-	private static StringBuilder formatSQLWithParametersForSearchOrAlert(Map<String, String[]> parameters, String userID, boolean isSearch) {
+	private static StringBuilder formatSQLWithParametersForSearchOrAlert(Map<String, String[]> parameters, String userID, boolean isSearch) {		//Search or Alert
 		StringBuilder sb;
 		//
 		String categoryName = getStringFromParamMap("categoryName", parameters);
@@ -320,34 +369,9 @@ public class SearchOffer extends DBBase {
 		//
 		return sb;
 	}
-
-
-	private static StringBuilder formatSQLWithOfferID(Map<String, String[]> parameters) {
-		StringBuilder sb;
-		//
-		String offeridcategoryname = getStringFromParamMap("offeridcategoryname", parameters);
-		//
-		String[] temp = offeridcategoryname.split(",");
-		//
-		String category_Name = temp[1];
-		//
-		sb = FormatterOfferQuery.initQuerySearch(category_Name);
-		//
-		{
-			String offerIDOP  = FormatterOfferQuery.OP_SZ_EQUAL;
-			String offerIDVal = temp[0];
-			FormatterOfferQuery.addCondition(sb, "offerID", offerIDOP, offerIDVal, null);
-		}
-		//
-		{
-			String statusOP  = FormatterOfferQuery.OP_INT_EQUAL;
-			String statusVal = "1";    // Active
-			FormatterOfferQuery.addCondition(sb, "status", statusOP, statusVal, null);
-		}
-		//
-		return sb;
-	}
-
+	
+	
+	
 
 	public static void main(String[] args) {
 		Map map = doSearchOffer(null);
