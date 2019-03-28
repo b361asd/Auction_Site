@@ -1,15 +1,15 @@
 package rutgers.cs336.db;
 
 import rutgers.cs336.gui.Helper;
+import rutgers.cs336.gui.TableData;
 
 import java.sql.*;
 import java.util.*;
 
 public class Offer extends DBBase {
 	
-	private static final int FIELD_START_INDEX = 11;
-	
-	
+	private static final int FIELD_START_INDEX = 12;
+
 	public static Map doSearchSimilar(Map<String, String[]> parameters) {
 		String offeridcategorynameconditioncode = getStringFromParamMap("offeridcategorynameconditioncode", parameters);
 		//
@@ -65,8 +65,8 @@ public class Offer extends DBBase {
 	private static Map doSearchOfferInternal(String sql) {
 		Map output = new HashMap();
 		//
-		List lstRows   = new ArrayList();
 		List lstHeader = new ArrayList();
+		List lstRows   = new ArrayList();
 		//
 		Map<String,String> mapFields = new HashMap<>(); 
 		Map<String,Integer> mapFieldIDToIndex = new HashMap<>();
@@ -114,8 +114,8 @@ public class Offer extends DBBase {
 					currentofferId = offerId.toString();
 					//
 					currentRow.add(offerId);
-					currentRow.add(categoryName);
 					currentRow.add(seller);
+					currentRow.add(categoryName);
 					currentRow.add(Helper.getConditionFromCode(conditionCode.toString()));
 					currentRow.add(description);
 					currentRow.add(initPrice);
@@ -123,15 +123,15 @@ public class Offer extends DBBase {
 					currentRow.add(minPrice);
 					currentRow.add(startDate);
 					currentRow.add(endDate);
-					//currentRow.add(status);
+					currentRow.add(status);
 					currentRow.add(price);
 					//
 					mapFields.put(""+rowIndex+"-"+fieldID, (fieldText==null)?"":fieldText.toString());
 					//
 					if (rowIndex == 0) {
 						lstHeader.add("offerId");
-						lstHeader.add("Category");
 						lstHeader.add("Seller");
+						lstHeader.add("Category");
 						lstHeader.add("Condition");
 						lstHeader.add("Desc");
 						lstHeader.add("initPrice");
@@ -139,7 +139,7 @@ public class Offer extends DBBase {
 						lstHeader.add("minPrice");
 						lstHeader.add("Start");
 						lstHeader.add("End");
-						//lstHeader.add("status");
+						lstHeader.add("status");
 						lstHeader.add("CurrBid");
 					}
 					//
@@ -172,15 +172,35 @@ public class Offer extends DBBase {
 				}
 			}
 			//
-			output.put(DATA_NAME_DATA, lstRows);
-			output.put(DATA_NAME_DATA_ADD, lstHeader);
+			int[] colSeq = new int[lstHeader.size() - 4];
+			{
+				colSeq[0] = 2;		//Category
+				colSeq[1] = 3;		//Condition
+				colSeq[2] = 4;		//Desc
+				colSeq[3] = 1;		//Seller
+				colSeq[4] = 5;		//initPrice
+				colSeq[5] = 11;	//CurrBid
+				colSeq[6] = 8;		//Start
+				colSeq[7] = 9;		//End
+				//lstHeader.add("offerId");		0
+				//lstHeader.add("increment");		6
+				//lstHeader.add("minPrice");		7
+				//lstHeader.add("status");			10
+				for (int i = FIELD_START_INDEX; i < lstHeader.size(); i++) {
+					colSeq[i + 8 - FIELD_START_INDEX] = i;
+				}
+			}
+			//
+			TableData dataTable = new TableData(lstHeader, lstRows, colSeq);
+			//
+			output.put(DATA_NAME_DATA, dataTable);
 			//
 			output.put(DATA_NAME_STATUS, true);
 			output.put(DATA_NAME_MESSAGE, "OK");
 		}
 		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sql != null ? sql : null));
+			output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sql));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
@@ -211,12 +231,6 @@ public class Offer extends DBBase {
 		return output;
 	}
 
-	
-	
-	
-	
-	
-	
 
 	public static Map doGenerateNewOfferAlertCriterion(String userID, Map<String, String[]> parameters) {
 		Map output = new HashMap();

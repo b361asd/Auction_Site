@@ -1,12 +1,6 @@
 package rutgers.cs336.gui;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.servlet.jsp.JspWriter;
 
 import rutgers.cs336.servlet.IConstant;
 
@@ -74,11 +68,23 @@ public class Helper implements IConstant {
 	
 	
 	
-	public static String printOneRowInTable(List row, int startIndex) {
+	public static String printHeaderForTable(List row, int[] colSeq) {
 		String out = "";
-		if (row != null && row.size() > 0) {
-			for (int i = startIndex; i < row.size(); i++) {
-				Object one = row.get(i);
+		if (row != null && row.size() > 0 && colSeq!=null && colSeq.length > 0) {
+			for (int i = 0; i < colSeq.length; i++) {
+				Object one = row.get(colSeq[i]);
+				String oneItem = (one == null) ? "" : one.toString();
+				out = out + "<td><div onclick=onClickHeader('"+oneItem+"')>"+oneItem+"</div></td>";
+			}
+		}
+		return out;
+	}
+
+	public static String printOneRowInTable(List row, int[] colSeq) {
+		String out = "";
+		if (row != null && row.size() > 0 && colSeq!=null && colSeq.length > 0) {
+			for (int i = 0; i < colSeq.length; i++) {
+				Object one = row.get(colSeq[i]);
 				String oneItem = (one == null) ? "" : one.toString();
 				out = out + "<td>" + oneItem + "</td>";
 			}
