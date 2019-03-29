@@ -2,11 +2,10 @@
 <!DOCTYPE html>
 
 <%@ page import="rutgers.cs336.db.Offer" %>
-<%@ page import="rutgers.cs336.gui.Helper" %>
-<%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
-<%@ page import="rutgers.cs336.gui.TableData" %>
-<%@ page import="static rutgers.cs336.db.DBBase.*" %>
 <%@ page import="java.util.List" %>
+<%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
+<%@ page import="rutgers.cs336.gui.*" %>
+<%@ page import="static rutgers.cs336.db.DBBase.*" %>
 
 <html>
 
@@ -14,11 +13,11 @@
 	<meta charset="utf-8">
 	<title>BuyMe - Search Offers</title>
 	<link rel="stylesheet" href="../style.css?v=1.0"/>
-
+	
 	<script type="text/javascript">
        function onClickHeader(value) {
-           document.getElementById('input-sort').value = value;
-           document.getElementById('form-sort').submit();
+    	   document.getElementById('input-sort').value=value; 
+    	   document.getElementById('form-sort').submit();
        }
 	</script>
 </head>
@@ -28,12 +27,12 @@
 <%
 	TableData dataTable = null;
 	//
-	Map data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
-	if (data != null) {
+	Map data = (Map)request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
+	if (data!=null) {
 		dataTable = (TableData) (data.get(DATA_NAME_DATA));
 	}
 	//
-	if (dataTable == null) {
+	if (dataTable==null) { 
 		data = Offer.doSearchOffer(request.getParameterMap());
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 	}
@@ -64,9 +63,9 @@
 </form>
 
 <form id="form-sort" target="_self" method="post">
-	<input id="input-sort" type="hidden" name="sort" value="_"/>
-	<table>
-		<thead>
+<input id="input-sort" type="hidden" name="sort" value="_"/>
+<table>
+	<thead>
 		<tr>
 			<td>Action</td>
 			<%
@@ -74,37 +73,31 @@
 				out.println(Helper.printHeaderForTable(lstHeader, colSeq));
 			%>
 		</tr>
-		</thead>
+	</thead>
 
-		<tbody>
-		<%
-			if (lstRows != null) {
-				for (Object oneRow : lstRows) {
-					List lstOneRow = (List) oneRow;
-					//
-					out.println("<tr>");
-					//
-					out.println("<td>");
-					out.println("<button onclick=\"document.getElementById('input-id-doBid').value='" + lstOneRow.get(
-							  0) + "," + lstOneRow.get(
-							  1) + "'; document.getElementById('form-id-doBid').submit();\" class=\"favorite styled\" type=\"button\">Bid</button>");
-					out.println("<button onclick=\"document.getElementById('input-id-listBid').value='" + lstOneRow.get(
-							  0) + "," + lstOneRow.get(
-							  1) + "'; document.getElementById('form-id-listBid').submit();\" class=\"favorite styled\" type=\"button\">List Bid</button>");
-					out.println("<button onclick=\"document.getElementById('input-id-listSimilar').value='" + lstOneRow.get(
-							  0) + "," + lstOneRow.get(1) + "," + lstOneRow.get(
-							  3) + "'; document.getElementById('form-id-listSimilar').submit();\" class=\"favorite styled\" type=\"button\">List Similar</button>");
-					out.println("</td>");
-					//
-					out.println(Helper.printOneRowInTable(lstOneRow, colSeq));
-					//
-					out.println("</tr>");
-				}
+	<tbody>
+	<%
+		if (lstRows != null) {
+			for (Object oneRow : lstRows) {
+				List lstOneRow = (List) oneRow;
+				//
+				out.println("<tr>");
+				//
+				out.println("<td>");
+				out.println("<button onclick=\"document.getElementById('input-id-doBid').value='" + lstOneRow.get(0) + "," + lstOneRow.get(1) + "'; document.getElementById('form-id-doBid').submit();\" class=\"favorite styled\" type=\"button\">Bid</button>");
+				out.println("<button onclick=\"document.getElementById('input-id-listBid').value='" + lstOneRow.get(0) + "," + lstOneRow.get(1) + "'; document.getElementById('form-id-listBid').submit();\" class=\"favorite styled\" type=\"button\">List Bid</button>");
+				out.println("<button onclick=\"document.getElementById('input-id-listSimilar').value='" + lstOneRow.get(0) + "," + lstOneRow.get(1) + "," + lstOneRow.get(3) + "'; document.getElementById('form-id-listSimilar').submit();\" class=\"favorite styled\" type=\"button\">List Similar</button>");
+				out.println("</td>");
+				//
+				out.println(Helper.printOneRowInTable(lstOneRow, colSeq));
+				//
+				out.println("</tr>");
 			}
-		%>
-		</tbody>
+		}
+	%>
+	</tbody>
 
-	</table>
+</table>
 </form>
 
 </body>

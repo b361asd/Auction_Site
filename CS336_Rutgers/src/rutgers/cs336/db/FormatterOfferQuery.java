@@ -8,6 +8,7 @@ public class FormatterOfferQuery {
 	private static       String                  OP_ANY                = "any";
 	//
 	public static        String                  OP_SZ_EQUAL           = "szequal";
+	public static        String                  OP_SZ_EQUAL_MULTI_NO_ESCAPE     = "szequalmultine";
 	private static       String                  OP_SZ_NOT_EQUAL       = "sznotequal";
 	private static       String                  OP_SZ_START_WITH      = "startwith";
 	private static       String                  OP_SZ_CONTAIN         = "contain";
@@ -61,9 +62,9 @@ public class FormatterOfferQuery {
 	}
 
 
-	public static StringBuilder initQuerySearch(String categoryName) {
+	public static StringBuilder initQuerySearch() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, cf1.sortOrder, f1.fieldName, f1.fieldType FROM OfferField of, CategoryField cf1, Field f1 WHERE of.fieldID = cf1.fieldID AND of.fieldID = f1.fieldID AND cf1.categoryName = '").append(categoryName).append("') of1 on o.offerID = of1.offerID");
+		sb.append("select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID");
 		//
 		return sb;
 	}
@@ -78,14 +79,22 @@ public class FormatterOfferQuery {
 	private static String oneCondition(String columnName, String op, String value, String valueAdd, boolean isCasting) {
 		String output = "";
 		//
-		if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_NOT_EQUAL) || op.equals(OP_SZ_START_WITH) || op.equals(OP_SZ_CONTAIN)) {      // String
-			value = escape((value == null ? "" : value.trim())).toUpperCase();
+		if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE) || op.equals(OP_SZ_NOT_EQUAL) || op.equals(OP_SZ_START_WITH) || op.equals(OP_SZ_CONTAIN)) {	// String
+			if (op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
+				value = (value == null ? "" : value.trim()).toUpperCase();
+			}
+			else {
+				value = escape((value == null ? "" : value.trim())).toUpperCase();
+			}
 			if (value.equals("")) {
 				output = "";
 			}
 			else {
 				if (op.equals(OP_SZ_EQUAL)) {
 					output = "(UPPER(" + columnName + ") = '" + value + "')";
+				}
+				else if (op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
+					output = "(UPPER(" + columnName + ") in (" + value + "))";
 				}
 				else if (op.equals(OP_SZ_NOT_EQUAL)) {
 					output = "(NOT UPPER(" + columnName + ") = '" + value + "')";
@@ -240,12 +249,12 @@ public class FormatterOfferQuery {
 	
 	
 	public static void main(String[] args) {
-		if (false) {
-			StringBuilder sb = initQuerySearch("truck");
+		if (true) {
+			StringBuilder sb = initQuerySearch();
 			//addCondition(sb, "offerID", OP_SZ_START_WITH, "Scratcges", null);
 			//addCondition(sb, "seller", OP_SZ_NOT_EQUAL, "us'er", null);
-			//addCondition(sb, "categoryName", OP_SZ_NOT_EQUAL, "car", null);
-			addCondition(sb, "conditionCode", OP_INT_EQUAL_MULTI, "1,3,4,5,6", null);
+			addCondition(sb, "categoryName", OP_SZ_EQUAL_MULTI_NO_ESCAPE, "'car','motorbike'", null);
+			//addCondition(sb, "conditionCode", OP_INT_EQUAL_MULTI, "1,3,4,5,6", null);
 			//addCondition(sb, "description", OP_SZ_CONTAIN, "Scratcges", null);
 			//addCondition(sb, "initPrice", OP_INT_EQUAL_OR_OVER, "2", null);
 			//addCondition(sb, "increment", OP_INT_EQUAL_OR_OVER, "4", null);
@@ -296,7 +305,7 @@ public class FormatterOfferQuery {
 		}
 		//
 		//
-		if (true) {
+		if (false) {
 			StringBuilder sb = buildSQLSimilarOffer("car", "1");
 			//
 			System.out.println(sb.toString());
@@ -334,7 +343,7 @@ or (of2.fieldID = 4 and (not (of2.fieldText = 'yes')))
 */
 
 /*
-select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, cf1.sortOrder, f1.fieldName, f1.fieldType FROM OfferField of, CategoryField cf1, Field f1 WHERE of.fieldID = cf1.fieldID AND of.fieldID = f1.fieldID AND cf1.categoryName = '$categoryName$') of1 on o.offerID = of1.offerID
+select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID
 and (o.offerID='aaa')
 and (o.seller='user')
 and (o.categoryName='car')
@@ -352,5 +361,5 @@ or (of2.fieldID = 1 and (not (of2.fieldText = 'blue')))
 or (of2.fieldID = 2 and (not (of2.fieldText = 'toyota')))
 or (of2.fieldID = 3 and (not (of2.fieldText = '400')))
 or (of2.fieldID = 4 and (not (of2.fieldText = 'yes')))
-))) order by o.offerID, of1.sortOrder;
+))) order by o.offerID, of1.fieldID;
 */

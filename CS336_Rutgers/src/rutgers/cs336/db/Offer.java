@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.*;
 
 public class Offer extends DBBase {
-	
+
 	private static final int FIELD_START_INDEX = 12;
 
 	public static Map doSearchSimilar(Map<String, String[]> parameters) {
@@ -15,7 +15,7 @@ public class Offer extends DBBase {
 		//
 		String[] temp = offeridcategorynameconditioncode.split(",");
 		//
-		String categoryName = temp[1];
+		String categoryName  = temp[1];
 		String conditionCode = Helper.getCodeFromCondition(temp[2]);
 		//
 		StringBuilder sb = FormatterOfferQuery.buildSQLSimilarOffer(categoryName, conditionCode);
@@ -24,9 +24,8 @@ public class Offer extends DBBase {
 		//
 		return doSearchOfferInternal(sql);
 	}
-	
-	
-	
+
+
 	public static Map doSearchOfferByID(Map<String, String[]> parameters) {
 		String offeridcategoryname = getStringFromParamMap("offeridcategoryname", parameters);
 		//
@@ -34,7 +33,7 @@ public class Offer extends DBBase {
 		//
 		String categoryName = temp[1];
 		//
-		StringBuilder sb = FormatterOfferQuery.initQuerySearch(categoryName);
+		StringBuilder sb = FormatterOfferQuery.initQuerySearch();
 		//
 		{
 			String offerIDOP  = FormatterOfferQuery.OP_SZ_EQUAL;
@@ -53,11 +52,10 @@ public class Offer extends DBBase {
 		return doSearchOfferInternal(sql);
 	}
 
-	
-	
+
 	public static Map doSearchOffer(Map<String, String[]> parameters) {
-		StringBuilder sb = formatSQLWithParameters(parameters);
-		String sql = sb.toString();
+		StringBuilder sb  = formatSQLWithParameters(parameters);
+		String        sql = sb.toString();
 		//
 		return doSearchOfferInternal(sql);
 	}
@@ -68,8 +66,8 @@ public class Offer extends DBBase {
 		List lstHeader = new ArrayList();
 		List lstRows   = new ArrayList();
 		//
-		Map<String,String> mapFields = new HashMap<>(); 
-		Map<String,Integer> mapFieldIDToIndex = new HashMap<>();
+		Map<String, String>  mapFields         = new HashMap<>();
+		Map<String, Integer> mapFieldIDToIndex = new HashMap<>();
 		//
 		Connection con       = null;
 		Statement  statement = null;
@@ -96,15 +94,15 @@ public class Offer extends DBBase {
 				Object status        = rs.getObject(11);
 				Object price         = rs.getObject(12);
 				//
-				Object fieldID   		= rs.getObject(13);
-				Object fieldText 		= rs.getObject(14);
-				Object fieldName 		= rs.getObject(15);
-				Object fieldType 		= rs.getObject(16);
+				Object fieldID   = rs.getObject(13);
+				Object fieldText = rs.getObject(14);
+				Object fieldName = rs.getObject(15);
+				Object fieldType = rs.getObject(16);
 				//
 				if (currentofferId.equals(offerId.toString())) {   // Continue with current row
 					List currentRow = (List) lstRows.get(rowIndex);
 					//
-					mapFields.put(""+rowIndex+"-"+fieldID, (fieldText==null)?"":fieldText.toString());
+					mapFields.put("" + rowIndex + "-" + fieldID, (fieldText == null) ? "" : fieldText.toString());
 				}
 				else {   // New Row
 					List currentRow = new LinkedList();
@@ -126,7 +124,7 @@ public class Offer extends DBBase {
 					currentRow.add(status);
 					currentRow.add(price);
 					//
-					mapFields.put(""+rowIndex+"-"+fieldID, (fieldText==null)?"":fieldText.toString());
+					mapFields.put("" + rowIndex + "-" + fieldID, (fieldText == null) ? "" : fieldText.toString());
 					//
 					if (rowIndex == 0) {
 						lstHeader.add("offerId");
@@ -145,7 +143,7 @@ public class Offer extends DBBase {
 					//
 				}
 				//
-				if (mapFieldIDToIndex.get(fieldID.toString())==null) {
+				if (mapFieldIDToIndex.get(fieldID.toString()) == null) {
 					mapFieldIDToIndex.put(fieldID.toString(), lstHeader.size());
 					//
 					lstHeader.add(fieldName.toString());
@@ -153,16 +151,16 @@ public class Offer extends DBBase {
 			}
 			//
 			Map<Integer, String> mapIndexToFieldID = new HashMap<>();
-			for (Map.Entry<String,Integer> entry : mapFieldIDToIndex.entrySet()) {
-				mapIndexToFieldID.put(entry.getValue(), entry.getKey());		// Reverse
+			for (Map.Entry<String, Integer> entry : mapFieldIDToIndex.entrySet()) {
+				mapIndexToFieldID.put(entry.getValue(), entry.getKey());      // Reverse
 			}
 			//
 			for (int i = 0; i < lstRows.size(); i++) {
 				List rowList = (List) lstRows.get(i);
 				for (int j = FIELD_START_INDEX; j < lstHeader.size(); j++) {
 					String fieldId = mapIndexToFieldID.get(j);
-					String key = "" + i + "-" + fieldId;
-					String item = mapFields.get(key);
+					String key     = "" + i + "-" + fieldId;
+					String item    = mapFields.get(key);
 					if (item == null) {
 						rowList.add("");
 					}
@@ -174,14 +172,14 @@ public class Offer extends DBBase {
 			//
 			int[] colSeq = new int[lstHeader.size() - 4];
 			{
-				colSeq[0] = 2;		//Category
-				colSeq[1] = 3;		//Condition
-				colSeq[2] = 4;		//Desc
-				colSeq[3] = 1;		//Seller
-				colSeq[4] = 5;		//initPrice
-				colSeq[5] = 11;	//CurrBid
-				colSeq[6] = 8;		//Start
-				colSeq[7] = 9;		//End
+				colSeq[0] = 2;      //Category
+				colSeq[1] = 3;      //Condition
+				colSeq[2] = 4;      //Desc
+				colSeq[3] = 1;      //Seller
+				colSeq[4] = 5;      //initPrice
+				colSeq[5] = 11;   //CurrBid
+				colSeq[6] = 8;      //Start
+				colSeq[7] = 9;      //End
 				//lstHeader.add("offerId");		0
 				//lstHeader.add("increment");		6
 				//lstHeader.add("minPrice");		7
@@ -200,7 +198,8 @@ public class Offer extends DBBase {
 		}
 		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sql));
+			output.put(DATA_NAME_MESSAGE,
+			           "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sql));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
@@ -235,8 +234,8 @@ public class Offer extends DBBase {
 	public static Map doGenerateNewOfferAlertCriterion(String userID, Map<String, String[]> parameters) {
 		Map output = new HashMap();
 		//
-		String categoryName = getStringFromParamMap("categoryName", parameters);
-		StringBuilder sb = formatSQLWithParametersForSearchOrAlert(parameters, userID, false);
+		String        categoryName = getStringFromParamMap("categoryName", parameters);
+		StringBuilder sb           = formatSQLWithParametersForSearchOrAlert(parameters, userID, false);
 		//
 		Connection        con          = null;
 		PreparedStatement preparedStmt = null;
@@ -257,7 +256,8 @@ public class Offer extends DBBase {
 		}
 		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sb != null ? sb.toString() : null));
+			output.put(DATA_NAME_MESSAGE,
+			           "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sb != null ? sb.toString() : null));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
@@ -288,26 +288,21 @@ public class Offer extends DBBase {
 		return output;
 	}
 
-	
-	
-	
-	
-	
-	
 
 	private static StringBuilder formatSQLWithParameters(Map<String, String[]> parameters) {
 		return formatSQLWithParametersForSearchOrAlert(parameters, null, true);
 	}
-	private static StringBuilder formatSQLWithParametersForSearchOrAlert(Map<String, String[]> parameters, String userID, boolean isSearch) {		//Search or Alert
+
+	private static StringBuilder formatSQLWithParametersForSearchOrAlert(Map<String, String[]> parameters, String userID, boolean isSearch) {      //Search or Alert
 		StringBuilder sb;
 		//
-		String categoryName = getStringFromParamMap("categoryName", parameters);
+		String categoryNames = getStringsFromParamMap("categoryName", 1, parameters, "'");
 		//
 		if (isSearch) {
-			sb = FormatterOfferQuery.initQuerySearch(categoryName);
+			sb = FormatterOfferQuery.initQuerySearch();
 		}
 		else {
-			sb = FormatterOfferQuery.initQueryAlert(userID, categoryName);
+			sb = FormatterOfferQuery.initQueryAlert(userID, categoryNames);
 		}
 		//
 		if (isSearch) {                        // In alert, offerID placeholder will be replaced with real one
@@ -323,8 +318,8 @@ public class Offer extends DBBase {
 		}
 		//
 		if (isSearch) {                     // In alert, categoryName is handled outside query
-			String categoryNameOP  = FormatterOfferQuery.OP_SZ_EQUAL;
-			String categoryNameVal = categoryName;
+			String categoryNameOP  = FormatterOfferQuery.OP_SZ_EQUAL_MULTI_NO_ESCAPE;
+			String categoryNameVal = categoryNames;
 			FormatterOfferQuery.addCondition(sb, "categoryName", categoryNameOP, categoryNameVal, null);
 		}
 		//
@@ -383,9 +378,7 @@ public class Offer extends DBBase {
 		//
 		return sb;
 	}
-	
-	
-	
+
 
 	public static void main(String[] args) {
 		Map map = doSearchOffer(null);

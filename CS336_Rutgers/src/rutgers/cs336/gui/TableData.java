@@ -44,8 +44,8 @@ public class TableData {
 		if (header != null) {
 			int index = mapHeaderToIndex.get(header);
 			//
-			Comparator<Object> comparatorRev  = (o1, o2) -> -(((List) o1).get(index) == null ? "" : ((List) o1).get(index).toString()).compareTo(((List) o2).get(index) == null ? "" : ((List) o2).get(index).toString());
-			Comparator<Object> comparatorNorm = Comparator.comparing(o -> ((List) o).get(index) == null ? "" : ((List) o).get(index).toString());
+			Comparator<Object> comparatorRev  = ((o1, o2) -> -(((((List) o1).get(index)) == null ? "" : (((List) o1).get(index)).toString())).compareTo(((List) o2).get(index) == null ? "" : ((List) o2).get(index).toString()));
+			Comparator<Object> comparatorNorm = (Comparator.comparing(o -> (((((List) o).get(index)) == null ? "" : (((List) o).get(index)).toString()))));
 			//
 			if (index >= 0 && index < lstHeader.size()) {
 				boolean isTheSame = (indexSorted == index);

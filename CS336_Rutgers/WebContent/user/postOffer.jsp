@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.GetCategoryField" %>
+<%@ page import="rutgers.cs336.db.CategoryAndField" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="static rutgers.cs336.db.CreateOffer.PREFIX_CATEGORY_NAME" %>
@@ -31,14 +31,14 @@
 	else {
 		message = (String) session.getAttribute("message");
 		if (message == null) {
-			message = "Welcome to BuyMe.";
+	message = "Welcome to BuyMe.";
 		}
 	}
 	//
 	String categoryNameFromParam = "CAT=" + getStringFromParamMap(PREFIX_CATEGORY_NAME, request.getParameterMap());
 	String paramMap = getParamMap(request.getParameterMap());
 	//
-	Map data = GetCategoryField.getCategoryField(getStringFromParamMap(PREFIX_CATEGORY_NAME, request.getParameterMap()));
+	Map data =CategoryAndField.getCategoryField(getStringFromParamMap(PREFIX_CATEGORY_NAME, request.getParameterMap()));
 %>
 <h1><%=message%>
 </h1>
@@ -51,9 +51,9 @@
 
 	<select name="categoryName" onchange="onCategoryChange(this.parentElement);">
 		<%
-			List lstCategory = (List) data.get(GetCategoryField.DATA_CATEGORY_LIST);
+			List lstCategory = (List) data.get(CategoryAndField.DATA_CATEGORY_LIST);
 			for (Object o : lstCategory) {
-				GetCategoryField.Category temp = (GetCategoryField.Category) o;
+			CategoryAndField.Category temp = (CategoryAndField.Category) o;
 				out.println(
 						  "<option " + (temp.isCurr() ? "selected " : "") + "value=\"" + temp.getCategoryName() + "\">" + temp
 									 .getCategoryName() + "</option>");
@@ -62,14 +62,14 @@
 	</select><br>
 
 	<%
-		List lstField = (List) data.get(GetCategoryField.DATA_FIELD_LIST);
-		for (Object o : lstField) {
-			String categoryName = ((GetCategoryField.Field) o).getCategoryName();
-			String fieldName    = ((GetCategoryField.Field) o).getFieldName();
-			int    fieldID      = ((GetCategoryField.Field) o).getFieldID();
-			out.println(
-					  "<div class=\"allField " + categoryName + "\" >" + fieldName + "<input type = \"text\" name = \"fieldID_" + fieldID + "\" / ></div><br >");
-		}
+		List lstField = (List) data.get(CategoryAndField.DATA_FIELD_LIST);
+			for (Object o : lstField) {
+		String categoryName = ((CategoryAndField.Field) o).getCategoryName();
+		String fieldName    = ((CategoryAndField.Field) o).getFieldName();
+		int    fieldID      = ((CategoryAndField.Field) o).getFieldID();
+		out.println(
+				  "<div class=\"allField " + categoryName + "\" >" + fieldName + "<input type = \"text\" name = \"fieldID_" + fieldID + "\" / ></div><br >");
+			}
 	%>
 
 	<div>Auction Days<input type="initPrice" name="initPrice" min="1" max="30"></div>

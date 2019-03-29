@@ -2,6 +2,7 @@ package rutgers.cs336.gui;
 
 import java.util.List;
 
+import rutgers.cs336.db.CategoryAndField;
 import rutgers.cs336.servlet.IConstant;
 
 public class Helper implements IConstant {
@@ -27,7 +28,34 @@ public class Helper implements IConstant {
 		return CONDITION_CODE_CHECKBOX.replaceAll("\\?", name);
 	}
 	
-	
+	public static String getCategoryNameCheckBox(String name, List lstCategoryName) {
+		StringBuilder sb = new StringBuilder();
+		//
+		sb.append("<div>");
+		for (int i = 0; i < lstCategoryName.size(); i++) {
+			CategoryAndField.Category one = (CategoryAndField.Category) (lstCategoryName.get(i));
+			sb.append("<input onchange='onCategoryChange();' type='checkbox' id='");
+			sb.append(one.getCategoryName());
+			sb.append("' name='");
+			sb.append(name+(i+1));
+			sb.append("' value='");
+			sb.append(one.getCategoryName());
+			if (one.isCurr()) {
+				sb.append("' checked><label for='");
+			}
+			else {
+				sb.append("'><label for='");
+			}
+			sb.append(one.getCategoryName());
+			sb.append("'>");
+			sb.append(one.getCategoryName());
+			sb.append("</label>");
+		}
+		sb.append("</div>");
+		//
+		return sb.toString();
+	}
+
 	
 	public static String getConditionFromCode(String code) {
 		switch (code) {

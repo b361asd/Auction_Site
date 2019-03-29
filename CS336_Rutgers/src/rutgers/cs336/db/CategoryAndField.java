@@ -6,10 +6,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-public class GetCategoryField extends DBBase {
+public class CategoryAndField extends DBBase {
 
 	public static final String DATA_CATEGORY_LIST = "DATA_CATEGORY_LIST";
 
@@ -39,24 +41,18 @@ public class GetCategoryField extends DBBase {
 
 
 	public static class Field {
-		String categoryName;
 		int    fieldID;
 		String fieldName;
 		int    fieldType;
 
 		//
-		public Field(String categoryName, int fieldID, String fieldName, int fieldType) {
-			this.categoryName = categoryName;
+		public Field(int fieldID, String fieldName, int fieldType) {
 			this.fieldID = fieldID;
 			this.fieldName = fieldName;
 			this.fieldType = fieldType;
 		}
 
 		//
-		public String getCategoryName() {
-			return categoryName;
-		}
-
 		public int getFieldID() {
 			return fieldID;
 		}
@@ -71,7 +67,7 @@ public class GetCategoryField extends DBBase {
 	}
 
 
-	public static Map getCategoryField(String categoryNameFromParam) {
+	public static Map getCategoryField(String categoryNamesFromParam) {
 		Map output = new HashMap();
 		//
 		Connection con  = null;
@@ -83,6 +79,7 @@ public class GetCategoryField extends DBBase {
 			//
 			ResultSet rs = stmt.executeQuery(SQL_CATEGORYFIELD_SELECT);
 			//
+			Set<String> fieldIDSet = new HashSet<>();
 			List lstField    = new ArrayList();
 			List lstCategory = new ArrayList();
 			//
@@ -100,12 +97,18 @@ public class GetCategoryField extends DBBase {
 				String sz_fieldName    = fieldName.toString();
 				int    i_fieldType     = (Integer) fieldType;
 				//
-				if (categoryNameFromParam.equals("")) {
-					categoryNameFromParam = sz_categoryName;
+				if (categoryNamesFromParam.equals("")) {
+					categoryNamesFromParam = sz_categoryName;
 				}
 				//
-				if (categoryNameFromParam.equals(sz_categoryName)) {
-					lstField.add(new Field(sz_categoryName, i_fieldID, sz_fieldName, i_fieldType));
+				if ((","+categoryNamesFromParam+",").indexOf(","+sz_categoryName+",")>=0) {
+					if (fieldIDSet.contains(""+i_fieldID)) {
+						//already in list per previous catogoryName
+					}
+					else {
+						lstField.add(new Field(i_fieldID, sz_fieldName, i_fieldType));
+						fieldIDSet.add(""+i_fieldID);
+					}
 				}
 				//
 				String currCategory;
@@ -118,7 +121,7 @@ public class GetCategoryField extends DBBase {
 				}
 				//
 				if (!currCategory.equals(sz_categoryName)) {
-					lstCategory.add(new Category(sz_categoryName, categoryNameFromParam.equals(sz_categoryName)));
+					lstCategory.add(new Category(sz_categoryName, ((","+categoryNamesFromParam+",").indexOf(","+sz_categoryName+",")>=0)));
 				}
 			}
 			//
