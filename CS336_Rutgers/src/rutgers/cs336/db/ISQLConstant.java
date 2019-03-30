@@ -49,15 +49,15 @@ public interface ISQLConstant {
 	String SQL_OFFER_ALERT_CRITERION_INSERT = "INSERT INTO OfferAlertCriterion (criterionID, buyer, categoryName, triggerTxt, generateDate) VALUES (?, ?, ?, ?, NOW())";
 
 	// Question
-	String SQL_QUESTION_INSERT 				= "INSERT INTO Question (questionID, userID, question, questionDate) VALUES (?, ?, ?, NOW())";
+	String SQL_QUESTION_INSERT             = "INSERT INTO Question (questionID, userID, question, questionDate) VALUES (?, ?, ?, NOW())";
 	String SQL_QUESTION_UPDATE_WITH_ANSWER = "UPDATE Question SET answer = ?, repID = ?, answerDate = NOW() WHERE questionID = ?";
-	String SQL_QUESTION_QUERY_OPEN 			= "SELECT questionID, userID, question, questionDate from Question WHERE answer IS NULL OR answer = '' LIMIT 0,1";
-	String SQL_QUESTION_QUERY_BY_USER 		= "SELECT questionID, userID, question, answer, repID, questionDate, answerDate from Question userID = ?";
-	String SQL_QUESTION_QUERY_BY_REP 		= "SELECT questionID, userID, question, answer, repID, questionDate, answerDate from Question repID = ?";
-	String SQL_QUESTION_QUERY_BY_1TAGS 		= "SELECT questionID, userID, question, answer, repID, questionDate, answerDate from Question WHERE (question LIKE ? OR answer LIKE ?)";
-	String SQL_QUESTION_QUERY_BY_2TAGS 		= "SELECT questionID, userID, question, answer, repID, questionDate, answerDate from Question WHERE (question LIKE ? OR answer LIKE ?) AND (question LIKE ? OR answer LIKE ?)";
-	String SQL_QUESTION_QUERY_BY_3TAGS 		= "SELECT questionID, userID, question, answer, repID, questionDate, answerDate from Question WHERE (question LIKE ? OR answer LIKE ?) AND (question LIKE ? OR answer LIKE ?) AND (question LIKE ? OR answer LIKE ?)";
-	
+	String SQL_QUESTION_QUERY_OPEN         = "SELECT questionID, userID, question, questionDate from Question WHERE answer IS NULL OR answer = '' LIMIT 0,1";
+	String SQL_QUESTION_QUERY_BY_USER      = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate from Question userID = ?";
+	String SQL_QUESTION_QUERY_BY_REP       = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate from Question repID = ?";
+	String SQL_QUESTION_QUERY_BY_1TAGS     = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate from Question WHERE (question LIKE ? OR answer LIKE ?)";
+	String SQL_QUESTION_QUERY_BY_2TAGS     = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate from Question WHERE (question LIKE ? OR answer LIKE ?) AND (question LIKE ? OR answer LIKE ?)";
+	String SQL_QUESTION_QUERY_BY_3TAGS     = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate from Question WHERE (question LIKE ? OR answer LIKE ?) AND (question LIKE ? OR answer LIKE ?) AND (question LIKE ? OR answer LIKE ?)";
+
 }
 
 /*
@@ -73,9 +73,9 @@ II. Auctions
 	[] A buyer should be able to bid
 		[] Manually
 			[] Let the buyer set a new bid
-			[*] With automatic bidding
-				[*] Set a secret upper limit
-				[*] Put in a higher bid automatically for the user in case someone bids higher
+		[*] With automatic bidding
+			[*] Set a secret upper limit
+			[*] Put in a higher bid automatically for the user in case someone bids higher
 	[] Define the winner of the auction
 		[] When the closing time has come, check if the seller has set a reserve
 			[] If yes: if the reserve is higher than the last bid none is the winner.

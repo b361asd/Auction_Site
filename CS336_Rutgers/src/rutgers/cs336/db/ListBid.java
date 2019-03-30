@@ -4,15 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ListBid extends DBBase {
 
-	
+
 	public static Map getBidsForOffer(String offerID) {
 		Map output = new HashMap();
 		//
@@ -30,11 +26,11 @@ public class ListBid extends DBBase {
 			//
 			ResultSet rs = preparedStmt.executeQuery();
 			//
-			int    rowIndex  = -1;
+			int rowIndex = -1;
 			while (rs.next()) {
-				Object bidID  	= rs.getObject(1);
-				Object buyer 	= rs.getObject(2);
-				Object price  	= rs.getObject(3);
+				Object bidID   = rs.getObject(1);
+				Object buyer   = rs.getObject(2);
+				Object price   = rs.getObject(3);
 				Object bidDate = rs.getObject(4);
 				//
 				List currentRow = new LinkedList();
@@ -62,14 +58,12 @@ public class ListBid extends DBBase {
 		}
 		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE,
-			           "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
+			output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE,
-			           "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
+			output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
 			e.printStackTrace();
 		}
 		finally {

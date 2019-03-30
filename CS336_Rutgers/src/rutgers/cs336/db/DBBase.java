@@ -54,15 +54,15 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 			return "";
 		}
 	}
-	
+
 
 	public static String getStringsFromParamMap(String name, int startIndex, Map<String, String[]> parameters, String delimiter) {
 		String out = "";
 		if (parameters != null) {
 			String[] temps = null;
-			int index = startIndex;
+			int      index = startIndex;
 			do {
-				temps = parameters.get(name+(index++));
+				temps = parameters.get(name + (index++));
 				//
 				if (temps != null) {
 					if (out.equals("")) {
@@ -72,13 +72,13 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 						out = out + "," + delimiter + temps[0] + delimiter;
 					}
 				}
-			} while (temps != null);
+			}
+			while (temps != null);
 		}
 		return out;
 	}
 
 
-	
 	public static int getPrefixIntFromParamMap(String name, Map<String, String[]> parameters, char delimiter) {
 		int out = -1;
 		//

@@ -5,23 +5,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FormatterOfferQuery {
-	private static       String                  OP_ANY                = "any";
+	private static       String                  OP_ANY                      = "any";
 	//
-	public static        String                  OP_SZ_EQUAL           = "szequal";
-	public static        String                  OP_SZ_EQUAL_MULTI_NO_ESCAPE     = "szequalmultine";
-	private static       String                  OP_SZ_NOT_EQUAL       = "sznotequal";
-	private static       String                  OP_SZ_START_WITH      = "startwith";
-	private static       String                  OP_SZ_CONTAIN         = "contain";
+	public static        String                  OP_SZ_EQUAL                 = "szequal";
+	public static        String                  OP_SZ_EQUAL_MULTI_NO_ESCAPE = "szequalmultine";
+	private static       String                  OP_SZ_NOT_EQUAL             = "sznotequal";
+	private static       String                  OP_SZ_START_WITH            = "startwith";
+	private static       String                  OP_SZ_CONTAIN               = "contain";
 	//
-	public static        String                  OP_INT_EQUAL          = "intequal";
-	public static        String                  OP_INT_EQUAL_MULTI    = "intequalmulti";
-	private static       String                  OP_INT_NOT_EQUAL      = "intnotequal";
-	private static       String                  OP_INT_EQUAL_OR_OVER  = "equalorover";
-	private static       String                  OP_INT_EQUAL_OR_UNDER = "equalorunder";
-	private static       String                  OP_INT_BETWEEN        = "between";
+	public static        String                  OP_INT_EQUAL                = "intequal";
+	public static        String                  OP_INT_EQUAL_MULTI          = "intequalmulti";
+	private static       String                  OP_INT_NOT_EQUAL            = "intnotequal";
+	private static       String                  OP_INT_EQUAL_OR_OVER        = "equalorover";
+	private static       String                  OP_INT_EQUAL_OR_UNDER       = "equalorunder";
+	private static       String                  OP_INT_BETWEEN              = "between";
 	//
-	private static       String                  OP_BOOL_TRUE          = "true";
-	private static       String                  OP_BOOL_FALSE         = "false";
+	private static       String                  OP_BOOL_TRUE                = "true";
+	private static       String                  OP_BOOL_FALSE               = "false";
 	//
 	private static final HashMap<String, String> sqlTokens;
 	private static       Pattern                 sqlTokenPattern;
@@ -64,10 +64,12 @@ public class FormatterOfferQuery {
 
 	public static StringBuilder initQuerySearch() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID");
+		sb.append(
+				  "select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID");
 		//
 		return sb;
 	}
+
 	public static StringBuilder initQueryAlert(String receiver, String categoryName) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("insert Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) select REPLACE(UUID(),'-',''), '").append(receiver).append("', o.offerID, NULL, NOW(), NULL from Offer o WHERE (o.offerID='$offerID$') and (o.categoryName='").append(categoryName).append("')");
@@ -75,11 +77,10 @@ public class FormatterOfferQuery {
 		return sb;
 	}
 
-
 	private static String oneCondition(String columnName, String op, String value, String valueAdd, boolean isCasting) {
 		String output = "";
 		//
-		if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE) || op.equals(OP_SZ_NOT_EQUAL) || op.equals(OP_SZ_START_WITH) || op.equals(OP_SZ_CONTAIN)) {	// String
+		if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE) || op.equals(OP_SZ_NOT_EQUAL) || op.equals(OP_SZ_START_WITH) || op.equals(OP_SZ_CONTAIN)) {   // String
 			if (op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
 				value = (value == null ? "" : value.trim()).toUpperCase();
 			}
@@ -211,7 +212,7 @@ public class FormatterOfferQuery {
 		return sb.append(" and (not exists (select * from OfferField of2 where of2.offerID = o.offerID and (false");
 	}
 
-	
+
 	public static StringBuilder addFieldCondition(StringBuilder sb, String fieldID, String op, String value, String valueAdd) {
 		if (op.equals(OP_ANY)) {
 			// Do Nothing
@@ -229,27 +230,27 @@ public class FormatterOfferQuery {
 	public static StringBuilder doneFieldConditionSearch(StringBuilder sb) {
 		return sb.append(" ))) order by o.offerID, of1.fieldID");
 	}
+
 	public static StringBuilder doneFieldConditionAlert(StringBuilder sb) {
 		return sb.append(" )))");
 	}
 
 
-	
-	
-	
-	
 	public static StringBuilder buildSQLSimilarOffer(String categoryName, String conditionCode) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, cf1.sortOrder, f1.fieldName, f1.fieldType FROM OfferField of, CategoryField cf1, Field f1 WHERE of.fieldID = cf1.fieldID AND of.fieldID = f1.fieldID AND cf1.categoryName = '").append(categoryName).append("') of1 on o.offerID = of1.offerID and (o.categoryName = '").append(categoryName).append("') and (o.conditionCode = ").append(conditionCode).append(") and (o.status = 1) order by o.offerID, of1.sortOrder");
+		sb.append(
+				  "select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID and (o.categoryName = '")
+				  .append(categoryName)
+				  .append("') and (o.conditionCode = ")
+				  .append(conditionCode)
+				  .append(") and (o.status = 1) order by o.offerID");
 		//
 		return sb;
 	}
-	
-	
-	
-	
+
+
 	public static void main(String[] args) {
-		if (true) {
+		if (false) {
 			StringBuilder sb = initQuerySearch();
 			//addCondition(sb, "offerID", OP_SZ_START_WITH, "Scratcges", null);
 			//addCondition(sb, "seller", OP_SZ_NOT_EQUAL, "us'er", null);
@@ -305,24 +306,23 @@ public class FormatterOfferQuery {
 		}
 		//
 		//
-		if (false) {
+		if (true) {
 			StringBuilder sb = buildSQLSimilarOffer("car", "1");
 			//
 			System.out.println(sb.toString());
 		}
 	}
-	
-	
+
+
 }
 
 
-/*
-public static final String SQL_OFFER_SIMILAR_STRING = 
-"select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, cf1.sortOrder, f1.fieldName, f1.fieldType FROM OfferField of, CategoryField cf1, Field f1 WHERE of.fieldID = cf1.fieldID AND of.fieldID = f1.fieldID AND cf1.categoryName = ?) of1 on o.offerID = of1.offerID and (o.categoryName = ?) and (o.conditionCode = ?) and (o.status = 1) order by o.offerID, of1.sortOrder";
+/* For Similar
+select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID and (o.categoryName = ?) and (o.conditionCode = ?) and (o.status = 1) order by o.offerID
 */
 
 
-/*
+/* For Alert
 insert Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) select REPLACE(UUID(),'-',''), '$receiver$', o.offerID, NULL, NOW(), NULL from Offer o WHERE (o.offerID='$offerID$') and (o.categoryName='$categoryName$')
 and (o.seller='user')
 and (o.conditionCode in (1,2))
@@ -342,7 +342,7 @@ or (of2.fieldID = 4 and (not (of2.fieldText = 'yes')))
 )));
 */
 
-/*
+/* General Search
 select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID
 and (o.offerID='aaa')
 and (o.seller='user')

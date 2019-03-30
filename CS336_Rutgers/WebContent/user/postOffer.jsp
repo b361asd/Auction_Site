@@ -63,13 +63,12 @@
 
 	<%
 		List lstField = (List) data.get(CategoryAndField.DATA_FIELD_LIST);
-			for (Object o : lstField) {
-		String categoryName = ((CategoryAndField.Field) o).getCategoryName();
-		String fieldName    = ((CategoryAndField.Field) o).getFieldName();
-		int    fieldID      = ((CategoryAndField.Field) o).getFieldID();
-		out.println(
-				  "<div class=\"allField " + categoryName + "\" >" + fieldName + "<input type = \"text\" name = \"fieldID_" + fieldID + "\" / ></div><br >");
-			}
+		for (Object o : lstField) {
+			String fieldName    = ((CategoryAndField.Field) o).getFieldName();
+			int    fieldID      = ((CategoryAndField.Field) o).getFieldID();
+			out.println(
+					  "<div class='allField'>" + fieldName + "<input type = \"text\" name = \"fieldID_" + fieldID + "\" / ></div><br >");
+		}
 	%>
 
 	<div>Auction Days<input type="initPrice" name="initPrice" min="1" max="30"></div>
