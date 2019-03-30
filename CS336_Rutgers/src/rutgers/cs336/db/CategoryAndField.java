@@ -4,12 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class CategoryAndField extends DBBase {
 
@@ -79,9 +74,9 @@ public class CategoryAndField extends DBBase {
 			//
 			ResultSet rs = stmt.executeQuery(SQL_CATEGORYFIELD_SELECT);
 			//
-			Set<String> fieldIDSet = new HashSet<>();
-			List lstField    = new ArrayList();
-			List lstCategory = new ArrayList();
+			Set<String> fieldIDSet  = new HashSet<>();
+			List        lstField    = new ArrayList();
+			List        lstCategory = new ArrayList();
 			//
 			output.put(DATA_CATEGORY_LIST, lstCategory);
 			output.put(DATA_FIELD_LIST, lstField);
@@ -101,13 +96,13 @@ public class CategoryAndField extends DBBase {
 					categoryNamesFromParam = sz_categoryName;
 				}
 				//
-				if ((","+categoryNamesFromParam+",").indexOf(","+sz_categoryName+",")>=0) {
-					if (fieldIDSet.contains(""+i_fieldID)) {
+				if (("," + categoryNamesFromParam + ",").contains("," + sz_categoryName + ",")) {
+					if (fieldIDSet.contains("" + i_fieldID)) {
 						//already in list per previous catogoryName
 					}
 					else {
 						lstField.add(new Field(i_fieldID, sz_fieldName, i_fieldType));
-						fieldIDSet.add(""+i_fieldID);
+						fieldIDSet.add("" + i_fieldID);
 					}
 				}
 				//
@@ -121,7 +116,7 @@ public class CategoryAndField extends DBBase {
 				}
 				//
 				if (!currCategory.equals(sz_categoryName)) {
-					lstCategory.add(new Category(sz_categoryName, ((","+categoryNamesFromParam+",").indexOf(","+sz_categoryName+",")>=0)));
+					lstCategory.add(new Category(sz_categoryName, (("," + categoryNamesFromParam + ",").contains("," + sz_categoryName + ","))));
 				}
 			}
 			//

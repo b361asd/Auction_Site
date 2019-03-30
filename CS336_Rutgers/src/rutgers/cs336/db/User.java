@@ -7,12 +7,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
 public class User extends DBBase {
 
-	
-	
 	public static Map doAddUser(String username, String password, String email, String firstName, String lastName, String street, String city, String state, String zipCode, String phone, int usertype) {
 		Map output = new HashMap();
 		//
@@ -28,7 +24,7 @@ public class User extends DBBase {
 			preparedStmt.setString(3, email);
 			preparedStmt.setString(4, firstName);
 			preparedStmt.setString(5, lastName);
-			preparedStmt.setString(6, street + " " + city + " " + state + " " + zipCode);		//address = street + city + state + zipCode
+			preparedStmt.setString(6, street + " " + city + " " + state + " " + zipCode);      // Address = street + city + state + zipCode
 			preparedStmt.setString(7, phone);
 			preparedStmt.setInt(8, usertype);
 			//
@@ -77,7 +73,6 @@ public class User extends DBBase {
 		return output;
 	}
 
-	
 
 	public static Map doVerifyLogin(String userID, String pwd) {
 		Map output = new HashMap();
@@ -93,7 +88,7 @@ public class User extends DBBase {
 			//
 			ResultSet rs = preparedStmt.executeQuery();
 			//
-			if (rs.next()) {											// Only 1 row
+			if (rs.next()) {                                 // Only 1 row
 				Object password  = rs.getObject(1);
 				Object firstname = rs.getObject(2);
 				Object lastname  = rs.getObject(3);
@@ -104,7 +99,7 @@ public class User extends DBBase {
 					output.put(DATA_NAME_STATUS, false);
 					output.put(DATA_NAME_MESSAGE, "Wrong Password. Please try again.");
 				}
-				else if (!(Boolean)active) {
+				else if (!(Boolean) active) {
 					output.put(DATA_NAME_STATUS, false);
 					output.put(DATA_NAME_MESSAGE, "User not active. Contact a customer representative.");
 				}
@@ -112,9 +107,9 @@ public class User extends DBBase {
 					output.put(DATA_NAME_STATUS, true);
 					output.put(DATA_NAME_MESSAGE, "Welcome, " + firstname.toString() + " " + lastname.toString() + "!");
 					//
-					output.put(DATA_NAME_USER_TYPE, 	usertype);
+					output.put(DATA_NAME_USER_TYPE, usertype);
 					output.put(DATA_NAME_FIRST_NAME, firstname);
-					output.put(DATA_NAME_LAST_NAME, 	lastname);
+					output.put(DATA_NAME_LAST_NAME, lastname);
 				}
 			}
 			else {
@@ -155,8 +150,7 @@ public class User extends DBBase {
 		return output;
 	}
 
-	
-	
+
 	public static void main(String[] args) {
 		Map map = doAddUser("abc", "123", "email", "fN", "lN", "123 St", "Pearl", "NJ", "01010", "39239033", 3);
 		//
@@ -164,7 +158,6 @@ public class User extends DBBase {
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
-	
 
 
 	public static void main1(String[] args) {

@@ -1,5 +1,5 @@
-<%@page import="rutgers.cs336.db.DBBase"%>
-<%@page import="rutgers.cs336.db.Question"%>
+<%@page import="rutgers.cs336.db.DBBase" %>
+<%@page import="rutgers.cs336.db.Question" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
@@ -15,13 +15,13 @@
 
 <%
 	{
-		String repID = (String) request.getSession().getAttribute(SESSION_ATTRIBUTE_USER);
+		String repID      = (String) request.getSession().getAttribute(SESSION_ATTRIBUTE_USER);
 		String questionID = DBBase.getStringFromParamMap("questionID", request.getParameterMap());
-		String answer = DBBase.getStringFromParamMap("answer", request.getParameterMap());
+		String answer     = DBBase.getStringFromParamMap("answer", request.getParameterMap());
 		//
 		Map dataUpdate;
 		if (questionID != null && !questionID.equals("") && answer != null && !answer.equals("")) {
-			dataUpdate = Question.answerQuestion(questionID, answer, repID);	
+			dataUpdate = Question.answerQuestion(questionID, answer, repID);
 		}
 	}
 	//
@@ -52,7 +52,7 @@
 
 	<label for="answer">Answer a Question:</label>
 	<textarea id="answer" name="answer" rows="5" cols="33"></textarea>
-	
+
 	<input type="submit" value="Submit">
 </form>
 

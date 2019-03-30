@@ -1,10 +1,5 @@
-<%@page import="rutgers.cs336.db.Offer"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-
-<%@ page import="java.util.*" %>
-<%@ page import="static rutgers.cs336.db.DBBase.*" %>
-<%@ page import="rutgers.cs336.gui.Helper" %>
 
 <html>
 
@@ -22,7 +17,7 @@
 <form action="${pageContext.request.contextPath}/user/postQuestionResult.jsp" method="post">
 
 	<label for="question">Ask a Question:</label>
-	
+
 	<textarea id="question" name="question" rows="5" cols="33"></textarea>
 
 	<input type="submit" value="Submit">

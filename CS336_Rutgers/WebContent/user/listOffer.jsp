@@ -13,7 +13,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Search Offers</title>
-	<link rel="stylesheet" href="../style.css?v=1.0"/>
+	<link type="text/css" rel="stylesheet" href="../style.css?v=1.0"/>
 
 	<script type="text/javascript">
        function onClickHeader(value) {
@@ -35,6 +35,14 @@
 		data = Offer.doSearchSimilar(offeridcategorynameconditioncode);
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 	}
+	else if (action.equals("searchOffer")) {
+		data = Offer.doSearchOffer(request.getParameterMap());
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+	}
+	else if (action.equals("browseOffer")) {
+		data = Offer.doBrowseOffer();
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+	}
 	else {
 		data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
 		if (data != null) {
@@ -42,10 +50,6 @@
 		}
 		//
 		if (dataTable == null) {
-			if (action.equals("searchOffer")) {
-				data = Offer.doSearchOffer(request.getParameterMap());
-				request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
-			}
 		}
 		else {
 			String sort = getStringFromParamMap("sort", request.getParameterMap());
@@ -57,6 +61,7 @@
 	List lstHeader = dataTable.getLstHeader();
 	List lstRows = dataTable.getLstRows();
 	int[] colSeq = dataTable.getColSeq();
+	String offerIDStandOut = dataTable.getOfferIDStandOut();
 %>
 
 <%@include file="../header.jsp" %>
@@ -82,24 +87,31 @@
 		<tr>
 			<td>Action</td>
 			<%
-				// Header
 				out.println(Helper.printHeaderForTable(lstHeader, colSeq));
 			%>
 		</tr>
 		</thead>
-
 		<tbody>
 		<%
 			if (lstRows != null) {
 				for (Object oneRow : lstRows) {
 					List lstOneRow = (List) oneRow;
 					//
-					out.println("<tr>");
+					boolean isStandOut = offerIDStandOut != null && (lstOneRow.get(0)).equals(offerIDStandOut);
+					//
+					if (isStandOut) {
+						out.println("<tr name='standout' class='standout'>");
+					}
+					else {
+						out.println("<tr>");
+					}
 					//
 					out.println("<td>");
 					out.println("<button onclick=\"document.getElementById('input-id-doBid').value='" + lstOneRow.get(0) + "," + lstOneRow.get(2) + "'; document.getElementById('form-id-doBid').submit();\" class=\"favorite styled\" type=\"button\">Bid</button>");
 					out.println("<button onclick=\"document.getElementById('input-id-listBid').value='" + lstOneRow.get(0) + "," + lstOneRow.get(2) + "'; document.getElementById('form-id-listBid').submit();\" class=\"favorite styled\" type=\"button\">List Bid</button>");
-					out.println("<button onclick=\"document.getElementById('input-id-listSimilar').value='" + lstOneRow.get(0) + "," + lstOneRow.get(2) + "," + lstOneRow.get(3) + "'; document.getElementById('form-id-listSimilar').submit();\" class=\"favorite styled\" type=\"button\">List Similar</button>");
+					if (!action.equals("listSimilar")) {
+						out.println("<button onclick=\"document.getElementById('input-id-listSimilar').value='" + lstOneRow.get(0) + "," + lstOneRow.get(2) + "," + lstOneRow.get(3) + "'; document.getElementById('form-id-listSimilar').submit();\" class=\"favorite styled\" type=\"button\">List Similar</button>");
+					}
 					out.println("</td>");
 					//
 					out.println(Helper.printOneRowInTable(lstOneRow, colSeq));

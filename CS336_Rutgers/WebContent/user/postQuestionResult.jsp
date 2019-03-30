@@ -1,10 +1,8 @@
-<%@page import="rutgers.cs336.db.DBBase"%>
-<%@page import="rutgers.cs336.db.Question"%>
+<%@page import="rutgers.cs336.db.DBBase" %>
+<%@page import="rutgers.cs336.db.Question" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.CreateOffer" %>
-<%@ page import="java.util.Map" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 
 <html>

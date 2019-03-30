@@ -2,9 +2,9 @@
 <!DOCTYPE html>
 
 <%@ page import="rutgers.cs336.db.Offer" %>
-<%@ page import="java.util.List" %>
-<%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 <%@ page import="rutgers.cs336.gui.Helper" %>
+<%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
+<%@ page import="java.util.List" %>
 
 <html>
 
@@ -60,7 +60,7 @@
 				List lstOneRow = (List) oneRow;
 				//
 				out.println("<tr>");
-				for (int i = 1; i < lstOneRow.size(); i++) {	// Skip offerID
+				for (int i = 1; i < lstOneRow.size(); i++) {   // Skip offerID
 					Object oneField = lstOneRow.get(i);
 					//
 					String oneItem = oneField == null ? "" : oneField.toString();

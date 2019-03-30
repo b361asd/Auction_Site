@@ -1,10 +1,10 @@
-<%@page import="rutgers.cs336.db.Offer"%>
+<%@page import="rutgers.cs336.db.Offer" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="java.util.*" %>
-<%@ page import="static rutgers.cs336.db.DBBase.*" %>
 <%@ page import="rutgers.cs336.gui.Helper" %>
+<%@ page import="static rutgers.cs336.db.DBBase.*" %>
+<%@ page import="java.util.List" %>
 
 <html>
 
@@ -51,7 +51,7 @@
 				offerID = (String) lstOneRow.get(0);
 				//
 				out.println("<tr>");
-				for (int i = 1; i < lstOneRow.size(); i++) {	// Skip offerID
+				for (int i = 1; i < lstOneRow.size(); i++) {   // Skip offerID
 					Object oneField = lstOneRow.get(i);
 					//
 					String oneItem = oneField == null ? "" : oneField.toString();

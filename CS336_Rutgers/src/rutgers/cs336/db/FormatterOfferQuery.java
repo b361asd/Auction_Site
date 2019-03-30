@@ -249,6 +249,11 @@ public class FormatterOfferQuery {
 	}
 
 
+	public static String buildSQLBrowseOffer() {
+		return "select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID and (o.status = 1) order by o.offerID";
+	}
+
+	
 	public static void main(String[] args) {
 		if (false) {
 			StringBuilder sb = initQuerySearch();
@@ -317,29 +322,13 @@ public class FormatterOfferQuery {
 }
 
 
-/* For Similar
-select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID and (o.categoryName = ?) and (o.conditionCode = ?) and (o.status = 1) order by o.offerID
+/* For Browse
+select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID and (o.status = 1) order by o.offerID
 */
 
 
-/* For Alert
-insert Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) select REPLACE(UUID(),'-',''), '$receiver$', o.offerID, NULL, NOW(), NULL from Offer o WHERE (o.offerID='$offerID$') and (o.categoryName='$categoryName$')
-and (o.seller='user')
-and (o.conditionCode in (1,2))
-and (o.description='Scratcges')
-and (o.initPrice=2)
-and (o.increment=4)
-and (o.minPrice=5)
-and (o.startDate < NOW() )
-and (o.endDate > NOW())
-and (o.status=1)
-and (o.price=2)
-and (not exists (select * from OfferField of2 where of2.offerID = o.offerID and (false
-or (of2.fieldID = 1 and (not (of2.fieldText = 'blue')))
-or (of2.fieldID = 2 and (not (of2.fieldText = 'toyota')))
-or (of2.fieldID = 3 and (not (of2.fieldText = '400')))
-or (of2.fieldID = 4 and (not (of2.fieldText = 'yes')))
-)));
+/* For Similar
+select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID and (o.categoryName = ?) and (o.conditionCode = ?) and (o.status = 1) order by o.offerID
 */
 
 /* General Search
@@ -362,4 +351,24 @@ or (of2.fieldID = 2 and (not (of2.fieldText = 'toyota')))
 or (of2.fieldID = 3 and (not (of2.fieldText = '400')))
 or (of2.fieldID = 4 and (not (of2.fieldText = 'yes')))
 ))) order by o.offerID, of1.fieldID;
+*/
+
+/* For Alert
+insert Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) select REPLACE(UUID(),'-',''), '$receiver$', o.offerID, NULL, NOW(), NULL from Offer o WHERE (o.offerID='$offerID$') and (o.categoryName='$categoryName$')
+and (o.seller='user')
+and (o.conditionCode in (1,2))
+and (o.description='Scratcges')
+and (o.initPrice=2)
+and (o.increment=4)
+and (o.minPrice=5)
+and (o.startDate < NOW() )
+and (o.endDate > NOW())
+and (o.status=1)
+and (o.price=2)
+and (not exists (select * from OfferField of2 where of2.offerID = o.offerID and (false
+or (of2.fieldID = 1 and (not (of2.fieldText = 'blue')))
+or (of2.fieldID = 2 and (not (of2.fieldText = 'toyota')))
+or (of2.fieldID = 3 and (not (of2.fieldText = '400')))
+or (of2.fieldID = 4 and (not (of2.fieldText = 'yes')))
+)));
 */

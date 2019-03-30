@@ -12,15 +12,13 @@ import java.util.Map;
 
 public class HomeServlet extends HttpServlet implements IConstant {
 
-	
-	
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
 	}
 
-	
-	
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		//request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "home!!!");
@@ -41,11 +39,11 @@ public class HomeServlet extends HttpServlet implements IConstant {
 			//
 			map = User.doAddUser(username, password, email, firstName, lastName, street, city, state, zipCode, phone, 3);
 			//
-			if ((Boolean)map.get(DATA_NAME_STATUS)) {															// Register successful also means logged in.
-				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, 			username);
-				request.getSession().setAttribute(SESSION_ATTRIBUTE_USERTYPE, 		"3");
-				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_FNAME, 	firstName);
-				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_LNAME, 	lastName);
+			if ((Boolean) map.get(DATA_NAME_STATUS)) {      // Register successful also means logged in.
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, username);
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_USERTYPE, "3");
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_FNAME, firstName);
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_LNAME, lastName);
 			}
 		}
 		else {
@@ -55,11 +53,11 @@ public class HomeServlet extends HttpServlet implements IConstant {
 				String password = request.getParameter("password");
 				map = User.doVerifyLogin(username, password);
 				//
-				if ((Boolean)map.get(DATA_NAME_STATUS)) {
-					request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, 			username);
-					request.getSession().setAttribute(SESSION_ATTRIBUTE_USERTYPE, 		map.get(DATA_NAME_USER_TYPE).toString());
-					request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_FNAME, 	map.get(DATA_NAME_FIRST_NAME).toString());
-					request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_LNAME, 	map.get(DATA_NAME_LAST_NAME).toString());
+				if ((Boolean) map.get(DATA_NAME_STATUS)) {
+					request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, username);
+					request.getSession().setAttribute(SESSION_ATTRIBUTE_USERTYPE, map.get(DATA_NAME_USER_TYPE).toString());
+					request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_FNAME, map.get(DATA_NAME_FIRST_NAME).toString());
+					request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_LNAME, map.get(DATA_NAME_LAST_NAME).toString());
 					//
 					//request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "no not OK");
 				}
@@ -77,8 +75,8 @@ public class HomeServlet extends HttpServlet implements IConstant {
 		//
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, map);
 		//
-		if ((Boolean)map.get(DATA_NAME_STATUS)) {
-			String szUserType = request.getSession() == null ? "3" : (String)request.getSession().getAttribute(SESSION_ATTRIBUTE_USERTYPE);
+		if ((Boolean) map.get(DATA_NAME_STATUS)) {
+			String szUserType = request.getSession() == null ? "3" : (String) request.getSession().getAttribute(SESSION_ATTRIBUTE_USERTYPE);
 			//
 			if (szUserType.equals("1")) {
 				map.put(DATA_NAME_MESSAGE, map.get(DATA_NAME_MESSAGE) + " Admin Login!");

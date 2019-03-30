@@ -1,9 +1,9 @@
 package rutgers.cs336.gui;
 
-import java.util.List;
-
 import rutgers.cs336.db.CategoryAndField;
 import rutgers.cs336.servlet.IConstant;
+
+import java.util.List;
 
 public class Helper implements IConstant {
 	// GUI
@@ -27,7 +27,7 @@ public class Helper implements IConstant {
 	public static String getConditionCodeCheckBox(String name) {
 		return CONDITION_CODE_CHECKBOX.replaceAll("\\?", name);
 	}
-	
+
 	public static String getCategoryNameCheckBox(String name, List lstCategoryName) {
 		StringBuilder sb = new StringBuilder();
 		//
@@ -37,7 +37,7 @@ public class Helper implements IConstant {
 			sb.append("<input onchange='onCategoryChange();' type='checkbox' id='");
 			sb.append(one.getCategoryName());
 			sb.append("' name='");
-			sb.append(name+(i+1));
+			sb.append(name).append(i + 1);
 			sb.append("' value='");
 			sb.append(one.getCategoryName());
 			if (one.isCurr()) {
@@ -56,7 +56,7 @@ public class Helper implements IConstant {
 		return sb.toString();
 	}
 
-	
+
 	public static String getConditionFromCode(String code) {
 		switch (code) {
 			case "1":
@@ -75,6 +75,7 @@ public class Helper implements IConstant {
 				return "Unknown.";
 		}
 	}
+
 	public static String getCodeFromCondition(String condition) {
 		switch (condition) {
 			case "New":
@@ -93,31 +94,30 @@ public class Helper implements IConstant {
 				return "9";
 		}
 	}
-	
-	
-	
+
+
 	public static String printHeaderForTable(List row, int[] colSeq) {
 		String out = "";
-		if (row != null && row.size() > 0 && colSeq!=null && colSeq.length > 0) {
-			for (int i = 0; i < colSeq.length; i++) {
-				Object one = row.get(colSeq[i]);
+		if (row != null && row.size() > 0 && colSeq != null && colSeq.length > 0) {
+			for (int value : colSeq) {
+				Object one     = row.get(value);
 				String oneItem = (one == null) ? "" : one.toString();
-				out = out + "<td><div onclick=onClickHeader('"+oneItem+"')>"+oneItem+"</div></td>";
+				out = out + "<td><div onclick=onClickHeader('" + oneItem + "')>" + oneItem + "</div></td>";
 			}
 		}
 		return out;
 	}
 
+
 	public static String printOneRowInTable(List row, int[] colSeq) {
 		String out = "";
-		if (row != null && row.size() > 0 && colSeq!=null && colSeq.length > 0) {
-			for (int i = 0; i < colSeq.length; i++) {
-				Object one = row.get(colSeq[i]);
+		if (row != null && row.size() > 0 && colSeq != null && colSeq.length > 0) {
+			for (int value : colSeq) {
+				Object one     = row.get(value);
 				String oneItem = (one == null) ? "" : one.toString();
 				out = out + "<td>" + oneItem + "</td>";
 			}
 		}
 		return out;
 	}
-	
 }

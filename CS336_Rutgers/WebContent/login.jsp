@@ -19,7 +19,7 @@
 	Please enter your password<input type="password" name="password"/>
 
 	<input type="submit" value="Submit">
-	
+
 </form>
 
 <h2><A href="${pageContext.request.contextPath}/register.jsp">Register</A></h2>

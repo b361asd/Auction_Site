@@ -11,6 +11,8 @@ public class Offer extends DBBase {
 	private static final int FIELD_START_INDEX = 12;
 
 	public static Map doSearchSimilar(String offeridcategorynameconditioncode) {
+		Map output;
+		//
 		String[] temp = offeridcategorynameconditioncode.split(",");
 		//
 		String categoryName  = temp[1];
@@ -20,7 +22,13 @@ public class Offer extends DBBase {
 		//
 		String sql = sb.toString();
 		//
-		return doSearchOfferInternal(sql);
+		output = doSearchOfferInternal(sql);
+		//
+		TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
+		//
+		dataTable.setOfferIDStandOut(temp[0]);
+		//
+		return output;
 	}
 
 
@@ -50,6 +58,12 @@ public class Offer extends DBBase {
 		return doSearchOfferInternal(sql);
 	}
 
+
+	public static Map doBrowseOffer() {
+		String sql = FormatterOfferQuery.buildSQLBrowseOffer();
+		//
+		return doSearchOfferInternal(sql);
+	}
 
 	public static Map doSearchOffer(Map<String, String[]> parameters) {
 		StringBuilder sb  = formatSQLWithParameters(parameters);

@@ -31,14 +31,14 @@
 	else {
 		message = (String) session.getAttribute("message");
 		if (message == null) {
-	message = "Welcome to BuyMe.";
+			message = "Welcome to BuyMe.";
 		}
 	}
 	//
 	String categoryNameFromParam = "CAT=" + getStringFromParamMap(PREFIX_CATEGORY_NAME, request.getParameterMap());
 	String paramMap = getParamMap(request.getParameterMap());
 	//
-	Map data =CategoryAndField.getCategoryField(getStringFromParamMap(PREFIX_CATEGORY_NAME, request.getParameterMap()));
+	Map data = CategoryAndField.getCategoryField(getStringFromParamMap(PREFIX_CATEGORY_NAME, request.getParameterMap()));
 %>
 <h1><%=message%>
 </h1>
@@ -53,10 +53,8 @@
 		<%
 			List lstCategory = (List) data.get(CategoryAndField.DATA_CATEGORY_LIST);
 			for (Object o : lstCategory) {
-			CategoryAndField.Category temp = (CategoryAndField.Category) o;
-				out.println(
-						  "<option " + (temp.isCurr() ? "selected " : "") + "value=\"" + temp.getCategoryName() + "\">" + temp
-									 .getCategoryName() + "</option>");
+				CategoryAndField.Category temp = (CategoryAndField.Category) o;
+				out.println("<option " + (temp.isCurr() ? "selected " : "") + "value=\"" + temp.getCategoryName() + "\">" + temp.getCategoryName() + "</option>");
 			}
 		%>
 	</select><br>
@@ -64,10 +62,9 @@
 	<%
 		List lstField = (List) data.get(CategoryAndField.DATA_FIELD_LIST);
 		for (Object o : lstField) {
-			String fieldName    = ((CategoryAndField.Field) o).getFieldName();
-			int    fieldID      = ((CategoryAndField.Field) o).getFieldID();
-			out.println(
-					  "<div class='allField'>" + fieldName + "<input type = \"text\" name = \"fieldID_" + fieldID + "\" / ></div><br >");
+			String fieldName = ((CategoryAndField.Field) o).getFieldName();
+			int    fieldID   = ((CategoryAndField.Field) o).getFieldID();
+			out.println("<div class='allField'>" + fieldName + "<input type = \"text\" name = \"fieldID_" + fieldID + "\" / ></div><br >");
 		}
 	%>
 

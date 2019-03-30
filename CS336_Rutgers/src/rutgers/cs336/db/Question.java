@@ -9,8 +9,6 @@ import java.util.Map;
 
 public class Question extends DBBase {
 
-	
-	
 	public static Map insertQuestion(String userID, String question) {
 		Map output = new HashMap();
 		//
@@ -70,8 +68,7 @@ public class Question extends DBBase {
 		return output;
 	}
 
-	
-	
+
 	public static Map answerQuestion(String questionID, String answer, String repID) {
 		Map output = new HashMap();
 		//
@@ -128,11 +125,10 @@ public class Question extends DBBase {
 			}
 		}
 		//
-		return output;	
+		return output;
 	}
-	
-	
-	
+
+
 	public static Map retrieveOneQuestion() {
 		Map output = new HashMap();
 		//
@@ -145,18 +141,18 @@ public class Question extends DBBase {
 			//
 			ResultSet rs = preparedStmt.executeQuery();
 			//
-			if (rs.next()) {											// Only 1 row
-				Object questionID  	= rs.getObject(1);
-				Object userID 			= rs.getObject(2);
-				Object question  		= rs.getObject(3);
-				Object questionDate  = rs.getObject(4);
+			if (rs.next()) {                                 // Only 1 row
+				Object questionID   = rs.getObject(1);
+				Object userID       = rs.getObject(2);
+				Object question     = rs.getObject(3);
+				Object questionDate = rs.getObject(4);
 				//
 				output.put(DATA_NAME_STATUS, true);
 				output.put(DATA_NAME_MESSAGE, "One question!");
 				//
-				output.put("questionID", 	questionID);
-				output.put("userID", 		userID);
-				output.put("question", 		question);
+				output.put("questionID", questionID);
+				output.put("userID", userID);
+				output.put("question", question);
 				output.put("questionDate", questionDate);
 			}
 			else {
@@ -196,8 +192,7 @@ public class Question extends DBBase {
 		//
 		return output;
 	}
-	
-	
+
 
 	public static void main(String[] args) {
 
