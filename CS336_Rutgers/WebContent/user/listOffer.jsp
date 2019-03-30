@@ -26,20 +26,31 @@
 <body>
 
 <%
+	Map data = null;
 	TableData dataTable = null;
 	//
-	Map data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
-	if (data != null) {
-		dataTable = (TableData) (data.get(DATA_NAME_DATA));
-	}
-	//
-	if (dataTable == null) {
-		data = Offer.doSearchOffer(request.getParameterMap());
+	String action = getStringFromParamMap("action", request.getParameterMap());
+	if (action.equals("listSimilar")) {
+		String offeridcategorynameconditioncode = getStringFromParamMap("offeridcategorynameconditioncode", request.getParameterMap());
+		data = Offer.doSearchSimilar(offeridcategorynameconditioncode);
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 	}
 	else {
-		String sort = getStringFromParamMap("sort", request.getParameterMap());
-		dataTable.sortRowPerHeader(sort);
+		data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
+		if (data != null) {
+			dataTable = (TableData) (data.get(DATA_NAME_DATA));
+		}
+		//
+		if (dataTable == null) {
+			if (action.equals("searchOffer")) {
+				data = Offer.doSearchOffer(request.getParameterMap());
+				request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+			}
+		}
+		else {
+			String sort = getStringFromParamMap("sort", request.getParameterMap());
+			dataTable.sortRowPerHeader(sort);
+		}
 	}
 	//
 	dataTable = (TableData) (data.get(DATA_NAME_DATA));
@@ -59,7 +70,8 @@
 	<input id="input-id-listBid" type="hidden" name="offeridcategoryname" value="_"/>
 </form>
 
-<form id="form-id-listSimilar" action="${pageContext.request.contextPath}/user/listSimilar.jsp" method="post">
+<form id="form-id-listSimilar" action="${pageContext.request.contextPath}/user/listOffer.jsp" method="post">
+	<input type="hidden" name="action" value="listSimilar"/>
 	<input id="input-id-listSimilar" type="hidden" name="offeridcategorynameconditioncode" value="_"/>
 </form>
 

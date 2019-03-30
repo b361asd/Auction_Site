@@ -35,7 +35,7 @@
 <%@include file="../header.jsp" %>
 <%@include file="userNav.jsp" %>
 
-<form id="form" action="${pageContext.request.contextPath}/user/searchOfferResult.jsp" method="post">
+<form id="form" action="${pageContext.request.contextPath}/user/listOffer.jsp" method="post">
 
 	<div class='allField'>categoryName
 		<%
@@ -103,6 +103,7 @@
 			out.println("<input name='lstFieldIDs' type='hidden' value='" + lstFieldIDs + "'/>");
 	%>
 
+	<input type="hidden" name="action" value="searchOffer"/>
 	<input type="submit" value="Submit">
 </form>
 

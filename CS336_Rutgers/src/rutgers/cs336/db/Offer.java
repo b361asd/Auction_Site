@@ -10,9 +10,7 @@ public class Offer extends DBBase {
 
 	private static final int FIELD_START_INDEX = 12;
 
-	public static Map doSearchSimilar(Map<String, String[]> parameters) {
-		String offeridcategorynameconditioncode = getStringFromParamMap("offeridcategorynameconditioncode", parameters);
-		//
+	public static Map doSearchSimilar(String offeridcategorynameconditioncode) {
 		String[] temp = offeridcategorynameconditioncode.split(",");
 		//
 		String categoryName  = temp[1];
