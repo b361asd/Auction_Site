@@ -6,8 +6,11 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DBBase extends Utils implements ISQLConstant, IConstant {
 
@@ -24,6 +27,73 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 	public static String getUUID() {
 		UUID uuid = UUID.randomUUID();
 		return uuid.toString().replace("-", "");
+	}
+
+
+	public static        String                  OP_ANY                      = "any";
+	//
+	public static        String                  OP_SZ_EQUAL                 = "szequal";
+	public static        String                  OP_SZ_EQUAL_MULTI_NO_ESCAPE = "szequalmultine";
+	public static        String                  OP_SZ_NOT_EQUAL             = "sznotequal";
+	public static        String                  OP_SZ_START_WITH            = "startwith";
+	public static        String                  OP_SZ_CONTAIN               = "contain";
+	//
+	public static        String                  OP_INT_EQUAL                = "intequal";
+	public static        String                  OP_INT_EQUAL_MULTI          = "intequalmulti";
+	public static        String                  OP_INT_NOT_EQUAL            = "intnotequal";
+	public static        String                  OP_INT_EQUAL_OR_OVER        = "equalorover";
+	public static        String                  OP_INT_EQUAL_OR_UNDER       = "equalorunder";
+	public static        String                  OP_INT_BETWEEN              = "between";
+	//
+	public static        String                  OP_BOOL_TRUE                = "true";
+	public static        String                  OP_BOOL_FALSE               = "false";
+	//
+	private static final HashMap<String, String> sqlTokens;
+	private static       Pattern                 sqlTokenPattern;
+
+	static {
+		// MySQL escape sequences: https://dev.mysql.com/doc/refman/8.0/en/string-literals.html
+		String[][] search_regex_replacement = new String[][]
+				  {	//   Search string       Search regex        SQL replacement regex
+							 {   "\u0000"    ,       "\\x00"     ,       "\\\\0"     },
+							 {   "'"         ,       "'"         ,       "\\\\'"     },
+							 {   "\""        ,       "\""        ,       "\\\\\""    },
+							 {   "\b"        ,       "\\x08"     ,       "\\\\b"     },
+							 {   "\n"        ,       "\\n"       ,       "\\\\n"     },
+							 {   "\r"        ,       "\\r"       ,       "\\\\r"     },
+							 {   "\t"        ,       "\\t"       ,       "\\\\t"     },
+							 {   "\u001A"    ,       "\\x1A"     ,       "\\\\Z"     },
+							 {   "\\"        ,       "\\\\"      ,       "\\\\\\\\"  }
+				  };
+		//
+		sqlTokens = new HashMap<>();
+		StringBuilder patternStr = new StringBuilder();
+		for (String[] srr : search_regex_replacement) {
+			sqlTokens.put(srr[0], srr[2]);
+			patternStr.append((patternStr.length() == 0) ? "" : "|").append(srr[1]);
+		}
+		sqlTokenPattern = Pattern.compile('(' + patternStr.toString() + ')');
+	}
+
+
+	public static String escape(String s) {
+		Matcher      matcher = sqlTokenPattern.matcher(s);
+		StringBuffer sb      = new StringBuffer();
+		while (matcher.find()) {
+			matcher.appendReplacement(sb, sqlTokens.get(matcher.group(1)));
+		}
+		matcher.appendTail(sb);
+		return sb.toString();
+	}
+
+
+	public static String escapeToUpperCaseTrimNoNull(String input) {
+		return escape((input == null ? "" : input.trim())).toUpperCase();
+	}
+
+
+	public static String toUpperCaseTrimNoNull(String input) {
+		return (input == null ? "" : input.trim()).toUpperCase();
 	}
 
 

@@ -1,10 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.CategoryAndField" %>
-<%@ page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
-<%@ page import="static rutgers.cs336.gui.Helper.*" %>
 
 <html>
 
@@ -16,7 +13,7 @@
 	<script type="text/javascript">
        function onCategoryChange() {
            var form = document.getElementById('form');
-           form.action = "${pageContext.request.contextPath}/user/searchOffer.jsp";
+           form.action = "${pageContext.request.contextPath}/rep/repSearchOffer.jsp";
            form.submit();
        }
 	</script>
@@ -29,20 +26,20 @@
 		String paramMap = getParamMap(request.getParameterMap());
 		//
 		Map data = CategoryAndField.getCategoryField(getStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
-		request.setAttribute("TEMP",data);
+		request.setAttribute("TEMP", data);
 	}
 %>
 
 <%@include file="../header.jsp" %>
-<%@include file="userNav.jsp" %>
+<%@include file="repNav.jsp" %>
 
-<form action="${pageContext.request.contextPath}/user/listOffer.jsp" method="post">
+<form action="${pageContext.request.contextPath}/rep/listOffer.jsp" method="post">
 	<input type="hidden" name="action" value="browseOffer"/>
 	<input type="submit" value="Browse">
 </form>
 
-<form id="form" action="${pageContext.request.contextPath}/user/listOffer.jsp" method="post">
 
+<form id="form" action="${pageContext.request.contextPath}/rep/listOffer.jsp" method="post">
 	<%@include file="../searchOfferCommon.jsp" %>
 
 	<input type="hidden" name="action" value="searchOffer"/>

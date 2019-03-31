@@ -1,71 +1,10 @@
 package rutgers.cs336.db;
 
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-public class FormatterOfferQuery {
-	private static       String                  OP_ANY                      = "any";
-	//
-	public static        String                  OP_SZ_EQUAL                 = "szequal";
-	public static        String                  OP_SZ_EQUAL_MULTI_NO_ESCAPE = "szequalmultine";
-	private static       String                  OP_SZ_NOT_EQUAL             = "sznotequal";
-	private static       String                  OP_SZ_START_WITH            = "startwith";
-	private static       String                  OP_SZ_CONTAIN               = "contain";
-	//
-	public static        String                  OP_INT_EQUAL                = "intequal";
-	public static        String                  OP_INT_EQUAL_MULTI          = "intequalmulti";
-	private static       String                  OP_INT_NOT_EQUAL            = "intnotequal";
-	private static       String                  OP_INT_EQUAL_OR_OVER        = "equalorover";
-	private static       String                  OP_INT_EQUAL_OR_UNDER       = "equalorunder";
-	private static       String                  OP_INT_BETWEEN              = "between";
-	//
-	private static       String                  OP_BOOL_TRUE                = "true";
-	private static       String                  OP_BOOL_FALSE               = "false";
-	//
-	private static final HashMap<String, String> sqlTokens;
-	private static       Pattern                 sqlTokenPattern;
-
-	static {
-		// MySQL escape sequences: https://dev.mysql.com/doc/refman/8.0/en/string-literals.html
-		String[][] search_regex_replacement = new String[][]
-				  {	//   Search string       Search regex        SQL replacement regex
-							 {   "\u0000"    ,       "\\x00"     ,       "\\\\0"     },
-							 {   "'"         ,       "'"         ,       "\\\\'"     },
-							 {   "\""        ,       "\""        ,       "\\\\\""    },
-							 {   "\b"        ,       "\\x08"     ,       "\\\\b"     },
-							 {   "\n"        ,       "\\n"       ,       "\\\\n"     },
-							 {   "\r"        ,       "\\r"       ,       "\\\\r"     },
-							 {   "\t"        ,       "\\t"       ,       "\\\\t"     },
-							 {   "\u001A"    ,       "\\x1A"     ,       "\\\\Z"     },
-							 {   "\\"        ,       "\\\\"      ,       "\\\\\\\\"  }
-				  };
-		//
-		sqlTokens = new HashMap<>();
-		StringBuilder patternStr = new StringBuilder();
-		for (String[] srr : search_regex_replacement) {
-			sqlTokens.put(srr[0], srr[2]);
-			patternStr.append((patternStr.length() == 0) ? "" : "|").append(srr[1]);
-		}
-		sqlTokenPattern = Pattern.compile('(' + patternStr.toString() + ')');
-	}
-
-
-	public static String escape(String s) {
-		Matcher      matcher = sqlTokenPattern.matcher(s);
-		StringBuffer sb      = new StringBuffer();
-		while (matcher.find()) {
-			matcher.appendReplacement(sb, sqlTokens.get(matcher.group(1)));
-		}
-		matcher.appendTail(sb);
-		return sb.toString();
-	}
-
+public class FormatterOfferQuery extends DBBase {
 
 	public static StringBuilder initQuerySearch() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(
-				  "select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID");
+		sb.append("select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID");
 		//
 		return sb;
 	}
@@ -82,11 +21,12 @@ public class FormatterOfferQuery {
 		//
 		if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE) || op.equals(OP_SZ_NOT_EQUAL) || op.equals(OP_SZ_START_WITH) || op.equals(OP_SZ_CONTAIN)) {   // String
 			if (op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
-				value = (value == null ? "" : value.trim()).toUpperCase();
+				value = toUpperCaseTrimNoNull(value);
 			}
 			else {
-				value = escape((value == null ? "" : value.trim())).toUpperCase();
+				value = escapeToUpperCaseTrimNoNull(value);
 			}
+			//
 			if (value.equals("")) {
 				output = "";
 			}
@@ -238,12 +178,7 @@ public class FormatterOfferQuery {
 
 	public static StringBuilder buildSQLSimilarOffer(String categoryName, String conditionCode) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(
-				  "select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID and (o.categoryName = '")
-				  .append(categoryName)
-				  .append("') and (o.conditionCode = ")
-				  .append(conditionCode)
-				  .append(") and (o.status = 1) order by o.offerID");
+		sb.append("select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID and (o.categoryName = '").append(categoryName).append("') and (o.conditionCode = ").append(conditionCode).append(") and (o.status = 1) order by o.offerID");
 		//
 		return sb;
 	}
@@ -253,7 +188,7 @@ public class FormatterOfferQuery {
 		return "select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID and (o.status = 1) order by o.offerID";
 	}
 
-	
+
 	public static void main(String[] args) {
 		if (false) {
 			StringBuilder sb = initQuerySearch();

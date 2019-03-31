@@ -11,32 +11,32 @@ public interface ISQLConstant {
 	// User
 	String SQL_USER_INSERT = "INSERT INTO User (username, password, email, firstname, lastname, address, phone, active, userType) VALUES (?, ?, ?, ?, ?, ?, ?, true, ?)";
 	//
-	String SQL_USER_SELECT = "SELECT password, firstname, lastname, active, userType from User where username = ?";
+	String SQL_USER_SELECT = "SELECT password, firstname, lastname, active, userType FROM User WHERE username = ?";
 
 
 	// Bid
 	String SQL_BID_INSERT = "INSERT Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) SELECT ?, o.offerID, ?, ?, ?, NOW() FROM Offer o WHERE o.endDate >= NOW() AND (NOT o.minPrice > ?) AND o.offerID = ? AND o.status = 1 AND ? > (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = ?)";
 	//
-	String SQL_BID_SELECT = "SELECT bidID, buyer, price, bidDate from Bid b where b.offerID = ?";
+	String SQL_BID_SELECT = "SELECT bidID, buyer, price, bidDate FROM Bid b WHERE b.offerID = ?";
 
 
 	// CategoryField
-	String SQL_CATEGORYFIELD_SELECT = "SELECT categoryName, CategoryField.fieldID, fieldName, fieldType from CategoryField inner JOIN Field ON CategoryField.fieldID = Field.fieldID order by categoryName, CategoryField.fieldID";
+	String SQL_CATEGORYFIELD_SELECT = "SELECT categoryName, CategoryField.fieldID, fieldName, fieldType FROM CategoryField INNER JOIN Field ON CategoryField.fieldID = Field.fieldID ORDER BY categoryName, CategoryField.fieldID";
 
 	// Offer
 	String SQL_OFFER_INSERT = "INSERT INTO Offer (offerID, categoryName, seller, initPrice, increment, minPrice, conditionCode, description, startDate, endDate, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL + ? DAY), 1)";
 
-	String SQL_OFFER_SELECT = "SELECT categoryName, seller, min_price, description, startDate, endDate, status from Offer where offerID = ?";
+	String SQL_OFFER_SELECT = "SELECT categoryName, seller, min_price, description, startDate, endDate, status FROM Offer WHERE offerID = ?";
 
-	String SQL_OFFER_SEARCH = "SELECT offerID, categoryName, seller, min_price, description, startDate, endDate from Offer where status = 1 and categoryName = ? and description like ?";
+	String SQL_OFFER_SEARCH = "SELECT offerID, categoryName, seller, min_price, description, startDate, endDate FROM Offer WHERE status = 1 and categoryName = ? and description LIKE ?";
 
 
 	// OfferField
 	String SQL_OFFERFIELD_INSERT = "INSERT INTO OfferField (offerID, fieldID, fieldText) VALUES (?, ?, ?)";
 
-	String SQL_OFFERFIELD_SELECT = "SELECT OfferField.fieldID, fieldName, fieldType, fieldText from OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID where OfferField.offerID = ? order by OfferField.fieldID";
+	String SQL_OFFERFIELD_SELECT = "SELECT OfferField.fieldID, fieldName, fieldType, fieldText FROM OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID WHERE OfferField.offerID = ? ORDER BY OfferField.fieldID";
 
-	String SQL_OFFERFIELD_SEARCH = "SELECT OfferField.offerID, OfferField.fieldID, fieldName, fieldType, fieldText from OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID where OfferField.offerID in (SELECT offerID from Offer where status = 1 and categoryName = ? and description like ?)";
+	String SQL_OFFERFIELD_SEARCH = "SELECT OfferField.offerID, OfferField.fieldID, fieldName, fieldType, fieldText FROM OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID WHERE OfferField.offerID IN (SELECT offerID FROM Offer WHERE status = 1 and categoryName = ? and description LIKE ?)";
 
 
 	// Browse
@@ -51,12 +51,12 @@ public interface ISQLConstant {
 	// Question
 	String SQL_QUESTION_INSERT             = "INSERT INTO Question (questionID, userID, question, questionDate) VALUES (?, ?, ?, NOW())";
 	String SQL_QUESTION_UPDATE_WITH_ANSWER = "UPDATE Question SET answer = ?, repID = ?, answerDate = NOW() WHERE questionID = ?";
-	String SQL_QUESTION_QUERY_OPEN         = "SELECT questionID, userID, question, questionDate from Question WHERE answer IS NULL OR answer = '' LIMIT 0,1";
-	String SQL_QUESTION_QUERY_BY_USER      = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate from Question userID = ?";
-	String SQL_QUESTION_QUERY_BY_REP       = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate from Question repID = ?";
-	String SQL_QUESTION_QUERY_BY_1TAGS     = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate from Question WHERE (question LIKE ? OR answer LIKE ?)";
-	String SQL_QUESTION_QUERY_BY_2TAGS     = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate from Question WHERE (question LIKE ? OR answer LIKE ?) AND (question LIKE ? OR answer LIKE ?)";
-	String SQL_QUESTION_QUERY_BY_3TAGS     = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate from Question WHERE (question LIKE ? OR answer LIKE ?) AND (question LIKE ? OR answer LIKE ?) AND (question LIKE ? OR answer LIKE ?)";
+	String SQL_QUESTION_QUERY_OPEN         = "SELECT questionID, userID, question, questionDate FROM Question WHERE answer IS NULL OR answer = '' LIMIT 0,1";
+	String SQL_QUESTION_QUERY_BY_USER      = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate FROM Question userID = ?";
+	String SQL_QUESTION_QUERY_BY_REP       = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate FROM Question repID = ?";
+	String SQL_QUESTION_QUERY_BY_1TAGS     = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate FROM Question WHERE (question LIKE ? OR answer LIKE ?)";
+	String SQL_QUESTION_QUERY_BY_2TAGS     = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate FROM Question WHERE (question LIKE ? OR answer LIKE ?) AND (question LIKE ? OR answer LIKE ?)";
+	String SQL_QUESTION_QUERY_BY_3TAGS     = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate FROM Question WHERE (question LIKE ? OR answer LIKE ?) AND (question LIKE ? OR answer LIKE ?) AND (question LIKE ? OR answer LIKE ?)";
 
 }
 
