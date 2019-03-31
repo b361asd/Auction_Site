@@ -28,25 +28,25 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		UUID uuid = UUID.randomUUID();
 		return uuid.toString().replace("-", "");
 	}
-
-
-	public static        String                  OP_ANY                      = "any";
+	
+	
+	public static       String                  OP_ANY                      = "any";
 	//
 	public static        String                  OP_SZ_EQUAL                 = "szequal";
 	public static        String                  OP_SZ_EQUAL_MULTI_NO_ESCAPE = "szequalmultine";
-	public static        String                  OP_SZ_NOT_EQUAL             = "sznotequal";
-	public static        String                  OP_SZ_START_WITH            = "startwith";
-	public static        String                  OP_SZ_CONTAIN               = "contain";
+	public static       String                  OP_SZ_NOT_EQUAL             = "sznotequal";
+	public static       String                  OP_SZ_START_WITH            = "startwith";
+	public static       String                  OP_SZ_CONTAIN               = "contain";
 	//
 	public static        String                  OP_INT_EQUAL                = "intequal";
 	public static        String                  OP_INT_EQUAL_MULTI          = "intequalmulti";
-	public static        String                  OP_INT_NOT_EQUAL            = "intnotequal";
-	public static        String                  OP_INT_EQUAL_OR_OVER        = "equalorover";
-	public static        String                  OP_INT_EQUAL_OR_UNDER       = "equalorunder";
-	public static        String                  OP_INT_BETWEEN              = "between";
+	public static       String                  OP_INT_NOT_EQUAL            = "intnotequal";
+	public static       String                  OP_INT_EQUAL_OR_OVER        = "equalorover";
+	public static       String                  OP_INT_EQUAL_OR_UNDER       = "equalorunder";
+	public static       String                  OP_INT_BETWEEN              = "between";
 	//
-	public static        String                  OP_BOOL_TRUE                = "true";
-	public static        String                  OP_BOOL_FALSE               = "false";
+	public static       String                  OP_BOOL_TRUE                = "true";
+	public static       String                  OP_BOOL_FALSE               = "false";
 	//
 	private static final HashMap<String, String> sqlTokens;
 	private static       Pattern                 sqlTokenPattern;
@@ -85,18 +85,168 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		matcher.appendTail(sb);
 		return sb.toString();
 	}
-
-
+	
+	
 	public static String escapeToUpperCaseTrimNoNull(String input) {
 		return escape((input == null ? "" : input.trim())).toUpperCase();
 	}
-
-
+	
+	
 	public static String toUpperCaseTrimNoNull(String input) {
 		return (input == null ? "" : input.trim()).toUpperCase();
 	}
+	
+
+	
+	private static String oneCondition(String columnName, String op, String value, String valueAdd, boolean isCasting) {
+		String output = "";
+		//
+		if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE) || op.equals(OP_SZ_NOT_EQUAL) || op.equals(OP_SZ_START_WITH) || op.equals(OP_SZ_CONTAIN)) {   // String
+			if (op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
+				value = toUpperCaseTrimNoNull(value);
+			}
+			else {
+				value = escapeToUpperCaseTrimNoNull(value);
+			}
+			//
+			if (value.equals("")) {
+				output = "";
+			}
+			else {
+				if (op.equals(OP_SZ_EQUAL)) {
+					output = "(UPPER(" + columnName + ") = '" + value + "')";
+				}
+				else if (op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
+					output = "(UPPER(" + columnName + ") in (" + value + "))";
+				}
+				else if (op.equals(OP_SZ_NOT_EQUAL)) {
+					output = "(NOT UPPER(" + columnName + ") = '" + value + "')";
+				}
+				else if (op.equals(OP_SZ_START_WITH)) {
+					output = "(UPPER(" + columnName + ") LIKE '" + value + "%')";
+				}
+				else if (op.equals(OP_SZ_CONTAIN)) {
+					output = "(UPPER(" + columnName + ") LIKE '%" + value + "%')";
+				}
+			}
+		}
+		else if (op.equals(OP_INT_EQUAL) || op.equals(OP_INT_EQUAL_MULTI) || op.equals(OP_INT_NOT_EQUAL) || op.equals(OP_INT_EQUAL_OR_OVER) || op.equals(OP_INT_EQUAL_OR_UNDER) || op.equals(OP_INT_BETWEEN)) {      // Integer
+			value = escape((value == null ? "" : value.trim())).toUpperCase();
+			if (value.equals("")) {
+				output = "";
+			}
+			else {
+				if (op.equals(OP_INT_EQUAL)) {
+					if (isCasting) {
+						output = "(CAST(" + columnName + " AS SIGNED) = CAST(" + value + " AS SIGNED))";
+					}
+					else {
+						output = "(" + columnName + " = " + value + ")";
+					}
+				}
+				else if (op.equals(OP_INT_EQUAL_MULTI)) {
+					if (isCasting) {
+						output = "(CAST(" + columnName + " AS SIGNED) = CAST(" + value + " AS SIGNED))";
+					}
+					else {
+						output = "(" + columnName + " IN (" + value + "))";
+					}
+				}
+				else if (op.equals(OP_INT_NOT_EQUAL)) {
+					if (isCasting) {
+						output = "(NOT CAST(" + columnName + " AS SIGNED) = CAST(" + value + " AS SIGNED))";
+					}
+					else {
+						output = "(NOT " + columnName + " = " + value + ")";
+					}
+				}
+				else if (op.equals(OP_INT_EQUAL_OR_OVER)) {
+					if (isCasting) {
+						output = "(CAST(" + columnName + " AS SIGNED) >= CAST(" + value + " AS SIGNED))";
+					}
+					else {
+						output = "(" + columnName + " >= " + value + ")";
+					}
+				}
+				else if (op.equals(OP_INT_EQUAL_OR_UNDER)) {
+					if (isCasting) {
+						output = "(CAST(" + columnName + " AS SIGNED) <= CAST(" + value + " AS SIGNED))";
+					}
+					else {
+						output = "(" + columnName + " <= " + value + ")";
+					}
+				}
+				else if (op.equals(OP_INT_BETWEEN)) {
+					valueAdd = escape((valueAdd == null ? "" : valueAdd.trim())).toUpperCase();
+					if (valueAdd.equals("")) {
+						output = "";
+					}
+					else {
+						if (isCasting) {
+							output = "(CAST(" + columnName + " AS SIGNED) BETWEEN CAST(" + value + " AS SIGNED) AND CAST(" + valueAdd + " AS SIGNED))";
+						}
+						else {
+							output = "(" + columnName + " BETWEEN " + value + " AND " + valueAdd + ")";
+						}
+					}
+				}
+			}
+		}
+		else if (op.equals(OP_BOOL_TRUE) || op.equals(OP_BOOL_FALSE)) {                  // Boolean
+			if (op.equals(OP_BOOL_TRUE)) {
+				if (isCasting) {
+					output = "(UPPER(" + columnName + ") = 'TRUE')";
+				}
+				else {
+					output = "(" + columnName + ")";
+				}
+			}
+			else {   // op.equals(OP_BOOL_FALSE)
+				if (isCasting) {
+					output = "(UPPER(" + columnName + ") = 'FALSE')";
+				}
+				else {
+					output = "(NOT " + columnName + ")";
+				}
+			}
+		}
+		//
+		return output;
+	}
 
 
+	public static StringBuilder addCondition(StringBuilder sb, String columnName, String op, String value, String valueAdd) {
+		if (op.equals(OP_ANY)) {
+			// Do Nothing
+		}
+		else {
+			String temp = oneCondition("o." + columnName, op, value, valueAdd, false);
+			if (temp.length() > 0) {
+				sb.append(" and ").append(temp);
+			}
+		}
+		//
+		return sb;
+	}
+	public static StringBuilder addFieldCondition(StringBuilder sb, String fieldID, String op, String value, String valueAdd) {
+		if (op.equals(OP_ANY)) {
+			// Do Nothing
+		}
+		else {
+			String temp = oneCondition("of2.fieldText", op, value, valueAdd, true);
+			if (temp.length() > 0) {
+				sb.append(" or (of2.fieldID = ").append(fieldID).append(" and (not ").append(temp).append("))");
+			}
+		}
+		//
+		return sb;
+	}
+	
+	
+	
+	
+	
+	
 	public static BigDecimal getBigDecimalFromParamMap(String name, Map<String, String[]> parameters) {
 		String[] temps = parameters.get(name);
 		//

@@ -16,7 +16,7 @@
 	<script type="text/javascript">
        function onCategoryChange() {
            var form = document.getElementById('form');
-           form.action = "${pageContext.request.contextPath}/rep/repSearchOffer.jsp";
+           form.action = "${pageContext.request.contextPath}/user/searchOffer.jsp";
            form.submit();
        }
 	</script>
@@ -36,16 +36,24 @@
 <%@include file="../header.jsp" %>
 <%@include file="repNav.jsp" %>
 
-<form action="${pageContext.request.contextPath}/rep/listOffer.jsp" method="post">
-	<input type="hidden" name="action" value="browseOffer"/>
+<form action="${pageContext.request.contextPath}/rep/listBid.jsp" method="post">
+	<input type="hidden" name="action" value="browseBid"/>
 	<input type="submit" value="Browse">
 </form>
 
+<form id="form" action="${pageContext.request.contextPath}/rep/listBid.jsp" method="post">
 
-<form id="form" action="${pageContext.request.contextPath}/rep/listOffer.jsp" method="post">
-	<%@include file="../searchOfferCommon.jsp" %>
+	<%
+		out.println("<div class='allField'>Buyer");
+		out.println(getOPSZSelection("sellerOP"));
+		out.println("<input type='text' name='sellerVal'/></div><br/>");
+	
+		out.println("<div class='allField'>description");
+		out.println(getOPSZSelection("buyerOP"));
+		out.println("<input type='text' name='buyerVal'/></div><br/>");
+	%>
 
-	<input type="hidden" name="action" value="searchOffer"/>
+	<input type="hidden" name="action" value="searchBid"/>
 	<input type="submit" value="Search">
 </form>
 

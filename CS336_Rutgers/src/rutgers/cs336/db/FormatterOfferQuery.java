@@ -1,10 +1,16 @@
 package rutgers.cs336.db;
 
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class FormatterOfferQuery extends DBBase {
+
 
 	public static StringBuilder initQuerySearch() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID");
+		sb.append(
+				  "select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID");
 		//
 		return sb;
 	}
@@ -16,136 +22,6 @@ public class FormatterOfferQuery extends DBBase {
 		return sb;
 	}
 
-	private static String oneCondition(String columnName, String op, String value, String valueAdd, boolean isCasting) {
-		String output = "";
-		//
-		if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE) || op.equals(OP_SZ_NOT_EQUAL) || op.equals(OP_SZ_START_WITH) || op.equals(OP_SZ_CONTAIN)) {   // String
-			if (op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
-				value = toUpperCaseTrimNoNull(value);
-			}
-			else {
-				value = escapeToUpperCaseTrimNoNull(value);
-			}
-			//
-			if (value.equals("")) {
-				output = "";
-			}
-			else {
-				if (op.equals(OP_SZ_EQUAL)) {
-					output = "(UPPER(" + columnName + ") = '" + value + "')";
-				}
-				else if (op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
-					output = "(UPPER(" + columnName + ") in (" + value + "))";
-				}
-				else if (op.equals(OP_SZ_NOT_EQUAL)) {
-					output = "(NOT UPPER(" + columnName + ") = '" + value + "')";
-				}
-				else if (op.equals(OP_SZ_START_WITH)) {
-					output = "(UPPER(" + columnName + ") LIKE '" + value + "%')";
-				}
-				else if (op.equals(OP_SZ_CONTAIN)) {
-					output = "(UPPER(" + columnName + ") LIKE '%" + value + "%')";
-				}
-			}
-		}
-		else if (op.equals(OP_INT_EQUAL) || op.equals(OP_INT_EQUAL_MULTI) || op.equals(OP_INT_NOT_EQUAL) || op.equals(OP_INT_EQUAL_OR_OVER) || op.equals(OP_INT_EQUAL_OR_UNDER) || op.equals(OP_INT_BETWEEN)) {      // Integer
-			value = escape((value == null ? "" : value.trim())).toUpperCase();
-			if (value.equals("")) {
-				output = "";
-			}
-			else {
-				if (op.equals(OP_INT_EQUAL)) {
-					if (isCasting) {
-						output = "(CAST(" + columnName + " AS SIGNED) = CAST(" + value + " AS SIGNED))";
-					}
-					else {
-						output = "(" + columnName + " = " + value + ")";
-					}
-				}
-				else if (op.equals(OP_INT_EQUAL_MULTI)) {
-					if (isCasting) {
-						output = "(CAST(" + columnName + " AS SIGNED) = CAST(" + value + " AS SIGNED))";
-					}
-					else {
-						output = "(" + columnName + " IN (" + value + "))";
-					}
-				}
-				else if (op.equals(OP_INT_NOT_EQUAL)) {
-					if (isCasting) {
-						output = "(NOT CAST(" + columnName + " AS SIGNED) = CAST(" + value + " AS SIGNED))";
-					}
-					else {
-						output = "(NOT " + columnName + " = " + value + ")";
-					}
-				}
-				else if (op.equals(OP_INT_EQUAL_OR_OVER)) {
-					if (isCasting) {
-						output = "(CAST(" + columnName + " AS SIGNED) >= CAST(" + value + " AS SIGNED))";
-					}
-					else {
-						output = "(" + columnName + " >= " + value + ")";
-					}
-				}
-				else if (op.equals(OP_INT_EQUAL_OR_UNDER)) {
-					if (isCasting) {
-						output = "(CAST(" + columnName + " AS SIGNED) <= CAST(" + value + " AS SIGNED))";
-					}
-					else {
-						output = "(" + columnName + " <= " + value + ")";
-					}
-				}
-				else if (op.equals(OP_INT_BETWEEN)) {
-					valueAdd = escape((valueAdd == null ? "" : valueAdd.trim())).toUpperCase();
-					if (valueAdd.equals("")) {
-						output = "";
-					}
-					else {
-						if (isCasting) {
-							output = "(CAST(" + columnName + " AS SIGNED) BETWEEN CAST(" + value + " AS SIGNED) AND CAST(" + valueAdd + " AS SIGNED))";
-						}
-						else {
-							output = "(" + columnName + " BETWEEN " + value + " AND " + valueAdd + ")";
-						}
-					}
-				}
-			}
-		}
-		else if (op.equals(OP_BOOL_TRUE) || op.equals(OP_BOOL_FALSE)) {                  // Boolean
-			if (op.equals(OP_BOOL_TRUE)) {
-				if (isCasting) {
-					output = "(UPPER(" + columnName + ") = 'TRUE')";
-				}
-				else {
-					output = "(" + columnName + ")";
-				}
-			}
-			else {   // op.equals(OP_BOOL_FALSE)
-				if (isCasting) {
-					output = "(UPPER(" + columnName + ") = 'FALSE')";
-				}
-				else {
-					output = "(NOT " + columnName + ")";
-				}
-			}
-		}
-		//
-		return output;
-	}
-
-
-	public static StringBuilder addCondition(StringBuilder sb, String columnName, String op, String value, String valueAdd) {
-		if (op.equals(OP_ANY)) {
-			// Do Nothing
-		}
-		else {
-			String temp = oneCondition("o." + columnName, op, value, valueAdd, false);
-			if (temp.length() > 0) {
-				sb.append(" and ").append(temp);
-			}
-		}
-		//
-		return sb;
-	}
 
 
 	public static StringBuilder initFieldCondition(StringBuilder sb) {
@@ -153,19 +29,6 @@ public class FormatterOfferQuery extends DBBase {
 	}
 
 
-	public static StringBuilder addFieldCondition(StringBuilder sb, String fieldID, String op, String value, String valueAdd) {
-		if (op.equals(OP_ANY)) {
-			// Do Nothing
-		}
-		else {
-			String temp = oneCondition("of2.fieldText", op, value, valueAdd, true);
-			if (temp.length() > 0) {
-				sb.append(" or (of2.fieldID = ").append(fieldID).append(" and (not ").append(temp).append("))");
-			}
-		}
-		//
-		return sb;
-	}
 
 	public static StringBuilder doneFieldConditionSearch(StringBuilder sb) {
 		return sb.append(" ))) order by o.offerID, of1.fieldID");
@@ -178,7 +41,12 @@ public class FormatterOfferQuery extends DBBase {
 
 	public static StringBuilder buildSQLSimilarOffer(String categoryName, String conditionCode) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID and (o.categoryName = '").append(categoryName).append("') and (o.conditionCode = ").append(conditionCode).append(") and (o.status = 1) order by o.offerID");
+		sb.append(
+				  "select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID and (o.categoryName = '")
+				  .append(categoryName)
+				  .append("') and (o.conditionCode = ")
+				  .append(conditionCode)
+				  .append(") and (o.status = 1) order by o.offerID");
 		//
 		return sb;
 	}
@@ -188,7 +56,7 @@ public class FormatterOfferQuery extends DBBase {
 		return "select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID and (o.status = 1) order by o.offerID";
 	}
 
-
+	
 	public static void main(String[] args) {
 		if (false) {
 			StringBuilder sb = initQuerySearch();

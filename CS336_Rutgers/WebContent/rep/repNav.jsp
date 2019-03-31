@@ -11,6 +11,7 @@
 
 <h2>
 	<A href="${pageContext.request.contextPath}/rep/repSearchOffer.jsp">Search Offers</A>
+	<A href="${pageContext.request.contextPath}/rep/repSearchBid.jsp">Search Bids</A>
 	<A href="${pageContext.request.contextPath}/rep/answerQuestion.jsp">Answer a Question</A>
 	<A href="${pageContext.request.contextPath}/logout">Logout</A>
 </h2>

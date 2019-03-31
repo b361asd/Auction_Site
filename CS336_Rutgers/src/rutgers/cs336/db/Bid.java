@@ -1,28 +1,38 @@
 package rutgers.cs336.db;
 
-import rutgers.cs336.gui.Helper;
-import rutgers.cs336.gui.TableData;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import rutgers.cs336.gui.Helper;
+import rutgers.cs336.gui.TableData;
 
 public class Bid extends DBBase {
 
+
 	private static final int FIELD_START_INDEX = 12;
 
-	public static Map searchBidByBuyer(String buyer) {
-		StringBuilder sb = new StringBuilder();
+	public static Map searchBid(Map<String, String[]> parameters) {
+		StringBuilder sb  = FormatterBidQuery.initQuerySearch();
 		//
-		sb.append("SELECT t1.*, t2.currPrice FROM (SELECT b1.bidID, b1.buyer, b1.price, b1.autoRebidLimit, b1.bidDate, o1.offerID, o1.seller, o1.categoryName, o1.conditionCode, o1.description, o1.initPrice, o1.increment, o1.minPrice, o1.startDate, o1.endDate, o1.status FROM Bid b1 INNER JOIN Offer o1 ON b1.offerID = o1.offerID AND UPPER(b1.buyer) = '").append(escapeToUpperCaseTrimNoNull(buyer)).append("') t1 LEFT OUTER JOIN (SELECT b1.price as currPrice, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) t2 ON t1.offerID = t2.offerID order by bidDate");
+		{
+			String buyerOP  = getStringFromParamMap("buyerOP", parameters);
+			String buyerVal = getStringFromParamMap("buyerVal", parameters);
+			FormatterOfferQuery.addCondition(sb, "buyer", buyerOP, buyerVal, null);
+		}
 		//
-		String sql = sb.toString();
-		return doSearchBidInternal(sql);
+		FormatterBidQuery.doneQuerySearch(sb);
+		//
+		return doSearchBidInternal(sb.toString());
 	}
-
-
+	
+	
 	private static Map doSearchBidInternal(String sql) {
 		Map output = new HashMap();
 		//
@@ -60,23 +70,23 @@ public class Bid extends DBBase {
 			lstHeader.add("currPrice");
 			//
 			while (rs.next()) {
-				Object bidID          = rs.getObject(1);
-				Object buyer          = rs.getObject(2);
-				Object price          = rs.getObject(3);
-				Object autoRebidLimit = rs.getObject(4);
-				Object bidDate        = rs.getObject(5);
-				Object offerID        = rs.getObject(6);
-				Object seller         = rs.getObject(7);
-				Object categoryName   = rs.getObject(8);
-				Object conditionCode  = rs.getObject(9);
-				Object description    = rs.getObject(10);
-				Object initPrice      = rs.getObject(11);
-				Object increment      = rs.getObject(12);
-				Object minPrice       = rs.getObject(13);
-				Object startDate      = rs.getObject(14);
-				Object endDate        = rs.getObject(15);
-				Object status         = rs.getObject(16);
-				Object currPrice      = rs.getObject(17);
+				Object bidID       		= rs.getObject(1);
+				Object buyer       		= rs.getObject(2);
+				Object price       		= rs.getObject(3);
+				Object autoRebidLimit   = rs.getObject(4);
+				Object bidDate       	= rs.getObject(5);
+				Object offerID       	= rs.getObject(6);
+				Object seller       		= rs.getObject(7);
+				Object categoryName     = rs.getObject(8);
+				Object conditionCode    = rs.getObject(9);
+				Object description      = rs.getObject(10);
+				Object initPrice       	= rs.getObject(11);
+				Object increment       	= rs.getObject(12);
+				Object minPrice       	= rs.getObject(13);
+				Object startDate       	= rs.getObject(14);
+				Object endDate       	= rs.getObject(15);
+				Object status       		= rs.getObject(16);
+				Object currPrice       	= rs.getObject(17);
 				//
 				List currentRow = new LinkedList();
 				lstRows.add(currentRow);
@@ -100,7 +110,7 @@ public class Bid extends DBBase {
 				currentRow.add(currPrice);
 			}
 			//
-			int[] colSeq = new int[lstHeader.size()];
+			int[] colSeq = new int[lstHeader.size() - 2];
 			{
 				colSeq[0] = 1;      //
 				colSeq[1] = 2;      //
@@ -160,7 +170,7 @@ public class Bid extends DBBase {
 	}
 
 	public static void main(String[] args) {
-		Map map = searchBidByBuyer("user");
+		Map map = searchBid(null);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
