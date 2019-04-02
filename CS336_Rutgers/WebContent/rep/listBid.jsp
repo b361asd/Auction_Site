@@ -28,17 +28,12 @@
 <%@include file="../header.jsp" %>
 <%@include file="repNav.jsp" %>
 
-<form id="form-id-doBid" action="${pageContext.request.contextPath}/user/postBid.jsp" method="post">
-	<input id="input-id-doBid" type="hidden" name="offeridcategoryname" value="_"/>
+<form id="form-id-cancelBid" action="${pageContext.request.contextPath}/rep/cancelBid.jsp" method="post">
+	<input id="input-id-cancelBid" type="hidden" name="bidID" value="_"/>
 </form>
 
-<form id="form-id-listBid" action="${pageContext.request.contextPath}/user/listBidResult.jsp" method="post">
-	<input id="input-id-listBid" type="hidden" name="offeridcategoryname" value="_"/>
-</form>
-
-<form id="form-id-listSimilar" action="${pageContext.request.contextPath}/user/listOffer.jsp" method="post">
-	<input type="hidden" name="action" value="listSimilar"/>
-	<input id="input-id-listSimilar" type="hidden" name="offeridcategorynameconditioncode" value="_"/>
+<form id="form-id-modifyBid" action="${pageContext.request.contextPath}/rep/modifyBid.jsp" method="post">
+	<input id="input-id-modifyBid" type="hidden" name="bidID" value="_"/>
 </form>
 
 <form id="form-sort" target="_self" method="post">
@@ -105,11 +100,8 @@
 					}
 					//
 					out.println("<td>");
-					out.println("<button onclick=\"document.getElementById('input-id-doBid').value='" + lstOneRow.get(0) + "," + lstOneRow.get(2) + "'; document.getElementById('form-id-doBid').submit();\" class=\"favorite styled\" type=\"button\">Bid</button>");
-					out.println("<button onclick=\"document.getElementById('input-id-listBid').value='" + lstOneRow.get(0) + "," + lstOneRow.get(2) + "'; document.getElementById('form-id-listBid').submit();\" class=\"favorite styled\" type=\"button\">List Bid</button>");
-					if (!action.equals("listSimilar")) {
-						out.println("<button onclick=\"document.getElementById('input-id-listSimilar').value='" + lstOneRow.get(0) + "," + lstOneRow.get(2) + "," + lstOneRow.get(3) + "'; document.getElementById('form-id-listSimilar').submit();\" class=\"favorite styled\" type=\"button\">List Similar</button>");
-					}
+					out.println("<button onclick=\"document.getElementById('input-id-cancelBid').value='" + lstOneRow.get(0) + "'; document.getElementById('form-id-cancelBid').submit();\" class=\"favorite styled\" type=\"button\">Cabcel Bid</button>");
+					out.println("<button onclick=\"document.getElementById('input-id-modifyBid').value='" + lstOneRow.get(0) + "'; document.getElementById('form-id-modifyBid').submit();\" class=\"favorite styled\" type=\"button\">Modify Bid</button>");
 					out.println("</td>");
 					//
 					out.println(Helper.printOneRowInTable(lstOneRow, colSeq));

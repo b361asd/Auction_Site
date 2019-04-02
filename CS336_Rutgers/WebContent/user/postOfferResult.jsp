@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.CreateOffer" %>
+<%@ page import="rutgers.cs336.db.Offer" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 
@@ -17,7 +17,7 @@
 
 <%
 	String userID = (String) request.getSession().getAttribute("user");
-	Map data = CreateOffer.doCreateOffer(userID, request.getParameterMap());
+	Map data = Offer.doCreateOffer(userID, request.getParameterMap());
 	//
 	String status = data.get(DATA_NAME_STATUS).toString();
 	String message = (String) data.get(DATA_NAME_MESSAGE);

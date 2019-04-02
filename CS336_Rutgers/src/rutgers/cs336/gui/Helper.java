@@ -102,7 +102,7 @@ public class Helper implements IConstant {
 			for (int value : colSeq) {
 				Object one     = row.get(value);
 				String oneItem = (one == null) ? "" : one.toString();
-				out = out + "<td><div onclick=onClickHeader('" + oneItem + "')>" + oneItem + "</div></td>";
+				out = out + "<th><div onclick=onClickHeader('" + oneItem + "')>" + oneItem + "</div></th>";
 			}
 		}
 		return out;
