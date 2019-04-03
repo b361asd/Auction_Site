@@ -54,34 +54,25 @@
 		<tr>
 			<td>Action</td>
 			<%
-				out.println(Helper.printHeaderForTable(lstHeader, colSeq));
+				out.println(dataTable.printHeaderForTable());
 			%>
 		</tr>
 		</thead>
 		<tbody>
 		<%
-			if (lstRows != null) {
-				for (Object oneRow : lstRows) {
-					List lstOneRow = (List) oneRow;
-					//
-					boolean isStandOut = offerIDStandOut != null && (lstOneRow.get(0)).equals(offerIDStandOut);
-					//
-					if (isStandOut) {
-						out.println("<tr name='standout' class='standout'>");
-					}
-					else {
-						out.println("<tr>");
-					}
+			if (dataTable.rowCount()>0) {
+				for (int i=0; i< dataTable.rowCount(); i++) {
+					out.println(dataTable.printRowStart(i));
 					//
 					out.println("<td>");
-					out.println("<button onclick=\"document.getElementById('input-id-doBid').value='" + lstOneRow.get(0) + "," + lstOneRow.get(2) + "'; document.getElementById('form-id-doBid').submit();\" class=\"favorite styled\" type=\"button\">Bid</button>");
-					out.println("<button onclick=\"document.getElementById('input-id-listBid').value='" + lstOneRow.get(0) + "," + lstOneRow.get(2) + "'; document.getElementById('form-id-listBid').submit();\" class=\"favorite styled\" type=\"button\">List Bid</button>");
+					out.println("<button onclick=\"document.getElementById('input-id-doBid').value='" + dataTable.getOneCell(i,0) + "," + dataTable.getOneCell(i,2) + "'; document.getElementById('form-id-doBid').submit();\" class=\"favorite styled\" type=\"button\">Bid</button>");
+					out.println("<button onclick=\"document.getElementById('input-id-listBid').value='" + dataTable.getOneCell(i,0) + "," + dataTable.getOneCell(i,2) + "'; document.getElementById('form-id-listBid').submit();\" class=\"favorite styled\" type=\"button\">List Bid</button>");
 					if (!action.equals("listSimilar")) {
-						out.println("<button onclick=\"document.getElementById('input-id-listSimilar').value='" + lstOneRow.get(0) + "," + lstOneRow.get(2) + "," + lstOneRow.get(3) + "'; document.getElementById('form-id-listSimilar').submit();\" class=\"favorite styled\" type=\"button\">List Similar</button>");
+						out.println("<button onclick=\"document.getElementById('input-id-listSimilar').value='" + dataTable.getOneCell(i,0) + "," + dataTable.getOneCell(i,2) + "," + dataTable.getOneCell(i,3) + "'; document.getElementById('form-id-listSimilar').submit();\" class=\"favorite styled\" type=\"button\">List Similar</button>");
 					}
 					out.println("</td>");
 					//
-					out.println(Helper.printOneRowInTable(lstOneRow, colSeq));
+					out.println(dataTable.printOneRowInTable(i));
 					//
 					out.println("</tr>");
 				}

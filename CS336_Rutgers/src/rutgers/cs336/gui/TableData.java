@@ -18,6 +18,14 @@ public class TableData {
 	String               offerIDStandOut = null;
 
 
+	public int rowCount() {
+		return (lstRows==null) ? 0 : lstRows.size();
+	}
+	public int colCount() {
+		return (colSeq==null) ? 0 : colSeq.length;
+	}
+	
+	
 	public List getLstHeader() {
 		return lstHeader;
 	}
@@ -52,6 +60,15 @@ public class TableData {
 	}
 
 
+	public Object getOneCell(int i, int j) {
+		return ((List)(lstRows.get(i))).get(j);
+	}
+	public Object getLastCellInRow(int i) {
+		List lst =  (List)(lstRows.get(i));
+		return lst.get(lst.size() - 1);
+	}
+	
+	
 	public void sortRowPerHeader(String header) {
 		if (header != null) {
 			int index = mapHeaderToIndex.get(header);
@@ -78,4 +95,48 @@ public class TableData {
 			}
 		}
 	}
+	
+	public String printHeaderForTable() {
+		String out = "";
+		if (lstHeader != null && lstHeader.size() > 0 && colSeq != null && colSeq.length > 0) {
+			for (int value : colSeq) {
+				Object one     = lstHeader.get(value);
+				String oneItem = (one == null) ? "" : one.toString();
+				out = out + "<th><div onclick=onClickHeader('" + oneItem + "')>" + oneItem + "</div></th>";
+			}
+		}
+		return out;
+	}
+
+
+	public String printOneRowInTable(int index) {
+		List row = (List)lstRows.get(index);
+		String out = "";
+		if (row != null && row.size() > 0 && colSeq != null && colSeq.length > 0) {
+			for (int value : colSeq) {
+				Object one     = row.get(value);
+				String oneItem = (one == null) ? "" : one.toString();
+				out = out + "<td>" + oneItem + "</td>";
+			}
+		}
+		return out;
+	}
+	
+
+	public String printRowStart(int index) {
+		List row = (List)lstRows.get(index);
+		String out = "";
+		//
+		boolean isStandOut = offerIDStandOut != null && (row.get(0)).equals(offerIDStandOut);
+		//
+		if (isStandOut) {
+			out = "<tr name='standout' class='standout'>";
+		}
+		else {
+			out = "<tr>";
+		}
+		//
+		return out;
+	}
+
 }

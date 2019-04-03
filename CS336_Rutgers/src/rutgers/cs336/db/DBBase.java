@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -220,7 +221,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 			// Do Nothing
 		}
 		else {
-			String temp = oneCondition("o." + columnName, op, value, valueAdd, false);
+			String temp = oneCondition(columnName, op, value, valueAdd, false);
 			if (temp.length() > 0) {
 				sb.append(" and ").append(temp);
 			}
@@ -299,6 +300,24 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 	}
 
 
+	
+	public static String getStringsFromSet(Set<String> set, String delimiter) {
+		String out = "";
+		if (set != null) {
+			for(String one : set) {
+				if (out.equals("")) {
+					out = delimiter + one + delimiter;
+				}
+				else {
+					out = out + "," + delimiter + one + delimiter;
+				}
+			}
+		}
+		return out;
+	}
+	
+	
+	
 	public static int getPrefixIntFromParamMap(String name, Map<String, String[]> parameters, char delimiter) {
 		int out = -1;
 		//

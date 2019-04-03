@@ -45,6 +45,7 @@
 	<input id="input-sort" type="hidden" name="sort" value="_"/>
 	
 	<%@include file="../listOfferCommon.jsp" %>
+	
 </form>
 
 </body>

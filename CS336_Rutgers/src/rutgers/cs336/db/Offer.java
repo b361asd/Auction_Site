@@ -10,6 +10,21 @@ public class Offer extends DBBase {
 
 	private static final int FIELD_START_INDEX = 12;
 
+	
+	public static Map doSearchByOfferIDSet(Set<String> offerIDSet) {
+		StringBuilder sb;
+		//
+		sb = FormatterOfferQuery.initQuerySearch();
+		//
+		String offerIDOP  = OP_SZ_EQUAL_MULTI_NO_ESCAPE;
+		String offerIDVal = getStringsFromSet(offerIDSet, "'");
+		FormatterOfferQuery.addCondition(sb, "o.offerID", offerIDOP, offerIDVal, null);
+		//
+		return doSearchOfferInternal(sb.toString());
+	}
+	
+	
+	
 	public static Map doSearchSimilar(String offeridcategorynameconditioncode) {
 		Map output;
 		//
@@ -44,13 +59,13 @@ public class Offer extends DBBase {
 		{
 			String offerIDOP  = FormatterOfferQuery.OP_SZ_EQUAL;
 			String offerIDVal = temp[0];
-			FormatterOfferQuery.addCondition(sb, "offerID", offerIDOP, offerIDVal, null);
+			FormatterOfferQuery.addCondition(sb, "o.offerID", offerIDOP, offerIDVal, null);
 		}
 		//
 		{
 			String statusOP  = FormatterOfferQuery.OP_INT_EQUAL;
 			String statusVal = "1";    // Active
-			FormatterOfferQuery.addCondition(sb, "status", statusOP, statusVal, null);
+			FormatterOfferQuery.addCondition(sb, "o.status", statusOP, statusVal, null);
 		}
 		//
 		String sql = sb.toString();
@@ -318,19 +333,19 @@ public class Offer extends DBBase {
 		if (isSearch) {                        // In alert, offerID placeholder will be replaced with real one
 			String offerIDOP  = getStringFromParamMap("offerIDOP", parameters);
 			String offerIDVal = getStringFromParamMap("offerIDVal", parameters);
-			FormatterOfferQuery.addCondition(sb, "offerID", offerIDOP, offerIDVal, null);
+			FormatterOfferQuery.addCondition(sb, "o.offerID", offerIDOP, offerIDVal, null);
 		}
 		//
 		{
 			String sellerOP  = getStringFromParamMap("sellerOP", parameters);
 			String sellerVal = getStringFromParamMap("sellerVal", parameters);
-			FormatterOfferQuery.addCondition(sb, "seller", sellerOP, sellerVal, null);
+			FormatterOfferQuery.addCondition(sb, "o.seller", sellerOP, sellerVal, null);
 		}
 		//
 		if (isSearch) {                     // In alert, categoryName is handled outside query
 			String categoryNameOP  = FormatterOfferQuery.OP_SZ_EQUAL_MULTI_NO_ESCAPE;
 			String categoryNameVal = categoryNames;
-			FormatterOfferQuery.addCondition(sb, "categoryName", categoryNameOP, categoryNameVal, null);
+			FormatterOfferQuery.addCondition(sb, "o.categoryName", categoryNameOP, categoryNameVal, null);
 		}
 		//
 		{
@@ -346,25 +361,25 @@ public class Offer extends DBBase {
 					}
 				}
 			}
-			FormatterOfferQuery.addCondition(sb, "conditionCode", FormatterOfferQuery.OP_INT_EQUAL_MULTI, lstConditionCode, null);
+			FormatterOfferQuery.addCondition(sb, "o.conditionCode", FormatterOfferQuery.OP_INT_EQUAL_MULTI, lstConditionCode, null);
 		}
 		{
 			String descriptionOP  = getStringFromParamMap("descriptionOP", parameters);
 			String descriptionVal = getStringFromParamMap("descriptionVal", parameters);
-			FormatterOfferQuery.addCondition(sb, "description", descriptionOP, descriptionVal, null);
+			FormatterOfferQuery.addCondition(sb, "o.description", descriptionOP, descriptionVal, null);
 		}
 		//
 		if (isSearch) {                     // In alert, new offer has no bid / price yet
 			String priceOP   = getStringFromParamMap("priceOP", parameters);
 			String priceVal1 = getStringFromParamMap("priceVal1", parameters);
 			String priceVal2 = getStringFromParamMap("priceVal2", parameters);
-			FormatterOfferQuery.addCondition(sb, "price", priceOP, priceVal1, priceVal2);
+			FormatterOfferQuery.addCondition(sb, "o.price", priceOP, priceVal1, priceVal2);
 		}
 		//
 		{
 			String statusOP  = FormatterOfferQuery.OP_INT_EQUAL;
 			String statusVal = "1";    // Active
-			FormatterOfferQuery.addCondition(sb, "status", statusOP, statusVal, null);
+			FormatterOfferQuery.addCondition(sb, "o.status", statusOP, statusVal, null);
 		}
 		//
 		FormatterOfferQuery.initFieldCondition(sb);
@@ -489,6 +504,7 @@ public class Offer extends DBBase {
 			//
 			if (con != null) {
 				try {
+					con.setAutoCommit(true);
 					con.close();
 				}
 				catch (Throwable t) {

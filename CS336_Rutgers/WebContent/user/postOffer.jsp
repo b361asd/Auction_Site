@@ -4,7 +4,6 @@
 <%@ page import="rutgers.cs336.db.CategoryAndField" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="static rutgers.cs336.db.CreateOffer.PREFIX_CATEGORY_NAME" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
 
 <html>
@@ -35,10 +34,10 @@
 		}
 	}
 	//
-	String categoryNameFromParam = "CAT=" + getStringFromParamMap(PREFIX_CATEGORY_NAME, request.getParameterMap());
+	String categoryNameFromParam = "CAT=" + getStringFromParamMap("categoryName", request.getParameterMap());
 	String paramMap = getParamMap(request.getParameterMap());
 	//
-	Map data = CategoryAndField.getCategoryField(getStringFromParamMap(PREFIX_CATEGORY_NAME, request.getParameterMap()));
+	Map data = CategoryAndField.getCategoryField(getStringFromParamMap("categoryName", request.getParameterMap()));
 %>
 <h1><%=message%>
 </h1>

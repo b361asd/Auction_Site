@@ -33,7 +33,7 @@
 </form>
 
 <form id="form-id-modifyBid" action="${pageContext.request.contextPath}/rep/modifyBid.jsp" method="post">
-	<input id="input-id-modifyBid" type="hidden" name="bidID" value="_"/>
+	<input id="input-id-modifyBid" type="hidden" name="bidIDofferIDBuyer" value="_"/>
 </form>
 
 <form id="form-sort" target="_self" method="post">
@@ -75,44 +75,61 @@
 	%>
 
 	<table>
-		<caption>Offer List</caption>
 		<thead>
 		<tr>
-			<td>Action</td>
 			<%
-				out.println(Helper.printHeaderForTable(lstHeader, colSeq));
+				out.println(dataTable.printHeaderForTable());
 			%>
 		</tr>
 		</thead>
 		<tbody>
 		<%
-			if (lstRows != null) {
-				for (Object oneRow : lstRows) {
-					List lstOneRow = (List) oneRow;
+			if (dataTable.rowCount()>0) {
+				for (int i=0; i< dataTable.rowCount(); i++) {
+					out.println("<tr>");
+					out.println(dataTable.printOneRowInTable(i));
+					out.println("</tr>");
 					//
-					boolean isStandOut = offerIDStandOut != null && (lstOneRow.get(0)).equals(offerIDStandOut);
-					//
-					if (isStandOut) {
-						out.println("<tr name='standout' class='standout'>");
-					}
-					else {
-						out.println("<tr>");
-					}
-					//
-					out.println("<td>");
-					out.println("<button onclick=\"document.getElementById('input-id-cancelBid').value='" + lstOneRow.get(0) + "'; document.getElementById('form-id-cancelBid').submit();\" class=\"favorite styled\" type=\"button\">Cabcel Bid</button>");
-					out.println("<button onclick=\"document.getElementById('input-id-modifyBid').value='" + lstOneRow.get(0) + "'; document.getElementById('form-id-modifyBid').submit();\" class=\"favorite styled\" type=\"button\">Modify Bid</button>");
-					out.println("</td>");
-					//
-					out.println(Helper.printOneRowInTable(lstOneRow, colSeq));
-					//
+					out.println("<tr>");
+						out.println("<td>Bids</td>");
+						{
+							TableData dataTableBid = (TableData) (dataTable.getLastCellInRow(i));
+							//
+							out.println("<td colspan='"+(dataTable.colCount()-1)+"'>");
+							//
+							out.println("<table>");
+								out.println("<thead>");
+								out.println("<tr>");
+									out.println("<td>Action</td>");
+									out.println(dataTableBid.printHeaderForTable());
+								out.println("</tr>");
+								out.println("</thead>");
+								out.println("<tbody>");
+									if (dataTableBid.rowCount()>0) {
+										for (int j=0; j< dataTableBid.rowCount(); j++) {
+											out.println("<tr>");
+											out.println("<td>");
+												out.println("<button onclick=\"document.getElementById('input-id-cancelBid').value='" + dataTableBid.getOneCell(j,0) + "'; document.getElementById('form-id-cancelBid').submit();\" class=\"favorite styled\" type=\"button\">Cabcel Bid</button>");
+												out.println("<button onclick=\"document.getElementById('input-id-modifyBid').value='" + dataTableBid.getOneCell(j,0)+","+dataTableBid.getOneCell(j,1)+","+dataTableBid.getOneCell(j,2) + "'; document.getElementById('form-id-modifyBid').submit();\" class=\"favorite styled\" type=\"button\">Modify Bid</button>");
+											out.println("</td>");
+											//
+											out.println(dataTableBid.printOneRowInTable(j));
+											out.println("</tr>");
+											//
+											
+										}
+									}
+								out.println("</tbody>");
+							out.println("</table>");
+						}
+						out.println("</td>");
 					out.println("</tr>");
 				}
 			}
 		%>
 		</tbody>
-
 	</table>
+
 </form>
 
 </body>

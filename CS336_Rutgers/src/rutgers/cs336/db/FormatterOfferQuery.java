@@ -1,9 +1,5 @@
 package rutgers.cs336.db;
 
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class FormatterOfferQuery extends DBBase {
 
 
@@ -60,16 +56,16 @@ public class FormatterOfferQuery extends DBBase {
 	public static void main(String[] args) {
 		if (false) {
 			StringBuilder sb = initQuerySearch();
-			//addCondition(sb, "offerID", OP_SZ_START_WITH, "Scratcges", null);
-			//addCondition(sb, "seller", OP_SZ_NOT_EQUAL, "us'er", null);
-			addCondition(sb, "categoryName", OP_SZ_EQUAL_MULTI_NO_ESCAPE, "'car','motorbike'", null);
-			//addCondition(sb, "conditionCode", OP_INT_EQUAL_MULTI, "1,3,4,5,6", null);
-			//addCondition(sb, "description", OP_SZ_CONTAIN, "Scratcges", null);
-			//addCondition(sb, "initPrice", OP_INT_EQUAL_OR_OVER, "2", null);
-			//addCondition(sb, "increment", OP_INT_EQUAL_OR_OVER, "4", null);
-			//addCondition(sb, "minPrice", OP_ANY, "5", null);
-			//addCondition(sb, "status", OP_INT_EQUAL_OR_OVER, "5", null);
-			//addCondition(sb, "price", OP_INT_EQUAL_OR_OVER, "5", null);
+			//addCondition(sb, "o.offerID", OP_SZ_START_WITH, "Scratcges", null);
+			//addCondition(sb, "o.seller", OP_SZ_NOT_EQUAL, "us'er", null);
+			addCondition(sb, "o.categoryName", OP_SZ_EQUAL_MULTI_NO_ESCAPE, "'car','motorbike'", null);
+			//addCondition(sb, "o.conditionCode", OP_INT_EQUAL_MULTI, "1,3,4,5,6", null);
+			//addCondition(sb, "o.description", OP_SZ_CONTAIN, "Scratcges", null);
+			//addCondition(sb, "o.initPrice", OP_INT_EQUAL_OR_OVER, "2", null);
+			//addCondition(sb, "o.increment", OP_INT_EQUAL_OR_OVER, "4", null);
+			//addCondition(sb, "o.minPrice", OP_ANY, "5", null);
+			//addCondition(sb, "o.status", OP_INT_EQUAL_OR_OVER, "5", null);
+			//addCondition(sb, "o.price", OP_INT_EQUAL_OR_OVER, "5", null);
 			//
 			initFieldCondition(sb);
 			//addFieldCondition(sb, "1", OP_INT_BETWEEN, "23", "56");
@@ -88,16 +84,16 @@ public class FormatterOfferQuery extends DBBase {
 		//
 		if (false) {
 			StringBuilder sb = initQueryAlert("creator", "truck");
-			//addCondition(sb, "offerID", OP_SZ_START_WITH, "Scratcges", null);
-			//addCondition(sb, "seller", OP_SZ_NOT_EQUAL, "us'er", null);
-			//addCondition(sb, "categoryName", OP_SZ_NOT_EQUAL, "car", null);
-			addCondition(sb, "conditionCode", OP_INT_EQUAL_MULTI, "1,3,4,5,6", null);
-			//addCondition(sb, "description", OP_SZ_CONTAIN, "Scratcges", null);
-			//addCondition(sb, "initPrice", OP_INT_EQUAL_OR_OVER, "2", null);
-			//addCondition(sb, "increment", OP_INT_EQUAL_OR_OVER, "4", null);
-			//addCondition(sb, "minPrice", OP_ANY, "5", null);
-			//addCondition(sb, "status", OP_INT_EQUAL_OR_OVER, "5", null);
-			//addCondition(sb, "price", OP_INT_EQUAL_OR_OVER, "5", null);
+			//addCondition(sb, "o.offerID", OP_SZ_START_WITH, "Scratcges", null);
+			//addCondition(sb, "o.seller", OP_SZ_NOT_EQUAL, "us'er", null);
+			//addCondition(sb, "o.categoryName", OP_SZ_NOT_EQUAL, "car", null);
+			addCondition(sb, "o.conditionCode", OP_INT_EQUAL_MULTI, "1,3,4,5,6", null);
+			//addCondition(sb, "o.description", OP_SZ_CONTAIN, "Scratcges", null);
+			//addCondition(sb, "o.initPrice", OP_INT_EQUAL_OR_OVER, "2", null);
+			//addCondition(sb, "o.increment", OP_INT_EQUAL_OR_OVER, "4", null);
+			//addCondition(sb, "o.minPrice", OP_ANY, "5", null);
+			//addCondition(sb, "o.status", OP_INT_EQUAL_OR_OVER, "5", null);
+			//addCondition(sb, "o.price", OP_INT_EQUAL_OR_OVER, "5", null);
 			//
 			initFieldCondition(sb);
 			//addFieldCondition(sb, "1", OP_INT_BETWEEN, "23", "56");

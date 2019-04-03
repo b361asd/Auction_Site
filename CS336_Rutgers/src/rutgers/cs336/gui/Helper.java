@@ -96,7 +96,7 @@ public class Helper implements IConstant {
 	}
 
 
-	public static String printHeaderForTable(List row, int[] colSeq) {
+	public static String _printHeaderForTable(List row, int[] colSeq) {
 		String out = "";
 		if (row != null && row.size() > 0 && colSeq != null && colSeq.length > 0) {
 			for (int value : colSeq) {
@@ -109,7 +109,7 @@ public class Helper implements IConstant {
 	}
 
 
-	public static String printOneRowInTable(List row, int[] colSeq) {
+	public static String _printOneRowInTable(List row, int[] colSeq) {
 		String out = "";
 		if (row != null && row.size() > 0 && colSeq != null && colSeq.length > 0) {
 			for (int value : colSeq) {

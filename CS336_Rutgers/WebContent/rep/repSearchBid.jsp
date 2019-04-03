@@ -45,10 +45,6 @@
 
 	<%
 		out.println("<div class='allField'>Buyer");
-		out.println(getOPSZSelection("sellerOP"));
-		out.println("<input type='text' name='sellerVal'/></div><br/>");
-	
-		out.println("<div class='allField'>description");
 		out.println(getOPSZSelection("buyerOP"));
 		out.println("<input type='text' name='buyerVal'/></div><br/>");
 	%>
