@@ -48,17 +48,13 @@ public class Offer extends DBBase {
 
 
 	public static Map doSearchOfferByID(Map<String, String[]> parameters) {
-		String offeridcategoryname = getStringFromParamMap("offeridcategoryname", parameters);
-		//
-		String[] temp = offeridcategoryname.split(",");
-		//
-		String categoryName = temp[1];
+		String offerid = getStringFromParamMap("offerid", parameters);
 		//
 		StringBuilder sb = FormatterOfferQuery.initQuerySearch();
 		//
 		{
 			String offerIDOP  = FormatterOfferQuery.OP_SZ_EQUAL;
-			String offerIDVal = temp[0];
+			String offerIDVal = offerid;
 			FormatterOfferQuery.addCondition(sb, "o.offerID", offerIDOP, offerIDVal, null);
 		}
 		//
@@ -105,10 +101,10 @@ public class Offer extends DBBase {
 			//
 			ResultSet rs = statement.executeQuery(sql);
 			//
-			String currentofferId = "";
+			String currentofferID = "";
 			int    rowIndex       = -1;
 			while (rs.next()) {
-				Object offerId       = rs.getObject(1);
+				Object offerID       = rs.getObject(1);
 				Object seller        = rs.getObject(2);
 				Object categoryName  = rs.getObject(3);
 				Object conditionCode = rs.getObject(4);
@@ -126,7 +122,7 @@ public class Offer extends DBBase {
 				Object fieldName = rs.getObject(15);
 				Object fieldType = rs.getObject(16);
 				//
-				if (currentofferId.equals(offerId.toString())) {   // Continue with current row
+				if (currentofferID.equals(offerID.toString())) {   // Continue with current row
 					List currentRow = (List) lstRows.get(rowIndex);
 					//
 					mapFields.put("" + rowIndex + "-" + fieldID, (fieldText == null) ? "" : fieldText.toString());
@@ -136,9 +132,9 @@ public class Offer extends DBBase {
 					lstRows.add(currentRow);
 					rowIndex++;
 					//
-					currentofferId = offerId.toString();
+					currentofferID = offerID.toString();
 					//
-					currentRow.add(offerId);
+					currentRow.add(offerID);
 					currentRow.add(seller);
 					currentRow.add(categoryName);
 					currentRow.add(Helper.getConditionFromCode(conditionCode.toString()));
@@ -407,9 +403,6 @@ public class Offer extends DBBase {
 	
 	
 	public static Map doCreateOffer(String userID, Map<String, String[]> parameters) {
-		//public static final String PREFIX_CATEGORY_NAME = "categoryName";
-		String debugInfo = "START";
-		//
 		Map output = new HashMap();
 		//
 		String offerID = getUUID();
@@ -441,8 +434,6 @@ public class Offer extends DBBase {
 					int    fieldID = Integer.parseInt(s.substring("fieldID_".length()));
 					String value   = parameters.get(s)[0];
 					//
-					debugInfo = "Processing|" + offerID + "|" + s + "|" + fieldID + "|" + value + "|";
-					//
 					pStmtInsertOfferField.setString(1, offerID);
 					pStmtInsertOfferField.setInt(2, fieldID);
 					pStmtInsertOfferField.setString(3, value);
@@ -456,67 +447,75 @@ public class Offer extends DBBase {
 			con.commit();
 		}
 		catch (SQLException e) {
-			if (con != null) {
-				try {
-					con.rollback();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
+			if (con != null) {try {con.rollback();} catch (Throwable t) {t.printStackTrace();}}
 			//
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", ParamMap=" + getParamMap(parameters) + ", DebugInfo=" + debugInfo);
+			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", ParamMap=" + getParamMap(parameters));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
-			if (con != null) {
-				try {
-					con.rollback();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
+			if (con != null) {try {con.rollback();} catch (Throwable t) {t.printStackTrace();}}
 			//
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", ParamMap=" + getParamMap(parameters));
 			e.printStackTrace();
 		}
 		finally {
-			if (pStmtInsertOffer != null) {
-				try {
-					pStmtInsertOffer.close();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-			//
-			if (pStmtInsertOfferField != null) {
-				try {
-					pStmtInsertOfferField.close();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-			//
-			if (con != null) {
-				try {
-					con.setAutoCommit(true);
-					con.close();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
+			if (pStmtInsertOffer != null) {try {pStmtInsertOffer.close();} catch (Throwable t) {t.printStackTrace();}}
+			if (pStmtInsertOfferField != null) {try {pStmtInsertOfferField.close();} catch (Throwable t) {t.printStackTrace();}}
+			if (con != null) {try {con.setAutoCommit(true);con.close();} catch (Throwable t) {t.printStackTrace();}}
 		}
 		//
 		return output;
 	}
 	
 
+	
+
+
+	public static Map doCancelOffer(Map<String, String[]> parameters) {
+		String offerid = getStringFromParamMap("offerid", parameters);
+		//
+		Map output = new HashMap();
+		//
+		Connection        con                   = null;
+		PreparedStatement pStmtInsertOffer      = null;
+		try {
+			con = getConnection();
+			//
+			pStmtInsertOffer = con.prepareStatement(SQL_OFFER_INSERT);
+			pStmtInsertOffer.setString(2, getStringFromParamMap("categoryName", parameters));
+			//
+			pStmtInsertOffer.execute();
+			//
+			output.put(DATA_NAME_STATUS, true);
+			output.put(DATA_NAME_MESSAGE, "OK");
+			//
+			con.commit();
+		}
+		catch (SQLException e) {
+			if (con != null) {try {con.rollback();} catch (Throwable t) {t.printStackTrace();}}
+			//
+			output.put(DATA_NAME_STATUS, false);
+			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", ParamMap=" + getParamMap(parameters));
+			e.printStackTrace();
+		}
+		catch (ClassNotFoundException e) {
+			if (con != null) {try {con.rollback();} catch (Throwable t) {t.printStackTrace();}}
+			//
+			output.put(DATA_NAME_STATUS, false);
+			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", ParamMap=" + getParamMap(parameters));
+			e.printStackTrace();
+		}
+		finally {
+			if (pStmtInsertOffer != null) {try {pStmtInsertOffer.close();} catch (Throwable t) {t.printStackTrace();}}
+			if (con != null) {try {con.close();} catch (Throwable t) {t.printStackTrace();}}
+		}
+		//
+		return output;
+	}
+	
+	
 	public static void main(String[] args) {
 		Map map = doSearchOffer(null);
 		//

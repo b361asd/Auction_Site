@@ -2,11 +2,10 @@
 <!DOCTYPE html>
 
 <%@ page import="rutgers.cs336.db.Bid" %>
-<%@ page import="rutgers.cs336.gui.Helper" %>
-<%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 <%@ page import="rutgers.cs336.gui.TableData" %>
-<%@ page import="static rutgers.cs336.db.DBBase.*" %>
+<%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 <%@ page import="java.util.List" %>
+<%@ page import="static rutgers.cs336.db.DBBase.*" %>
 
 <html>
 
@@ -38,7 +37,7 @@
 
 <form id="form-sort" target="_self" method="post">
 	<input id="input-sort" type="hidden" name="sort" value="_"/>
-	
+
 	<%
 		Map data = null;
 		TableData dataTable = null;
@@ -84,45 +83,45 @@
 		</thead>
 		<tbody>
 		<%
-			if (dataTable.rowCount()>0) {
-				for (int i=0; i< dataTable.rowCount(); i++) {
+			if (dataTable.rowCount() > 0) {
+				for (int i = 0; i < dataTable.rowCount(); i++) {
 					out.println("<tr>");
 					out.println(dataTable.printOneRowInTable(i));
 					out.println("</tr>");
 					//
 					out.println("<tr>");
-						out.println("<td>Bids</td>");
-						{
-							TableData dataTableBid = (TableData) (dataTable.getLastCellInRow(i));
-							//
-							out.println("<td colspan='"+(dataTable.colCount()-1)+"'>");
-							//
-							out.println("<table>");
-								out.println("<thead>");
+					out.println("<td>Bids</td>");
+					{
+						TableData dataTableBid = (TableData) (dataTable.getLastCellInRow(i));
+						//
+						out.println("<td colspan='" + (dataTable.colCount() - 1) + "'>");
+						//
+						out.println("<table>");
+						out.println("<thead>");
+						out.println("<tr>");
+						out.println("<td>Action</td>");
+						out.println(dataTableBid.printHeaderForTable());
+						out.println("</tr>");
+						out.println("</thead>");
+						out.println("<tbody>");
+						if (dataTableBid.rowCount() > 0) {
+							for (int j = 0; j < dataTableBid.rowCount(); j++) {
 								out.println("<tr>");
-									out.println("<td>Action</td>");
-									out.println(dataTableBid.printHeaderForTable());
+								out.println("<td>");
+								out.println("<button onclick=\"document.getElementById('input-id-cancelBid').value='" + dataTableBid.getOneCell(j, 0) + "'; document.getElementById('form-id-cancelBid').submit();\" class=\"favorite styled\" type=\"button\">Cabcel Bid</button>");
+								out.println("<button onclick=\"document.getElementById('input-id-modifyBid').value='" + dataTableBid.getOneCell(j, 0) + "," + dataTableBid.getOneCell(j, 1) + "," + dataTableBid.getOneCell(j, 2) + "'; document.getElementById('form-id-modifyBid').submit();\" class=\"favorite styled\" type=\"button\">Modify Bid</button>");
+								out.println("</td>");
+								//
+								out.println(dataTableBid.printOneRowInTable(j));
 								out.println("</tr>");
-								out.println("</thead>");
-								out.println("<tbody>");
-									if (dataTableBid.rowCount()>0) {
-										for (int j=0; j< dataTableBid.rowCount(); j++) {
-											out.println("<tr>");
-											out.println("<td>");
-												out.println("<button onclick=\"document.getElementById('input-id-cancelBid').value='" + dataTableBid.getOneCell(j,0) + "'; document.getElementById('form-id-cancelBid').submit();\" class=\"favorite styled\" type=\"button\">Cabcel Bid</button>");
-												out.println("<button onclick=\"document.getElementById('input-id-modifyBid').value='" + dataTableBid.getOneCell(j,0)+","+dataTableBid.getOneCell(j,1)+","+dataTableBid.getOneCell(j,2) + "'; document.getElementById('form-id-modifyBid').submit();\" class=\"favorite styled\" type=\"button\">Modify Bid</button>");
-											out.println("</td>");
-											//
-											out.println(dataTableBid.printOneRowInTable(j));
-											out.println("</tr>");
-											//
-											
-										}
-									}
-								out.println("</tbody>");
-							out.println("</table>");
+								//
+
+							}
 						}
-						out.println("</td>");
+						out.println("</tbody>");
+						out.println("</table>");
+					}
+					out.println("</td>");
 					out.println("</tr>");
 				}
 			}

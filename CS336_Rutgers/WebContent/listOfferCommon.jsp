@@ -9,6 +9,8 @@
 <!DOCTYPE html>
 
 	<%
+		String userType = (String) request.getSession().getAttribute("userType");
+		//
 		Map data = null;
 		TableData dataTable = null;
 		//
@@ -40,35 +42,36 @@
 			}
 		}
 		//
-		//
 		dataTable = (TableData) (data.get(DATA_NAME_DATA));
-		List lstHeader = dataTable.getLstHeader();
-		List lstRows = dataTable.getLstRows();
-		int[] colSeq = dataTable.getColSeq();
-		String offerIDStandOut = dataTable.getOfferIDStandOut();
 	%>
 
 	<table>
 		<caption>Offer List</caption>
 		<thead>
-		<tr>
-			<td>Action</td>
-			<%
-				out.println(dataTable.printHeaderForTable());
-			%>
-		</tr>
+			<tr>
+				<td>Action</td>
+				<%
+					out.println(dataTable.printHeaderForTable());
+				%>
+			</tr>
 		</thead>
 		<tbody>
-		<%
+			<%
 			if (dataTable.rowCount()>0) {
 				for (int i=0; i< dataTable.rowCount(); i++) {
 					out.println(dataTable.printRowStart(i));
 					//
 					out.println("<td>");
-					out.println("<button onclick=\"document.getElementById('input-id-doBid').value='" + dataTable.getOneCell(i,0) + "," + dataTable.getOneCell(i,2) + "'; document.getElementById('form-id-doBid').submit();\" class=\"favorite styled\" type=\"button\">Bid</button>");
-					out.println("<button onclick=\"document.getElementById('input-id-listBid').value='" + dataTable.getOneCell(i,0) + "," + dataTable.getOneCell(i,2) + "'; document.getElementById('form-id-listBid').submit();\" class=\"favorite styled\" type=\"button\">List Bid</button>");
-					if (!action.equals("listSimilar")) {
-						out.println("<button onclick=\"document.getElementById('input-id-listSimilar').value='" + dataTable.getOneCell(i,0) + "," + dataTable.getOneCell(i,2) + "," + dataTable.getOneCell(i,3) + "'; document.getElementById('form-id-listSimilar').submit();\" class=\"favorite styled\" type=\"button\">List Similar</button>");
+					if (userType!=null && userType.equalsIgnoreCase("3")) {
+						out.println(Helper.getButton("form-id-doBid", "input-id-doBid", ""+dataTable.getOneCell(i,0), "Bid"));
+						out.println(Helper.getButton("form-id-listBid", "input-id-listBid", dataTable.getOneCell(i,0)+","+dataTable.getOneCell(i,2), "List Bid"));
+						if (!action.equals("listSimilar")) {
+							out.println(Helper.getButton("form-id-listSimilar", "input-id-listSimilar",  dataTable.getOneCell(i,0)+","+dataTable.getOneCell(i,2)+","+dataTable.getOneCell(i,3), "List Similar"));
+						}
+					}
+					else {
+						out.println(Helper.getButton("form-id-cancelOffer", "input-id-cancelOffer", ""+dataTable.getOneCell(i,0), "Cancel"));
+						out.println(Helper.getButton("form-id-modifyOffer", "input-id-modifyOffer", ""+dataTable.getOneCell(i,0), "Modify"));
 					}
 					out.println("</td>");
 					//
@@ -77,7 +80,6 @@
 					out.println("</tr>");
 				}
 			}
-		%>
+			%>
 		</tbody>
-
 	</table>

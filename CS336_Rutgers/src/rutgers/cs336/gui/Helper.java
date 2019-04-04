@@ -95,6 +95,20 @@ public class Helper implements IConstant {
 		}
 	}
 
+	
+	public static String getButton(String formID, String inputID, String inputValue, String display) {
+		return 	"<button onclick=\"document.getElementById('" +
+					inputID +
+					"').value='" +
+					inputValue +
+					"'; document.getElementById('" +
+					formID +
+					"').submit();\" class=\"buttonclass\" type=\"button\">" +
+					display +
+					"</button>";
+	}
+	
+	
 
 	public static String _printHeaderForTable(List row, int[] colSeq) {
 		String out = "";

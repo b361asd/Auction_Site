@@ -28,17 +28,13 @@
 <%@include file="../header.jsp" %>
 <%@include file="repNav.jsp" %>
 
-<form id="form-id-doBid" action="${pageContext.request.contextPath}/user/postBid.jsp" method="post">
-	<input id="input-id-doBid" type="hidden" name="offeridcategoryname" value="_"/>
+<form id="form-id-cancelOffer" action="${pageContext.request.contextPath}/rep/cancelOffer.jsp" method="post">
+	<input id="input-id-cancelOffer" type="hidden" name="offeridcategoryname" value="_"/>
 </form>
 
-<form id="form-id-listBid" action="${pageContext.request.contextPath}/user/listBidResult.jsp" method="post">
-	<input id="input-id-listBid" type="hidden" name="offeridcategoryname" value="_"/>
-</form>
-
-<form id="form-id-listSimilar" action="${pageContext.request.contextPath}/user/listOffer.jsp" method="post">
+<form id="form-id-modifyOffer" action="${pageContext.request.contextPath}/rep/modifyOffer.jsp" method="post">
 	<input type="hidden" name="action" value="listSimilar"/>
-	<input id="input-id-listSimilar" type="hidden" name="offeridcategorynameconditioncode" value="_"/>
+	<input id="input-id-modifyOffer" type="hidden" name="offeridcategorynameconditioncode" value="_"/>
 </form>
 
 <form id="form-sort" target="_self" method="post">
