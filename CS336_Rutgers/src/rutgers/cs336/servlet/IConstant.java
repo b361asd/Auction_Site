@@ -8,7 +8,6 @@ public interface IConstant {
 	//
 	String DATA_NAME_STATUS     = "DataNameStatus";
 	String DATA_NAME_MESSAGE    = "DataNameMessage";
-	//
 	String DATA_NAME_DATA       = "DataNameData";
 	String DATA_NAME_DATA_ADD   = "DataNameDataAdd";
 

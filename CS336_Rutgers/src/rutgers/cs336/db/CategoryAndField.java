@@ -52,10 +52,12 @@ public class CategoryAndField extends DBBase {
 			return fieldID;
 		}
 
+		//
 		public String getFieldName() {
 			return fieldName;
 		}
 
+		//
 		public int getFieldType() {
 			return fieldType;
 		}
@@ -64,6 +66,12 @@ public class CategoryAndField extends DBBase {
 
 	public static Map getCategoryField(String categoryNamesFromParam) {
 		Map output = new HashMap();
+		//
+		List        lstField    = new ArrayList();
+		List        lstCategory = new ArrayList();
+		//
+		output.put(DATA_CATEGORY_LIST, lstCategory);
+		output.put(DATA_FIELD_LIST, lstField);
 		//
 		Connection con  = null;
 		Statement  stmt = null;
@@ -75,11 +83,7 @@ public class CategoryAndField extends DBBase {
 			ResultSet rs = stmt.executeQuery(SQL_CATEGORYFIELD_SELECT);
 			//
 			Set<String> fieldIDSet  = new HashSet<>();
-			List        lstField    = new ArrayList();
-			List        lstCategory = new ArrayList();
-			//
-			output.put(DATA_CATEGORY_LIST, lstCategory);
-			output.put(DATA_FIELD_LIST, lstField);
+			Set<String> categoryNameSet  = new HashSet<>();
 			//
 			while (rs.next()) {
 				Object categoryName = rs.getObject(1);
@@ -92,31 +96,23 @@ public class CategoryAndField extends DBBase {
 				String sz_fieldName    = fieldName.toString();
 				int    i_fieldType     = (Integer) fieldType;
 				//
+				//Default the first one
 				if (categoryNamesFromParam.equals("")) {
 					categoryNamesFromParam = sz_categoryName;
 				}
 				//
-				if (("," + categoryNamesFromParam + ",").contains("," + sz_categoryName + ",")) {
-					if (fieldIDSet.contains("" + i_fieldID)) {
-						//already in list per previous catogoryName
-					}
-					else {
+				boolean isSelected = ("," + categoryNamesFromParam + ",").contains("," + sz_categoryName + ",");
+				//
+				if (isSelected) {
+					if (!fieldIDSet.contains("" + i_fieldID)) {
 						lstField.add(new Field(i_fieldID, sz_fieldName, i_fieldType));
 						fieldIDSet.add("" + i_fieldID);
 					}
 				}
 				//
-				String currCategory;
-				if (lstCategory.size() == 0) {
-					currCategory = "";
-				}
-				else {
-					Category temp = (Category) lstCategory.get(lstCategory.size() - 1);
-					currCategory = temp.getCategoryName();
-				}
-				//
-				if (!currCategory.equals(sz_categoryName)) {
-					lstCategory.add(new Category(sz_categoryName, (("," + categoryNamesFromParam + ",").contains("," + sz_categoryName + ","))));
+				if (!categoryNameSet.contains(sz_categoryName)) {
+					lstCategory.add(new Category(sz_categoryName, isSelected));
+					categoryNameSet.add(sz_categoryName);
 				}
 			}
 			//
@@ -134,23 +130,8 @@ public class CategoryAndField extends DBBase {
 			e.printStackTrace();
 		}
 		finally {
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (Throwable e) {
-					e.printStackTrace();
-				}
-			}
-			//
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (Throwable e) {
-					e.printStackTrace();
-				}
-			}
+			if (stmt != null) {try {stmt.close();} catch (Throwable e) {e.printStackTrace();}}
+			if (con != null) {try {con.close();} catch (Throwable e) {e.printStackTrace();}}
 		}
 		//
 		return output;

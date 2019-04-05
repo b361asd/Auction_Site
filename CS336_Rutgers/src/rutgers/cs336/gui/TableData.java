@@ -15,7 +15,8 @@ public class TableData {
 	int                  indexSorted     = -1;
 	boolean              normalSorted    = true;
 	//
-	String               offerIDStandOut = null;
+	String               signStandOut 	= null;
+	int               	idxStandOut 	= -1;
 
 
 	public int rowCount() {
@@ -26,26 +27,27 @@ public class TableData {
 	}
 	
 	
-	public List getLstHeader() {
-		return lstHeader;
-	}
+//	public List getLstHeader() {
+//		return lstHeader;
+//	}
 
 
-	public List getLstRows() {
+	public List getRows() {
 		return lstRows;
 	}
 
 
-	public int[] getColSeq() {
-		return colSeq;
+//	public int[] getColSeq() {
+//		return colSeq;
+//	}
+
+	public String getSignStandOut() {
+		return signStandOut;
 	}
 
-	public String getOfferIDStandOut() {
-		return offerIDStandOut;
-	}
-
-	public void setOfferIDStandOut(String input) {
-		offerIDStandOut = input;
+	public void setStandOut(String input, int idx) {
+		signStandOut 	= input;
+		idxStandOut		= idx;
 	}
 
 	public TableData(List _lstHeader, List _lstRows, int[] _colSeq) {
@@ -54,14 +56,29 @@ public class TableData {
 		colSeq = _colSeq;
 		//
 		mapHeaderToIndex = new HashMap<>();
-		for (int i = 0; i < lstHeader.size(); i++) {
-			mapHeaderToIndex.put(lstHeader.get(i).toString(), i);
+		if (lstHeader!=null) {
+			for (int i = 0; i < lstHeader.size(); i++) {
+				String temp = lstHeader.get(i)==null ? "" : lstHeader.get(i).toString();
+				mapHeaderToIndex.put(temp, i);
+			}
 		}
 	}
 
+//	public List getOneRow(int i) {
+//		return (List)(lstRows.get(i));
+//	}
 
 	public Object getOneCell(int i, int j) {
 		return ((List)(lstRows.get(i))).get(j);
+	}
+	public Object getOneCell(int i, String header) {
+		int index = mapHeaderToIndex.get(header);
+		if (index>=0) {
+			return ((List)(lstRows.get(i))).get(index);
+		}
+		else {
+			return "";
+		}
 	}
 	public Object getLastCellInRow(int i) {
 		List lst =  (List)(lstRows.get(i));
@@ -73,14 +90,13 @@ public class TableData {
 		if (header != null) {
 			int index = mapHeaderToIndex.get(header);
 			//
-			Comparator<Object> comparatorRev  = (o1, o2) -> -(((List) o1).get(index) == null ? "" : ((List) o1).get(index).toString()).compareTo(((List) o2).get(index) == null ? "" : ((List) o2).get(index).toString());
-			Comparator<Object> comparatorNorm = Comparator.comparing(o -> ((List) o).get(index) == null ? "" : ((List) o).get(index).toString());
-			//
 			if (index >= 0 && index < lstHeader.size()) {
+				Comparator<Object> comparatorNorm = Comparator.comparing(o -> ((List) o).get(index) == null ? "" : ((List) o).get(index).toString().trim());
+				//
 				boolean isTheSame = (indexSorted == index);
 				if (isTheSame) {
 					if (normalSorted) {
-						lstRows.sort(comparatorRev);
+						lstRows.sort(comparatorNorm.reversed());
 					}
 					else {
 						lstRows.sort(comparatorNorm);
@@ -127,10 +143,11 @@ public class TableData {
 		List row = (List)lstRows.get(index);
 		String out = "";
 		//
-		boolean isStandOut = offerIDStandOut != null && (row.get(0)).equals(offerIDStandOut);
+		boolean isStandOut = signStandOut != null && idxStandOut>=0 && (row.get(idxStandOut)).toString().equals(signStandOut);
 		//
 		if (isStandOut) {
-			out = "<tr name='standout' class='standout'>";
+			out = "<tr style='color: red;'>";
+			//out = "<tr name='standout' class='standout'>";
 		}
 		else {
 			out = "<tr>";

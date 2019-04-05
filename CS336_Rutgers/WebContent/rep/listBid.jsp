@@ -67,10 +67,10 @@
 		//
 		//
 		dataTable = (TableData) (data.get(DATA_NAME_DATA));
-		List lstHeader = dataTable.getLstHeader();
-		List lstRows = dataTable.getLstRows();
-		int[] colSeq = dataTable.getColSeq();
-		String offerIDStandOut = dataTable.getOfferIDStandOut();
+		//List lstHeader = dataTable.getLstHeader();
+		//List lstRows = dataTable.getLstRows();
+		//int[] colSeq = dataTable.getColSeq();
+		//String offerIDStandOut = dataTable.getOfferIDStandOut();
 	%>
 
 	<table>

@@ -2,12 +2,18 @@
 <!DOCTYPE html>
 
 <%@ page import="rutgers.cs336.db.DBBase" %>
-<%@ page import="rutgers.cs336.db.Bid" %>
+<%@ page import="rutgers.cs336.gui.Helper" %>
+<%@ page import="rutgers.cs336.db.Offer" %>
+<%@ page import="rutgers.cs336.db.CategoryAndField" %>
 <%@ page import="rutgers.cs336.gui.Helper" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 <%@ page import="rutgers.cs336.gui.TableData" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
 <%@ page import="java.util.List" %>
+<%@ page import="rutgers.cs336.db.CategoryAndField" %>
+<%@ page import="java.util.List" %>
+<%@ page import="static rutgers.cs336.db.DBBase.*" %>
+<%@ page import="static rutgers.cs336.gui.Helper.*" %>
 
 <html>
 
@@ -41,19 +47,37 @@
 	<input id="input-sort" type="hidden" name="sort" value="_"/>
 	
 	<%
+		Map dataModify = null;
 		Map data = null;
+		Map categoryAndField = null;
 		TableData dataTable = null;
 		//
+		String offeridcategoryname = DBBase.getStringFromParamMap("offeridcategoryname", request.getParameterMap());
+		String[] temps = offeridcategoryname.split("\\,");
+		//
 		String action = getStringFromParamMap("action", request.getParameterMap());
-		if (action.equals("modifyBid")) {
-			Map dataModify = Bid.doModifyBid(request.getParameterMap());
+		if (action.equals("modifyOffer")) {
+			dataModify = Offer.doModifyOffer(request.getParameterMap());
+		}
+		else if (action.equals("startModifyOffer")) {
 		}
 		//
-		data = Bid.searchBid(request.getParameterMap());
+		categoryAndField = CategoryAndField.getCategoryField(temps[1]);
 		//
-		String bidIDofferIDBuyer = DBBase.getStringFromParamMap("bidIDofferIDBuyer", request.getParameterMap());
+		data = Offer.doSearchOfferByID(temps[0]);
+		//
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 		//
 		dataTable = (TableData) (data.get(DATA_NAME_DATA));
+		//
+		if (dataModify!=null) {
+			boolean _status = Helper.getStatus(dataModify);
+			String  _message = Helper.getMessage(dataModify);
+			if (!_status) {
+				Helper.setStatus(data, false);
+				Helper.appendMessage(data, Helper.getMessage(dataModify));
+			}
+		}
 	%>
 
 	<table>
@@ -71,41 +95,6 @@
 					out.println("<tr>");
 					out.println(dataTable.printOneRowInTable(i));
 					out.println("</tr>");
-					//
-					out.println("<tr>");
-						out.println("<td>Bids</td>");
-						{
-							TableData dataTableBid = (TableData) (dataTable.getLastCellInRow(i));
-							//
-							out.println("<td colspan='"+(dataTable.colCount()-1)+"'>");
-							//
-							out.println("<table>");
-								out.println("<thead>");
-								out.println("<tr>");
-									out.println("<td>Action</td>");
-									out.println(dataTableBid.printHeaderForTable());
-								out.println("</tr>");
-								out.println("</thead>");
-								out.println("<tbody>");
-									if (dataTableBid.rowCount()>0) {
-										for (int j=0; j< dataTableBid.rowCount(); j++) {
-											out.println(dataTableBid.printRowStart(j));
-											out.println("<td>");
-												out.println("<button onclick=\"document.getElementById('input-id-cancelBid').value='" + dataTableBid.getOneCell(j,0) + "'; document.getElementById('form-id-cancelBid').submit();\" class=\"favorite styled\" type=\"button\">Cabcel Bid</button>");
-												out.println("<button onclick=\"document.getElementById('input-id-modifyBid').value='" + dataTableBid.getOneCell(j,0) + "'; document.getElementById('form-id-modifyBid').submit();\" class=\"favorite styled\" type=\"button\">Modify Bid</button>");
-											out.println("</td>");
-											//
-											out.println(dataTableBid.printOneRowInTable(j));
-											out.println("</tr>");
-											//
-											
-										}
-									}
-								out.println("</tbody>");
-							out.println("</table>");
-						}
-						out.println("</td>");
-					out.println("</tr>");
 				}
 			}
 		%>
@@ -116,12 +105,55 @@
 
 <form method="post">
 	<%
-		out.println("<input type='hidden' name='action' value='modifyBid'/>");
-		out.println("<input type='hidden' name='bidIDofferIDBuyer' value='" + bidIDofferIDBuyer + "'/>");
+		out.println("<input type='hidden' name='action' value='modifyOffer'/>");
+		out.println("<input type='hidden' name='offeridcategoryname' value='" + offeridcategoryname + "'/>");
 	%>
 
-	<div>Price<input type="number" name="price" min="1"></div>
-	<div>Auto Rebid Limit<input type="number" name="autoRebidLimit" min="1"></div>
+	<%
+		List lstCategory = (List) categoryAndField.get(CategoryAndField.DATA_CATEGORY_LIST);
+
+		out.println("<div class='allField'>conditionCode");
+		out.println(getConditionCodeSelection("conditionCode", dataTable.getOneCell(0, "Condition").toString()));
+		out.println("</div><br/>");
+		
+		out.println("<div class='allField'>description");
+		out.println("<input type='text' name='descriptionVal' value='" + dataTable.getOneCell(0, "Desc") + "' /></div><br/>");
+
+		List lstField = (List) categoryAndField.get(CategoryAndField.DATA_FIELD_LIST);
+		String lstFieldIDs = null;
+		for (Object o : lstField) {
+			String fieldName = ((CategoryAndField.Field) o).getFieldName();
+			int    fieldID   = ((CategoryAndField.Field) o).getFieldID();
+			int    fieldType = ((CategoryAndField.Field) o).getFieldType();
+			//
+			if (lstFieldIDs == null) {
+				lstFieldIDs = "" + fieldID;
+			}
+			else {
+				lstFieldIDs = lstFieldIDs + "," + fieldID;
+			}
+			// String
+			if (fieldType == 1) {
+				out.println("<div class='allField'>" + fieldName);
+				out.println("<input type='text' name='fieldval1_" + fieldID + "' value='" + dataTable.getOneCell(0, fieldName) + "' /></div><br/>");
+			}
+			// Integer
+			else if (fieldType == 2) {
+				out.println("<div class='allField'>" + fieldName);
+				out.println("<input type='number' name = 'fieldval2_" + fieldID + "' value='" + dataTable.getOneCell(0, fieldName) + "' /></div><br/>");
+			}
+			// Boolean
+			else {
+				out.println("<div class='allField'>" + fieldName);
+				out.println(getYesNoSelection("fieldop_" + fieldID, dataTable.getOneCell(0, fieldName).toString()));
+				out.println("</div><br/>");
+			}
+		}
+		//
+		out.println("<input name='lstFieldIDs' type='hidden' value='" + lstFieldIDs + "'/>");
+	%>
+	
+	
 	<input type="submit" value="Submit">
 </form>
 

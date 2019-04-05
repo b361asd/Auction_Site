@@ -82,7 +82,7 @@ public class User extends DBBase {
 		try {
 			con = getConnection();
 			//
-			preparedStmt = con.prepareStatement(SQL_USER_SELECT);
+			preparedStmt = con.prepareStatement(SQL_USER_AUTH);
 			//
 			preparedStmt.setString(1, userID);
 			//

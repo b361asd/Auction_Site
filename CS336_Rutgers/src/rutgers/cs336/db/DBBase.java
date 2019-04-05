@@ -367,16 +367,33 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		return false;
 	}
 
+	
+	
+	
 
-	public static String getParamMap(Map<String, String[]> parameters) {
-		StringBuilder output = new StringBuilder("Param: ");
+	//For debug
+	public static String dumpParamMap(Map<String, String[]> parameters) {
+		StringBuilder sb = new StringBuilder("Params:");
 		for (Map.Entry<String, String[]> s : parameters.entrySet()) {
 			String   key    = s.getKey();
 			String[] values = s.getValue();
 			//
-			output.append(key).append("=").append(values[0]).append(", ");
+			for (int i=0; i<values.length; i++) {
+				if (i==0) {
+					sb.append(key).append("=").append(values[0]).append(",");
+				}
+				else {
+					sb.append(key).append("(").append(i).append(")=").append(values[i]).append(",");
+				}
+			}
 		}
 		//
-		return output.toString();
+		String output = sb.toString();
+		//
+		if (output.endsWith(",")) {
+			output = output.substring(0, output.length() - 1);
+		}
+		//
+		return output;
 	}
 }

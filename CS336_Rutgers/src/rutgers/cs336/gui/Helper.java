@@ -4,12 +4,15 @@ import rutgers.cs336.db.CategoryAndField;
 import rutgers.cs336.servlet.IConstant;
 
 import java.util.List;
+import java.util.Map;
 
 public class Helper implements IConstant {
+	private final static String[] S_CONDITIONS = {"New", "Like New", "Manufacturer Refurbished", "Seller Refurbished", "Used", "For parts or Not Working"};
+	
 	// GUI
 	private static final String SELECT_OP_SZ_TYPE       = "<select name='?'><option value='any'>Any</option><option value='szequal'>Equal</option><option value='sznotequal'>Not Equal</option><option value='startwith'>Starts With</option><option value='contain'>Contains</option></select>";
 	private static final String SELECT_OP_INT_TYPE      = "<select name='?'><option value='any'>Any</option><option value='intequal'>Equal</option><option value='intnotequal'>Not Equal</option><option value='equalorover'>Greater Than or Equal To</option><option value='equalorunder'>Less Than or Equal To</option><option value='between'>Between</option></select>";
-	private static final String SELECT_OP_BOOL_TYPE     = "<select name='?'><option value='any'>Any</option><option value='true'>True</option><option value='false'>False</option></select>";
+	private static final String SELECT_OP_BOOL_TYPE     = "<select name='?'><option value='any'>Any</option><option value='true'>YES</option><option value='false'>NO</option></select>";
 	private static final String CONDITION_CODE_CHECKBOX = "<div><input type='checkbox' id='new' name='?_1' value='yes' checked><label for='new'>New</label><input type='checkbox' id='likenew' name='?_2' value='yes' checked><label for='likenew'>Like New</label><input type='checkbox' id='manfrefurb' name='?_3'  value='yes' checked><label for='manfrefurb'>Manufacturer Refurbished</label><input type='checkbox' id='sellerrefurb' name='?_4' value='yes' checked><label for='sellerrefurb'>Seller Refurbished</label><input type='checkbox' id='used' name='?_5' value='yes' checked><label for='used'>Used</label><input type='checkbox' id='notwork' name='?_6' value='yes' checked><label for='notwork'>For parts or Not Working</label></div>";
 
 	public static String getOPSZSelection(String name) {
@@ -55,24 +58,59 @@ public class Helper implements IConstant {
 		//
 		return sb.toString();
 	}
-
-
+	
+	
+	
+	public static String getConditionCodeSelection(String name, String selected) {
+		StringBuilder sb = new StringBuilder();
+		//
+		sb.append("<select name='").append(name).append("'>");
+		for (int i = 0; i<S_CONDITIONS.length; i++) {
+			if (S_CONDITIONS[i].equalsIgnoreCase(selected)) {
+				sb.append("<option value='"+(i+1)+"' selected>"+S_CONDITIONS[i]+"</option>");
+			}
+			else {
+				sb.append("<option value='"+(i+1)+"'>"+S_CONDITIONS[i]+"</option>");
+			}
+		}
+		sb.append("</select>");
+		//
+		return sb.toString();
+	}
+	
+	
+	
+	public static String getYesNoSelection(String name, String selected) {
+		StringBuilder sb = new StringBuilder();
+		//
+		boolean isYes = selected.equalsIgnoreCase("yes");	//IN DB: 'no' 'yes'
+		//
+		sb.append("<option value='true'" + (isYes?" selected":"") + ">YES</option>");
+		sb.append("<option value='false'" + (isYes?"":" selected") + ">NO</option>");
+		//
+		sb.append("</select>");
+		//
+		return sb.toString();
+	}
+	
+	
+	
 	public static String getConditionFromCode(String code) {
 		switch (code) {
 			case "1":
-				return "New";
+				return S_CONDITIONS[0];
 			case "2":
-				return "Like New";
+				return S_CONDITIONS[1];
 			case "3":
-				return "Manufacturer Refurbished";
+				return S_CONDITIONS[2];
 			case "4":
-				return "Seller Refurbished";
+				return S_CONDITIONS[3];
 			case "5":
-				return "Used";
+				return S_CONDITIONS[4];
 			case "6":
-				return "For parts or Not Working";
+				return S_CONDITIONS[5];
 			default:
-				return "Unknown.";
+				return "Unknown";
 		}
 	}
 
@@ -109,29 +147,37 @@ public class Helper implements IConstant {
 	}
 	
 	
+	public static void setStatus(Map data, boolean status) {
+		data.put(DATA_NAME_STATUS, status);
+	}
 
-	public static String _printHeaderForTable(List row, int[] colSeq) {
-		String out = "";
-		if (row != null && row.size() > 0 && colSeq != null && colSeq.length > 0) {
-			for (int value : colSeq) {
-				Object one     = row.get(value);
-				String oneItem = (one == null) ? "" : one.toString();
-				out = out + "<th><div onclick=onClickHeader('" + oneItem + "')>" + oneItem + "</div></th>";
-			}
-		}
-		return out;
+	
+	public static void setMessage(Map data, String message) {
+		data.put(DATA_NAME_MESSAGE, message);
+	}
+	public static void appendMessage(Map data, String message) {
+		data.put(DATA_NAME_MESSAGE, getMessage(data) + " " + message);
 	}
 
 
-	public static String _printOneRowInTable(List row, int[] colSeq) {
-		String out = "";
-		if (row != null && row.size() > 0 && colSeq != null && colSeq.length > 0) {
-			for (int value : colSeq) {
-				Object one     = row.get(value);
-				String oneItem = (one == null) ? "" : one.toString();
-				out = out + "<td>" + oneItem + "</td>";
-			}
-		}
-		return out;
+	public static void setData(Map data, String payload) {
+		data.put(DATA_NAME_DATA, payload);
 	}
+	
+	
+	
+	public static boolean getStatus(Map data) {
+		return (Boolean)data.get(DATA_NAME_STATUS);
+	}
+
+	
+	public static String getMessage(Map data) {
+		return (String)data.get(DATA_NAME_MESSAGE);
+	}
+
+
+	public static Object getData(Map data) {
+		return data.get(DATA_NAME_DATA);
+	}
+	
 }

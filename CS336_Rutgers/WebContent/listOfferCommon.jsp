@@ -71,7 +71,7 @@
 					}
 					else {
 						out.println(Helper.getButton("form-id-cancelOffer", "input-id-cancelOffer", ""+dataTable.getOneCell(i,0), "Cancel"));
-						out.println(Helper.getButton("form-id-modifyOffer", "input-id-modifyOffer", ""+dataTable.getOneCell(i,0), "Modify"));
+						out.println(Helper.getButton("form-id-modifyOffer", "input-id-modifyOffer", dataTable.getOneCell(i,0)+","+dataTable.getOneCell(i,2), "Modify"));
 					}
 					out.println("</td>");
 					//

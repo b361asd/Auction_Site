@@ -1,5 +1,7 @@
 package rutgers.cs336.db;
 
+import com.sun.org.apache.bcel.internal.generic.Select;
+
 public interface ISQLConstant {
 	// MySQL JDBC Connector URL
 	//init("jdbc:mysql://localhost:3306/BuyMe", "cs336", "cs336_password");
@@ -10,19 +12,19 @@ public interface ISQLConstant {
 
 
 	// User
-	String SQL_USER_INSERT = "INSERT INTO User (username, password, email, firstname, lastname, address, phone, active, userType) VALUES (?, ?, ?, ?, ?, ?, ?, true, ?)";
-	//
-	String SQL_USER_SELECT = "SELECT password, firstname, lastname, active, userType FROM User WHERE username = ?";
+	String SQL_USER_INSERT 	= "INSERT INTO User (username, password, email, firstname, lastname, address, phone, active, userType) VALUES (?, ?, ?, ?, ?, ?, ?, true, ?)";
+	String SQL_USER_AUTH 	= "SELECT password, firstname, lastname, active, userType FROM User WHERE username = ?";
 
+	String SQL_USER_INSERT = "SELECT password, firstname, lastname, active, userType FROM User";
 
+	
+//	Select username, password, email, firstname, lastname, address, phone, active, userType
+	
 
 	// Bid
 	String SQL_BID_INSERT = "INSERT Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) SELECT ?, o.offerID, ?, ?, ?, NOW() FROM Offer o WHERE o.endDate >= NOW() AND (NOT o.minPrice > ?) AND o.offerID = ? AND o.status = 1 AND ? > (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = ?)";
-	//
 	String SQL_BID_DELETE = "DELETE from Bid where bidID = ?";
-	//
 	String SQL_BID_SELECT_EX = "SELECT bidID, offerID, buyer, price, autoRebidLimit, bidDate FROM Bid";
-	
 	String SQL_BID_SELECT = "SELECT bidID, buyer, price, bidDate FROM Bid b WHERE b.offerID = ?";
 
 
@@ -30,19 +32,21 @@ public interface ISQLConstant {
 	// CategoryField
 	String SQL_CATEGORYFIELD_SELECT = "SELECT categoryName, CategoryField.fieldID, fieldName, fieldType FROM CategoryField INNER JOIN Field ON CategoryField.fieldID = Field.fieldID ORDER BY categoryName, CategoryField.fieldID";
 
+
+
 	// Offer
 	String SQL_OFFER_INSERT = "INSERT INTO Offer (offerID, categoryName, seller, initPrice, increment, minPrice, conditionCode, description, startDate, endDate, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL + ? DAY), 1)";
-
+	String SQL_OFFER_MODIFY = "UPDATE Offer SET (minPrice, conditionCode, description) VALUES (?, ?, ?) WHERE offerID = ? AND status = 1";
+	String sQL_OFFER_CANCEL = "UPDATE Offer SET status = 2 WHERE offerID = ? AND status = 1";
 	String SQL_OFFER_SELECT = "SELECT categoryName, seller, min_price, description, startDate, endDate, status FROM Offer WHERE offerID = ?";
-
 	String SQL_OFFER_SEARCH = "SELECT offerID, categoryName, seller, min_price, description, startDate, endDate FROM Offer WHERE status = 1 and categoryName = ? and description LIKE ?";
 
 
+	
 	// OfferField
 	String SQL_OFFERFIELD_INSERT = "INSERT INTO OfferField (offerID, fieldID, fieldText) VALUES (?, ?, ?)";
-
+	String SQL_OFFERFIELD_DELETE = "DELETE OfferField WHERE offerID = ?";
 	String SQL_OFFERFIELD_SELECT = "SELECT OfferField.fieldID, fieldName, fieldType, fieldText FROM OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID WHERE OfferField.offerID = ? ORDER BY OfferField.fieldID";
-
 	String SQL_OFFERFIELD_SEARCH = "SELECT OfferField.offerID, OfferField.fieldID, fieldName, fieldType, fieldText FROM OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID WHERE OfferField.offerID IN (SELECT offerID FROM Offer WHERE status = 1 and categoryName = ? and description LIKE ?)";
 
 

@@ -1,10 +1,21 @@
 package rutgers.cs336.db;
 
-import rutgers.cs336.gui.TableData;
-
 import java.math.BigDecimal;
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import rutgers.cs336.gui.Helper;
+import rutgers.cs336.gui.TableData;
 
 public class Bid extends DBBase {
 
@@ -138,7 +149,7 @@ public class Bid extends DBBase {
 			}
 			//
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", ParamMap=" + getParamMap(parameters));
+			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
@@ -152,7 +163,7 @@ public class Bid extends DBBase {
 			}
 			//
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", ParamMap=" + getParamMap(parameters));
+			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
 			e.printStackTrace();
 		}
 		finally {
@@ -246,7 +257,7 @@ public class Bid extends DBBase {
 			}
 			//
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", ParamMap=" + getParamMap(parameters));
+			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
@@ -260,7 +271,7 @@ public class Bid extends DBBase {
 			}
 			//
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", ParamMap=" + getParamMap(parameters));
+			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
 			e.printStackTrace();
 		}
 		finally {
@@ -429,7 +440,7 @@ public class Bid extends DBBase {
 			//
 			Map offerMap = Offer.doSearchByOfferIDSet(offerIDSet);
 			TableData dataTableOffer = (TableData)offerMap.get(DATA_NAME_DATA);
-			List lstOfferRows = dataTableOffer.getLstRows();
+			List lstOfferRows = dataTableOffer.getRows();
 			for (int i=0; i<lstOfferRows.size(); i++) {
 				List oneOfferRow = (List)lstOfferRows.get(i);
 				//
@@ -440,7 +451,7 @@ public class Bid extends DBBase {
 				else {
 					TableData tableDataBiD = new TableData(lstHeader, lstBidRows, colSeq);
 					if (bidIDStandout!=null) {
-						tableDataBiD.setOfferIDStandOut(bidIDStandout);
+						tableDataBiD.setStandOut(bidIDStandout, 0);
 					}
 					oneOfferRow.add(tableDataBiD);
 				}

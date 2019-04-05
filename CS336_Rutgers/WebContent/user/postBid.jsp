@@ -4,6 +4,7 @@
 
 <%@ page import="rutgers.cs336.gui.Helper" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
+<%@ page import="rutgers.cs336.gui.TableData" %>
 <%@ page import="java.util.List" %>
 
 <html>
@@ -17,12 +18,13 @@
 <body>
 
 <%
-	Map data = Offer.doSearchOfferByID(request.getParameterMap());
+	String offerid = getStringFromParamMap("offerid", request.getParameterMap());
+	//
+	Map data = Offer.doSearchOfferByID(offerid);
 	//
 	request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 	//
-	List lstHeader = (List) (data.get(DATA_NAME_DATA_ADD));
-	List lstRows = (List) (data.get(DATA_NAME_DATA));
+	TableData dataTable = (TableData) (data.get(DATA_NAME_DATA));
 %>
 
 
@@ -32,40 +34,18 @@
 <table>
 	<tr>
 		<%
-			// Header
-			if (lstHeader != null && lstHeader.size() > 0) {
-				for (int i = 1; i < lstHeader.size(); i++) {
-					Object one = lstHeader.get(i);
-					out.println("<td>" + one.toString() + "</td>");
-				}
-			}
+			out.println(dataTable.printHeaderForTable());
 		%>
 	</tr>
 
 	<%
-		String offerID = "";
-		if (lstRows != null) {
-			for (Object oneRow : lstRows) {
-				List lstOneRow = (List) oneRow;
-				//
-				offerID = (String) lstOneRow.get(0);
-				//
-				out.println("<tr>");
-				for (int i = 1; i < lstOneRow.size(); i++) {   // Skip offerID
-					Object oneField = lstOneRow.get(i);
-					//
-					String oneItem = oneField == null ? "" : oneField.toString();
-					if (i == 3) {
-						out.println("<td>" + Helper.getConditionFromCode(oneItem) + "</td>");
-					}
-					else {
-						out.println("<td>" + oneItem + "</td>");
-					}
-				}
-				//
-				out.println("</tr>");
-			}
+	if (dataTable.rowCount() > 0) {
+		for (int i = 0; i < dataTable.rowCount(); i++) {
+			out.println("<tr>");
+			out.println(dataTable.printOneRowInTable(i));
+			out.println("</tr>");
 		}
+	}
 	%>
 
 </table>
@@ -74,7 +54,7 @@
 <form action="${pageContext.request.contextPath}/user/postBidResult.jsp" method="post">
 
 	<%
-		out.println("<input type='hidden' name='offerId' value='" + offerID + "'/>");
+		out.println("<input type='hidden' name='offerId' value='" + offerid + "'/>");
 	%>
 
 	<div>Price<input type="number" name="price" min="1"></div>
