@@ -13,7 +13,7 @@
 <body>
 
 <%@include file="../header.jsp" %>
-<%@include file="/admin/adminNav.jsp" %>
+<%@include file="nav.jsp" %>
 
 <form action="${pageContext.request.contextPath}/admin/registerRepResult.jsp" method="post">
 	<input name="register" type="hidden" value="YES">

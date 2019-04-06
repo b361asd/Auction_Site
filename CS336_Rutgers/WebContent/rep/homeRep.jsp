@@ -12,7 +12,7 @@
 <body>
 
 <%@include file="../header.jsp" %>
-<%@include file="repNav.jsp" %>
+<%@include file="nav.jsp" %>
 
 </body>
 

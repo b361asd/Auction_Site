@@ -1,7 +1,5 @@
 package rutgers.cs336.db;
 
-import com.sun.org.apache.bcel.internal.generic.Select;
-
 public interface ISQLConstant {
 	// MySQL JDBC Connector URL
 	//init("jdbc:mysql://localhost:3306/BuyMe", "cs336", "cs336_password");
@@ -10,28 +8,25 @@ public interface ISQLConstant {
 	String MySQL_PASSWORD = "cs336_password";
 
 
-
 	// User
-	String SQL_USER_INSERT 	= "INSERT INTO User (username, password, email, firstname, lastname, address, phone, active, userType) VALUES (?, ?, ?, ?, ?, ?, ?, true, ?)";
-	String SQL_USER_AUTH 	= "SELECT password, firstname, lastname, active, userType FROM User WHERE username = ?";
+	String SQL_USER_INSERT     = "INSERT INTO User (username, password, email, firstname, lastname, address, phone, active, userType) SELECT ?, ?, ?, ?, ?, ?, ?, true, ? FROM DUAL WHERE NOT EXISTS (SELECT * FROM User u WHERE UPPER(u.username) = UPPER(?))";
+	String SQL_USER_AUTH       = "SELECT password, firstname, lastname, active, userType FROM User WHERE username = ?";
+	String SQL_USER_SELECT     = "SELECT username, password, email, firstname, lastname, address, phone, active FROM User WHERE userType = ?";
+	String SQL_USER_SELECT_ONE = "SELECT username, password, email, firstname, lastname, address, phone, active FROM User WHERE username = ? AND userType = ?";
+	String SQL_USER_ACTIVE     = "UPDATE User SET active = true where username = ?";
+	String SQL_USER_DEACTIVE   = "UPDATE User SET active = false where username = ?";
+	String SQL_USER_UPDATE     = "UPDATE User SET password = ?, email = ?, firstname = ?, lastname = ?, address = ?, phone = ? WHERE username = ? AND userType = ?";
 
-	String SQL_USER_INSERT = "SELECT password, firstname, lastname, active, userType FROM User";
-
-	
-//	Select username, password, email, firstname, lastname, address, phone, active, userType
-	
 
 	// Bid
-	String SQL_BID_INSERT = "INSERT Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) SELECT ?, o.offerID, ?, ?, ?, NOW() FROM Offer o WHERE o.endDate >= NOW() AND (NOT o.minPrice > ?) AND o.offerID = ? AND o.status = 1 AND ? > (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = ?)";
-	String SQL_BID_DELETE = "DELETE from Bid where bidID = ?";
+	String SQL_BID_INSERT    = "INSERT Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) SELECT ?, o.offerID, ?, ?, ?, NOW() FROM Offer o WHERE o.endDate >= NOW() AND (NOT o.minPrice > ?) AND o.offerID = ? AND o.status = 1 AND ? > (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = ?)";
+	String SQL_BID_DELETE    = "DELETE from Bid where bidID = ?";
 	String SQL_BID_SELECT_EX = "SELECT bidID, offerID, buyer, price, autoRebidLimit, bidDate FROM Bid";
-	String SQL_BID_SELECT = "SELECT bidID, buyer, price, bidDate FROM Bid b WHERE b.offerID = ?";
-
+	String SQL_BID_SELECT    = "SELECT bidID, buyer, price, bidDate FROM Bid b WHERE b.offerID = ?";
 
 
 	// CategoryField
 	String SQL_CATEGORYFIELD_SELECT = "SELECT categoryName, CategoryField.fieldID, fieldName, fieldType FROM CategoryField INNER JOIN Field ON CategoryField.fieldID = Field.fieldID ORDER BY categoryName, CategoryField.fieldID";
-
 
 
 	// Offer
@@ -42,7 +37,6 @@ public interface ISQLConstant {
 	String SQL_OFFER_SEARCH = "SELECT offerID, categoryName, seller, min_price, description, startDate, endDate FROM Offer WHERE status = 1 and categoryName = ? and description LIKE ?";
 
 
-	
 	// OfferField
 	String SQL_OFFERFIELD_INSERT = "INSERT INTO OfferField (offerID, fieldID, fieldText) VALUES (?, ?, ?)";
 	String SQL_OFFERFIELD_DELETE = "DELETE OfferField WHERE offerID = ?";

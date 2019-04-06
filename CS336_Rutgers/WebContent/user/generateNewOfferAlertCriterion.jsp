@@ -28,8 +28,6 @@
 <body>
 
 <%
-	String paramMap = getParamMap(request.getParameterMap());
-	//
 	Map data = CategoryAndField.getCategoryField(getStringFromParamMap("categoryName", request.getParameterMap()));
 %>
 

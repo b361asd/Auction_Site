@@ -10,7 +10,8 @@
 <body>
 
 <h2>
-	<A href="${pageContext.request.contextPath}/admin/registerRep.jsp">Register a Representative</A>
+	<A href="${pageContext.request.contextPath}/admin/listUser.jsp">Reports</A>
+	<A href="${pageContext.request.contextPath}/admin/listUser.jsp">Manage Reps</A>
 	<A href="${pageContext.request.contextPath}/logout">Logout</A>
 </h2>
 

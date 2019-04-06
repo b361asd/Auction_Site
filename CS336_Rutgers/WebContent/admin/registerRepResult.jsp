@@ -34,7 +34,7 @@
 %>
 
 <%@include file="../header.jsp" %>
-<%@include file="/admin/adminNav.jsp" %>
+<%@include file="nav.jsp" %>
 
 </body>
 

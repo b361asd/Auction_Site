@@ -67,8 +67,8 @@ public class CategoryAndField extends DBBase {
 	public static Map getCategoryField(String categoryNamesFromParam) {
 		Map output = new HashMap();
 		//
-		List        lstField    = new ArrayList();
-		List        lstCategory = new ArrayList();
+		List lstField    = new ArrayList();
+		List lstCategory = new ArrayList();
 		//
 		output.put(DATA_CATEGORY_LIST, lstCategory);
 		output.put(DATA_FIELD_LIST, lstField);
@@ -82,8 +82,8 @@ public class CategoryAndField extends DBBase {
 			//
 			ResultSet rs = stmt.executeQuery(SQL_CATEGORYFIELD_SELECT);
 			//
-			Set<String> fieldIDSet  = new HashSet<>();
-			Set<String> categoryNameSet  = new HashSet<>();
+			Set<String> fieldIDSet      = new HashSet<>();
+			Set<String> categoryNameSet = new HashSet<>();
 			//
 			while (rs.next()) {
 				Object categoryName = rs.getObject(1);
@@ -130,8 +130,22 @@ public class CategoryAndField extends DBBase {
 			e.printStackTrace();
 		}
 		finally {
-			if (stmt != null) {try {stmt.close();} catch (Throwable e) {e.printStackTrace();}}
-			if (con != null) {try {con.close();} catch (Throwable e) {e.printStackTrace();}}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				}
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		//
 		return output;

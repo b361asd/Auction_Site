@@ -10,21 +10,18 @@ public class Offer extends DBBase {
 
 	private static final int FIELD_START_INDEX = 12;
 
-
-
 	//for seach Bid
 	public static Map doSearchByOfferIDSet(Set<String> offerIDSet) {
 		StringBuilder sb;
 		//
 		sb = FormatterOfferQuery.initQuerySearch();
 		//
-		FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL_MULTI_NO_ESCAPE, getStringsFromSet(offerIDSet,"'"), null);
+		FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL_MULTI_NO_ESCAPE, getListOfStringsFromSet(offerIDSet, "'"), null);
 		//
 		return doSearchOfferInternal(sb.toString(), true);
 	}
-	
-	
-	
+
+
 	public static Map doSearchSimilar(String offeridcategorynameconditioncode) {
 		Map output;
 		//
@@ -81,15 +78,14 @@ public class Offer extends DBBase {
 		return doSearchOfferInternal(sql, true);
 	}
 
-	
-	
+
 	private static Map doSearchOfferInternal(String sql, boolean excludeStatus) {
 		Map output = new HashMap();
 		//
 		List lstHeader = new LinkedList();
 		List lstRows   = new LinkedList();
 		//
-		Map<String, String>  mapFields         = new HashMap<>();		//RowID-fieldID : fieldText
+		Map<String, String>  mapFields         = new HashMap<>();      //RowID-fieldID : fieldText
 		Map<String, Integer> mapFieldIDToIndex = new HashMap<>();
 		Map<Integer, String> mapIndexToFieldID = new HashMap<>();
 		//
@@ -197,14 +193,14 @@ public class Offer extends DBBase {
 			if (excludeStatus) {
 				colSeq = new int[lstHeader.size() - 4];
 				//
-				colSeq[0] = 2;      	//Category
-				colSeq[1] = 3;      	//Condition
-				colSeq[2] = 4;      	//Desc
-				colSeq[3] = 1;      	//Seller
-				colSeq[4] = 5;      	//initPrice
-				colSeq[5] = 11;   	//CurrBid
-				colSeq[6] = 8;      	//Start
-				colSeq[7] = 9;      	//End
+				colSeq[0] = 2;         //Category
+				colSeq[1] = 3;         //Condition
+				colSeq[2] = 4;         //Desc
+				colSeq[3] = 1;         //Seller
+				colSeq[4] = 5;         //initPrice
+				colSeq[5] = 11;      //CurrBid
+				colSeq[6] = 8;         //Start
+				colSeq[7] = 9;         //End
 				//lstHeader.add("offerId");		0
 				//lstHeader.add("increment");		6
 				//lstHeader.add("minPrice");		7
@@ -216,15 +212,15 @@ public class Offer extends DBBase {
 			else {
 				colSeq = new int[lstHeader.size() - 3];
 				//
-				colSeq[0] = 2;      	//Category
-				colSeq[1] = 3;      	//Condition
-				colSeq[2] = 4;      	//Desc
-				colSeq[3] = 1;      	//Seller
-				colSeq[4] = 5;      	//initPrice
-				colSeq[5] = 11;   	//CurrBid
-				colSeq[6] = 8;      	//Start
-				colSeq[7] = 9;      	//End
-				colSeq[8] = 10;		//status
+				colSeq[0] = 2;         //Category
+				colSeq[1] = 3;         //Condition
+				colSeq[2] = 4;         //Desc
+				colSeq[3] = 1;         //Seller
+				colSeq[4] = 5;         //initPrice
+				colSeq[5] = 11;      //CurrBid
+				colSeq[6] = 8;         //Start
+				colSeq[7] = 9;         //End
+				colSeq[8] = 10;      //status
 				//lstHeader.add("offerId");		0
 				//lstHeader.add("increment");		6
 				//lstHeader.add("minPrice");		7
@@ -338,7 +334,7 @@ public class Offer extends DBBase {
 	private static StringBuilder formatSQLWithParametersForSearchOrAlert(Map<String, String[]> parameters, String userID, boolean isSearch) {      //Search or Alert
 		StringBuilder sb;
 		//
-		String categoryNames = getStringsFromParamMap("categoryName", 1, parameters, "'");
+		String categoryNames = getListOfStringsFromParamMap("categoryName", 1, parameters, "'");
 		//
 		if (isSearch) {
 			sb = FormatterOfferQuery.initQuerySearch();
@@ -421,8 +417,7 @@ public class Offer extends DBBase {
 		return sb;
 	}
 
-	
-	
+
 	public static Map doCreateOffer(String userID, Map<String, String[]> parameters) {
 		Map output = new HashMap();
 		//
@@ -468,30 +463,63 @@ public class Offer extends DBBase {
 			con.commit();
 		}
 		catch (SQLException e) {
-			if (con != null) {try {con.rollback();} catch (Throwable t) {t.printStackTrace();}}
+			if (con != null) {
+				try {
+					con.rollback();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
 			//
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
-			if (con != null) {try {con.rollback();} catch (Throwable t) {t.printStackTrace();}}
+			if (con != null) {
+				try {
+					con.rollback();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
 			//
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
 			e.printStackTrace();
 		}
 		finally {
-			if (pStmtInsertOffer != null) {try {pStmtInsertOffer.close();} catch (Throwable t) {t.printStackTrace();}}
-			if (pStmtInsertOfferField != null) {try {pStmtInsertOfferField.close();} catch (Throwable t) {t.printStackTrace();}}
-			if (con != null) {try {con.setAutoCommit(true);con.close();} catch (Throwable t) {t.printStackTrace();}}
+			if (pStmtInsertOffer != null) {
+				try {
+					pStmtInsertOffer.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (pStmtInsertOfferField != null) {
+				try {
+					pStmtInsertOfferField.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.setAutoCommit(true);
+					con.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
 		}
 		//
 		return output;
 	}
-	
-
-	
 
 
 	public static Map doCancelOffer(Map<String, String[]> parameters) {
@@ -499,8 +527,8 @@ public class Offer extends DBBase {
 		//
 		Map output = new HashMap();
 		//
-		Connection        con                   = null;
-		PreparedStatement pStmtCancelOffer      = null;
+		Connection        con              = null;
+		PreparedStatement pStmtCancelOffer = null;
 		try {
 			con = getConnection();
 			//
@@ -510,7 +538,7 @@ public class Offer extends DBBase {
 			pStmtCancelOffer.execute();
 			//
 			int count = pStmtCancelOffer.getUpdateCount();
-			if (count==1) {
+			if (count == 1) {
 				output.put(DATA_NAME_STATUS, true);
 				output.put(DATA_NAME_MESSAGE, "OK");
 			}
@@ -530,24 +558,35 @@ public class Offer extends DBBase {
 			e.printStackTrace();
 		}
 		finally {
-			if (pStmtCancelOffer != null) {try {pStmtCancelOffer.close();} catch (Throwable t) {t.printStackTrace();}}
-			if (con != null) {try {con.close();} catch (Throwable t) {t.printStackTrace();}}
+			if (pStmtCancelOffer != null) {
+				try {
+					pStmtCancelOffer.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
 		}
 		//
 		return output;
 	}
-	
 
-	
-	
-	
+
 	public static Map doModifyOffer(Map<String, String[]> parameters) {
 		Map output = new HashMap();
 		//
-		Connection        con               		= null;
-		PreparedStatement pStmtModify 				= null;
-		PreparedStatement pStmtDeleteField  		= null;
-		PreparedStatement pStmtInsertOfferField	= null;
+		Connection        con                   = null;
+		PreparedStatement pStmtModify           = null;
+		PreparedStatement pStmtDeleteField      = null;
+		PreparedStatement pStmtInsertOfferField = null;
 		//
 		String offerid = getStringFromParamMap("offerid", parameters);
 		//
@@ -564,7 +603,7 @@ public class Offer extends DBBase {
 			pStmtModify.execute();
 			//
 			int count = pStmtModify.getUpdateCount();
-			if (count==1) {
+			if (count == 1) {
 				pStmtDeleteField = con.prepareStatement(SQL_OFFERFIELD_DELETE);
 				pStmtDeleteField.setString(1, offerid);
 				//
@@ -595,31 +634,73 @@ public class Offer extends DBBase {
 			con.commit();
 		}
 		catch (SQLException e) {
-			if (con != null) {try {con.rollback();} catch (Throwable t) {t.printStackTrace();}}
+			if (con != null) {
+				try {
+					con.rollback();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
 			//
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
-			if (con != null) {try {con.rollback();} catch (Throwable t) {t.printStackTrace();}}
+			if (con != null) {
+				try {
+					con.rollback();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
 			//
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
 			e.printStackTrace();
 		}
 		finally {
-			if (pStmtModify != null) {try {pStmtModify.close();} catch (Throwable t) {t.printStackTrace();}}
-			if (pStmtDeleteField != null) {try {pStmtDeleteField.close();} catch (Throwable t) {t.printStackTrace();}}
-			if (pStmtInsertOfferField != null) {try {pStmtInsertOfferField.close();} catch (Throwable t) {t.printStackTrace();}}
-			if (con != null) {try {con.setAutoCommit(true);con.close();} catch (Throwable t) {t.printStackTrace();}}
+			if (pStmtModify != null) {
+				try {
+					pStmtModify.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (pStmtDeleteField != null) {
+				try {
+					pStmtDeleteField.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (pStmtInsertOfferField != null) {
+				try {
+					pStmtInsertOfferField.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.setAutoCommit(true);
+					con.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
 		}
 		//
 		return output;
 	}
-	
-	
-	
+
+
 	public static void main(String[] args) {
 		Map<String, String[]> parameters = new HashMap<String, String[]>();
 		//

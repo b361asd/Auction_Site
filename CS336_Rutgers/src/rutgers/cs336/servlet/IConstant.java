@@ -1,6 +1,10 @@
 package rutgers.cs336.servlet;
 
 public interface IConstant {
+	//Debug
+	boolean DEBUG_FLAG = true;
+
+
 	// DB output map
 	String DATA_NAME_USER_TYPE  = "DataNameUserType";
 	String DATA_NAME_FIRST_NAME = "DataNameFirstName";

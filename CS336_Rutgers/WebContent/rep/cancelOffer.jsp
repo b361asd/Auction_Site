@@ -2,11 +2,8 @@
 <!DOCTYPE html>
 
 <%@ page import="rutgers.cs336.db.Offer" %>
-<%@ page import="rutgers.cs336.gui.Helper" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
-<%@ page import="rutgers.cs336.gui.TableData" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
-<%@ page import="java.util.List" %>
 
 <html>
 
@@ -18,15 +15,15 @@
 
 <body>
 
-	<%
-		Map data = Offer.doCancelOffer(request.getParameterMap());
-		//
-		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
-	%>
+<%
+	Map data = Offer.doCancelOffer(request.getParameterMap());
+	//
+	request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+%>
 
 
 <%@include file="../header.jsp" %>
-<%@include file="repNav.jsp" %>
+<%@include file="nav.jsp" %>
 
 <form id="form-sort" target="_self" method="post">
 	<input type="submit" value="Go Back">

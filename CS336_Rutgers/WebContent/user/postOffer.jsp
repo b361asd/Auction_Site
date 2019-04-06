@@ -35,15 +35,11 @@
 	}
 	//
 	String categoryNameFromParam = "CAT=" + getStringFromParamMap("categoryName", request.getParameterMap());
-	String paramMap = getParamMap(request.getParameterMap());
+	//String paramMap = getParamMap(request.getParameterMap());
 	//
 	Map data = CategoryAndField.getCategoryField(getStringFromParamMap("categoryName", request.getParameterMap()));
 %>
 <h1><%=message%>
-</h1>
-<h1><%=categoryNameFromParam%>
-</h1>
-<h1><%=paramMap%>
 </h1>
 
 <form action="${pageContext.request.contextPath}/user/postOfferResult.jsp" method="post">

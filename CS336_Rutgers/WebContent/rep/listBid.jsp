@@ -4,7 +4,6 @@
 <%@ page import="rutgers.cs336.db.Bid" %>
 <%@ page import="rutgers.cs336.gui.TableData" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
-<%@ page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
 
 <html>
@@ -25,7 +24,7 @@
 <body>
 
 <%@include file="../header.jsp" %>
-<%@include file="repNav.jsp" %>
+<%@include file="nav.jsp" %>
 
 <form id="form-id-cancelBid" action="${pageContext.request.contextPath}/rep/cancelBid.jsp" method="post">
 	<input id="input-id-cancelBid" type="hidden" name="bidID" value="_"/>

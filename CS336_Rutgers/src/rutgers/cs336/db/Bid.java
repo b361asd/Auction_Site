@@ -1,21 +1,10 @@
 package rutgers.cs336.db;
 
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import rutgers.cs336.gui.Helper;
 import rutgers.cs336.gui.TableData;
+
+import java.math.BigDecimal;
+import java.sql.*;
+import java.util.*;
 
 public class Bid extends DBBase {
 
@@ -99,12 +88,7 @@ public class Bid extends DBBase {
 		return output;
 	}
 
-	
-	
-	
-	
-	
-	
+
 	public static Map doCreateBid(String userID, Map<String, String[]> parameters) {
 		Map output = new HashMap();
 		//
@@ -189,19 +173,19 @@ public class Bid extends DBBase {
 		return output;
 	}
 
-	
+
 	public static Map doModifyBid(Map<String, String[]> parameters) {
 		Map output = new HashMap();
 		//
-		String bidIDofferIDBuyer  = getStringFromParamMap("bidIDofferIDBuyer", parameters);
-		String[] temps = bidIDofferIDBuyer.split("\\,");
+		String   bidIDofferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
+		String[] temps             = bidIDofferIDBuyer.split("\\,");
 		//
-		BigDecimal price = getBigDecimalFromParamMap("price", parameters);
+		BigDecimal price          = getBigDecimalFromParamMap("price", parameters);
 		BigDecimal autoRebidLimit = getBigDecimalFromParamMap("autoRebidLimit", parameters);
 		//
-		Connection        con                  = null;
-		PreparedStatement pStmtDeleteBid      	= null;
-		PreparedStatement pStmtInsertBid 		= null;
+		Connection        con            = null;
+		PreparedStatement pStmtDeleteBid = null;
+		PreparedStatement pStmtInsertBid = null;
 		try {
 			con = getConnection();
 			con.setAutoCommit(false);
@@ -211,7 +195,7 @@ public class Bid extends DBBase {
 			pStmtDeleteBid.execute();
 			//
 			int countDelete = pStmtDeleteBid.getUpdateCount();
-			if (countDelete==1) {
+			if (countDelete == 1) {
 				pStmtInsertBid = con.prepareStatement(SQL_BID_INSERT);
 				pStmtInsertBid.setString(1, temps[0]);
 				pStmtInsertBid.setString(2, temps[2]);
@@ -225,7 +209,7 @@ public class Bid extends DBBase {
 				pStmtInsertBid.execute();
 				//
 				int countInsert = pStmtInsertBid.getUpdateCount();
-				if (countInsert==1) {
+				if (countInsert == 1) {
 					con.commit();
 					//
 					output.put(DATA_NAME_STATUS, true);
@@ -275,20 +259,41 @@ public class Bid extends DBBase {
 			e.printStackTrace();
 		}
 		finally {
-			if (pStmtDeleteBid != null) {try {pStmtDeleteBid.close();} catch (Throwable t) {t.printStackTrace();}}
-			if (pStmtInsertBid != null) {try {pStmtInsertBid.close();} catch (Throwable t) {t.printStackTrace();}}
-			if (con != null) {try {con.setAutoCommit(true);con.close();} catch (Throwable t) {t.printStackTrace();}}
+			if (pStmtDeleteBid != null) {
+				try {
+					pStmtDeleteBid.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (pStmtInsertBid != null) {
+				try {
+					pStmtInsertBid.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.setAutoCommit(true);
+					con.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
 		}
 		//
 		return output;
 	}
-	
-	
-	
+
+
 	public static Map cancelBid(Map<String, String[]> parameters) {
 		Map output = new HashMap();
 		//
-		String bidID  = getStringFromParamMap("bidID", parameters);
+		String bidID = getStringFromParamMap("bidID", parameters);
 		//
 		Connection        con          = null;
 		PreparedStatement preparedStmt = null;
@@ -345,9 +350,8 @@ public class Bid extends DBBase {
 	}
 
 
-
 	public static Map searchBid(Map<String, String[]> parameters) {
-		StringBuilder sb  = FormatterBidQuery.initQuerySearch();
+		StringBuilder sb = FormatterBidQuery.initQuerySearch();
 		//
 		{
 			String buyerOP  = getStringFromParamMap("buyerOP", parameters);
@@ -355,8 +359,8 @@ public class Bid extends DBBase {
 			FormatterOfferQuery.addCondition(sb, "buyer", buyerOP, buyerVal, null);
 		}
 		//
-		String bidIDofferIDBuyer  = getStringFromParamMap("bidIDofferIDBuyer", parameters);
-		String bidIDStandout = null;
+		String bidIDofferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
+		String bidIDStandout     = null;
 		if (!bidIDofferIDBuyer.equals("")) {
 			String[] temps = bidIDofferIDBuyer.split("\\,");
 			FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, temps[1], null);
@@ -364,21 +368,21 @@ public class Bid extends DBBase {
 		}
 		else {
 			{
-				String bidID  = getStringFromParamMap("bidID", parameters);
+				String bidID = getStringFromParamMap("bidID", parameters);
 				FormatterOfferQuery.addCondition(sb, "bidID", OP_SZ_EQUAL, bidID, null);
 			}
 			//
 			{
-				String offerID  = getStringFromParamMap("offerID", parameters);
+				String offerID = getStringFromParamMap("offerID", parameters);
 				FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, offerID, null);
 			}
 		}
 		//
 		String sql = sb.toString();
 		//
-		Map output = new HashMap();
-		Map<String,List> tempMap = new HashMap();
-		Set<String> offerIDSet = new HashSet<>(); 
+		Map               output     = new HashMap();
+		Map<String, List> tempMap    = new HashMap();
+		Set<String>       offerIDSet = new HashSet<>();
 		//
 		List lstHeader = new ArrayList();
 		//
@@ -412,12 +416,12 @@ public class Bid extends DBBase {
 			}
 			//
 			while (rs.next()) {
-				Object bidID       		= rs.getObject(1);
-				Object offerID       	= rs.getObject(2);
-				Object buyer       		= rs.getObject(3);
-				Object price       		= rs.getObject(4);
-				Object autoRebidLimit   = rs.getObject(5);
-				Object bidDate       	= rs.getObject(6);
+				Object bidID          = rs.getObject(1);
+				Object offerID        = rs.getObject(2);
+				Object buyer          = rs.getObject(3);
+				Object price          = rs.getObject(4);
+				Object autoRebidLimit = rs.getObject(5);
+				Object bidDate        = rs.getObject(6);
 				//
 				List currentRow = new LinkedList();
 				//
@@ -430,27 +434,27 @@ public class Bid extends DBBase {
 				//
 				offerIDSet.add(offerID.toString());
 				//
-				List lstRows   = tempMap.get(offerID.toString());
-				if (lstRows==null) {
+				List lstRows = tempMap.get(offerID.toString());
+				if (lstRows == null) {
 					lstRows = new ArrayList();
 					tempMap.put(offerID.toString(), lstRows);
 				}
 				lstRows.add(currentRow);
 			}
 			//
-			Map offerMap = Offer.doSearchByOfferIDSet(offerIDSet);
-			TableData dataTableOffer = (TableData)offerMap.get(DATA_NAME_DATA);
-			List lstOfferRows = dataTableOffer.getRows();
-			for (int i=0; i<lstOfferRows.size(); i++) {
-				List oneOfferRow = (List)lstOfferRows.get(i);
+			Map       offerMap       = Offer.doSearchByOfferIDSet(offerIDSet);
+			TableData dataTableOffer = (TableData) offerMap.get(DATA_NAME_DATA);
+			List      lstOfferRows   = dataTableOffer.getRows();
+			for (int i = 0; i < lstOfferRows.size(); i++) {
+				List oneOfferRow = (List) lstOfferRows.get(i);
 				//
 				List lstBidRows = tempMap.get(oneOfferRow.get(0));
-				if (lstBidRows==null) {
+				if (lstBidRows == null) {
 					oneOfferRow.add(null);
 				}
 				else {
 					TableData tableDataBiD = new TableData(lstHeader, lstBidRows, colSeq);
-					if (bidIDStandout!=null) {
+					if (bidIDStandout != null) {
 						tableDataBiD.setStandOut(bidIDStandout, 0);
 					}
 					oneOfferRow.add(tableDataBiD);
@@ -508,6 +512,7 @@ public class Bid extends DBBase {
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
+
 	public static void main1(String[] args) {
 		Map<String, String[]> parameters = new HashMap<String, String[]>();
 		//

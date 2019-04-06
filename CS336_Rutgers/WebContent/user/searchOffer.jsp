@@ -1,10 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.CategoryAndField" %>
-<%@ page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
-<%@ page import="static rutgers.cs336.gui.Helper.*" %>
 
 <html>
 
@@ -26,10 +23,10 @@
 
 <%
 	{
-		String paramMap = getParamMap(request.getParameterMap());
+		//String paramMap = getParamMap(request.getParameterMap());
 		//
-		Map data = CategoryAndField.getCategoryField(getStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
-		request.setAttribute("TEMP",data);
+		Map data = CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
+		request.setAttribute("TEMP", data);
 	}
 %>
 

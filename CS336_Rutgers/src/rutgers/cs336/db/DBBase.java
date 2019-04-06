@@ -1,5 +1,6 @@
 package rutgers.cs336.db;
 
+import rutgers.cs336.gui.Helper;
 import rutgers.cs336.servlet.IConstant;
 
 import java.math.BigDecimal;
@@ -29,25 +30,25 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		UUID uuid = UUID.randomUUID();
 		return uuid.toString().replace("-", "");
 	}
-	
-	
-	public static       String                  OP_ANY                      = "any";
+
+
+	public static        String                  OP_ANY                      = "any";
 	//
 	public static        String                  OP_SZ_EQUAL                 = "szequal";
 	public static        String                  OP_SZ_EQUAL_MULTI_NO_ESCAPE = "szequalmultine";
-	public static       String                  OP_SZ_NOT_EQUAL             = "sznotequal";
-	public static       String                  OP_SZ_START_WITH            = "startwith";
-	public static       String                  OP_SZ_CONTAIN               = "contain";
+	public static        String                  OP_SZ_NOT_EQUAL             = "sznotequal";
+	public static        String                  OP_SZ_START_WITH            = "startwith";
+	public static        String                  OP_SZ_CONTAIN               = "contain";
 	//
 	public static        String                  OP_INT_EQUAL                = "intequal";
 	public static        String                  OP_INT_EQUAL_MULTI          = "intequalmulti";
-	public static       String                  OP_INT_NOT_EQUAL            = "intnotequal";
-	public static       String                  OP_INT_EQUAL_OR_OVER        = "equalorover";
-	public static       String                  OP_INT_EQUAL_OR_UNDER       = "equalorunder";
-	public static       String                  OP_INT_BETWEEN              = "between";
+	public static        String                  OP_INT_NOT_EQUAL            = "intnotequal";
+	public static        String                  OP_INT_EQUAL_OR_OVER        = "equalorover";
+	public static        String                  OP_INT_EQUAL_OR_UNDER       = "equalorunder";
+	public static        String                  OP_INT_BETWEEN              = "between";
 	//
-	public static       String                  OP_BOOL_TRUE                = "true";
-	public static       String                  OP_BOOL_FALSE               = "false";
+	public static        String                  OP_BOOL_TRUE                = "true";
+	public static        String                  OP_BOOL_FALSE               = "false";
 	//
 	private static final HashMap<String, String> sqlTokens;
 	private static       Pattern                 sqlTokenPattern;
@@ -86,19 +87,18 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		matcher.appendTail(sb);
 		return sb.toString();
 	}
-	
-	
+
+
 	public static String escapeToUpperCaseTrimNoNull(String input) {
 		return escape((input == null ? "" : input.trim())).toUpperCase();
 	}
-	
-	
+
+
 	public static String toUpperCaseTrimNoNull(String input) {
 		return (input == null ? "" : input.trim()).toUpperCase();
 	}
-	
 
-	
+
 	private static String oneCondition(String columnName, String op, String value, String valueAdd, boolean isCasting) {
 		String output = "";
 		//
@@ -114,81 +114,58 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 				output = "";
 			}
 			else {
+				columnName = "UPPER(" + columnName + ")";
 				if (op.equals(OP_SZ_EQUAL)) {
-					output = "(UPPER(" + columnName + ") = '" + value + "')";
+					output = "(" + columnName + " = '" + value + "')";
 				}
-				else if (op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
-					output = "(UPPER(" + columnName + ") in (" + value + "))";
+				else if (op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {               //no quote in input
+					output = "(" + columnName + " in (" + value + "))";
 				}
 				else if (op.equals(OP_SZ_NOT_EQUAL)) {
-					output = "(NOT UPPER(" + columnName + ") = '" + value + "')";
+					output = "(NOT " + columnName + " = '" + value + "')";
 				}
 				else if (op.equals(OP_SZ_START_WITH)) {
-					output = "(UPPER(" + columnName + ") LIKE '" + value + "%')";
+					output = "(" + columnName + " LIKE '" + value + "%')";
 				}
 				else if (op.equals(OP_SZ_CONTAIN)) {
-					output = "(UPPER(" + columnName + ") LIKE '%" + value + "%')";
+					output = "(" + columnName + " LIKE '%" + value + "%')";
 				}
 			}
 		}
 		else if (op.equals(OP_INT_EQUAL) || op.equals(OP_INT_EQUAL_MULTI) || op.equals(OP_INT_NOT_EQUAL) || op.equals(OP_INT_EQUAL_OR_OVER) || op.equals(OP_INT_EQUAL_OR_UNDER) || op.equals(OP_INT_BETWEEN)) {      // Integer
-			value = escape((value == null ? "" : value.trim())).toUpperCase();
+			value = escapeToUpperCaseTrimNoNull(value);
+			//
 			if (value.equals("")) {
 				output = "";
 			}
 			else {
+				if (isCasting) {
+					columnName = "CAST(" + columnName + " AS SIGNED)";
+				}
+				//
 				if (op.equals(OP_INT_EQUAL)) {
-					if (isCasting) {
-						output = "(CAST(" + columnName + " AS SIGNED) = CAST(" + value + " AS SIGNED))";
-					}
-					else {
-						output = "(" + columnName + " = " + value + ")";
-					}
+					output = "(" + columnName + " = " + value + ")";
 				}
 				else if (op.equals(OP_INT_EQUAL_MULTI)) {
-					if (isCasting) {
-						output = "(CAST(" + columnName + " AS SIGNED) = CAST(" + value + " AS SIGNED))";
-					}
-					else {
-						output = "(" + columnName + " IN (" + value + "))";
-					}
+					output = "(" + columnName + " IN (" + value + "))";
 				}
 				else if (op.equals(OP_INT_NOT_EQUAL)) {
-					if (isCasting) {
-						output = "(NOT CAST(" + columnName + " AS SIGNED) = CAST(" + value + " AS SIGNED))";
-					}
-					else {
-						output = "(NOT " + columnName + " = " + value + ")";
-					}
+					output = "(NOT " + columnName + " = " + value + ")";
 				}
 				else if (op.equals(OP_INT_EQUAL_OR_OVER)) {
-					if (isCasting) {
-						output = "(CAST(" + columnName + " AS SIGNED) >= CAST(" + value + " AS SIGNED))";
-					}
-					else {
-						output = "(" + columnName + " >= " + value + ")";
-					}
+					output = "(" + columnName + " >= " + value + ")";
 				}
 				else if (op.equals(OP_INT_EQUAL_OR_UNDER)) {
-					if (isCasting) {
-						output = "(CAST(" + columnName + " AS SIGNED) <= CAST(" + value + " AS SIGNED))";
-					}
-					else {
-						output = "(" + columnName + " <= " + value + ")";
-					}
+					output = "(" + columnName + " <= " + value + ")";
 				}
 				else if (op.equals(OP_INT_BETWEEN)) {
-					valueAdd = escape((valueAdd == null ? "" : valueAdd.trim())).toUpperCase();
+					valueAdd = escapeToUpperCaseTrimNoNull(valueAdd);
+					//
 					if (valueAdd.equals("")) {
 						output = "";
 					}
 					else {
-						if (isCasting) {
-							output = "(CAST(" + columnName + " AS SIGNED) BETWEEN CAST(" + value + " AS SIGNED) AND CAST(" + valueAdd + " AS SIGNED))";
-						}
-						else {
-							output = "(" + columnName + " BETWEEN " + value + " AND " + valueAdd + ")";
-						}
+						output = "(" + columnName + " BETWEEN " + value + " AND " + valueAdd + ")";
 					}
 				}
 			}
@@ -196,7 +173,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		else if (op.equals(OP_BOOL_TRUE) || op.equals(OP_BOOL_FALSE)) {                  // Boolean
 			if (op.equals(OP_BOOL_TRUE)) {
 				if (isCasting) {
-					output = "(UPPER(" + columnName + ") = 'TRUE')";
+					output = "(UPPER(" + columnName + ") = 'YES')";                           //UPPER('yes')
 				}
 				else {
 					output = "(" + columnName + ")";
@@ -204,7 +181,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 			}
 			else {   // op.equals(OP_BOOL_FALSE)
 				if (isCasting) {
-					output = "(UPPER(" + columnName + ") = 'FALSE')";
+					output = "(NOT UPPER(" + columnName + ") = 'YES')";                           //UPPER('no')
 				}
 				else {
 					output = "(NOT " + columnName + ")";
@@ -229,6 +206,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		//
 		return sb;
 	}
+
 	public static StringBuilder addFieldCondition(StringBuilder sb, String fieldID, String op, String value, String valueAdd) {
 		if (op.equals(OP_ANY)) {
 			// Do Nothing
@@ -242,26 +220,26 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		//
 		return sb;
 	}
-	
-	
-	
-	
-	
-	
+
+
 	public static BigDecimal getBigDecimalFromParamMap(String name, Map<String, String[]> parameters) {
-		String[] temps = parameters.get(name);
-		//
-		if (temps != null && temps.length > 0) {
-			return new BigDecimal(temps[0]);
+		if (parameters != null && name != null) {
+			String[] temps = parameters.get(name);
+			//
+			if (temps != null && temps.length > 0 && temps[0].length() > 0) {
+				return new BigDecimal(temps[0]);
+			}
+			else {
+				return new BigDecimal(-1);
+			}
 		}
 		else {
-			return new BigDecimal(-1);
+			return new BigDecimal(-2);
 		}
 	}
 
-
 	public static String getStringFromParamMap(String name, Map<String, String[]> parameters) {
-		if (parameters != null) {
+		if (parameters != null && name != null) {
 			String[] temps = parameters.get(name);
 			//
 			if (temps != null && temps.length > 0) {
@@ -276,8 +254,61 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		}
 	}
 
+	public static int getIntFromParamMap(String name, Map<String, String[]> parameters) {
+		if (parameters != null && name != null) {
+			String[] temps = parameters.get(name);
+			//
+			if (temps != null && temps.length > 0 && temps[0].length() > 0) {
+				int iTemp = -1;
+				try {
+					iTemp = Integer.parseInt(temps[0]);
+				}
+				catch (NumberFormatException e) {
+					e.printStackTrace();
+				}
+				//
+				return iTemp;
+			}
+			else {
+				return -2;
+			}
+		}
+		else {
+			return -3;
+		}
+	}
 
-	public static String getStringsFromParamMap(String name, int startIndex, Map<String, String[]> parameters, String delimiter) {
+	public static boolean getBooleanFromParamMap(String name, Map<String, String[]> parameters) {
+		String[] temps = parameters.get(name);
+		//
+		if (temps != null && temps.length > 0) {
+			String szTemp = temps[0];
+			//
+			return szTemp.equalsIgnoreCase("checked");
+		}
+		return false;
+	}
+
+
+	public static String getListOfStringsFromSet(Set<String> set, String delimiter) {
+		String out = "";
+		if (set != null) {
+			for (String one : set) {
+				if (one != null && one.length() > 0) {
+					if (out.equals("")) {
+						out = delimiter + one + delimiter;
+					}
+					else {
+						out = out + "," + delimiter + one + delimiter;
+					}
+				}
+			}
+		}
+		return out;
+	}
+
+
+	public static String getListOfStringsFromParamMap(String name, int startIndex, Map<String, String[]> parameters, String delimiter) {
 		String out = "";
 		if (parameters != null) {
 			String[] temps = null;
@@ -286,38 +317,23 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 				temps = parameters.get(name + (index++));
 				//
 				if (temps != null) {
-					if (out.equals("")) {
-						out = delimiter + temps[0] + delimiter;
-					}
-					else {
-						out = out + "," + delimiter + temps[0] + delimiter;
+					String one = temps[0];
+					if (one != null && one.length() > 0) {
+						if (out.equals("")) {
+							out = delimiter + one + delimiter;
+						}
+						else {
+							out = out + "," + delimiter + one + delimiter;
+						}
 					}
 				}
 			}
 			while (temps != null);
 		}
+		//
 		return out;
 	}
 
-
-	
-	public static String getStringsFromSet(Set<String> set, String delimiter) {
-		String out = "";
-		if (set != null) {
-			for(String one : set) {
-				if (out.equals("")) {
-					out = delimiter + one + delimiter;
-				}
-				else {
-					out = out + "," + delimiter + one + delimiter;
-				}
-			}
-		}
-		return out;
-	}
-	
-	
-	
 	public static int getPrefixIntFromParamMap(String name, Map<String, String[]> parameters, char delimiter) {
 		int out = -1;
 		//
@@ -338,39 +354,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 	}
 
 
-	public static int getIntFromParamMap(String name, Map<String, String[]> parameters) {
-		String[] temps = parameters.get(name);
-		//
-		if (temps != null && temps.length > 0) {
-			int iTemp = -1;
-			try {
-				iTemp = Integer.parseInt(temps[0]);
-			}
-			catch (NumberFormatException e) {
-				e.printStackTrace();
-			}
-			//
-			return iTemp;
-		}
-		return -2;
-	}
-
-
-	public static boolean getBooleanFromParamMap(String name, Map<String, String[]> parameters) {
-		String[] temps = parameters.get(name);
-		//
-		if (temps != null && temps.length > 0) {
-			String szTemp = temps[0];
-			//
-			return szTemp.equalsIgnoreCase("checked");
-		}
-		return false;
-	}
-
-	
-	
-	
-
 	//For debug
 	public static String dumpParamMap(Map<String, String[]> parameters) {
 		StringBuilder sb = new StringBuilder("Params:");
@@ -378,9 +361,9 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 			String   key    = s.getKey();
 			String[] values = s.getValue();
 			//
-			for (int i=0; i<values.length; i++) {
-				if (i==0) {
-					sb.append(key).append("=").append(values[0]).append(",");
+			for (int i = 0; i < values.length; i++) {
+				if (i == 0) {
+					sb.append(key).append("=").append(values[i]).append(",");
 				}
 				else {
 					sb.append(key).append("(").append(i).append(")=").append(values[i]).append(",");
@@ -394,6 +377,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 			output = output.substring(0, output.length() - 1);
 		}
 		//
-		return output;
+		return Helper.escapeHTML(output);
 	}
 }

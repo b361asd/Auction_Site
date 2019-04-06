@@ -1,17 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.DBBase" %>
-<%@ page import="rutgers.cs336.gui.Helper" %>
+<%@ page import="rutgers.cs336.db.CategoryAndField" %>
 <%@ page import="rutgers.cs336.db.Offer" %>
-<%@ page import="rutgers.cs336.db.CategoryAndField" %>
 <%@ page import="rutgers.cs336.gui.Helper" %>
-<%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 <%@ page import="rutgers.cs336.gui.TableData" %>
+<%@ page import="java.util.List" %>
+<%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
-<%@ page import="java.util.List" %>
-<%@ page import="rutgers.cs336.db.CategoryAndField" %>
-<%@ page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
 <%@ page import="static rutgers.cs336.gui.Helper.*" %>
 
@@ -33,7 +29,7 @@
 <body>
 
 <%@include file="../header.jsp" %>
-<%@include file="repNav.jsp" %>
+<%@include file="nav.jsp" %>
 
 <form id="form-id-cancelBid" action="${pageContext.request.contextPath}/rep/cancelBid.jsp" method="post">
 	<input id="input-id-cancelBid" type="hidden" name="bidID" value="_"/>
@@ -45,7 +41,7 @@
 
 <form id="form-sort" target="_self" method="post">
 	<input id="input-sort" type="hidden" name="sort" value="_"/>
-	
+
 	<%
 		Map dataModify = null;
 		Map data = null;
@@ -70,8 +66,8 @@
 		//
 		dataTable = (TableData) (data.get(DATA_NAME_DATA));
 		//
-		if (dataModify!=null) {
-			boolean _status = Helper.getStatus(dataModify);
+		if (dataModify != null) {
+			boolean _status  = Helper.getStatus(dataModify);
 			String  _message = Helper.getMessage(dataModify);
 			if (!_status) {
 				Helper.setStatus(data, false);
@@ -90,8 +86,8 @@
 		</thead>
 		<tbody>
 		<%
-			if (dataTable.rowCount()>0) {
-				for (int i=0; i< dataTable.rowCount(); i++) {
+			if (dataTable.rowCount() > 0) {
+				for (int i = 0; i < dataTable.rowCount(); i++) {
 					out.println("<tr>");
 					out.println(dataTable.printOneRowInTable(i));
 					out.println("</tr>");
@@ -115,7 +111,7 @@
 		out.println("<div class='allField'>conditionCode");
 		out.println(getConditionCodeSelection("conditionCode", dataTable.getOneCell(0, "Condition").toString()));
 		out.println("</div><br/>");
-		
+
 		out.println("<div class='allField'>description");
 		out.println("<input type='text' name='descriptionVal' value='" + dataTable.getOneCell(0, "Desc") + "' /></div><br/>");
 
@@ -152,8 +148,8 @@
 		//
 		out.println("<input name='lstFieldIDs' type='hidden' value='" + lstFieldIDs + "'/>");
 	%>
-	
-	
+
+
 	<input type="submit" value="Submit">
 </form>
 

@@ -2,10 +2,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.gui.Helper" %>
-<%@ page import="static rutgers.cs336.db.DBBase.*" %>
 <%@ page import="rutgers.cs336.gui.TableData" %>
-<%@ page import="java.util.List" %>
+<%@ page import="static rutgers.cs336.db.DBBase.*" %>
 
 <html>
 
@@ -39,13 +37,13 @@
 	</tr>
 
 	<%
-	if (dataTable.rowCount() > 0) {
-		for (int i = 0; i < dataTable.rowCount(); i++) {
-			out.println("<tr>");
-			out.println(dataTable.printOneRowInTable(i));
-			out.println("</tr>");
+		if (dataTable.rowCount() > 0) {
+			for (int i = 0; i < dataTable.rowCount(); i++) {
+				out.println("<tr>");
+				out.println(dataTable.printOneRowInTable(i));
+				out.println("</tr>");
+			}
 		}
-	}
 	%>
 
 </table>

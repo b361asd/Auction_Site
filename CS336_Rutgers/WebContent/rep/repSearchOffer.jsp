@@ -1,8 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.CategoryAndField" %>
-<%@ page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
 <%@ page import="static rutgers.cs336.gui.Helper.*" %>
 
@@ -28,13 +26,13 @@
 	{
 		String paramMap = dumpParamMap(request.getParameterMap());
 		//
-		Map data = CategoryAndField.getCategoryField(getStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
-		request.setAttribute("TEMP",data);
+		Map data = CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
+		request.setAttribute("TEMP", data);
 	}
 %>
 
 <%@include file="../header.jsp" %>
-<%@include file="repNav.jsp" %>
+<%@include file="nav.jsp" %>
 
 <form action="${pageContext.request.contextPath}/rep/listOffer.jsp" method="post">
 	<input type="hidden" name="action" value="browseOffer"/>

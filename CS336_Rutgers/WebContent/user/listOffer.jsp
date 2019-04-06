@@ -1,12 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.Offer" %>
-<%@ page import="rutgers.cs336.gui.Helper" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
-<%@ page import="rutgers.cs336.gui.TableData" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
-<%@ page import="java.util.List" %>
 
 <html>
 
@@ -43,7 +39,7 @@
 
 <form id="form-sort" target="_self" method="post">
 	<input id="input-sort" type="hidden" name="sort" value="_"/>
-	
+
 	<%@include file="../listOfferCommon.jsp" %>
 </form>
 
