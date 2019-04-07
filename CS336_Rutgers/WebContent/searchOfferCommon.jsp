@@ -1,12 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!DOCTYPE html>
-
 <%@ page import="rutgers.cs336.db.CategoryAndField" %>
 <%@ page import="java.util.List" %>
+<%@ page import="static rutgers.cs336.db.DBBase.*" %>
 <%@ page import="static rutgers.cs336.gui.Helper.*" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="java.util.Iterator" %>
 
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 
 <%
 	Map data = (Map) request.getAttribute("TEMP");

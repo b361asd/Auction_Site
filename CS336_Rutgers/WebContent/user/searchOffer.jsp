@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
+<%@ page import="static rutgers.cs336.gui.Helper.*" %>
 
 <html>
 
@@ -31,7 +32,7 @@
 %>
 
 <%@include file="../header.jsp" %>
-<%@include file="userNav.jsp" %>
+<%@include file="nav.jsp" %>
 
 <form action="${pageContext.request.contextPath}/user/listOffer.jsp" method="post">
 	<input type="hidden" name="action" value="browseOffer"/>

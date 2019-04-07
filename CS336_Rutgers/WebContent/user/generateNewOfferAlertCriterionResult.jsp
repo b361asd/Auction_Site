@@ -22,7 +22,7 @@
 %>
 
 <%@include file="../header.jsp" %>
-<%@include file="userNav.jsp" %>
+<%@include file="nav.jsp" %>
 
 </body>
 

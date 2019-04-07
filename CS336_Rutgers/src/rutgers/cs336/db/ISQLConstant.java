@@ -30,7 +30,7 @@ public interface ISQLConstant {
 
 
 	// Offer
-	String SQL_OFFER_INSERT = "INSERT INTO Offer (offerID, categoryName, seller, initPrice, increment, minPrice, conditionCode, description, startDate, endDate, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL + ? DAY), 1)";
+	String SQL_OFFER_INSERT = "INSERT INTO Offer (offerID, categoryName, seller, initPrice, increment, minPrice, conditionCode, description, startDate, endDate, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, 1)";
 	String SQL_OFFER_MODIFY = "UPDATE Offer SET (minPrice, conditionCode, description) VALUES (?, ?, ?) WHERE offerID = ? AND status = 1";
 	String sQL_OFFER_CANCEL = "UPDATE Offer SET status = 2 WHERE offerID = ? AND status = 1";
 	String SQL_OFFER_SELECT = "SELECT categoryName, seller, min_price, description, startDate, endDate, status FROM Offer WHERE offerID = ?";
@@ -53,16 +53,11 @@ public interface ISQLConstant {
 
 	String SQL_OFFER_ALERT_CRITERION_INSERT = "INSERT INTO OfferAlertCriterion (criterionID, buyer, categoryName, triggerTxt, generateDate) VALUES (?, ?, ?, ?, NOW())";
 
+
 	// Question
 	String SQL_QUESTION_INSERT             = "INSERT INTO Question (questionID, userID, question, questionDate) VALUES (?, ?, ?, NOW())";
-	String SQL_QUESTION_UPDATE_WITH_ANSWER = "UPDATE Question SET answer = ?, repID = ?, answerDate = NOW() WHERE questionID = ?";
-	String SQL_QUESTION_QUERY_OPEN         = "SELECT questionID, userID, question, questionDate FROM Question WHERE answer IS NULL OR answer = '' LIMIT 0,1";
-	String SQL_QUESTION_QUERY_BY_USER      = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate FROM Question userID = ?";
-	String SQL_QUESTION_QUERY_BY_REP       = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate FROM Question repID = ?";
-	String SQL_QUESTION_QUERY_BY_1TAGS     = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate FROM Question WHERE (question LIKE ? OR answer LIKE ?)";
-	String SQL_QUESTION_QUERY_BY_2TAGS     = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate FROM Question WHERE (question LIKE ? OR answer LIKE ?) AND (question LIKE ? OR answer LIKE ?)";
-	String SQL_QUESTION_QUERY_BY_3TAGS     = "SELECT questionID, userID, question, answer, repID, questionDate, answerDate FROM Question WHERE (question LIKE ? OR answer LIKE ?) AND (question LIKE ? OR answer LIKE ?) AND (question LIKE ? OR answer LIKE ?)";
-
+	String SQL_QUESTION_UPDATE_WITH_ANSWER = "UPDATE Question SET answer = ?, repID = ?, answerDate = NOW() WHERE questionID = ? AND (answer IS NULL OR answer = '')";
+	String SQL_QUESTION_QUERY_OPEN         = "SELECT questionID, userID, question, questionDate FROM Question WHERE (answer IS NULL OR answer = '')";
 }
 
 /*

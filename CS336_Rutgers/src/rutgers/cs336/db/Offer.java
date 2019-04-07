@@ -1,6 +1,7 @@
 package rutgers.cs336.db;
 
 import rutgers.cs336.gui.Helper;
+import rutgers.cs336.gui.HelperDatetime;
 import rutgers.cs336.gui.TableData;
 
 import java.sql.*;
@@ -10,7 +11,7 @@ public class Offer extends DBBase {
 
 	private static final int FIELD_START_INDEX = 12;
 
-	//for seach Bid
+	// For search Bid
 	public static Map doSearchByOfferIDSet(Set<String> offerIDSet) {
 		StringBuilder sb;
 		//
@@ -439,7 +440,7 @@ public class Offer extends DBBase {
 			pStmtInsertOffer.setBigDecimal(6, getBigDecimalFromParamMap("minPrice", parameters));
 			pStmtInsertOffer.setInt(7, getPrefixIntFromParamMap("conditionCode", parameters, '_'));
 			pStmtInsertOffer.setString(8, getStringFromParamMap("description", parameters));
-			pStmtInsertOffer.setInt(9, getIntFromParamMap("auction_days", parameters));
+			pStmtInsertOffer.setDate(9, HelperDatetime.convertToSQLDate(HelperDatetime.getDatetime(getStringFromParamMap("endDate", parameters))));
 			//
 			pStmtInsertOffer.execute();
 			//

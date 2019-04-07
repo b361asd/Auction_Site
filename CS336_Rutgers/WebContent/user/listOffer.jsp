@@ -22,7 +22,7 @@
 <body>
 
 <%@include file="../header.jsp" %>
-<%@include file="userNav.jsp" %>
+<%@include file="nav.jsp" %>
 
 <form id="form-id-doBid" action="${pageContext.request.contextPath}/user/postBid.jsp" method="post">
 	<input id="input-id-doBid" type="hidden" name="offerid" value="_"/>

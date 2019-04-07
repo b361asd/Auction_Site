@@ -193,6 +193,30 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 	}
 
 
+	public static StringBuilder addDatetimeConditionLookback(StringBuilder sb, String columnName, int lookbackDay) {
+		sb.append(" AND (");
+		sb.append(columnName);
+		sb.append(" >= DATE_SUB(NOW(), INTERVAL ");
+		sb.append(lookbackDay);
+		sb.append(" DAY))");
+		//
+		return sb;
+	}
+
+	public static StringBuilder addContainTagsCondition2Cols(StringBuilder sb, String columnName1, String columnName2, String value) {
+		value = escapeToUpperCaseTrimNoNull(value);
+		//
+		if (value.length() > 0) {
+			sb.append(" and (");
+			sb.append(oneCondition(columnName1, OP_SZ_CONTAIN, value, "", false));
+			sb.append(" OR ");
+			sb.append(oneCondition(columnName2, OP_SZ_CONTAIN, value, "", false));
+			sb.append(")");
+		}
+		//
+		return sb;
+	}
+
 	public static StringBuilder addCondition(StringBuilder sb, String columnName, String op, String value, String valueAdd) {
 		if (op.equals(OP_ANY)) {
 			// Do Nothing
@@ -227,7 +251,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 			String[] temps = parameters.get(name);
 			//
 			if (temps != null && temps.length > 0 && temps[0].length() > 0) {
-				return new BigDecimal(temps[0]);
+				return new BigDecimal(temps[0].trim());
 			}
 			else {
 				return new BigDecimal(-1);
@@ -243,7 +267,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 			String[] temps = parameters.get(name);
 			//
 			if (temps != null && temps.length > 0) {
-				return temps[0];
+				return temps[0].trim();
 			}
 			else {
 				return "";
@@ -261,7 +285,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 			if (temps != null && temps.length > 0 && temps[0].length() > 0) {
 				int iTemp = -1;
 				try {
-					iTemp = Integer.parseInt(temps[0]);
+					iTemp = Integer.parseInt(temps[0].trim());
 				}
 				catch (NumberFormatException e) {
 					e.printStackTrace();
@@ -282,7 +306,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		String[] temps = parameters.get(name);
 		//
 		if (temps != null && temps.length > 0) {
-			String szTemp = temps[0];
+			String szTemp = temps[0].trim();
 			//
 			return szTemp.equalsIgnoreCase("checked");
 		}
@@ -311,7 +335,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 	public static String getListOfStringsFromParamMap(String name, int startIndex, Map<String, String[]> parameters, String delimiter) {
 		String out = "";
 		if (parameters != null) {
-			String[] temps = null;
+			String[] temps;
 			int      index = startIndex;
 			do {
 				temps = parameters.get(name + (index++));
@@ -354,7 +378,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 	}
 
 
-	//For debug
+	// For debug
 	public static String dumpParamMap(Map<String, String[]> parameters) {
 		StringBuilder sb = new StringBuilder("Params:");
 		for (Map.Entry<String, String[]> s : parameters.entrySet()) {

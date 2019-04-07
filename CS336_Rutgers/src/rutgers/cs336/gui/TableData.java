@@ -6,17 +6,29 @@ import java.util.List;
 import java.util.Map;
 
 public class TableData {
+	public static final String SUB_TABLE_HEADER_SIGN = "-";
+
 	Map<String, Integer> mapHeaderToIndex;
 	//
 	List                 lstHeader;
 	List                 lstRows;
 	int[]                colSeq;
+	String               description  = "";
 	//
 	int                  indexSorted  = -1;
 	boolean              normalSorted = true;
 	//
 	String               signStandOut = null;
 	int                  idxStandOut  = -1;
+
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String input) {
+		description = input;
+	}
 
 
 	public int rowCount() {
@@ -28,19 +40,10 @@ public class TableData {
 	}
 
 
-	//	public List getLstHeader() {
-	//		return lstHeader;
-	//	}
-
-
 	public List getRows() {
 		return lstRows;
 	}
 
-
-	//	public int[] getColSeq() {
-	//		return colSeq;
-	//	}
 
 	public String getSignStandOut() {
 		return signStandOut;
@@ -65,9 +68,6 @@ public class TableData {
 		}
 	}
 
-	//	public List getOneRow(int i) {
-	//		return (List)(lstRows.get(i));
-	//	}
 
 	public Object getOneCell(int i, int j) {
 		return ((List) (lstRows.get(i))).get(j);
@@ -90,7 +90,19 @@ public class TableData {
 
 
 	public void sortRowPerHeader(String header) {
-		if (header != null) {
+		if (header != null && header.startsWith(SUB_TABLE_HEADER_SIGN)) {
+			if (lstRows != null) {
+				for (Object one : lstRows) {
+					List lst = (List) one;
+					//
+					TableData tableData = (TableData) lst.get(lst.size() - 1);
+					if (tableData != null) {
+						tableData.sortRowPerHeader(header.substring(SUB_TABLE_HEADER_SIGN.length()));
+					}
+				}
+			}
+		}
+		else if (header != null) {
 			int index = mapHeaderToIndex.get(header);
 			//
 			if (index >= 0 && index < lstHeader.size()) {
@@ -115,13 +127,31 @@ public class TableData {
 		}
 	}
 
+
+	public String printDescriptionForTable() {
+		String out = "";
+		//
+		out = "<th colspan='" + colCount() + "'>" + Helper.escapeHTML(description) + "</th>";
+		//
+		return out;
+	}
+
+
 	public String printHeaderForTable() {
+		return printHeaderForTable(false);
+	}
+
+	public String printSubHeaderForTable() {
+		return printHeaderForTable(true);
+	}
+
+	private String printHeaderForTable(boolean subTable) {
 		String out = "";
 		if (lstHeader != null && lstHeader.size() > 0 && colSeq != null && colSeq.length > 0) {
 			for (int value : colSeq) {
 				Object one     = lstHeader.get(value);
 				String oneItem = (one == null) ? "" : one.toString();
-				out = out + "<th><div onclick=onClickHeader('" + oneItem + "')>" + oneItem + "</div></th>";
+				out = out + "<th><div onclick=onClickHeader('" + (subTable ? SUB_TABLE_HEADER_SIGN : "") + oneItem + "')>" + oneItem + "</div></th>";
 			}
 		}
 		return out;

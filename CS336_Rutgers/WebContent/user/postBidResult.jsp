@@ -40,7 +40,7 @@
 <h1><%=message%>
 </h1>
 
-<%@include file="userNav.jsp" %>
+<%@include file="nav.jsp" %>
 
 </body>
 

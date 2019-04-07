@@ -29,7 +29,7 @@
 %>
 
 <%@include file="../header.jsp" %>
-<%@include file="userNav.jsp" %>
+<%@include file="nav.jsp" %>
 
 <table>
 	<tr>

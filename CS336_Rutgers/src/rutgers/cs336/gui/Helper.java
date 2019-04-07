@@ -167,7 +167,7 @@ public class Helper implements IConstant {
 	}
 
 
-	public static void setData(Map data, String payload) {
+	public static void setData(Map data, Object payload) {
 		data.put(DATA_NAME_DATA, payload);
 	}
 
@@ -185,5 +185,6 @@ public class Helper implements IConstant {
 	public static Object getData(Map data) {
 		return data.get(DATA_NAME_DATA);
 	}
+
 
 }

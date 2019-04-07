@@ -12,7 +12,7 @@
 <body>
 
 <%@include file="../header.jsp" %>
-<%@include file="userNav.jsp" %>
+<%@include file="nav.jsp" %>
 
 <form action="${pageContext.request.contextPath}/user/postQuestionResult.jsp" method="post">
 

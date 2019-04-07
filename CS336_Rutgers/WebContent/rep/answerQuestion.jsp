@@ -1,6 +1,9 @@
-<%@page import="rutgers.cs336.db.Question" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
+
+<%@page import="rutgers.cs336.db.Question" %>
+<%@page import="rutgers.cs336.gui.Helper" %>
+<%@page import="java.util.List" %>
 
 <html>
 
@@ -11,6 +14,7 @@
 </head>
 
 <body>
+
 
 <%
 	{
@@ -26,34 +30,50 @@
 	//
 	Map data = Question.retrieveOneQuestion();
 	//
-	request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+	List lstRows = (List) Helper.getData(data);
 %>
 
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<form action='${request.getAttribute("javax.servlet.forward.request_uri")}' method='post'>
+<table>
+	<thead>
+	<tr>
+		<th>User</th>
+		<th>QuestionDate</th>
+		<th>Question</th>
+	</tr>
+	</thead>
+	<tbody>
 	<%
-		out.println("<input type='hidden' name='questionID' value='" + data.get("questionID") + "'/>");
+		if (lstRows.size() > 0) {
+			for (int i = 0; i < lstRows.size(); i++) {
+				List oneRow = (List) lstRows.get(i);
+				out.println("<tr>");
+				//
+				out.println("<td>" + oneRow.get(1) + "</td>");
+				out.println("<td>" + oneRow.get(3) + "</td>");
+				//
+				out.println("<td>");
+				{
+					out.println("<form method='post'>");
+					out.println("<input type='hidden' name='questionID' value='" + oneRow.get(0) + "'/>");
+					out.println("<label for='question'>Question</label>");
+					out.println("<textarea id='question' rows='5' cols='33' readonly>" + Helper.escapeHTML(oneRow.get(2).toString()) + "</textarea>");
+					out.println("<label for='answer'>Answer</label>");
+					out.println("<textarea id='answer' name='answer' rows='5' cols='33'></textarea>");
+					out.println("<input type='submit' value='Submit'>");
+					out.println("</form>");
+				}
+				out.println("</td>");
+				//
+				out.println("</tr>");
+			}
+		}
 	%>
+	</tbody>
+</table>
 
-	<%
-		out.println("<h1>" + data.get("userID") + "</h1>");
-	%>
-
-	<%
-		out.println("<h1>" + data.get("questionDate") + "</h1>");
-	%>
-
-	<%
-		out.println("<textarea name='textarea' rows='5' cols='33' readonly>" + data.get("question") + "</textarea>");
-	%>
-
-	<label for="answer">Answer a Question:</label>
-	<textarea id="answer" name="answer" rows="5" cols="33"></textarea>
-
-	<input type="submit" value="Submit">
-</form>
 
 </body>
 

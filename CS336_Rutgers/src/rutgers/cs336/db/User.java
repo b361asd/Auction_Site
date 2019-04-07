@@ -9,14 +9,12 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class User extends DBBase {
-
-	private static List  lstHeader_user = Arrays.asList("username", "password", "email", "firstname", "lastname", "address", "phone", "active");
-	private static int[] colSeq_user    = {0, 1, 2, 3, 4, 5, 6, 7};
+	static List  lstHeader_user = Arrays.asList("username", "password", "email", "firstname", "lastname", "address", "phone", "active");
+	static int[] colSeq_user    = {0, 1, 2, 3, 4, 5, 6, 7};
 
 
 	public static Map selectUser(Map<String, String[]> parameters, int userType) {
-		Map output = new HashMap();
-		//
+		Map  output  = new HashMap();
 		List lstRows = new ArrayList();
 		//
 		String in_username = parameters == null ? "" : getStringFromParamMap("username", parameters);

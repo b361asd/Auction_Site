@@ -113,7 +113,7 @@
 		out.println("</div><br/>");
 
 		out.println("<div class='allField'>description");
-		out.println("<input type='text' name='descriptionVal' value='" + dataTable.getOneCell(0, "Desc") + "' /></div><br/>");
+		out.println("<input type='text' name='descriptionVal' value='" + Helper.escapeHTML(dataTable.getOneCell(0, "Desc").toString()) + "' /></div><br/>");
 
 		List lstField = (List) categoryAndField.get(CategoryAndField.DATA_FIELD_LIST);
 		String lstFieldIDs = null;
@@ -131,7 +131,7 @@
 			// String
 			if (fieldType == 1) {
 				out.println("<div class='allField'>" + fieldName);
-				out.println("<input type='text' name='fieldval1_" + fieldID + "' value='" + dataTable.getOneCell(0, fieldName) + "' /></div><br/>");
+				out.println("<input type='text' name='fieldval1_" + fieldID + "' value='" + Helper.escapeHTML(dataTable.getOneCell(0, fieldName).toString()) + "' /></div><br/>");
 			}
 			// Integer
 			else if (fieldType == 2) {

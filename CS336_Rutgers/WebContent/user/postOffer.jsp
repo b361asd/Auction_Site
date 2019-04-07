@@ -1,7 +1,8 @@
+<%@page import="rutgers.cs336.db.CategoryAndField" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.CategoryAndField" %>
+<%@ page import="rutgers.cs336.gui.HelperDatetime" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
@@ -75,7 +76,10 @@
 		<option value='conditionCode_6'>For parts or Not Working</option>
 	</select></div>
 	<div>Item Description<input type="text" name="description"></div>
-	<div>Auction Days<input type="number" name="auction_days" min="1" max="30"></div>
+
+	<%
+		out.println("<div>Auction Days<input type='datetime-local' name='endDate' value='" + HelperDatetime.getDatetimeSZ(7) + "' /></div>");
+	%>
 
 	<input type="submit" value="Submit">
 </form>

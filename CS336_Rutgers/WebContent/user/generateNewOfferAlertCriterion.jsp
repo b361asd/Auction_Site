@@ -32,7 +32,7 @@
 %>
 
 <%@include file="../header.jsp" %>
-<%@include file="userNav.jsp" %>
+<%@include file="nav.jsp" %>
 
 <form action="${pageContext.request.contextPath}/user/generateNewOfferAlertCriterionResult.jsp" method="post">
 

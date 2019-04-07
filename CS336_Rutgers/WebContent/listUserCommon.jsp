@@ -12,13 +12,13 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Search Offers</title>
-	<link type="text/css" rel="stylesheet" href="style.css?v=1.0"/>
+	<link type="text/css" rel="stylesheet" href="../style.css?v=1.0"/>
 </head>
 
 <body>
 
-<%@include file="header.jsp" %>
-<%@include file="/rep/nav.jsp" %>
+<%@include file="../header.jsp" %>
+<%@include file="nav.jsp" %>
 
 <form id="form-activateUser" method="post">
 	<input type="hidden" name="action" value="activateUser"/>
