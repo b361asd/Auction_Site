@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DBBase extends Utils implements ISQLConstant, IConstant {
-
+	private static final int MAX_CATEGORY_COUNT = 16;
 
 	public static Connection getConnection() throws ClassNotFoundException, SQLException {
 		// JDBC driver for MySQL. Latest: https://dev.mysql.com/downloads/connector/j/
@@ -47,8 +47,8 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 	public static        String                  OP_INT_EQUAL_OR_UNDER       = "equalorunder";
 	public static        String                  OP_INT_BETWEEN              = "between";
 	//
-	public static        String                  OP_BOOL_TRUE                = "true";
-	public static        String                  OP_BOOL_FALSE               = "false";
+	public static        String                  OP_BOOL_TRUE                = "yes";
+	public static        String                  OP_BOOL_FALSE               = "no";
 	//
 	private static final HashMap<String, String> sqlTokens;
 	private static       Pattern                 sqlTokenPattern;
@@ -173,7 +173,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		else if (op.equals(OP_BOOL_TRUE) || op.equals(OP_BOOL_FALSE)) {                  // Boolean
 			if (op.equals(OP_BOOL_TRUE)) {
 				if (isCasting) {
-					output = "(UPPER(" + columnName + ") = 'YES')";                           //UPPER('yes')
+					output = "(UPPER(" + columnName + ") = 'YES')";                           	//UPPER('yes')
 				}
 				else {
 					output = "(" + columnName + ")";
@@ -336,9 +336,8 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		String out = "";
 		if (parameters != null) {
 			String[] temps;
-			int      index = startIndex;
-			do {
-				temps = parameters.get(name + (index++));
+			for (int i = startIndex; i < MAX_CATEGORY_COUNT; i++) {
+				temps = parameters.get(name + i);
 				//
 				if (temps != null) {
 					String one = temps[0];
@@ -352,7 +351,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 					}
 				}
 			}
-			while (temps != null);
 		}
 		//
 		return out;

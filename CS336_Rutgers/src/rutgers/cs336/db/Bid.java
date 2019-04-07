@@ -99,8 +99,8 @@ public class Bid extends DBBase {
 		try {
 			con = getConnection();
 			//
-			String     offerId = getStringFromParamMap("offerId", parameters);
-			BigDecimal price   = getBigDecimalFromParamMap("price", parameters);
+			String offerId = getStringFromParamMap("offerId", parameters);
+			BigDecimal price = getBigDecimalFromParamMap("price", parameters);
 			//
 			pStmtInsertBid = con.prepareStatement(SQL_BID_INSERT);
 			pStmtInsertBid.setString(1, bidId);
@@ -449,8 +449,8 @@ public class Bid extends DBBase {
 			Map       offerMap       = Offer.doSearchByOfferIDSet(offerIDSet);
 			TableData dataTableOffer = (TableData) offerMap.get(DATA_NAME_DATA);
 			List      lstOfferRows   = dataTableOffer.getRows();
-			for (Object lstOfferRow : lstOfferRows) {
-				List oneOfferRow = (List) lstOfferRow;
+			for (int i = 0; i < lstOfferRows.size(); i++) {
+				List oneOfferRow = (List) lstOfferRows.get(i);
 				//
 				List lstBidRows = tempMap.get(oneOfferRow.get(0));
 				if (lstBidRows == null) {
@@ -503,12 +503,14 @@ public class Bid extends DBBase {
 		return output;
 	}
 
-
+	
+	
+	
 	//offerId=648e2f949a3f4c3eaf3311799e409249,price=3000,autoRebidLimit=2222	
 
 
 	public static void main(String[] args) {
-		Map<String, String[]> parameters = new HashMap<>();
+		Map<String, String[]> parameters = new HashMap<String, String[]>();
 		//
 		parameters.put("offerId", new String[]{"648e2f949a3f4c3eaf3311799e409249"});
 		parameters.put("price", new String[]{"3000"});
@@ -520,9 +522,9 @@ public class Bid extends DBBase {
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
-
+	
 	public static void main2(String[] args) {
-		Map<String, String[]> parameters = new HashMap<>();
+		Map<String, String[]> parameters = new HashMap<String, String[]>();
 		//
 		parameters.put("bidIDofferIDBuyer", new String[]{"11fe20aabc7a4025928e9522544be2e3,8f0e1575b13040f88a840a6599174cc0,user"});
 		parameters.put("price", new String[]{"1900"});
@@ -536,7 +538,7 @@ public class Bid extends DBBase {
 	}
 
 	public static void main1(String[] args) {
-		Map<String, String[]> parameters = new HashMap<>();
+		Map<String, String[]> parameters = new HashMap<String, String[]>();
 		//
 		//parameters.put("buyerOP", new String[]{"11fe20aabc7a4025928e9522544be2e3"});
 		//parameters.put("buyerVal", new String[]{OP_SZ_EQUAL});

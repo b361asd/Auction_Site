@@ -8,7 +8,13 @@ import java.sql.*;
 import java.util.*;
 
 public class Offer extends DBBase {
-
+	static List  lstHeader_offerdefault = Arrays.asList("offerId", "Seller", "Category", "Condition", "Desc", "initPrice", "increment", "minPrice", "Start", "End", "status", "CurrBid");
+	//
+	static int[] colSeq_offerdefault_ex_status    = {2, 3, 4, 1, 5, 11, 8, 9};
+	static int[] colSeq_offerdefault_w_status    = {2, 3, 4, 1, 5, 11, 8, 9, 10};
+	
+	
+	
 	private static final int FIELD_START_INDEX = 12;
 
 	// For search Bid
@@ -192,41 +198,53 @@ public class Offer extends DBBase {
 			//
 			int[] colSeq = null;
 			if (excludeStatus) {
-				colSeq = new int[lstHeader.size() - 4];
-				//
-				colSeq[0] = 2;         //Category
-				colSeq[1] = 3;         //Condition
-				colSeq[2] = 4;         //Desc
-				colSeq[3] = 1;         //Seller
-				colSeq[4] = 5;         //initPrice
-				colSeq[5] = 11;      //CurrBid
-				colSeq[6] = 8;         //Start
-				colSeq[7] = 9;         //End
-				//lstHeader.add("offerId");		0
-				//lstHeader.add("increment");		6
-				//lstHeader.add("minPrice");		7
-				//lstHeader.add("status");			10
-				for (int i = FIELD_START_INDEX; i < lstHeader.size(); i++) {
-					colSeq[i + 8 - FIELD_START_INDEX] = i;
+				if (lstHeader.size()==0) {
+					lstHeader = lstHeader_offerdefault;
+					colSeq = colSeq_offerdefault_ex_status;
+				}
+				else {
+					colSeq = new int[lstHeader.size() - 4];
+					//
+					colSeq[0] = 2;         //Category
+					colSeq[1] = 3;         //Condition
+					colSeq[2] = 4;         //Desc
+					colSeq[3] = 1;         //Seller
+					colSeq[4] = 5;         //initPrice
+					colSeq[5] = 11;      //CurrBid
+					colSeq[6] = 8;         //Start
+					colSeq[7] = 9;         //End
+					//lstHeader.add("offerId");		0
+					//lstHeader.add("increment");		6
+					//lstHeader.add("minPrice");		7
+					//lstHeader.add("status");			10
+					for (int i = FIELD_START_INDEX; i < lstHeader.size(); i++) {
+						colSeq[i + 8 - FIELD_START_INDEX] = i;
+					}
 				}
 			}
 			else {
-				colSeq = new int[lstHeader.size() - 3];
-				//
-				colSeq[0] = 2;         //Category
-				colSeq[1] = 3;         //Condition
-				colSeq[2] = 4;         //Desc
-				colSeq[3] = 1;         //Seller
-				colSeq[4] = 5;         //initPrice
-				colSeq[5] = 11;      //CurrBid
-				colSeq[6] = 8;         //Start
-				colSeq[7] = 9;         //End
-				colSeq[8] = 10;      //status
-				//lstHeader.add("offerId");		0
-				//lstHeader.add("increment");		6
-				//lstHeader.add("minPrice");		7
-				for (int i = FIELD_START_INDEX; i < lstHeader.size(); i++) {
-					colSeq[i + 9 - FIELD_START_INDEX] = i;
+				if (lstHeader.size()==0) {
+					lstHeader = lstHeader_offerdefault;
+					colSeq = colSeq_offerdefault_w_status;
+				}
+				else {
+					colSeq = new int[lstHeader.size() - 3];
+					//
+					colSeq[0] = 2;         //Category
+					colSeq[1] = 3;         //Condition
+					colSeq[2] = 4;         //Desc
+					colSeq[3] = 1;         //Seller
+					colSeq[4] = 5;         //initPrice
+					colSeq[5] = 11;      //CurrBid
+					colSeq[6] = 8;         //Start
+					colSeq[7] = 9;         //End
+					colSeq[8] = 10;      //status
+					//lstHeader.add("offerId");		0
+					//lstHeader.add("increment");		6
+					//lstHeader.add("minPrice");		7
+					for (int i = FIELD_START_INDEX; i < lstHeader.size(); i++) {
+						colSeq[i + 9 - FIELD_START_INDEX] = i;
+					}
 				}
 			}
 			//
@@ -438,7 +456,7 @@ public class Offer extends DBBase {
 			pStmtInsertOffer.setBigDecimal(4, getBigDecimalFromParamMap("initPrice", parameters));
 			pStmtInsertOffer.setBigDecimal(5, getBigDecimalFromParamMap("increment", parameters));
 			pStmtInsertOffer.setBigDecimal(6, getBigDecimalFromParamMap("minPrice", parameters));
-			pStmtInsertOffer.setInt(7, getPrefixIntFromParamMap("conditionCode", parameters, '_'));
+			pStmtInsertOffer.setInt(7, getIntFromParamMap("conditionCode", parameters));
 			pStmtInsertOffer.setString(8, getStringFromParamMap("description", parameters));
 			pStmtInsertOffer.setString(9, getStringFromParamMap("endDate", parameters));
 			//
@@ -705,7 +723,24 @@ public class Offer extends DBBase {
 	public static void main(String[] args) {
 		Map<String, String[]> parameters = new HashMap<String, String[]>();
 		//
-		parameters.put("offerid", new String[]{"c622c45535544dd99be86776aa758d58"});
+		parameters.put("categoryName1", new String[]{"car"});
+		parameters.put("fieldop_6", new String[]{"yes"});
+		parameters.put("lstFieldIDs", new String[]{"1,2,3,4,5,6,7"});
+		//
+		Map map = doSearchOffer(parameters);
+		//
+		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
+		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
+		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
+	}
+	public static void main1(String[] args) {
+		Map<String, String[]> parameters = new HashMap<String, String[]>();
+		//
+		parameters.put("categoryName2", new String[]{"motorbike"});
+		parameters.put("categoryName3", new String[]{"truck"});
+		//
+		System.out.println(DATA_NAME_STATUS + "= " + getListOfStringsFromParamMap("categoryName", 1, parameters, "'"));
+		System.out.println(DATA_NAME_STATUS + "= " + getListOfStringsFromParamMap("categoryName", 1, parameters, ""));
 		//
 		Map map = doCancelOffer(parameters);
 		//
@@ -714,3 +749,8 @@ public class Offer extends DBBase {
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
 }
+
+
+//
+//Params:categoryName1=car,offerIDOP=any,offerIDVal=,sellerOP=any,sellerVal=,conditionCode_1=yes,conditionCode_2=yes,conditionCode_3=yes,conditionCode_4=yes,conditionCode_5=yes,conditionCode_6=yes,descriptionOP=any,descriptionVal=,priceOP=any,priceVal1=,priceVal2=,fieldop_1=any,fieldval1_1=,fieldop_2=any,fieldval1_2=,fieldop_3=any,fieldval1_3=,fieldval2_3=,fieldop_4=any,fieldval1_4=,fieldop_5=any,fieldval1_5=,fieldval2_5=,fieldop_6=yes,fieldop_7=any,fieldval1_7=,lstFieldIDs=1,2,3,4,5,6,7,action=searchOffer
+

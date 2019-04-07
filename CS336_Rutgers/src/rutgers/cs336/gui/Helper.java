@@ -7,20 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Helper implements IConstant {
+
 	private final static String[] S_CONDITIONS = {"New", "Like New", "Manufacturer Refurbished", "Seller Refurbished", "Used", "For parts or Not Working"};
 
-	// GUI
-	private static final String SELECT_VAL_BOOL_TYPE     = "<select name='?'><option value='yes'>YES</option><option value='no'>NO</option></select>";
-	//
-	public static String getValBoolSelection(String name) {
-		return SELECT_VAL_BOOL_TYPE.replaceAll("\\?", name);
-	}
-	
-	
-	
-	
-	
-	
 	private static final String SELECT_OP_SZ_TYPE       = "<select name='?'><option value='any'>Any</option><option value='szequal'>Equal</option><option value='sznotequal'>Not Equal</option><option value='startwith'>Starts With</option><option value='contain'>Contains</option></select>";
 	private static final String SELECT_OP_INT_TYPE      = "<select name='?'><option value='any'>Any</option><option value='intequal'>Equal</option><option value='intnotequal'>Not Equal</option><option value='equalorover'>Greater Than or Equal To</option><option value='equalorunder'>Less Than or Equal To</option><option value='between'>Between</option></select>";
 	private static final String SELECT_OP_BOOL_TYPE     = "<select name='?'><option value='any'>Any</option><option value='yes'>YES</option><option value='no'>NO</option></select>";
@@ -29,9 +18,11 @@ public class Helper implements IConstant {
 	public static String getOPSZSelection(String name) {
 		return SELECT_OP_SZ_TYPE.replaceAll("\\?", name);
 	}
+
 	public static String getOPIntSelection(String name) {
 		return SELECT_OP_INT_TYPE.replaceAll("\\?", name);
 	}
+
 	public static String getOPBoolSelection(String name) {
 		return SELECT_OP_BOOL_TYPE.replaceAll("\\?", name);
 	}
@@ -92,9 +83,9 @@ public class Helper implements IConstant {
 		//
 		boolean isYes = selected.equalsIgnoreCase("yes");   //IN DB: 'no' 'yes'
 		//
-		sb.append("<select>");
-		sb.append("<option value='true'" + (isYes ? " selected" : "") + ">YES</option>");
-		sb.append("<option value='false'" + (isYes ? "" : " selected") + ">NO</option>");
+		sb.append("<select name='").append(name).append("'>");
+		sb.append("<option value='yes'" + (isYes ? " selected" : "") + ">YES</option>");
+		sb.append("<option value='no'" + (isYes ? "" : " selected") + ">NO</option>");
 		sb.append("</select>");
 		//
 		return sb.toString();

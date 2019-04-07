@@ -43,6 +43,9 @@ public interface ISQLConstant {
 	String SQL_OFFERFIELD_SELECT = "SELECT OfferField.fieldID, fieldName, fieldType, fieldText FROM OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID WHERE OfferField.offerID = ? ORDER BY OfferField.fieldID";
 	String SQL_OFFERFIELD_SEARCH = "SELECT OfferField.offerID, OfferField.fieldID, fieldName, fieldType, fieldText FROM OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID WHERE OfferField.offerID IN (SELECT offerID FROM Offer WHERE status = 1 and categoryName = ? and description LIKE ?)";
 
+	// Trade
+	String SQL_TRADE_VIEW          = "(select t.tradeID, o.offerID, b.bidID, tradeDate, seller, categoryName, conditionCode, description, status, buyer, price from Trade t, Offer o, Bid b WHERE t.offerID = o.offerID and t.bidID = b.bidID AND tradeDate > DATE_SUB(NOW(), INTERVAL ? DAY)) tob";
+	String SQL_TRADE_TOTAL_BY_USER = "SELECT buyer, SUM(price) as Total, AVG(price) as Avarage, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By buyer order by Total DESC";
 
 	// Browse
 	//	String BROWSE_OPEN_OFFER (including current bid, sorted by different criteria)

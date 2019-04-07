@@ -5,6 +5,7 @@
 <%@ page import="rutgers.cs336.gui.HelperDatetime" %>
 <%@ page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
+<%@ page import="static rutgers.cs336.gui.Helper.*" %>
 
 <html>
 
@@ -60,14 +61,13 @@
 	<div>Initial Price<input type="NUMBER" name="initPrice" min="1"></div>
 	<div>Price Increment<input type="Number" name="increment" min="1"></div>
 	<div>Minimal Price<input type="Number" name="minPrice"></div>
-	<div><select name="conditionCode" onchange="onCategoryChange(this.parentElement);">
-		<option value='conditionCode_1'>New</option>
-		<option value='conditionCode_2'>Like New</option>
-		<option value='conditionCode_3'>Manufacturer Refurbished</option>
-		<option value='conditionCode_4'>Seller Refurbished</option>
-		<option value='conditionCode_5'>Used</option>
-		<option value='conditionCode_6'>For parts or Not Working</option>
-	</select></div>
+
+	<%
+		out.println("<div class='allField'>conditionCode");
+		out.println(getConditionCodeSelection("conditionCode", "New"));
+		out.println("</div><br/>");
+	%>
+
 	<div>Item Description<input type="text" name="description"></div>
 
 	<%
@@ -75,7 +75,24 @@
 		for (Object o : lstField) {
 			String fieldName = ((CategoryAndField.Field) o).getFieldName();
 			int    fieldID   = ((CategoryAndField.Field) o).getFieldID();
-			out.println("<div class='allField'>" + fieldName + "<input type = \"text\" name = \"fieldID_" + fieldID + "\" / ></div><br >");
+			int    fieldType = ((CategoryAndField.Field) o).getFieldType();
+			//
+			// String
+			if (fieldType == 1) {
+				out.println("<div class='allField'>" + fieldName);
+				out.println("<input type='text' name='fieldID_" + fieldID + "' value='' /></div><br/>");
+			}
+			// Integer
+			else if (fieldType == 2) {
+				out.println("<div class='allField'>" + fieldName);
+				out.println("<input type='number' name = 'fieldID_" + fieldID + "' value='1' /></div><br/>");
+			}
+			// Boolean
+			else {
+				out.println("<div class='allField'>" + fieldName);
+				out.println(getYesNoSelection("fieldID_" + fieldID, "yes"));
+				out.println("</div><br/>");
+			}
 		}
 	%>
 
