@@ -228,27 +228,56 @@ CREATE TABLE Email
 
 
 -- Procedure to generate alert for new offers if criteria matched
+DROP PROCEDURE IF EXISTS GenerateNewOfferAlert;
 DELIMITER $$
-	CREATE PROCEDURE GenerateNewOfferAlert(IN offerID VARCHAR(32), IN categoryName VARCHAR(32))
-	BEGIN
-		DECLARE sqlTxt VARCHAR(2048);
-		DECLARE criteriaCursor CURSOR FOR SELECT criterionID, buyer, categoryName, triggerTxt FROM OfferAlertCriterion;
-		--
-		OPEN criteriaCursor;
-		--
-		cursorLoop: WHILE (@criteriaCursor) DO
-			SET sqlTxt = REPLACE (triggerText, '$offerID$', offerID);
-			IF (@criteriaCursor.categoryName = categoryName) THEN
-				BEGIN
-					PREPARE stmt FROM @sqlTxt;
-					EXECUTE stmt USING @sqlTxt;
-					DEALLOCATE PREPARE stmt;
-				END;
-			END IF;
-		END WHILE cursorLoop;
-		--
-		CLOSE criteriaCursor;
-	END $$
+CREATE PROCEDURE GenerateNewOfferAlert(IN offerID VARCHAR(32), IN categoryName VARCHAR(32))
+BEGIN
+	DECLARE sqlTxt VARCHAR(2048);
+	DECLARE criteriaCursor CURSOR FOR SELECT criterionID, buyer, categoryName, triggerTxt FROM OfferAlertCriterion;
+	--
+	OPEN criteriaCursor;
+	--
+	cursorLoop: WHILE (@criteriaCursor) DO
+		SET sqlTxt = REPLACE (triggerText, '$offerID$', offerID);
+		IF (@criteriaCursor.categoryName = categoryName) THEN
+			BEGIN
+				PREPARE stmt FROM @sqlTxt;
+				EXECUTE stmt USING @sqlTxt;
+				DEALLOCATE PREPARE stmt;
+			END;
+		END IF;
+	END WHILE cursorLoop;
+	--
+	CLOSE criteriaCursor;
+END $$
+DELIMITER ;
+
+
+
+-- Procedure to match offer and bid
+DROP PROCEDURE IF EXISTS DoTrade;
+DELIMITER $$
+CREATE PROCEDURE DoTrade()
+BEGIN
+	UPDATE Offer o SET o.status = 4 WHERE o.offerID <> 'A' AND o.status = 1 AND NOW() > endDate AND 
+    NOT EXISTS (SELECT * FROM Bid b WHERE b.offerID = o.offerID);
+	--
+	UPDATE Offer o SET o.status = 5 WHERE o.offerID <> 'A' AND o.status = 1 AND NOW() > endDate AND 
+    (o.minPrice >= o.initPrice AND NOT EXISTS (SELECT * FROM Bid b WHERE b.offerID = o.offerID AND b.price >= o.minPrice));
+	--
+	UPDATE Offer o SET o.status = 13 WHERE o.offerID <> 'A' AND o.status = 1 AND NOW() > endDate AND 
+	(
+		(o.minPrice >= o.initPrice AND EXISTS (SELECT * FROM Bid b WHERE b.offerID = o.offerID AND b.price >= o.minPrice))
+        OR 
+		(NOT o.minPrice >= o.initPrice AND EXISTS (SELECT * FROM Bid b WHERE b.offerID = o.offerID AND b.price >= o.initPrice))
+    );
+	--
+	INSERT INTO Trade (tradeID, offerID, bidID, tradeDate) 
+    SELECT REPLACE(UUID(),'-',''), o.offerID, b.bidID, NOW() FROM Offer o, Bid b WHERE o.status = 13 AND o.offerID = b.offerID AND 
+    b.price = (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = o.offerID ) LIMIT 0, 1;
+	--
+	UPDATE Offer SET status = 3 WHERE offerID <> 'A' AND status = 13;
+END $$
 DELIMITER ;
 
 
@@ -260,29 +289,29 @@ DELIMITER $$
 	FOR EACH ROW
 	BEGIN
 		DECLARE priceAdjust DECIMAL(20, 2);
-      DECLARE timeNow DATETIME;
-      --
+		DECLARE timeNow DATETIME;
+		--
 		CREATE TEMPORARY TABLE Temp		-- Latest Bid with auto rebid before insert
 		SELECT * FROM Bid b1 WHERE b1.price = (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = NEW.offerID AND NOT b1.bidID = NEW.bidID) AND b1.autoRebidLimit > 0 AND b1.offerID = NEW.offerID AND NOT b1.bidID = NEW.bidID LIMIT 0,1;
-      --
-      SET priceAdjust = (NEW.price + (SELECT o.increment FROM Offer o WHERE o.offerID = NEW.offerID));
-      SET timeNow = NOW();
-      --
-      IF ((SELECT COUNT(*) FROM Temp) = 0) THEN -- Either New is 1st bid or last is not auto rebid
-			BEGIN
-         --
-			END;
+		--
+		SET priceAdjust = (NEW.price + (SELECT o.increment FROM Offer o WHERE o.offerID = NEW.offerID));
+		SET timeNow = NOW();
+		--
+		IF ((SELECT COUNT(*) FROM Temp) = 0) THEN -- Either New is 1st bid or last is not auto rebid
+		BEGIN
+		--
+		END;
 		ELSEIF ((SELECT autoRebidLimit FROM Temp) >= @priceAdjust) THEN	-- Auto rebid and autoRebidLimit >= New.price + increment. Do a rebid
-			BEGIN
-				INSERT Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) SELECT bidID, offerID, buyer, @priceAdjust, autoRebidLimit, @timeNow FROM Temp WHERE @timeNow <= (SELECT endDate from Offer o1 where o1.offerID = NEW.offerID);
-			END;
-      ELSE	-- Price >= Auto Rebid. Send Alert.
-			BEGIN
-				INSERT Alert (alertID, receiver, message, offerID, bidID, alertDate, dismissedDate) SELECT REPLACE(UUID(),'-',''), buyer, 'Item Price Exceeded Auto Rebid Limit', offerID, bidID, @timeNow, NULL FROM Temp;
-			END;
-      END IF;
-      --
-      DROP TEMPORARY TABLE Temp;
+		BEGIN
+			INSERT Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) SELECT bidID, offerID, buyer, @priceAdjust, autoRebidLimit, @timeNow FROM Temp WHERE @timeNow <= (SELECT endDate from Offer o1 where o1.offerID = NEW.offerID);
+		END;
+		ELSE	-- Price >= Auto Rebid. Send Alert.
+		BEGIN
+			INSERT Alert (alertID, receiver, message, offerID, bidID, alertDate, dismissedDate) SELECT REPLACE(UUID(),'-',''), buyer, 'Item Price Exceeded Auto Rebid Limit', offerID, bidID, @timeNow, NULL FROM Temp;
+		END;
+		END IF;
+		--
+		DROP TEMPORARY TABLE Temp;
 	END $$
 DELIMITER ;
 
@@ -309,14 +338,6 @@ DELIMITER $$
 	COMMENT 'Process trades'
 	DO
 		BEGIN
-			UPDATE Offer o SET o.status = 4 WHERE o.status = 1 AND NOW() > endDate AND NOT EXISTS (SELECT * FROM Bid b WHERE b.offerID = o.offerID);
-			--
-			UPDATE Offer o SET o.status = 5 WHERE o.status = 1 AND NOW() > endDate AND NOT EXISTS (SELECT * FROM Bid b WHERE b.offerID = o.offerID AND b.price >= o.minPrice);
-			--
-			UPDATE Offer SET status = 13 WHERE status = 1 AND NOW() > endDate AND EXISTS (SELECT * FROM Bid b WHERE b.offerID = o.offerID AND b.price >= o.minPrice);
-			--
-			INSERT INTO Trade (tradeID, offerID, bidID, tradeDate) SELECT REPLACE(UUID(),'-',''), o.offerID, b.bidID, NOW() FROM Offer o, Bid b WHERE o.status = 13 AND o.offerID = b.offerID AND b.price = (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = o.offerID ) LIMIT 0, 1;
-			--
-			UPDATE Offer SET status = 3 WHERE status = 13;
+			CALL DoTrade();
 		END $$
 DELIMITER ;
