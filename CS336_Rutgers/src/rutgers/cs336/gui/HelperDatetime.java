@@ -54,7 +54,9 @@ public class HelperDatetime {
 
 
 	public static void main(String[] args) {
-		String datetimeSZString = "2014-12-08T15:43:00";
+		String datetimeSZString = "2019-04-07T11:01:20";
+		//
+		System.out.println(HelperDatetime.convertToSQLDate(HelperDatetime.getDatetime(datetimeSZString)));
 		//
 		System.out.println(getDatetimeSZ(7));
 		//

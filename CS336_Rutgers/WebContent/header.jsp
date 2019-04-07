@@ -20,8 +20,8 @@
 <%
 	Map _dataMapHeader = (Map) session.getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
 	if (_dataMapHeader != null && !(Boolean) _dataMapHeader.get(DATA_NAME_STATUS)) {
-		String message = (String) _dataMapHeader.get(DATA_NAME_MESSAGE);
-		out.println("<h2>" + message + "</h2>");
+		String _message = (String) _dataMapHeader.get(DATA_NAME_MESSAGE);
+		out.println("<h2>" + _message + "</h2>");
 	}
 	//
 	String _sessionMessage;

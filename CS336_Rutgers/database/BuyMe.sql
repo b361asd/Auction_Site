@@ -86,12 +86,17 @@ CREATE TABLE Offer
 	--
 	initPrice     DECIMAL(20, 2) NOT NULL,
 	increment     DECIMAL(20, 2) NOT NULL,
-	minPrice      DECIMAL(20, 2) NULL,     -- NULL if user has not set a min price
+	minPrice      DECIMAL(20, 2) NULL NOT NULL,
+    CONSTRAINT INIT_CK CHECK(initPrice > 0),
+    CONSTRAINT INC_CK CHECK(increment > 0),
+    CONSTRAINT MIN_CK CHECK(minPrice = 0 OR minPrice>=initPrice),
 	--
 	startDate     DATETIME       NOT NULL,
 	endDate       DATETIME       NOT NULL,
+    CONSTRAINT ENDDATE_CK CHECK(endDate > startDate),
 	--
 	status        INT            NOT NULL, -- 1:Active, 2:Withdrawal, 3:Completed, 4:No bid, 5:Min not met
+    
 	--
 	FOREIGN KEY (seller) REFERENCES User (username) ON UPDATE CASCADE ON DELETE CASCADE,
 	--
@@ -159,7 +164,8 @@ CREATE TABLE OfferAlertCriterion
 	--
 	buyer        VARCHAR(64)   NOT NULL,
 	--
-	categoryName VARCHAR(64)   NOT NULL,
+	criterionName VARCHAR(64)   NOT NULL,
+    --
 	triggerTxt   VARCHAR(2048) NOT NULL,
     --
 	generateDate DATETIME    NOT NULL,

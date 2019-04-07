@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 
 <%@ page import="rutgers.cs336.db.Offer" %>
-<%@ page import="java.util.Map" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 
 <html>
@@ -33,14 +32,16 @@
 		}
 	}
 %>
-<h1><%=sessionMessage%>
-</h1>
-<h1><%=status%>
-</h1>
+
+
 <h1><%=message%>
 </h1>
 
 <%@include file="nav.jsp" %>
+<%@include file="../header.jsp" %>
+
+<h1><%=message%>
+</h1>
 
 </body>
 

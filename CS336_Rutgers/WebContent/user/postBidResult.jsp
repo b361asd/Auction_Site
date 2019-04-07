@@ -3,7 +3,6 @@
 
 <%@ page import="rutgers.cs336.db.Bid" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
-<%@ page import="java.util.Map" %>
 
 <html>
 
@@ -41,6 +40,7 @@
 </h1>
 
 <%@include file="nav.jsp" %>
+<%@include file="../header.jsp" %>
 
 </body>
 

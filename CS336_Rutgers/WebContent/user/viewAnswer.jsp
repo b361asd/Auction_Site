@@ -51,24 +51,24 @@
 		out.println("<table>");
 		out.println("<tr>");
 		out.println("<td>");
-		out.println("<div class='allField'>userID");
+		out.println("<div align='left' class='allField'>userID");
 		out.println(getOPSZSelection("useridOP"));
 		out.println("<input type='text' name='useridVal'/></div>");
 		out.println("</td>");
 		out.println("<td>");
-		out.println("<div class='allField'>repID");
+		out.println("<div align='left' class='allField'>repID");
 		out.println(getOPSZSelection("repidOP"));
 		out.println("<input type='text' name='repidVal'/></div>");
 		out.println("</td>");
 		out.println("<td>");
-		out.println("<div class='allField'>Lookbackdays");
+		out.println("<div align='left' class='allField'>Lookbackdays");
 		out.println("<input type='number' name='lookbackdays' value='30'/></div>");
 		out.println("</td>");
 		out.println("</tr>");
 		//
 		out.println("<tr>");
 		out.println("<td colspan='2'>");
-		out.println("<div class='allField'>Tags");
+		out.println("<div align='left' class='allField'>Tags");
 		out.println("<input type='text' name='tags'/></div>");
 		out.println("</td>");
 		out.println("<td>");

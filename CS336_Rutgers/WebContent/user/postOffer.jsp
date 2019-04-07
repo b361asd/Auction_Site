@@ -4,7 +4,6 @@
 
 <%@ page import="rutgers.cs336.gui.HelperDatetime" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Map" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
 
 <html>
@@ -39,15 +38,18 @@
 	//String paramMap = getParamMap(request.getParameterMap());
 	//
 	Map data = CategoryAndField.getCategoryField(getStringFromParamMap("categoryName", request.getParameterMap()));
+	List lstCategory = (List) data.get(CategoryAndField.DATA_CATEGORY_LIST);
 %>
 <h1><%=message%>
 </h1>
+
+<%@include file="nav.jsp" %>
+<%@include file="../header.jsp" %>
 
 <form action="${pageContext.request.contextPath}/user/postOfferResult.jsp" method="post">
 
 	<select name="categoryName" onchange="onCategoryChange(this.parentElement);">
 		<%
-			List lstCategory = (List) data.get(CategoryAndField.DATA_CATEGORY_LIST);
 			for (Object o : lstCategory) {
 				CategoryAndField.Category temp = (CategoryAndField.Category) o;
 				out.println("<option " + (temp.isCurr() ? "selected " : "") + "value=\"" + temp.getCategoryName() + "\">" + temp.getCategoryName() + "</option>");
@@ -55,18 +57,9 @@
 		%>
 	</select><br>
 
-	<%
-		List lstField = (List) data.get(CategoryAndField.DATA_FIELD_LIST);
-		for (Object o : lstField) {
-			String fieldName = ((CategoryAndField.Field) o).getFieldName();
-			int    fieldID   = ((CategoryAndField.Field) o).getFieldID();
-			out.println("<div class='allField'>" + fieldName + "<input type = \"text\" name = \"fieldID_" + fieldID + "\" / ></div><br >");
-		}
-	%>
-
-	<div>Auction Days<input type="initPrice" name="initPrice" min="1" max="30"></div>
-	<div>Auction Days<input type="increment" name="increment" min="1" max="30"></div>
-	<div>Auction Days<input type="minPrice" name="minPrice" min="1" max="30"></div>
+	<div>Initial Price<input type="NUMBER" name="initPrice" min="1"></div>
+	<div>Price Increment<input type="Number" name="increment" min="1"></div>
+	<div>Minimal Price<input type="Number" name="minPrice"></div>
 	<div><select name="conditionCode" onchange="onCategoryChange(this.parentElement);">
 		<option value='conditionCode_1'>New</option>
 		<option value='conditionCode_2'>Like New</option>
@@ -76,6 +69,15 @@
 		<option value='conditionCode_6'>For parts or Not Working</option>
 	</select></div>
 	<div>Item Description<input type="text" name="description"></div>
+
+	<%
+		List lstField = (List) data.get(CategoryAndField.DATA_FIELD_LIST);
+		for (Object o : lstField) {
+			String fieldName = ((CategoryAndField.Field) o).getFieldName();
+			int    fieldID   = ((CategoryAndField.Field) o).getFieldID();
+			out.println("<div class='allField'>" + fieldName + "<input type = \"text\" name = \"fieldID_" + fieldID + "\" / ></div><br >");
+		}
+	%>
 
 	<%
 		out.println("<div>Auction Days<input type='datetime-local' name='endDate' value='" + HelperDatetime.getDatetimeSZ(7) + "' /></div>");

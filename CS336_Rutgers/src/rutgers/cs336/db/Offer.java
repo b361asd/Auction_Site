@@ -440,7 +440,7 @@ public class Offer extends DBBase {
 			pStmtInsertOffer.setBigDecimal(6, getBigDecimalFromParamMap("minPrice", parameters));
 			pStmtInsertOffer.setInt(7, getPrefixIntFromParamMap("conditionCode", parameters, '_'));
 			pStmtInsertOffer.setString(8, getStringFromParamMap("description", parameters));
-			pStmtInsertOffer.setDate(9, HelperDatetime.convertToSQLDate(HelperDatetime.getDatetime(getStringFromParamMap("endDate", parameters))));
+			pStmtInsertOffer.setString(9, getStringFromParamMap("endDate", parameters));
 			//
 			pStmtInsertOffer.execute();
 			//
