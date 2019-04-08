@@ -130,7 +130,10 @@ CREATE TABLE Bid
 	--
 	buyer          VARCHAR(64)    NOT NULL,
 	price          DECIMAL(20, 2) NOT NULL,
-	autoRebidLimit DECIMAL(20, 2) NULL, -- NULL or 0 if not auto rebid
+	autoRebidLimit DECIMAL(20, 2) NOT NULL,
+    CONSTRAINT PRICE_CK CHECK(price > 0),
+    CONSTRAINT AUTOREBID_CK CHECK(autoRebidLimit = 0 OR autoRebidLimit > price),
+    --
 	bidDate        DATETIME       NOT NULL,
 	--
 	FOREIGN KEY (buyer) REFERENCES User (username) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -233,6 +236,8 @@ CREATE TABLE Email
 
 
 
+
+
 -- Procedure to generate alert for new offers if criteria matched
 DROP PROCEDURE IF EXISTS GenerateNewOfferAlert;
 DELIMITER $$
@@ -288,49 +293,35 @@ DELIMITER ;
 
 
 
--- Handles Auto Rebid and outbid alert when a row is inserted into Bid table
-DROP TRIGGER IF EXISTS AutoRebidAndOutbidAlert;
+
+-- Auto rebid
+DROP PROCEDURE IF EXISTS doAutoRebidAndOutbidAlert;
 DELIMITER $$
-	CREATE TRIGGER AutoRebidAndOutbidAlert AFTER INSERT ON Bid
-	FOR EACH ROW
-	BEGIN
-		DECLARE priceAdjust DECIMAL(20, 2);
-		DECLARE timeNow DATETIME;
-		--
-		CREATE TEMPORARY TABLE Temp		-- Latest Bid with auto rebid before insert
-		SELECT * FROM Bid b1 WHERE b1.price = (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = NEW.offerID AND NOT b1.bidID = NEW.bidID) AND b1.autoRebidLimit > 0 AND b1.offerID = NEW.offerID AND NOT b1.bidID = NEW.bidID LIMIT 0,1;
-		--
-		SET priceAdjust = (NEW.price + (SELECT o.increment FROM Offer o WHERE o.offerID = NEW.offerID));
-		SET timeNow = NOW();
-		--
-		IF ((SELECT COUNT(*) FROM Temp) = 0) THEN -- Either New is 1st bid or last is not auto rebid
+CREATE PROCEDURE doAutoRebidAndOutbidAlert(IN newofferID VARCHAR(32), IN newbidID VARCHAR(32), IN newprice DECIMAL(20, 2))
+BEGIN
+	DECLARE priceAdjust DECIMAL(20, 2);
+	--
+	CREATE TEMPORARY TABLE _Temp		-- Latest Bid with auto rebid before insert
+	SELECT * FROM Bid b1 WHERE b1.price = (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = newofferID AND NOT b2.bidID = newbidID) AND b1.autoRebidLimit > 0 AND b1.offerID = newofferID AND NOT b1.bidID = newbidID LIMIT 0,1;
+	--
+	SELECT newprice + o.increment INTO priceAdjust FROM Offer o WHERE o.offerID = newofferID;
+	--
+	IF ((SELECT COUNT(*) FROM _Temp) = 0) THEN -- Either New is 1st bid or last is not auto rebid
 		BEGIN
 		--
 		END;
-		ELSEIF ((SELECT autoRebidLimit FROM Temp) >= @priceAdjust) THEN	-- Auto rebid and autoRebidLimit >= New.price + increment. Do a rebid
+	ELSEIF ((SELECT autoRebidLimit FROM _Temp) >= priceAdjust) THEN	-- Auto rebid and autoRebidLimit >= New.price + increment. Do a rebid
 		BEGIN
-			INSERT Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) SELECT bidID, offerID, buyer, @priceAdjust, autoRebidLimit, @timeNow FROM Temp WHERE @timeNow <= (SELECT endDate from Offer o1 where o1.offerID = NEW.offerID);
+			INSERT Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) SELECT bidID, offerID, buyer, priceAdjust, autoRebidLimit, NOW() FROM _Temp WHERE NOW() <= (SELECT endDate from Offer o1 where o1.offerID = newofferID);
 		END;
-		ELSE	-- Price >= Auto Rebid. Send Alert.
+	ELSE	-- Price >= Auto Rebid. Send Alert.
 		BEGIN
-			INSERT Alert (alertID, receiver, message, offerID, bidID, alertDate, dismissedDate) SELECT REPLACE(UUID(),'-',''), buyer, 'Item Price Exceeded Auto Rebid Limit', offerID, bidID, @timeNow, NULL FROM Temp;
+			INSERT Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) SELECT REPLACE(UUID(),'-',''), buyer, NULL, bidID, NOW(), NULL FROM _Temp;
 		END;
-		END IF;
-		--
-		DROP TEMPORARY TABLE Temp;
-	END $$
-DELIMITER ;
-
-
-
--- Handles Auto Rebid and outbid alert when a row is inserted into Bid table
-DROP TRIGGER IF EXISTS NewOfferAlert;
-DELIMITER $$
-	CREATE TRIGGER NewOfferAlert AFTER INSERT ON Offer
-	FOR EACH ROW
-	BEGIN
-		CALL GenerateNewOfferAlert (NEW.offerID, NEW.categoryName);
-	END $$
+	END IF;
+	--
+	DROP TEMPORARY TABLE _Temp;
+END $$
 DELIMITER ;
 
 
@@ -346,4 +337,28 @@ DELIMITER $$
 		BEGIN
 			CALL DoTrade();
 		END $$
+DELIMITER ;
+
+
+
+-- Handles Auto Rebid and outbid alert when a row is inserted into Bid table
+DROP TRIGGER IF EXISTS AutoRebidAndOutbidAlert;
+DELIMITER $$
+	CREATE TRIGGER AutoRebidAndOutbidAlert AFTER INSERT ON Bid
+	FOR EACH ROW
+	BEGIN
+		CALL doAutoRebidAndOutbidAlert(NEW.offerID, NEW.bidID, NEW.price);
+	END $$
+DELIMITER ;
+
+
+
+-- Handles Auto Rebid and outbid alert when a row is inserted into Bid table
+DROP TRIGGER IF EXISTS NewOfferAlert;
+DELIMITER $$
+	CREATE TRIGGER NewOfferAlert AFTER INSERT ON Offer
+	FOR EACH ROW
+	BEGIN
+		CALL GenerateNewOfferAlert (NEW.offerID, NEW.categoryName);
+	END $$
 DELIMITER ;

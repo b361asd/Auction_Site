@@ -18,7 +18,7 @@
 <body>
 
 <%
-	Map data = null;
+	Map data;
 	TableData dataTable = null;
 	//
 	String action = getStringFromParamMap("action", request.getParameterMap());

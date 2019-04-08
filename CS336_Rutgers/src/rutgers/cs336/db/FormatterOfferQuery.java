@@ -17,17 +17,17 @@ public class FormatterOfferQuery extends DBBase {
 	}
 
 
-	public static StringBuilder initFieldCondition(StringBuilder sb) {
-		return sb.append(" and (not exists (select * from OfferField of2 where of2.offerID = o.offerID and (false");
+	public static void initFieldCondition(StringBuilder sb) {
+		sb.append(" and (not exists (select * from OfferField of2 where of2.offerID = o.offerID and (false");
 	}
 
 
-	public static StringBuilder doneFieldConditionSearch(StringBuilder sb) {
-		return sb.append(" ))) order by o.offerID, of1.fieldID");
+	public static void doneFieldConditionSearch(StringBuilder sb) {
+		sb.append(" ))) order by o.offerID, of1.fieldID");
 	}
 
-	public static StringBuilder doneFieldConditionAlert(StringBuilder sb) {
-		return sb.append(" )))");
+	public static void doneFieldConditionAlert(StringBuilder sb) {
+		sb.append(" )))");
 	}
 
 

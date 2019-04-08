@@ -14,7 +14,7 @@
 
 	<script type="text/javascript">
        function onCategoryChange() {
-           var form = document.getElementById('form');
+           const form = document.getElementById('form');
            form.action = "${pageContext.request.contextPath}/user/searchOffer.jsp";
            form.submit();
        }

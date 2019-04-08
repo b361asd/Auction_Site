@@ -10,9 +10,12 @@ public class Helper implements IConstant {
 
 	private final static String[] S_CONDITIONS = {"New", "Like New", "Manufacturer Refurbished", "Seller Refurbished", "Used", "For parts or Not Working"};
 
-	private static final String SELECT_OP_SZ_TYPE       = "<select name='?'><option value='any'>Any</option><option value='szequal'>Equal</option><option value='sznotequal'>Not Equal</option><option value='startwith'>Starts With</option><option value='contain'>Contains</option></select>";
-	private static final String SELECT_OP_INT_TYPE      = "<select name='?'><option value='any'>Any</option><option value='intequal'>Equal</option><option value='intnotequal'>Not Equal</option><option value='equalorover'>Greater Than or Equal To</option><option value='equalorunder'>Less Than or Equal To</option><option value='between'>Between</option></select>";
-	private static final String SELECT_OP_BOOL_TYPE     = "<select name='?'><option value='any'>Any</option><option value='yes'>YES</option><option value='no'>NO</option></select>";
+	private static final String SELECT_OP_SZ_TYPE = "<select name='?'><option value='any'>Any</option><option value='szequal'>Equal</option><option value='sznotequal'>Not Equal</option><option value='startwith'>Starts With</option><option value='contain'>Contains</option></select>";
+
+	private static final String SELECT_OP_INT_TYPE = "<select name='?'><option value='any'>Any</option><option value='intequal'>Equal</option><option value='intnotequal'>Not Equal</option><option value='equalorover'>Greater Than or Equal To</option><option value='equalorunder'>Less Than or Equal To</option><option value='between'>Between</option></select>";
+
+	private static final String SELECT_OP_BOOL_TYPE = "<select name='?'><option value='any'>Any</option><option value='yes'>YES</option><option value='no'>NO</option></select>";
+
 	private static final String CONDITION_CODE_CHECKBOX = "<div><input type='checkbox' id='new' name='?_1' value='yes' checked><label for='new'>New</label><input type='checkbox' id='likenew' name='?_2' value='yes' checked><label for='likenew'>Like New</label><input type='checkbox' id='manfrefurb' name='?_3'  value='yes' checked><label for='manfrefurb'>Manufacturer Refurbished</label><input type='checkbox' id='sellerrefurb' name='?_4' value='yes' checked><label for='sellerrefurb'>Seller Refurbished</label><input type='checkbox' id='used' name='?_5' value='yes' checked><label for='used'>Used</label><input type='checkbox' id='notwork' name='?_6' value='yes' checked><label for='notwork'>For parts or Not Working</label></div>";
 
 	public static String getOPSZSelection(String name) {
@@ -66,10 +69,10 @@ public class Helper implements IConstant {
 		sb.append("<select name='").append(name).append("'>");
 		for (int i = 0; i < S_CONDITIONS.length; i++) {
 			if (S_CONDITIONS[i].equalsIgnoreCase(selected)) {
-				sb.append("<option value='" + (i + 1) + "' selected>" + S_CONDITIONS[i] + "</option>");
+				sb.append("<option value='").append(i + 1).append("' selected>").append(S_CONDITIONS[i]).append("</option>");
 			}
 			else {
-				sb.append("<option value='" + (i + 1) + "'>" + S_CONDITIONS[i] + "</option>");
+				sb.append("<option value='").append(i + 1).append("'>").append(S_CONDITIONS[i]).append("</option>");
 			}
 		}
 		sb.append("</select>");
@@ -84,8 +87,8 @@ public class Helper implements IConstant {
 		boolean isYes = selected.equalsIgnoreCase("yes");   //IN DB: 'no' 'yes'
 		//
 		sb.append("<select name='").append(name).append("'>");
-		sb.append("<option value='yes'" + (isYes ? " selected" : "") + ">YES</option>");
-		sb.append("<option value='no'" + (isYes ? "" : " selected") + ">NO</option>");
+		sb.append("<option value='yes'").append(isYes ? " selected" : "").append(">YES</option>");
+		sb.append("<option value='no'").append(isYes ? "" : " selected").append(">NO</option>");
 		sb.append("</select>");
 		//
 		return sb.toString();

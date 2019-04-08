@@ -13,7 +13,6 @@ public class Trade extends DBBase {
 	private static List  lstHeader_trade = Arrays.asList("Buyer", "Total", "Average", "Count");
 	private static int[] colSeq_trade    = {0, 1, 2, 3};
 
-
 	public static Map summaryByBuyer(Map<String, String[]> parameters) {
 		int lookbackdays = getIntFromParamMap("lookbackdays", parameters);
 		if (lookbackdays < 1) {
@@ -39,7 +38,7 @@ public class Trade extends DBBase {
 			while (rs.next()) {
 				Object buyer   = rs.getObject(1);
 				Object Total   = rs.getObject(2);
-				Object Avarage = rs.getObject(3);
+				Object Average = rs.getObject(3);
 				Object Count   = rs.getObject(4);
 				//
 				List currentRow = new LinkedList();
@@ -47,7 +46,7 @@ public class Trade extends DBBase {
 				//
 				currentRow.add(buyer);
 				currentRow.add(Total);
-				currentRow.add(Avarage);
+				currentRow.add(Average);
 				currentRow.add(Count);
 			}
 			//
@@ -92,7 +91,7 @@ public class Trade extends DBBase {
 
 
 	public static void main(String[] args) {
-		Map<String, String[]> parameters = new HashMap<String, String[]>();
+		Map<String, String[]> parameters = new HashMap<>();
 		//
 		//parameters.put("bidID", new String[]{"11fe20aabc7a4025928e9522544be2e3"});
 		//

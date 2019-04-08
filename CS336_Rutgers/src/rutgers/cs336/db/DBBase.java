@@ -21,9 +21,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		// JDBC driver for MySQL. Latest: https://dev.mysql.com/downloads/connector/j/
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//
-		Connection conn = DriverManager.getConnection(MySQL_URL, MySQL_USER_ID, MySQL_PASSWORD);
-		//
-		return conn;
+		return DriverManager.getConnection(MySQL_URL, MySQL_USER_ID, MySQL_PASSWORD);
 	}
 
 	public static String getUUID() {
@@ -193,17 +191,16 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 	}
 
 
-	public static StringBuilder addDatetimeConditionLookback(StringBuilder sb, String columnName, int lookbackDay) {
+	public static void addDatetimeConditionLookback(StringBuilder sb, String columnName, int lookbackDay) {
 		sb.append(" AND (");
 		sb.append(columnName);
 		sb.append(" >= DATE_SUB(NOW(), INTERVAL ");
 		sb.append(lookbackDay);
 		sb.append(" DAY))");
 		//
-		return sb;
 	}
 
-	public static StringBuilder addContainTagsCondition2Cols(StringBuilder sb, String columnName1, String columnName2, String value) {
+	public static void addContainTagsCondition2Cols(StringBuilder sb, String columnName1, String columnName2, String value) {
 		value = escapeToUpperCaseTrimNoNull(value);
 		//
 		if (value.length() > 0) {
@@ -214,10 +211,9 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 			sb.append(")");
 		}
 		//
-		return sb;
 	}
 
-	public static StringBuilder addCondition(StringBuilder sb, String columnName, String op, String value, String valueAdd) {
+	public static void addCondition(StringBuilder sb, String columnName, String op, String value, String valueAdd) {
 		if (op.equals(OP_ANY)) {
 			// Do Nothing
 		}
@@ -228,10 +224,9 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 			}
 		}
 		//
-		return sb;
 	}
 
-	public static StringBuilder addFieldCondition(StringBuilder sb, String fieldID, String op, String value, String valueAdd) {
+	public static void addFieldCondition(StringBuilder sb, String fieldID, String op, String value, String valueAdd) {
 		if (op.equals(OP_ANY)) {
 			// Do Nothing
 		}
@@ -242,7 +237,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 			}
 		}
 		//
-		return sb;
 	}
 
 

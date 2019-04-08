@@ -394,7 +394,7 @@ public class User extends DBBase {
 
 
 	public static void main(String[] args) {
-		Map<String, String[]> parameters = new HashMap<String, String[]>();
+		Map<String, String[]> parameters = new HashMap<>();
 		//
 		parameters.put("username", new String[]{"user"});
 		parameters.put("password", new String[]{"user_pwd"});

@@ -47,8 +47,8 @@
 	<tbody>
 	<%
 		if (lstRows.size() > 0) {
-			for (int i = 0; i < lstRows.size(); i++) {
-				List oneRow = (List) lstRows.get(i);
+			for (Object lstRow : lstRows) {
+				List oneRow = (List) lstRow;
 				out.println("<tr>");
 				//
 				out.println("<td>" + oneRow.get(1) + "</td>");

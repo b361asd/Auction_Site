@@ -22,7 +22,7 @@ public interface ISQLConstant {
 	String SQL_BID_INSERT    = "INSERT Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) SELECT ?, o.offerID, ?, ?, ?, NOW() FROM Offer o WHERE o.endDate >= NOW() AND (NOT o.minPrice > ?) AND o.offerID = ? AND o.status = 1 AND ((NOT EXISTS (SELECT * FROM Bid b3 WHERE b3.offerID = ?)) OR (? > (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = ?)))";
 	String SQL_BID_DELETE    = "DELETE from Bid where bidID = ?";
 	String SQL_BID_SELECT_EX = "SELECT bidID, offerID, buyer, price, autoRebidLimit, bidDate FROM Bid";
-	String SQL_BID_SELECT    = "SELECT bidID, buyer, price, bidDate FROM Bid b WHERE b.offerID = ?";
+	String SQL_BID_SELECT    = "SELECT bidID, buyer, price, bidDate FROM Bid b WHERE b.offerID = ? ORDER BY price DESC";
 
 
 	// CategoryField
@@ -32,7 +32,7 @@ public interface ISQLConstant {
 	// Offer
 	String SQL_OFFER_INSERT = "INSERT INTO Offer (offerID, categoryName, seller, initPrice, increment, minPrice, conditionCode, description, startDate, endDate, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), STR_TO_DATE(?,'%Y-%m-%dT%H:%i:%s'), 1)";
 	String SQL_OFFER_MODIFY = "UPDATE Offer SET (minPrice, conditionCode, description) VALUES (?, ?, ?) WHERE offerID = ? AND status = 1";
-	String sQL_OFFER_CANCEL = "UPDATE Offer SET status = 2 WHERE offerID = ? AND status = 1";
+	String SQL_OFFER_CANCEL = "UPDATE Offer SET status = 2 WHERE offerID = ? AND status = 1";
 	String SQL_OFFER_SELECT = "SELECT categoryName, seller, min_price, description, startDate, endDate, status FROM Offer WHERE offerID = ?";
 	String SQL_OFFER_SEARCH = "SELECT offerID, categoryName, seller, min_price, description, startDate, endDate FROM Offer WHERE status = 1 and categoryName = ? and description LIKE ?";
 
@@ -43,9 +43,10 @@ public interface ISQLConstant {
 	String SQL_OFFERFIELD_SELECT = "SELECT OfferField.fieldID, fieldName, fieldType, fieldText FROM OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID WHERE OfferField.offerID = ? ORDER BY OfferField.fieldID";
 	String SQL_OFFERFIELD_SEARCH = "SELECT OfferField.offerID, OfferField.fieldID, fieldName, fieldType, fieldText FROM OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID WHERE OfferField.offerID IN (SELECT offerID FROM Offer WHERE status = 1 and categoryName = ? and description LIKE ?)";
 
+
 	// Trade
-	String SQL_TRADE_VIEW          = "(select t.tradeID, o.offerID, b.bidID, tradeDate, seller, categoryName, conditionCode, description, status, buyer, price from Trade t, Offer o, Bid b WHERE t.offerID = o.offerID and t.bidID = b.bidID AND tradeDate > DATE_SUB(NOW(), INTERVAL ? DAY)) tob";
-	String SQL_TRADE_TOTAL_BY_USER = "SELECT buyer, SUM(price) as Total, AVG(price) as Avarage, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By buyer order by Total DESC";
+	String SQL_TRADE_VIEW          = "(SELECT t.tradeID, o.offerID, b.bidID, tradeDate, seller, categoryName, conditionCode, description, status, buyer, price from Trade t, Offer o, Bid b WHERE t.offerID = o.offerID and t.bidID = b.bidID AND tradeDate > DATE_SUB(NOW(), INTERVAL ? DAY)) tob";
+	String SQL_TRADE_TOTAL_BY_USER = "SELECT buyer, SUM(price) as Total, AVG(price) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By buyer order by Total DESC";
 
 	// Browse
 	//	String BROWSE_OPEN_OFFER (including current bid, sorted by different criteria)
@@ -54,7 +55,10 @@ public interface ISQLConstant {
 	//	String OFFER_BID_BY_USER
 	//	String SIMILAR_ITEM
 
-	String SQL_OFFER_ALERT_CRITERION_INSERT = "INSERT INTO OfferAlertCriterion (criterionID, buyer, criterionName, triggerTxt, generateDate) VALUES (?, ?, ?, ?, NOW())";
+	// OfferAlertCriterion
+	String SQL_OFFERALERTCRITERION_INSERT      = "INSERT INTO OfferAlertCriterion (criterionID, buyer, criterionName, triggerTxt, generateDate) VALUES (?, ?, ?, ?, NOW())";
+	String SQL_OFFERALERTCRITERION_SELECT      = "select criterionID, buyer, criterionName, triggerTxt, generateDate FROM OfferAlertCriterion";
+	String SQL_OFFERALERTCRITERION_SELECT_USER = "select criterionID, buyer, criterionName, triggerTxt, generateDate FROM OfferAlertCriterion Where buyer = ?";
 
 
 	// Question

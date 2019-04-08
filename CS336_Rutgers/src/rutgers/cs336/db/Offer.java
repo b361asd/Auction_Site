@@ -1,20 +1,19 @@
 package rutgers.cs336.db;
 
 import rutgers.cs336.gui.Helper;
-import rutgers.cs336.gui.HelperDatetime;
 import rutgers.cs336.gui.TableData;
 
 import java.sql.*;
 import java.util.*;
 
 public class Offer extends DBBase {
-	static List  lstHeader_offerdefault = Arrays.asList("offerId", "Seller", "Category", "Condition", "Desc", "initPrice", "increment", "minPrice", "Start", "End", "status", "CurrBid");
+
+	private static List  lstHeader_offerdefault        = Arrays.asList("offerId", "Seller", "Category", "Condition", "Desc", "initPrice", "increment", "minPrice", "Start", "End", "status", "CurrBid");
 	//
-	static int[] colSeq_offerdefault_ex_status    = {2, 3, 4, 1, 5, 11, 8, 9};
-	static int[] colSeq_offerdefault_w_status    = {2, 3, 4, 1, 5, 11, 8, 9, 10};
-	
-	
-	
+	private static int[] colSeq_offerdefault_ex_status = {2, 3, 4, 1, 5, 11, 8, 9};
+	private static int[] colSeq_offerdefault_w_status  = {2, 3, 4, 1, 5, 11, 8, 9, 10};
+
+
 	private static final int FIELD_START_INDEX = 12;
 
 	// For search Bid
@@ -196,9 +195,9 @@ public class Offer extends DBBase {
 				}
 			}
 			//
-			int[] colSeq = null;
+			int[] colSeq;
 			if (excludeStatus) {
-				if (lstHeader.size()==0) {
+				if (lstHeader.size() == 0) {
 					lstHeader = lstHeader_offerdefault;
 					colSeq = colSeq_offerdefault_ex_status;
 				}
@@ -223,7 +222,7 @@ public class Offer extends DBBase {
 				}
 			}
 			else {
-				if (lstHeader.size()==0) {
+				if (lstHeader.size() == 0) {
 					lstHeader = lstHeader_offerdefault;
 					colSeq = colSeq_offerdefault_w_status;
 				}
@@ -300,7 +299,7 @@ public class Offer extends DBBase {
 		try {
 			con = getConnection();
 			//
-			preparedStmt = con.prepareStatement(SQL_OFFER_ALERT_CRITERION_INSERT);
+			preparedStmt = con.prepareStatement(SQL_OFFERALERTCRITERION_INSERT);
 			//
 			preparedStmt.setString(1, getUUID());
 			preparedStmt.setString(2, userID);
@@ -384,7 +383,7 @@ public class Offer extends DBBase {
 			String lstConditionCode = "";
 			for (int i = 1; i <= 6; i++) {
 				String temp = getStringFromParamMap("conditionCode_" + i, parameters);
-				if (temp != null && temp.length() > 0) {
+				if (temp.length() > 0) {
 					if (lstConditionCode.equals("")) {
 						lstConditionCode = "" + i;
 					}
@@ -551,7 +550,7 @@ public class Offer extends DBBase {
 		try {
 			con = getConnection();
 			//
-			pStmtCancelOffer = con.prepareStatement(sQL_OFFER_CANCEL);
+			pStmtCancelOffer = con.prepareStatement(SQL_OFFER_CANCEL);
 			pStmtCancelOffer.setString(1, offerid);
 			//
 			pStmtCancelOffer.execute();
@@ -721,7 +720,7 @@ public class Offer extends DBBase {
 
 
 	public static void main(String[] args) {
-		Map<String, String[]> parameters = new HashMap<String, String[]>();
+		Map<String, String[]> parameters = new HashMap<>();
 		//
 		parameters.put("categoryName1", new String[]{"car"});
 		parameters.put("fieldop_6", new String[]{"yes"});
@@ -733,8 +732,9 @@ public class Offer extends DBBase {
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
+
 	public static void main1(String[] args) {
-		Map<String, String[]> parameters = new HashMap<String, String[]>();
+		Map<String, String[]> parameters = new HashMap<>();
 		//
 		parameters.put("categoryName2", new String[]{"motorbike"});
 		parameters.put("categoryName3", new String[]{"truck"});

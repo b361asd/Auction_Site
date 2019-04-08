@@ -30,9 +30,8 @@ public class Question extends DBBase {
 		{
 			String tags = getStringFromParamMap("tags", parameters);
 			if (tags.length() > 0) {
-				String[] temps = tags.split("\\,");
-				for (int i = 0; i < temps.length; i++) {
-					String one = temps[i];
+				String[] temps = tags.split(",");
+				for (String one : temps) {
 					if (one != null && one.length() > 0) {
 						addContainTagsCondition2Cols(sb, "question", "answer", one);
 					}
@@ -310,7 +309,7 @@ public class Question extends DBBase {
 
 
 	public static void main(String[] args) {
-		Map<String, String[]> parameters = new HashMap<String, String[]>();
+		Map<String, String[]> parameters = new HashMap<>();
 		//
 		//parameters.put("bidID", new String[]{"11fe20aabc7a4025928e9522544be2e3"});
 		//

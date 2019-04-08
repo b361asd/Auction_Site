@@ -88,7 +88,7 @@
 							for (int j = 0; j < dataTableBid.rowCount(); j++) {
 								out.println(dataTableBid.printRowStart(j));
 								out.println("<td>");
-								out.println("<button onclick=\"document.getElementById('input-id-cancelBid').value='" + dataTableBid.getOneCell(j, 0) + "'; document.getElementById('form-id-cancelBid').submit();\" class=\"favorite styled\" type=\"button\">Cabcel Bid</button>");
+								out.println("<button onclick=\"document.getElementById('input-id-cancelBid').value='" + dataTableBid.getOneCell(j, 0) + "'; document.getElementById('form-id-cancelBid').submit();\" class=\"favorite styled\" type=\"button\">Cancel Bid</button>");
 								out.println("<button onclick=\"document.getElementById('input-id-modifyBid').value='" + dataTableBid.getOneCell(j, 0) + "'; document.getElementById('form-id-modifyBid').submit();\" class=\"favorite styled\" type=\"button\">Modify Bid</button>");
 								out.println("</td>");
 								//

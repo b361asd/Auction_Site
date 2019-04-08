@@ -1,18 +1,18 @@
-use cs336buyme;
+USE cs336buyme;
 
 -- In RDS instance parameter group:
 -- Set set log_bin_trust_function_creators to 1 
 -- Set event_scheduler to "ON"
 
-Show events;
+SHOW EVENTS;
 
-Show processlist;
+Show PROCESSLIST;
 
 -- SET GLOBAL event_scheduler = ON;
 
 SELECT * FROM INFORMATION_SCHEMA.events;
 
-select * from Offer;
+SELECT * FROM Offer;
 
 
-show triggers;
+SHOW TRIGGERS;

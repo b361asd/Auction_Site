@@ -49,7 +49,7 @@
 		TableData dataTable = null;
 		//
 		String offeridcategoryname = DBBase.getStringFromParamMap("offeridcategoryname", request.getParameterMap());
-		String[] temps = offeridcategoryname.split("\\,");
+		String[] temps = offeridcategoryname.split(",");
 		//
 		String action = getStringFromParamMap("action", request.getParameterMap());
 		if (action.equals("modifyOffer")) {

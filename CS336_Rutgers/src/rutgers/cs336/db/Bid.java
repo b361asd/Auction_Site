@@ -182,7 +182,7 @@ public class Bid extends DBBase {
 		Map output = new HashMap();
 		//
 		String   bidIDofferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
-		String[] temps             = bidIDofferIDBuyer.split("\\,");
+		String[] temps             = bidIDofferIDBuyer.split(",");
 		//
 		BigDecimal price          = getBigDecimalFromParamMap("price", parameters);
 		BigDecimal autoRebidLimit = getBigDecimalFromParamMap("autoRebidLimit", parameters);
@@ -366,7 +366,7 @@ public class Bid extends DBBase {
 		String bidIDofferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
 		String bidIDStandout     = null;
 		if (!bidIDofferIDBuyer.equals("")) {
-			String[] temps = bidIDofferIDBuyer.split("\\,");
+			String[] temps = bidIDofferIDBuyer.split(",");
 			FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, temps[1], null);
 			bidIDStandout = temps[0];
 		}
@@ -385,7 +385,7 @@ public class Bid extends DBBase {
 		String sql = sb.toString();
 		//
 		Map               output     = new HashMap();
-		Map<String, List> tempMap    = new HashMap();
+		Map<String, List> tempMap    = new HashMap<>();
 		Set<String>       offerIDSet = new HashSet<>();
 		//
 		List lstHeader = new ArrayList();
@@ -409,7 +409,7 @@ public class Bid extends DBBase {
 			lstHeader.add("autoRebidLimit");
 			lstHeader.add("bidDate");
 			//
-			int[] colSeq = new int[lstHeader.size() - 0];
+			int[] colSeq = new int[lstHeader.size()];
 			{
 				colSeq[0] = 0;      //
 				colSeq[1] = 1;      //
@@ -438,19 +438,21 @@ public class Bid extends DBBase {
 				//
 				offerIDSet.add(offerID.toString());
 				//
-				List lstRows = tempMap.get(offerID.toString());
+				List lstRows = tempMap.computeIfAbsent(offerID.toString(), k -> new ArrayList());
+				/*
 				if (lstRows == null) {
 					lstRows = new ArrayList();
 					tempMap.put(offerID.toString(), lstRows);
 				}
+				*/
 				lstRows.add(currentRow);
 			}
 			//
 			Map       offerMap       = Offer.doSearchByOfferIDSet(offerIDSet);
 			TableData dataTableOffer = (TableData) offerMap.get(DATA_NAME_DATA);
 			List      lstOfferRows   = dataTableOffer.getRows();
-			for (int i = 0; i < lstOfferRows.size(); i++) {
-				List oneOfferRow = (List) lstOfferRows.get(i);
+			for (Object lstOfferRow : lstOfferRows) {
+				List oneOfferRow = (List) lstOfferRow;
 				//
 				List lstBidRows = tempMap.get(oneOfferRow.get(0));
 				if (lstBidRows == null) {
@@ -510,7 +512,7 @@ public class Bid extends DBBase {
 
 
 	public static void main(String[] args) {
-		Map<String, String[]> parameters = new HashMap<String, String[]>();
+		Map<String, String[]> parameters = new HashMap<>();
 		//
 		parameters.put("offerId", new String[]{"648e2f949a3f4c3eaf3311799e409249"});
 		parameters.put("price", new String[]{"3000"});
@@ -524,7 +526,7 @@ public class Bid extends DBBase {
 	}
 	
 	public static void main2(String[] args) {
-		Map<String, String[]> parameters = new HashMap<String, String[]>();
+		Map<String, String[]> parameters = new HashMap<>();
 		//
 		parameters.put("bidIDofferIDBuyer", new String[]{"11fe20aabc7a4025928e9522544be2e3,8f0e1575b13040f88a840a6599174cc0,user"});
 		parameters.put("price", new String[]{"1900"});
@@ -538,7 +540,7 @@ public class Bid extends DBBase {
 	}
 
 	public static void main1(String[] args) {
-		Map<String, String[]> parameters = new HashMap<String, String[]>();
+		Map<String, String[]> parameters = new HashMap<>();
 		//
 		//parameters.put("buyerOP", new String[]{"11fe20aabc7a4025928e9522544be2e3"});
 		//parameters.put("buyerVal", new String[]{OP_SZ_EQUAL});
