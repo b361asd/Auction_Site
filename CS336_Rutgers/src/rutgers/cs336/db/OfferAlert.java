@@ -9,9 +9,8 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class OfferAlert extends DBBase {
-
-	static List  lstHeader_offeralert = Arrays.asList("criterionID", "buyer", "criterionName", "triggerTxt", "generateDate");
-	static int[] colSeq_offeralert    = {1, 2, 3, 4};
+	private static List  lstHeader_offeralert = Arrays.asList("criterionID", "buyer", "criterionName", "triggerTxt", "generateDate");
+	private static int[] colSeq_offeralert    = {1, 2, 3, 4};
 
 
 	public static Map doGenerateNewOfferAlertCriterion(String userID, Map<String, String[]> parameters) {

@@ -66,7 +66,7 @@
 		}
 		//
 		out.println("<input type='hidden' name='offerId' value='" + offerid + "'/>");
-		out.println("<div>Price<input type='number' name='price' min='" + minPrice + "' VALUE='" + minPrice + "'></div>");
+		out.println("<div>Price(min " + minPrice + ")<input type='number' name='price' min='" + minPrice + "' VALUE='" + minPrice + "'></div>");
 	%>
 
 	<div>Auto Rebid Limit<input type="number" name="autoRebidLimit"></div>

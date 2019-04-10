@@ -9,18 +9,16 @@ public class FormatterOfferQuery extends DBBase {
 		return sb;
 	}
 
-	public static StringBuilder initQueryAlert(String receiver, String categoryName) {
+	public static StringBuilder initQueryAlert(String receiver) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("insert Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) select REPLACE(UUID(),'-',''), '").append(receiver).append("', o.offerID, NULL, NOW(), NULL from Offer o WHERE (o.offerID='$offerID$') and (o.categoryName='").append(categoryName).append("')");
+		sb.append("insert Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) select REPLACE(UUID(),'-',''), '").append(receiver).append("', o.offerID, NULL, NOW(), NULL from Offer o WHERE (o.offerID='$offerID$')");
 		//
 		return sb;
 	}
 
-
 	public static void initFieldCondition(StringBuilder sb) {
 		sb.append(" and (not exists (select * from OfferField of2 where of2.offerID = o.offerID and (false");
 	}
-
 
 	public static void doneFieldConditionSearch(StringBuilder sb) {
 		sb.append(" ))) order by o.offerID, of1.fieldID");
@@ -74,7 +72,7 @@ public class FormatterOfferQuery extends DBBase {
 		//
 		//
 		if (false) {
-			StringBuilder sb = initQueryAlert("creator", "truck");
+			StringBuilder sb = initQueryAlert("creator");
 			//addCondition(sb, "o.offerID", OP_SZ_START_WITH, "Scratcges", null);
 			//addCondition(sb, "o.seller", OP_SZ_NOT_EQUAL, "us'er", null);
 			//addCondition(sb, "o.categoryName", OP_SZ_NOT_EQUAL, "car", null);
@@ -144,7 +142,7 @@ or (of2.fieldID = 4 and (not (of2.fieldText = 'yes')))
 */
 
 /* For Alert
-insert Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) select REPLACE(UUID(),'-',''), '$receiver$', o.offerID, NULL, NOW(), NULL from Offer o WHERE (o.offerID='$offerID$') and (o.categoryName='$categoryName$')
+insert Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) select REPLACE(UUID(),'-',''), '$receiver$', o.offerID, NULL, NOW(), NULL from Offer o WHERE (o.offerID='$offerID$') and 
 and (o.seller='user')
 and (o.conditionCode in (1,2))
 and (o.description='Scratcges')

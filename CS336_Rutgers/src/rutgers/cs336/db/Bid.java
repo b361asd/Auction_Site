@@ -235,8 +235,8 @@ public class Bid extends DBBase {
 	public static Map doCreateOrModifyBid(String userID, Map<String, String[]> parameters, boolean isCreate) {
 		Map output = new HashMap();
 		//
-		String     offerId;
-		String     bidID;
+		String     offerId   = "";
+		String     bidID     = "";
 		BigDecimal initPrice = null;
 		BigDecimal increment = null;
 		int        status    = -1;
@@ -272,7 +272,7 @@ public class Bid extends DBBase {
 		PreparedStatement preparedStmtMaxPriceBid = null;
 		PreparedStatement pStmtModifyBid          = null;
 		PreparedStatement pStmtInsertBid          = null;
-		PreparedStatement pStmtInsertOutBidAlert  = null;
+		PreparedStatement pStmtInsertAlert        = null;
 		//
 		Object[] lastMaxBid = new Object[4];
 		try {
@@ -326,7 +326,7 @@ public class Bid extends DBBase {
 				current[0] = getUUID();
 			}
 			//
-			int outcome = 1;                  // 1 Start, 2 NotMeetInitPrice, 3 LessThanLastPlusDelta; 4: offerClosed 5 Out-bided; 10 OK
+			int outcome = 1;                  //1 Start, 2 NotMeetInitPrice, 3 LessThanLastPlusDelta; 4: offerClosed 5 Out-bided; 10 OK
 			if (status != 1) {
 				outcome = 4;
 			}
@@ -364,7 +364,9 @@ public class Bid extends DBBase {
 					if (isModifyAndDoit) {
 						isModifyAndDoit = false;
 						//
-						pStmtModifyBid = con.prepareStatement(SQL_BID_UPDATE);
+						if (pStmtModifyBid == null) {
+							pStmtModifyBid = con.prepareStatement(SQL_BID_UPDATE);
+						}
 						pStmtModifyBid.setBigDecimal(1, (BigDecimal) current[2]);
 						pStmtModifyBid.setBigDecimal(2, (BigDecimal) current[3]);
 						pStmtModifyBid.setString(3, current[0].toString());
@@ -394,11 +396,13 @@ public class Bid extends DBBase {
 							last[2] = new_bid;
 						}
 						else {                  //Out bid alert
-							pStmtInsertOutBidAlert = con.prepareStatement(SQL_ALERT_INSERT_BID);
-							pStmtInsertOutBidAlert.setString(1, getUUID());
-							pStmtInsertOutBidAlert.setString(2, last[1].toString());
-							pStmtInsertOutBidAlert.setString(3, last[0].toString());
-							pStmtInsertOutBidAlert.execute();
+							if (pStmtInsertAlert == null) {
+								pStmtInsertAlert = con.prepareStatement(SQL_ALERT_INSERT_BID);
+							}
+							pStmtInsertAlert.setString(1, getUUID());
+							pStmtInsertAlert.setString(2, last[1].toString());
+							pStmtInsertAlert.setString(3, last[0].toString());
+							pStmtInsertAlert.execute();
 							//
 							outcome = 5;                                                               // Out-bided
 							break;
@@ -498,9 +502,9 @@ public class Bid extends DBBase {
 					t.printStackTrace();
 				}
 			}
-			if (pStmtInsertOutBidAlert != null) {
+			if (pStmtInsertAlert != null) {
 				try {
-					pStmtInsertOutBidAlert.close();
+					pStmtInsertAlert.close();
 				}
 				catch (Throwable t) {
 					t.printStackTrace();

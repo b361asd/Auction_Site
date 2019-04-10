@@ -27,7 +27,7 @@
 
 <%
 	Map data = null;
-	TableData dataTable;
+	TableData dataTable = null;
 	//
 	String userID = (String) session.getAttribute(SESSION_ATTRIBUTE_USER);
 	//

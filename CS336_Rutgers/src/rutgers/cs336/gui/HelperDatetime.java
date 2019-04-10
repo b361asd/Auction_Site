@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-
 public class HelperDatetime {
 
 	public static String getDatetimeSZ(int delta) {

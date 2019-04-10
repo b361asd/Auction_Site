@@ -88,13 +88,11 @@ public class Offer extends DBBase {
 	public static StringBuilder formatSQLWithParametersForSearchOrAlert(Map<String, String[]> parameters, String userID, boolean isSearch) {      //Search or Alert
 		StringBuilder sb;
 		//
-		String categoryNames = getListOfStringsFromParamMap("categoryName", 1, parameters, "'");
-		//
 		if (isSearch) {
 			sb = FormatterOfferQuery.initQuerySearch();
 		}
 		else {
-			sb = FormatterOfferQuery.initQueryAlert(userID, categoryNames);
+			sb = FormatterOfferQuery.initQueryAlert(userID);
 		}
 		//
 		if (isSearch) {                        // In alert, offerID placeholder will be replaced with real one
@@ -109,7 +107,9 @@ public class Offer extends DBBase {
 			FormatterOfferQuery.addCondition(sb, "o.seller", sellerOP, sellerVal, null);
 		}
 		//
-		if (isSearch) {                     // In alert, categoryName is handled outside query
+		{
+			String categoryNames = getListOfStringsFromParamMap("categoryName", 1, parameters, "'");
+			//
 			String categoryNameOP  = FormatterOfferQuery.OP_SZ_EQUAL_MULTI_NO_ESCAPE;
 			String categoryNameVal = categoryNames;
 			FormatterOfferQuery.addCondition(sb, "o.categoryName", categoryNameOP, categoryNameVal, null);
@@ -475,7 +475,101 @@ public class Offer extends DBBase {
 			}
 		}
 		//
+		if ((Boolean) output.get(DATA_NAME_STATUS)) {
+			doCreateAllerts(offerID);
+		}
+		//
 		return output;
+	}
+
+
+	public static void doCreateAllerts(String offerID) {
+		Connection        con                       = null;
+		PreparedStatement pStmtSelectAlertCriterion = null;
+		PreparedStatement pStmtInsertAlert          = null;
+		//
+		List lstRows = new ArrayList();
+		//
+		try {
+			con = getConnection();
+			//
+			pStmtSelectAlertCriterion = con.prepareStatement(SQL_OFFERALERTCRITERION_SELECT);
+			//
+			ResultSet rs = pStmtSelectAlertCriterion.executeQuery();
+			while (rs.next()) {
+				Object criterionID   = rs.getObject(1);
+				Object buyer         = rs.getObject(1);
+				Object criterionName = rs.getObject(1);
+				Object triggerTxt    = rs.getObject(1);
+				Object generateDate  = rs.getObject(1);
+				//
+				//
+				List currentRow = new LinkedList();
+				lstRows.add(currentRow);
+				//
+				currentRow.add(criterionID);
+				currentRow.add(buyer);
+				currentRow.add(criterionName);
+				currentRow.add(triggerTxt);
+				currentRow.add(generateDate);
+			}
+			rs.close();
+			//
+			for (Iterator iterator = lstRows.iterator(); iterator.hasNext(); ) {
+				Object object = (Object) iterator.next();
+				//
+				//run the Insert allert
+				//
+				//
+				if (pStmtInsertAlert == null) {
+					pStmtInsertAlert = con.prepareStatement(SQL_ALERT_INSERT_BID);
+				}
+				pStmtInsertAlert.setString(1, getUUID());
+				pStmtInsertAlert.setString(2, "");
+				pStmtInsertAlert.setString(3, "");
+				pStmtInsertAlert.execute();
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if (pStmtSelectAlertCriterion != null) {
+				try {
+					pStmtSelectAlertCriterion.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (pStmtInsertAlert != null) {
+				try {
+					pStmtInsertAlert.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (pStmtInsertAlert != null) {
+				try {
+					pStmtInsertAlert.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+		}
 	}
 
 
