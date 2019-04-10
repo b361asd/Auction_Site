@@ -43,7 +43,7 @@
 		//
 		String action = getStringFromParamMap("action", request.getParameterMap());
 		if (action.equals("modifyBid")) {
-			Map dataModify = Bid.doModifyBid(request.getParameterMap());
+			Map dataModify = Bid.doCreateOrModifyBid(null, request.getParameterMap(), false);
 		}
 		//
 		data = Bid.searchBid(request.getParameterMap());

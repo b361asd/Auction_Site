@@ -16,7 +16,7 @@
 
 <%
 	String userID = (String) request.getSession().getAttribute("user");
-	Map data = Bid.doCreateBid(userID, request.getParameterMap());
+	Map data = Bid.doCreateOrModifyBid(userID, request.getParameterMap(), true);
 	//
 	String status = data.get(DATA_NAME_STATUS).toString();
 	String message = (String) data.get(DATA_NAME_MESSAGE);

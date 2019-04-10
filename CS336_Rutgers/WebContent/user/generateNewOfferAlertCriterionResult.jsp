@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.Offer" %>
+<%@ page import="rutgers.cs336.db.OfferAlert" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 
 <html>
@@ -16,7 +16,7 @@
 
 <%
 	String userID = (String) request.getSession().getAttribute("user");
-	Map data = Offer.doGenerateNewOfferAlertCriterion(userID, request.getParameterMap());
+	Map data = OfferAlert.doGenerateNewOfferAlertCriterion(userID, request.getParameterMap());
 	//
 	request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 %>

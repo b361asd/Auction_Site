@@ -25,11 +25,11 @@ public class HelperDatetime {
 
 
 	public static java.util.Date getDatetime(String input) {
-		java.util.Date output = null;
+		java.util.Date output;
 		//
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
 		try {
-			output = (java.util.Date) formatter.parse(input);
+			output = formatter.parse(input);
 		}
 		catch (ParseException e) {
 			e.printStackTrace();

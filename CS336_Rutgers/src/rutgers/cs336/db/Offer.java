@@ -78,10 +78,97 @@ public class Offer extends DBBase {
 	}
 
 	public static Map doSearchOffer(Map<String, String[]> parameters) {
-		StringBuilder sb  = formatSQLWithParameters(parameters);
+		StringBuilder sb  = formatSQLWithParametersForSearchOrAlert(parameters, null, true);
 		String        sql = sb.toString();
 		//
 		return doSearchOfferInternal(sql, true);
+	}
+
+
+	public static StringBuilder formatSQLWithParametersForSearchOrAlert(Map<String, String[]> parameters, String userID, boolean isSearch) {      //Search or Alert
+		StringBuilder sb;
+		//
+		String categoryNames = getListOfStringsFromParamMap("categoryName", 1, parameters, "'");
+		//
+		if (isSearch) {
+			sb = FormatterOfferQuery.initQuerySearch();
+		}
+		else {
+			sb = FormatterOfferQuery.initQueryAlert(userID, categoryNames);
+		}
+		//
+		if (isSearch) {                        // In alert, offerID placeholder will be replaced with real one
+			String offerIDOP  = getStringFromParamMap("offerIDOP", parameters);
+			String offerIDVal = getStringFromParamMap("offerIDVal", parameters);
+			FormatterOfferQuery.addCondition(sb, "o.offerID", offerIDOP, offerIDVal, null);
+		}
+		//
+		{
+			String sellerOP  = getStringFromParamMap("sellerOP", parameters);
+			String sellerVal = getStringFromParamMap("sellerVal", parameters);
+			FormatterOfferQuery.addCondition(sb, "o.seller", sellerOP, sellerVal, null);
+		}
+		//
+		if (isSearch) {                     // In alert, categoryName is handled outside query
+			String categoryNameOP  = FormatterOfferQuery.OP_SZ_EQUAL_MULTI_NO_ESCAPE;
+			String categoryNameVal = categoryNames;
+			FormatterOfferQuery.addCondition(sb, "o.categoryName", categoryNameOP, categoryNameVal, null);
+		}
+		//
+		{
+			String lstConditionCode = "";
+			for (int i = 1; i <= 6; i++) {
+				String temp = getStringFromParamMap("conditionCode_" + i, parameters);
+				if (temp.length() > 0) {
+					if (lstConditionCode.equals("")) {
+						lstConditionCode = "" + i;
+					}
+					else {
+						lstConditionCode = lstConditionCode + "," + i;
+					}
+				}
+			}
+			FormatterOfferQuery.addCondition(sb, "o.conditionCode", FormatterOfferQuery.OP_INT_EQUAL_MULTI, lstConditionCode, null);
+		}
+		{
+			String descriptionOP  = getStringFromParamMap("descriptionOP", parameters);
+			String descriptionVal = getStringFromParamMap("descriptionVal", parameters);
+			FormatterOfferQuery.addCondition(sb, "o.description", descriptionOP, descriptionVal, null);
+		}
+		//
+		if (isSearch) {                     // In alert, new offer has no bid / price yet
+			String priceOP   = getStringFromParamMap("priceOP", parameters);
+			String priceVal1 = getStringFromParamMap("priceVal1", parameters);
+			String priceVal2 = getStringFromParamMap("priceVal2", parameters);
+			FormatterOfferQuery.addCondition(sb, "o.price", priceOP, priceVal1, priceVal2);
+		}
+		//
+		{
+			String statusOP  = FormatterOfferQuery.OP_INT_EQUAL;
+			String statusVal = "1";    // Active
+			FormatterOfferQuery.addCondition(sb, "o.status", statusOP, statusVal, null);
+		}
+		//
+		FormatterOfferQuery.initFieldCondition(sb);
+		//
+		String   lstFieldIDs = getStringFromParamMap("lstFieldIDs", parameters);
+		String[] fieldIDs    = lstFieldIDs.split(",");
+		for (String fieldID : fieldIDs) {
+			//
+			String fieldOP   = getStringFromParamMap("fieldop_" + fieldID, parameters);
+			String fieldVal1 = getStringFromParamMap("fieldval1_" + fieldID, parameters);
+			String fieldVal2 = getStringFromParamMap("fieldval2_" + fieldID, parameters);
+			FormatterOfferQuery.addFieldCondition(sb, fieldID, fieldOP, fieldVal1, fieldVal2);
+		}
+		//
+		if (isSearch) {
+			FormatterOfferQuery.doneFieldConditionSearch(sb);
+		}
+		else {
+			FormatterOfferQuery.doneFieldConditionAlert(sb);
+		}
+		//
+		return sb;
 	}
 
 
@@ -288,154 +375,6 @@ public class Offer extends DBBase {
 	}
 
 
-	public static Map doGenerateNewOfferAlertCriterion(String userID, Map<String, String[]> parameters) {
-		Map output = new HashMap();
-		//
-		String        categoryName = getStringFromParamMap("categoryName", parameters);
-		StringBuilder sb           = formatSQLWithParametersForSearchOrAlert(parameters, userID, false);
-		//
-		Connection        con          = null;
-		PreparedStatement preparedStmt = null;
-		try {
-			con = getConnection();
-			//
-			preparedStmt = con.prepareStatement(SQL_OFFERALERTCRITERION_INSERT);
-			//
-			preparedStmt.setString(1, getUUID());
-			preparedStmt.setString(2, userID);
-			preparedStmt.setString(3, categoryName);
-			preparedStmt.setString(4, sb.toString());
-			//
-			preparedStmt.execute();
-			//
-			output.put(DATA_NAME_STATUS, true);
-			output.put(DATA_NAME_MESSAGE, "OK");
-		}
-		catch (SQLException e) {
-			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sb != null ? sb.toString() : null));
-			e.printStackTrace();
-		}
-		catch (ClassNotFoundException e) {
-			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
-			e.printStackTrace();
-		}
-		finally {
-			if (preparedStmt != null) {
-				try {
-					preparedStmt.close();
-				}
-				catch (Throwable e) {
-					e.printStackTrace();
-				}
-			}
-			//
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (Throwable e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		//
-		return output;
-	}
-
-
-	private static StringBuilder formatSQLWithParameters(Map<String, String[]> parameters) {
-		return formatSQLWithParametersForSearchOrAlert(parameters, null, true);
-	}
-
-	private static StringBuilder formatSQLWithParametersForSearchOrAlert(Map<String, String[]> parameters, String userID, boolean isSearch) {      //Search or Alert
-		StringBuilder sb;
-		//
-		String categoryNames = getListOfStringsFromParamMap("categoryName", 1, parameters, "'");
-		//
-		if (isSearch) {
-			sb = FormatterOfferQuery.initQuerySearch();
-		}
-		else {
-			sb = FormatterOfferQuery.initQueryAlert(userID, categoryNames);
-		}
-		//
-		if (isSearch) {                        // In alert, offerID placeholder will be replaced with real one
-			String offerIDOP  = getStringFromParamMap("offerIDOP", parameters);
-			String offerIDVal = getStringFromParamMap("offerIDVal", parameters);
-			FormatterOfferQuery.addCondition(sb, "o.offerID", offerIDOP, offerIDVal, null);
-		}
-		//
-		{
-			String sellerOP  = getStringFromParamMap("sellerOP", parameters);
-			String sellerVal = getStringFromParamMap("sellerVal", parameters);
-			FormatterOfferQuery.addCondition(sb, "o.seller", sellerOP, sellerVal, null);
-		}
-		//
-		if (isSearch) {                     // In alert, categoryName is handled outside query
-			String categoryNameOP  = FormatterOfferQuery.OP_SZ_EQUAL_MULTI_NO_ESCAPE;
-			String categoryNameVal = categoryNames;
-			FormatterOfferQuery.addCondition(sb, "o.categoryName", categoryNameOP, categoryNameVal, null);
-		}
-		//
-		{
-			String lstConditionCode = "";
-			for (int i = 1; i <= 6; i++) {
-				String temp = getStringFromParamMap("conditionCode_" + i, parameters);
-				if (temp.length() > 0) {
-					if (lstConditionCode.equals("")) {
-						lstConditionCode = "" + i;
-					}
-					else {
-						lstConditionCode = lstConditionCode + "," + i;
-					}
-				}
-			}
-			FormatterOfferQuery.addCondition(sb, "o.conditionCode", FormatterOfferQuery.OP_INT_EQUAL_MULTI, lstConditionCode, null);
-		}
-		{
-			String descriptionOP  = getStringFromParamMap("descriptionOP", parameters);
-			String descriptionVal = getStringFromParamMap("descriptionVal", parameters);
-			FormatterOfferQuery.addCondition(sb, "o.description", descriptionOP, descriptionVal, null);
-		}
-		//
-		if (isSearch) {                     // In alert, new offer has no bid / price yet
-			String priceOP   = getStringFromParamMap("priceOP", parameters);
-			String priceVal1 = getStringFromParamMap("priceVal1", parameters);
-			String priceVal2 = getStringFromParamMap("priceVal2", parameters);
-			FormatterOfferQuery.addCondition(sb, "o.price", priceOP, priceVal1, priceVal2);
-		}
-		//
-		{
-			String statusOP  = FormatterOfferQuery.OP_INT_EQUAL;
-			String statusVal = "1";    // Active
-			FormatterOfferQuery.addCondition(sb, "o.status", statusOP, statusVal, null);
-		}
-		//
-		FormatterOfferQuery.initFieldCondition(sb);
-		//
-		String   lstFieldIDs = getStringFromParamMap("lstFieldIDs", parameters);
-		String[] fieldIDs    = lstFieldIDs.split(",");
-		for (String fieldID : fieldIDs) {
-			//
-			String fieldOP   = getStringFromParamMap("fieldop_" + fieldID, parameters);
-			String fieldVal1 = getStringFromParamMap("fieldval1_" + fieldID, parameters);
-			String fieldVal2 = getStringFromParamMap("fieldval2_" + fieldID, parameters);
-			FormatterOfferQuery.addFieldCondition(sb, fieldID, fieldOP, fieldVal1, fieldVal2);
-		}
-		//
-		if (isSearch) {
-			FormatterOfferQuery.doneFieldConditionSearch(sb);
-		}
-		else {
-			FormatterOfferQuery.doneFieldConditionAlert(sb);
-		}
-		//
-		return sb;
-	}
-
-
 	public static Map doCreateOffer(String userID, Map<String, String[]> parameters) {
 		Map output = new HashMap();
 		//
@@ -540,6 +479,7 @@ public class Offer extends DBBase {
 	}
 
 
+	//Bid Alert cascading delete
 	public static Map doCancelOffer(Map<String, String[]> parameters) {
 		String offerid = getStringFromParamMap("offerid", parameters);
 		//

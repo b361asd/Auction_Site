@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 
 <%@ page import="rutgers.cs336.gui.TableData" %>
+<%@ page import="java.math.BigDecimal" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
 
 <html>
@@ -52,11 +53,23 @@
 <form action="${pageContext.request.contextPath}/user/postBidResult.jsp" method="post">
 
 	<%
+		BigDecimal initPrice = (BigDecimal) dataTable.getOneCell(0, 5);
+		BigDecimal increment = (BigDecimal) dataTable.getOneCell(0, 6);
+		BigDecimal curPrice = (BigDecimal) dataTable.getOneCell(0, 11);
+		//
+		BigDecimal minPrice = null;
+		if (curPrice == null) {
+			minPrice = initPrice;
+		}
+		else {
+			minPrice = curPrice.add(increment);
+		}
+		//
 		out.println("<input type='hidden' name='offerId' value='" + offerid + "'/>");
+		out.println("<div>Price<input type='number' name='price' min='" + minPrice + "' VALUE='" + minPrice + "'></div>");
 	%>
 
-	<div>Price<input type="number" name="price" min="1"></div>
-	<div>Auto Rebid Limit<input type="number" name="autoRebidLimit" min="1"></div>
+	<div>Auto Rebid Limit<input type="number" name="autoRebidLimit"></div>
 	<input type="submit" value="Submit">
 </form>
 

@@ -7,25 +7,24 @@ import java.sql.*;
 import java.util.*;
 
 public class Bid extends DBBase {
+	private static List lstHeader_bid = Arrays.asList("bidID", "buyer", "price", "bidDate");
 
 	public static Map getBidsForOffer(String offerID) {
 		Map output = new HashMap();
 		//
-		List lstRows   = new ArrayList();
-		List lstHeader = new ArrayList();
+		List lstRows = new ArrayList();
 		//
 		Connection        con          = null;
 		PreparedStatement preparedStmt = null;
 		try {
 			con = getConnection();
 			//
-			preparedStmt = con.prepareStatement(SQL_BID_SELECT);
+			preparedStmt = con.prepareStatement(SQL_BID_SELECT_BY_OFFERID);
 			//
 			preparedStmt.setString(1, offerID);
 			//
 			ResultSet rs = preparedStmt.executeQuery();
 			//
-			int rowIndex = -1;
 			while (rs.next()) {
 				Object bidID   = rs.getObject(1);
 				Object buyer   = rs.getObject(2);
@@ -34,23 +33,15 @@ public class Bid extends DBBase {
 				//
 				List currentRow = new LinkedList();
 				lstRows.add(currentRow);
-				rowIndex++;
 				//
 				currentRow.add(bidID);
 				currentRow.add(buyer);
 				currentRow.add(price);
 				currentRow.add(bidDate);
-				//
-				if (rowIndex == 0) {
-					lstHeader.add("bidID");
-					lstHeader.add("buyer");
-					lstHeader.add("price");
-					lstHeader.add("bidDate");
-				}
 			}
 			//
 			output.put(DATA_NAME_DATA, lstRows);
-			output.put(DATA_NAME_DATA_ADD, lstHeader);
+			output.put(DATA_NAME_DATA_ADD, lstHeader_bid);
 			//
 			output.put(DATA_NAME_STATUS, true);
 			output.put(DATA_NAME_MESSAGE, "OK");
@@ -74,272 +65,6 @@ public class Bid extends DBBase {
 					e.printStackTrace();
 				}
 			}
-			//
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (Throwable e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		//
-		return output;
-	}
-
-
-	public static Map doCreateBid(String userID, Map<String, String[]> parameters) {
-		Map output = new HashMap();
-		//
-		String bidId = getUUID();
-		//
-		Connection        con            = null;
-		PreparedStatement pStmtInsertBid = null;
-		try {
-			con = getConnection();
-			//
-			String offerId = getStringFromParamMap("offerId", parameters);
-			BigDecimal price = getBigDecimalFromParamMap("price", parameters);
-			//
-			pStmtInsertBid = con.prepareStatement(SQL_BID_INSERT);
-			pStmtInsertBid.setString(1, bidId);
-			pStmtInsertBid.setString(2, userID);
-			pStmtInsertBid.setBigDecimal(3, price);
-			pStmtInsertBid.setBigDecimal(4, getBigDecimalFromParamMap("autoRebidLimit", parameters));
-			pStmtInsertBid.setBigDecimal(5, price);
-			pStmtInsertBid.setString(6, offerId);
-			pStmtInsertBid.setString(7, offerId);
-			pStmtInsertBid.setBigDecimal(8, price);
-			pStmtInsertBid.setString(9, offerId);
-			//
-			pStmtInsertBid.execute();
-			//
-			int count = pStmtInsertBid.getUpdateCount();
-			//
-			if (count == 1) {
-				output.put(DATA_NAME_STATUS, true);
-				output.put(DATA_NAME_MESSAGE, "Bid Created!");
-			}
-			else {
-				output.put(DATA_NAME_STATUS, false);
-				output.put(DATA_NAME_MESSAGE, "No bid created.");
-			}
-		}
-		catch (SQLException e) {
-			if (con != null) {
-				try {
-					con.rollback();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-			//
-			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
-			e.printStackTrace();
-		}
-		catch (ClassNotFoundException e) {
-			if (con != null) {
-				try {
-					con.rollback();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-			//
-			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
-			e.printStackTrace();
-		}
-		finally {
-			if (pStmtInsertBid != null) {
-				try {
-					pStmtInsertBid.close();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-			//
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-		}
-		//
-		return output;
-	}
-
-
-	public static Map doModifyBid(Map<String, String[]> parameters) {
-		Map output = new HashMap();
-		//
-		String   bidIDofferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
-		String[] temps             = bidIDofferIDBuyer.split(",");
-		//
-		BigDecimal price          = getBigDecimalFromParamMap("price", parameters);
-		BigDecimal autoRebidLimit = getBigDecimalFromParamMap("autoRebidLimit", parameters);
-		//
-		Connection        con            = null;
-		PreparedStatement pStmtDeleteBid = null;
-		PreparedStatement pStmtInsertBid = null;
-		try {
-			con = getConnection();
-			con.setAutoCommit(false);
-			//
-			pStmtDeleteBid = con.prepareStatement(SQL_BID_DELETE);
-			pStmtDeleteBid.setString(1, temps[0]);
-			pStmtDeleteBid.execute();
-			//
-			int countDelete = pStmtDeleteBid.getUpdateCount();
-			if (countDelete == 1) {
-				pStmtInsertBid = con.prepareStatement(SQL_BID_INSERT);
-				pStmtInsertBid.setString(1, temps[0]);
-				pStmtInsertBid.setString(2, temps[2]);
-				pStmtInsertBid.setBigDecimal(3, price);
-				pStmtInsertBid.setBigDecimal(4, autoRebidLimit);
-				pStmtInsertBid.setBigDecimal(5, price);
-				pStmtInsertBid.setString(6, temps[1]);
-				pStmtInsertBid.setBigDecimal(7, price);
-				pStmtInsertBid.setString(8, temps[1]);
-				//
-				pStmtInsertBid.execute();
-				//
-				int countInsert = pStmtInsertBid.getUpdateCount();
-				if (countInsert == 1) {
-					con.commit();
-					//
-					output.put(DATA_NAME_STATUS, true);
-					output.put(DATA_NAME_MESSAGE, "BID UPDATED");
-				}
-				else {
-					con.rollback();
-					//
-					output.put(DATA_NAME_STATUS, false);
-					output.put(DATA_NAME_MESSAGE, "FAILED TO INSERT");
-				}
-			}
-			else {
-				con.rollback();
-				//
-				output.put(DATA_NAME_STATUS, false);
-				output.put(DATA_NAME_MESSAGE, "FAILED TO DELETE");
-			}
-			//
-		}
-		catch (SQLException e) {
-			if (con != null) {
-				try {
-					con.rollback();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-			//
-			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
-			e.printStackTrace();
-		}
-		catch (ClassNotFoundException e) {
-			if (con != null) {
-				try {
-					con.rollback();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-			//
-			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
-			e.printStackTrace();
-		}
-		finally {
-			if (pStmtDeleteBid != null) {
-				try {
-					pStmtDeleteBid.close();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-			if (pStmtInsertBid != null) {
-				try {
-					pStmtInsertBid.close();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-			if (con != null) {
-				try {
-					con.setAutoCommit(true);
-					con.close();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-		}
-		//
-		return output;
-	}
-
-
-	public static Map cancelBid(Map<String, String[]> parameters) {
-		Map output = new HashMap();
-		//
-		String bidID = getStringFromParamMap("bidID", parameters);
-		//
-		Connection        con          = null;
-		PreparedStatement preparedStmt = null;
-		try {
-			con = getConnection();
-			//
-			preparedStmt = con.prepareStatement(SQL_BID_DELETE);
-			//
-			preparedStmt.setString(1, bidID);
-			//
-			preparedStmt.execute();
-			//
-			int count = preparedStmt.getUpdateCount();
-			if (count == 0) {
-				output.put(DATA_NAME_STATUS, false);
-				output.put(DATA_NAME_MESSAGE, "Could not delete bid.");
-			}
-			else {
-				output.put(DATA_NAME_STATUS, true);
-				output.put(DATA_NAME_MESSAGE, "Bid deleted");
-			}
-		}
-		catch (SQLException e) {
-			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
-			e.printStackTrace();
-		}
-		catch (ClassNotFoundException e) {
-			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
-			e.printStackTrace();
-		}
-		finally {
-			if (preparedStmt != null) {
-				try {
-					preparedStmt.close();
-				}
-				catch (Throwable e) {
-					e.printStackTrace();
-				}
-			}
-			//
 			if (con != null) {
 				try {
 					con.close();
@@ -440,11 +165,13 @@ public class Bid extends DBBase {
 				//
 				List lstRows = tempMap.computeIfAbsent(offerID.toString(), k -> new ArrayList());
 				/*
+				List lstRows = tempMap.get(offerID.toString());
 				if (lstRows == null) {
 					lstRows = new ArrayList();
 					tempMap.put(offerID.toString(), lstRows);
 				}
-				*/
+				 */
+				//
 				lstRows.add(currentRow);
 			}
 			//
@@ -491,7 +218,6 @@ public class Bid extends DBBase {
 					e.printStackTrace();
 				}
 			}
-			//
 			if (con != null) {
 				try {
 					con.close();
@@ -505,26 +231,370 @@ public class Bid extends DBBase {
 		return output;
 	}
 
-	
-	
-	
-	//offerId=648e2f949a3f4c3eaf3311799e409249,price=3000,autoRebidLimit=2222	
+
+	public static Map doCreateOrModifyBid(String userID, Map<String, String[]> parameters, boolean isCreate) {
+		Map output = new HashMap();
+		//
+		String     offerId;
+		String     bidID;
+		BigDecimal initPrice = null;
+		BigDecimal increment = null;
+		int        status    = -1;
+		//
+		Object[] newBid = new Object[4];
+		if (isCreate) {
+			offerId = getStringFromParamMap("offerId", parameters);
+			bidID = null;
+			BigDecimal price          = getBigDecimalFromParamMap("price", parameters);
+			BigDecimal autoRebidLimit = getBigDecimalFromParamMap("autoRebidLimit", parameters);
+			//
+			newBid[0] = null;
+			newBid[1] = userID;
+			newBid[2] = price;
+			newBid[3] = autoRebidLimit;
+		}
+		else {
+			String   bidIDofferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
+			String[] temps             = bidIDofferIDBuyer.split(",");
+			//
+			offerId = temps[1];
+			bidID = temps[0];
+			BigDecimal price          = getBigDecimalFromParamMap("price", parameters);
+			BigDecimal autoRebidLimit = getBigDecimalFromParamMap("autoRebidLimit", parameters);
+			//
+			newBid[0] = bidID;
+			newBid[0] = temps[2];
+			newBid[0] = price;
+			newBid[0] = autoRebidLimit;
+		}
+		//
+		Connection        con                     = null;
+		PreparedStatement preparedStmtMaxPriceBid = null;
+		PreparedStatement pStmtModifyBid          = null;
+		PreparedStatement pStmtInsertBid          = null;
+		PreparedStatement pStmtInsertOutBidAlert  = null;
+		//
+		Object[] lastMaxBid = new Object[4];
+		try {
+			con = getConnection();
+			con.setAutoCommit(false);
+			//
+			preparedStmtMaxPriceBid = con.prepareStatement(isCreate ? SQL_BID_SELECT_MAX_PRICE : SQL_BID_SELECT_MAX_PRICE_EX);
+			preparedStmtMaxPriceBid.setString(1, offerId);
+			if (!isCreate) {
+				preparedStmtMaxPriceBid.setString(2, bidID);
+			}
+			//
+			ResultSet rs = preparedStmtMaxPriceBid.executeQuery();
+			if (rs.next()) {
+				Object _offerID        = rs.getObject(1);
+				Object _seller         = rs.getObject(2);
+				Object _categoryName   = rs.getObject(3);
+				Object _conditionCode  = rs.getObject(4);
+				Object _description    = rs.getObject(5);
+				Object _initPrice      = rs.getObject(6);
+				Object _increment      = rs.getObject(7);
+				Object _minPrice       = rs.getObject(8);
+				Object _startDate      = rs.getObject(9);
+				Object _endDate        = rs.getObject(10);
+				Object _status         = rs.getObject(11);
+				Object _bidID          = rs.getObject(12);
+				Object _buyer          = rs.getObject(13);
+				Object _price          = rs.getObject(14);
+				Object _autoRebidLimit = rs.getObject(15);
+				Object _bidDate        = rs.getObject(16);
+				//
+				initPrice = (BigDecimal) _initPrice;
+				increment = (BigDecimal) _increment;
+				status = (Integer) _status;
+				//
+				if (_bidID == null || _bidID.toString().length() == 0) {
+					lastMaxBid = null;
+				}
+				else {
+					lastMaxBid[0] = _bidID;
+					lastMaxBid[1] = _buyer;
+					lastMaxBid[2] = _price;
+					lastMaxBid[3] = _autoRebidLimit;
+				}
+			}
+			//
+			Object[] current = newBid;
+			Object[] last    = lastMaxBid;
+			//
+			if (isCreate) {
+				current[0] = getUUID();
+			}
+			//
+			int outcome = 1;                  // 1 Start, 2 NotMeetInitPrice, 3 LessThanLastPlusDelta; 4: offerClosed 5 Out-bided; 10 OK
+			if (status != 1) {
+				outcome = 4;
+			}
+			else {
+				boolean isModifyAndDoit = !isCreate;
+				boolean isAutoRebid     = false;
+				while (true) {
+					BigDecimal last_price          = (last == null) ? null : ((BigDecimal) last[2]);
+					BigDecimal last_autoRebidLimit = (last == null) ? null : ((BigDecimal) last[3]);
+					//
+					BigDecimal current_price          = (BigDecimal) current[2];
+					BigDecimal current_autoRebidLimit = (BigDecimal) current[3];
+					//
+					//Check price meet offer
+					if (last == null) {
+						if (current_price.compareTo(initPrice) >= 0) {
+							//OK
+						}
+						else {
+							outcome = 2;
+							break;
+						}
+					}
+					else {
+						BigDecimal lastPlusDelta = last_price.add(increment);
+						if (current_price.compareTo(lastPlusDelta) >= 0) {
+							//OK
+						}
+						else {
+							outcome = 3;
+							break;
+						}
+					}
+					//
+					if (isModifyAndDoit) {
+						isModifyAndDoit = false;
+						//
+						pStmtModifyBid = con.prepareStatement(SQL_BID_UPDATE);
+						pStmtModifyBid.setBigDecimal(1, (BigDecimal) current[2]);
+						pStmtModifyBid.setBigDecimal(2, (BigDecimal) current[3]);
+						pStmtModifyBid.setString(3, current[0].toString());
+						pStmtModifyBid.execute();
+					}
+					else {
+						if (pStmtInsertBid == null) {
+							pStmtInsertBid = con.prepareStatement(SQL_BID_INSERT);
+						}
+						pStmtInsertBid.setString(1, current[0].toString());
+						pStmtInsertBid.setString(2, offerId);
+						pStmtInsertBid.setString(3, current[1].toString());
+						pStmtInsertBid.setBigDecimal(4, (BigDecimal) current[2]);
+						pStmtInsertBid.setBigDecimal(5, (BigDecimal) current[3]);
+						pStmtInsertBid.execute();
+					}
+					//
+					if (last == null) {
+						outcome = 10;
+						break;
+					}
+					else {
+						BigDecimal new_bid = current_price.add(increment);
+						//
+						if (last_autoRebidLimit.compareTo(new_bid) >= 0) {                                 //Continue
+							last[0] = getUUID();
+							last[2] = new_bid;
+						}
+						else {                  //Out bid alert
+							pStmtInsertOutBidAlert = con.prepareStatement(SQL_ALERT_INSERT_BID);
+							pStmtInsertOutBidAlert.setString(1, getUUID());
+							pStmtInsertOutBidAlert.setString(2, last[1].toString());
+							pStmtInsertOutBidAlert.setString(3, last[0].toString());
+							pStmtInsertOutBidAlert.execute();
+							//
+							outcome = 5;                                                               // Out-bided
+							break;
+						}
+					}
+					//
+					//Switch for next round
+					{
+						Object[] temp = current;
+						current = last;
+						last = temp;
+					}
+				}
+			}
+			//
+			if (outcome == 5) {
+				con.commit();
+				output.put(DATA_NAME_STATUS, true);
+				output.put(DATA_NAME_MESSAGE, "BID " + (isCreate ? "CREATED" : "UPDATED") + " WITH AUTOREBID");
+			}
+			else if (outcome == 10) {
+				con.commit();
+				output.put(DATA_NAME_STATUS, true);
+				output.put(DATA_NAME_MESSAGE, "BID " + (isCreate ? "CREATED" : "UPDATED"));
+			}
+			else if (outcome == 2) {
+				con.rollback();
+				output.put(DATA_NAME_STATUS, false);
+				output.put(DATA_NAME_MESSAGE, "FAILED TO " + (isCreate ? "CREATED" : "UPDATED") + " BID DUE TO NotMeetInitPrice");
+			}
+			else if (outcome == 3) {
+				con.rollback();
+				output.put(DATA_NAME_STATUS, false);
+				output.put(DATA_NAME_MESSAGE, "FAILED TO " + (isCreate ? "CREATED" : "UPDATED") + " BID DUE TO LessThanLastPlusDelta");
+			}
+			else if (outcome == 4) {
+				con.rollback();
+				output.put(DATA_NAME_STATUS, false);
+				output.put(DATA_NAME_MESSAGE, "FAILED TO " + (isCreate ? "CREATED" : "UPDATED") + " BID DUE TO Offer closed");
+			}
+			else {
+				con.rollback();
+				output.put(DATA_NAME_STATUS, false);
+				output.put(DATA_NAME_MESSAGE, "FAILED TO " + (isCreate ? "CREATED" : "UPDATED") + " BID DUE TO UNNOWN");
+			}
+		}
+		catch (SQLException e) {
+			if (con != null) {
+				try {
+					con.rollback();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			//
+			output.put(DATA_NAME_STATUS, false);
+			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+			e.printStackTrace();
+		}
+		catch (ClassNotFoundException e) {
+			if (con != null) {
+				try {
+					con.rollback();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			//
+			output.put(DATA_NAME_STATUS, false);
+			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+			e.printStackTrace();
+		}
+		finally {
+			if (preparedStmtMaxPriceBid != null) {
+				try {
+					preparedStmtMaxPriceBid.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (pStmtInsertBid != null) {
+				try {
+					pStmtInsertBid.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (pStmtModifyBid != null) {
+				try {
+					pStmtModifyBid.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (pStmtInsertOutBidAlert != null) {
+				try {
+					pStmtInsertOutBidAlert.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.setAutoCommit(true);
+					con.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+		}
+		//
+		return output;
+	}
+
+
+	//Alert cascading delete
+	public static Map cancelBid(Map<String, String[]> parameters) {
+		Map output = new HashMap();
+		//
+		String bidID = getStringFromParamMap("bidID", parameters);
+		//
+		Connection        con          = null;
+		PreparedStatement preparedStmt = null;
+		try {
+			con = getConnection();
+			//
+			preparedStmt = con.prepareStatement(SQL_BID_DELETE);
+			//
+			preparedStmt.setString(1, bidID);
+			//
+			preparedStmt.execute();
+			//
+			int count = preparedStmt.getUpdateCount();
+			if (count == 0) {
+				output.put(DATA_NAME_STATUS, false);
+				output.put(DATA_NAME_MESSAGE, "Could not delete bid.");
+			}
+			else {
+				output.put(DATA_NAME_STATUS, true);
+				output.put(DATA_NAME_MESSAGE, "Bid deleted");
+			}
+		}
+		catch (SQLException e) {
+			output.put(DATA_NAME_STATUS, false);
+			output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
+			e.printStackTrace();
+		}
+		catch (ClassNotFoundException e) {
+			output.put(DATA_NAME_STATUS, false);
+			output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
+			e.printStackTrace();
+		}
+		finally {
+			if (preparedStmt != null) {
+				try {
+					preparedStmt.close();
+				}
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				}
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		//
+		return output;
+	}
 
 
 	public static void main(String[] args) {
 		Map<String, String[]> parameters = new HashMap<>();
 		//
-		parameters.put("offerId", new String[]{"648e2f949a3f4c3eaf3311799e409249"});
-		parameters.put("price", new String[]{"3000"});
-		parameters.put("autoRebidLimit", new String[]{"3000"});
+		parameters.put("offerId", new String[]{"d6ac071c449c46b4812dd96b9bc8f197"});
+		parameters.put("price", new String[]{"550"});
+		parameters.put("autoRebidLimit", new String[]{"1200"});
 		//
-		Map map = doCreateBid("user", parameters);
+		Map map = doCreateOrModifyBid("user", parameters, true);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
-	
+
 	public static void main2(String[] args) {
 		Map<String, String[]> parameters = new HashMap<>();
 		//
@@ -532,7 +602,7 @@ public class Bid extends DBBase {
 		parameters.put("price", new String[]{"1900"});
 		parameters.put("autoRebidLimit", new String[]{"2500"});
 		//
-		Map map = doModifyBid(parameters);
+		Map map = doCreateOrModifyBid(null, parameters, false);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
@@ -563,4 +633,99 @@ SELECT t1.*, t2.currPrice FROM (SELECT b1.bidID, b1.buyer, b1.price, b1.autoRebi
 
 /* By Buyer
 SELECT t1.*, t2.currPrice FROM (SELECT b1.bidID, b1.buyer, b1.price, b1.autoRebidLimit, b1.bidDate, o1.offerID, o1.seller, o1.categoryName, o1.conditionCode, o1.description, o1.initPrice, o1.increment, o1.minPrice, o1.startDate, o1.endDate, o1.status FROM Bid b1 INNER JOIN Offer o1 ON b1.offerID = o1.offerID AND b1.buyer = 'user') t1 LEFT OUTER JOIN (SELECT b1.price as currPrice, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) t2 ON t1.offerID = t2.offerID order by bidDate
+*/
+
+
+
+
+/*
+	public static Map _doCreateBid(String userID, Map<String, String[]> parameters) {
+		Map output = new HashMap();
+		//
+		String bidId = getUUID();
+		//
+		Connection        con            = null;
+		PreparedStatement pStmtInsertBid = null;
+		try {
+			con = getConnection();
+			//
+			String offerId = getStringFromParamMap("offerId", parameters);
+			BigDecimal price = getBigDecimalFromParamMap("price", parameters);
+			//
+			pStmtInsertBid = con.prepareStatement(SQL_BID_INSERT);
+			pStmtInsertBid.setString(1, bidId);
+			pStmtInsertBid.setString(2, userID);
+			pStmtInsertBid.setBigDecimal(3, price);
+			pStmtInsertBid.setBigDecimal(4, getBigDecimalFromParamMap("autoRebidLimit", parameters));
+			pStmtInsertBid.setBigDecimal(5, price);
+			pStmtInsertBid.setString(6, offerId);
+			pStmtInsertBid.setString(7, offerId);
+			pStmtInsertBid.setBigDecimal(8, price);
+			pStmtInsertBid.setString(9, offerId);
+			//
+			pStmtInsertBid.execute();
+			//
+			int count = pStmtInsertBid.getUpdateCount();
+			//
+			if (count == 1) {
+				output.put(DATA_NAME_STATUS, true);
+				output.put(DATA_NAME_MESSAGE, "Bid Created!");
+			}
+			else {
+				output.put(DATA_NAME_STATUS, false);
+				output.put(DATA_NAME_MESSAGE, "No bid created.");
+			}
+		}
+		catch (SQLException e) {
+			if (con != null) {
+				try {
+					con.rollback();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			//
+			output.put(DATA_NAME_STATUS, false);
+			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+			e.printStackTrace();
+		}
+		catch (ClassNotFoundException e) {
+			if (con != null) {
+				try {
+					con.rollback();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			//
+			output.put(DATA_NAME_STATUS, false);
+			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+			e.printStackTrace();
+		}
+		finally {
+			if (pStmtInsertBid != null) {
+				try {
+					pStmtInsertBid.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			//
+			if (con != null) {
+				try {
+					con.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+		}
+		//
+		return output;
+	}
+	
+	
 */

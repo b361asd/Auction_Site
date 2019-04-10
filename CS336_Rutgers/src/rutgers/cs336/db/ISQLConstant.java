@@ -19,10 +19,14 @@ public interface ISQLConstant {
 
 
 	// Bid
-	String SQL_BID_INSERT    = "INSERT Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) SELECT ?, o.offerID, ?, ?, ?, NOW() FROM Offer o WHERE o.endDate >= NOW() AND (NOT o.minPrice > ?) AND o.offerID = ? AND o.status = 1 AND ((NOT EXISTS (SELECT * FROM Bid b3 WHERE b3.offerID = ?)) OR (? > (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = ?)))";
-	String SQL_BID_DELETE    = "DELETE from Bid where bidID = ?";
-	String SQL_BID_SELECT_EX = "SELECT bidID, offerID, buyer, price, autoRebidLimit, bidDate FROM Bid";
-	String SQL_BID_SELECT    = "SELECT bidID, buyer, price, bidDate FROM Bid b WHERE b.offerID = ? ORDER BY price DESC";
+	String SQL_BID_INSERT              = "INSERT Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) VALUES (?, ?, ?, ?, ?, NOW())";
+	String SQL_BID_UPDATE              = "UPDATE Bid SET price = ?, autoRebidLimit = ?, bidDate = NOW() WHERE bidID = ?";
+	//String SQL_BID_INSERT    			= "INSERT Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) SELECT ?, o.offerID, ?, ?, ?, NOW() FROM Offer o WHERE o.endDate >= NOW() AND (NOT o.minPrice > ?) AND o.offerID = ? AND o.status = 1 AND ((NOT EXISTS (SELECT * FROM Bid b3 WHERE b3.offerID = ?)) OR (? > (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = ?)))";
+	String SQL_BID_DELETE              = "DELETE from Bid where bidID = ?";
+	String SQL_BID_SELECT_EX           = "SELECT bidID, offerID, buyer, price, autoRebidLimit, bidDate FROM Bid";
+	String SQL_BID_SELECT_BY_OFFERID   = "SELECT bidID, buyer, price, bidDate FROM Bid b WHERE b.offerID = ? ORDER BY price DESC";
+	String SQL_BID_SELECT_MAX_PRICE    = "SELECT o.offerID, seller, categoryName, conditionCode, description, initPrice, increment, minPrice, startDate, endDate, status, bidID, buyer, price, autoRebidLimit, bidDate FROM (select * from Offer where offerID = ?) o LEFT OUTER JOIN Bid b ON o.offerID = b.offerID AND b.price = (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = o.offerID)";
+	String SQL_BID_SELECT_MAX_PRICE_EX = "SELECT o.offerID, seller, categoryName, conditionCode, description, initPrice, increment, minPrice, startDate, endDate, status, bidID, buyer, price, autoRebidLimit, bidDate FROM (select * from Offer where offerID = ?) o LEFT OUTER JOIN Bid b ON o.offerID = b.offerID AND b.bidID <> ? AND b.price = (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = o.offerID)";
 
 
 	// CategoryField
@@ -39,7 +43,7 @@ public interface ISQLConstant {
 
 	// OfferField
 	String SQL_OFFERFIELD_INSERT = "INSERT INTO OfferField (offerID, fieldID, fieldText) VALUES (?, ?, ?)";
-	String SQL_OFFERFIELD_DELETE = "DELETE OfferField WHERE offerID = ?";
+	String SQL_OFFERFIELD_DELETE = "DELETE from OfferField WHERE offerID = ?";
 	String SQL_OFFERFIELD_SELECT = "SELECT OfferField.fieldID, fieldName, fieldType, fieldText FROM OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID WHERE OfferField.offerID = ? ORDER BY OfferField.fieldID";
 	String SQL_OFFERFIELD_SEARCH = "SELECT OfferField.offerID, OfferField.fieldID, fieldName, fieldType, fieldText FROM OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID WHERE OfferField.offerID IN (SELECT offerID FROM Offer WHERE status = 1 and categoryName = ? and description LIKE ?)";
 
@@ -55,10 +59,16 @@ public interface ISQLConstant {
 	//	String OFFER_BID_BY_USER
 	//	String SIMILAR_ITEM
 
+	// Allert
+	String SQL_ALERT_INSERT_BID   = "INSERT INTO Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) VALUES (?, ?, NULL, ?, NOW(), NULL)";
+	String SQL_ALERT_INSERT_OFFER = "INSERT INTO Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) VALUES (?, ?, ?, NULL, NOW(), NULL)";
+
+
 	// OfferAlertCriterion
 	String SQL_OFFERALERTCRITERION_INSERT      = "INSERT INTO OfferAlertCriterion (criterionID, buyer, criterionName, triggerTxt, generateDate) VALUES (?, ?, ?, ?, NOW())";
 	String SQL_OFFERALERTCRITERION_SELECT      = "select criterionID, buyer, criterionName, triggerTxt, generateDate FROM OfferAlertCriterion";
 	String SQL_OFFERALERTCRITERION_SELECT_USER = "select criterionID, buyer, criterionName, triggerTxt, generateDate FROM OfferAlertCriterion Where buyer = ?";
+	String SQL_OFFERALERTCRITERION_DELETE      = "DELETE from OfferAlertCriterion WHERE criterionID = ?";
 
 
 	// Question
