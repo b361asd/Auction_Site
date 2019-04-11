@@ -36,7 +36,6 @@ public class User extends DBBase {
 			//
 			ResultSet rs = preparedStmt.executeQuery();
 			//
-			int rowIndex = -1;
 			while (rs.next()) {
 				Object username  = rs.getObject(1);
 				Object password  = rs.getObject(2);
@@ -49,7 +48,6 @@ public class User extends DBBase {
 				//
 				List currentRow = new LinkedList();
 				lstRows.add(currentRow);
-				rowIndex++;
 				//
 				currentRow.add(username);
 				currentRow.add(password);
@@ -61,9 +59,9 @@ public class User extends DBBase {
 				currentRow.add(active);
 			}
 			//
-			TableData tableDataBiD = new TableData(lstHeader_user, lstRows, colSeq_user);
+			TableData tableData = new TableData(lstHeader_user, lstRows, colSeq_user);
 			//
-			output.put(DATA_NAME_DATA, tableDataBiD);
+			output.put(DATA_NAME_DATA, tableData);
 			//
 			output.put(DATA_NAME_STATUS, true);
 			output.put(DATA_NAME_MESSAGE, "OK");

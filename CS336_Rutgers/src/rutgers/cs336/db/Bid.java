@@ -8,7 +8,12 @@ import java.sql.*;
 import java.util.*;
 
 public class Bid extends DBBase {
-	private static List lstHeader_bid = Arrays.asList("bidID", "buyer", "price", "bidDate");
+	private static List  lstHeader_bid = Arrays.asList("bidID", "offerID", "buyer", "price", "autoRebidLimit", "bidDate");
+	private static int[] colSeq_bid    = {0, 1, 2, 3, 4, 5};
+	//
+
+
+	private static List lstHeader_bid1 = Arrays.asList("bidID", "buyer", "price", "bidDate");
 
 	public static Map getBidsForOffer(String offerID) {
 		Map output = new HashMap();
@@ -42,7 +47,7 @@ public class Bid extends DBBase {
 			}
 			//
 			output.put(DATA_NAME_DATA, lstRows);
-			output.put(DATA_NAME_DATA_ADD, lstHeader_bid);
+			output.put(DATA_NAME_DATA_ADD, lstHeader_bid1);
 			//
 			output.put(DATA_NAME_STATUS, true);
 			output.put(DATA_NAME_MESSAGE, "OK");
@@ -111,13 +116,12 @@ public class Bid extends DBBase {
 		String sql = sb.toString();
 		//
 		Map               output     = new HashMap();
-		Map<String, List> tempMap    = new HashMap<>();
-		Set<String>       offerIDSet = new HashSet<>();
+		Map<String, List> tempMap    = new HashMap<>();            //offerID -> Bids(in List)
+		Set<String>       offerIDSet = new HashSet<>();            //offerID set
 		//
-		List lstHeader = new ArrayList();
 		//
-		Map<String, String>  mapFields         = new HashMap<>();
-		Map<String, Integer> mapFieldIDToIndex = new HashMap<>();
+		//		Map<String, String>  mapFields         = new HashMap<>();
+		//		Map<String, Integer> mapFieldIDToIndex = new HashMap<>();
 		//
 		Connection con       = null;
 		Statement  statement = null;
@@ -127,23 +131,6 @@ public class Bid extends DBBase {
 			statement = con.createStatement();
 			//
 			ResultSet rs = statement.executeQuery(sql);
-			//
-			lstHeader.add("bidID");
-			lstHeader.add("offerID");
-			lstHeader.add("buyer");
-			lstHeader.add("price");
-			lstHeader.add("autoRebidLimit");
-			lstHeader.add("bidDate");
-			//
-			int[] colSeq = new int[lstHeader.size()];
-			{
-				colSeq[0] = 0;      //
-				colSeq[1] = 1;      //
-				colSeq[2] = 2;      //
-				colSeq[3] = 3;      //
-				colSeq[4] = 4;      //
-				colSeq[5] = 5;      //
-			}
 			//
 			while (rs.next()) {
 				Object bidID          = rs.getObject(1);
@@ -179,15 +166,15 @@ public class Bid extends DBBase {
 			Map       offerMap       = Offer.doSearchByOfferIDSet(offerIDSet);
 			TableData dataTableOffer = (TableData) offerMap.get(DATA_NAME_DATA);
 			List      lstOfferRows   = dataTableOffer.getRows();
-			for (Object lstOfferRow : lstOfferRows) {
-				List oneOfferRow = (List) lstOfferRow;
+			for (Object one : lstOfferRows) {
+				List oneOfferRow = (List) one;
 				//
 				List lstBidRows = tempMap.get(oneOfferRow.get(0));
 				if (lstBidRows == null) {
 					oneOfferRow.add(null);
 				}
 				else {
-					TableData tableDataBiD = new TableData(lstHeader, lstBidRows, colSeq);
+					TableData tableDataBiD = new TableData(lstHeader_bid, lstBidRows, colSeq_bid);
 					if (bidIDStandout != null) {
 						tableDataBiD.setStandOut(bidIDStandout, 0);
 					}
@@ -254,7 +241,7 @@ public class Bid extends DBBase {
 			BigDecimal price          = getBigDecimalFromParamMap("price", parameters);
 			BigDecimal autoRebidLimit = getBigDecimalFromParamMap("autoRebidLimit", parameters);
 			//
-			newBid[0] = null;
+			newBid[0] = bidID;
 			newBid[1] = userID;
 			newBid[2] = price;
 			newBid[3] = autoRebidLimit;
@@ -346,7 +333,6 @@ public class Bid extends DBBase {
 			}
 			else {
 				boolean isModifyAndDoit = !isCreate;
-				boolean isAutoRebid     = false;
 				while (true) {
 					BigDecimal last_price          = (last == null) ? null : ((BigDecimal) last[2]);
 					BigDecimal last_autoRebidLimit = (last == null) ? null : ((BigDecimal) last[3]);
@@ -378,9 +364,7 @@ public class Bid extends DBBase {
 					if (isModifyAndDoit) {
 						isModifyAndDoit = false;
 						//
-						if (pStmtModifyBid == null) {
-							pStmtModifyBid = con.prepareStatement(SQL_BID_UPDATE);
-						}
+						pStmtModifyBid = con.prepareStatement(SQL_BID_UPDATE);
 						pStmtModifyBid.setBigDecimal(1, (BigDecimal) current[2]);
 						pStmtModifyBid.setBigDecimal(2, (BigDecimal) current[3]);
 						pStmtModifyBid.setString(3, current[0].toString());
@@ -409,18 +393,18 @@ public class Bid extends DBBase {
 							last[0] = getUUID();
 							last[2] = new_bid;
 						}
-						else {                  // Out bid alert
+						else {                  //Out bid alert
 							String context = "Your bid for a " + categoryName + " (" + Helper.getConditionFromCode(conditionCode) + ", " + description + ") by seller " + seller + " is outbidded.";
 							//
 							pStmtInsertAlert = con.prepareStatement(SQL_ALERT_INSERT_BID);
 							pStmtInsertAlert.setString(1, getUUID());
-							pStmtInsertAlert.setString(2, last[1].toString());
+							pStmtInsertAlert.setString(2, last[1].toString());                     //user
 							pStmtInsertAlert.setString(3, offerId);
-							pStmtInsertAlert.setString(4, last[0].toString());
+							pStmtInsertAlert.setString(4, last[0].toString());                     //bidID
 							pStmtInsertAlert.setString(5, context);
 							pStmtInsertAlert.execute();
 							//
-							outcome = 5;                                                               // Out-bidded
+							outcome = 5;                                                               // Out-bided
 							break;
 						}
 					}

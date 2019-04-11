@@ -234,7 +234,7 @@ public class Offer extends DBBase {
 					currentRow.add(minPrice);
 					currentRow.add(startDate);
 					currentRow.add(endDate);
-					currentRow.add(status);
+					currentRow.add(Helper.getStatusFromCode(status.toString()));
 					currentRow.add(price);
 					//
 					mapFields.put("" + rowIndex + "-" + fieldID, (fieldText == null) ? "" : fieldText.toString());
@@ -515,7 +515,8 @@ public class Offer extends DBBase {
 			}
 			rs.close();
 			//
-			for (Object object : lstRows) {
+			for (Iterator iterator = lstRows.iterator(); iterator.hasNext(); ) {
+				Object object = (Object) iterator.next();
 				//
 				Object[] oneRow = (Object[]) object;
 				//
@@ -532,7 +533,10 @@ public class Offer extends DBBase {
 				pStmtInsertAlert.execute();
 			}
 		}
-		catch (SQLException | ClassNotFoundException e) {
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		finally {

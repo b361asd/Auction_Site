@@ -134,6 +134,22 @@ public class Helper implements IConstant {
 	}
 
 
+	public static String getStatusFromCode(String status) {
+		switch (status) {
+			case "1":
+				return "Active";
+			case "3":
+				return "Completed";
+			case "4":
+				return "No Bid";
+			case "5":
+				return "Min Not Met";
+			default:
+				return "Unknown";
+		}
+	}
+
+
 	public static String getButton(String formID, String inputID, String inputValue, String display) {
 		return "<button onclick=\"document.getElementById('" + inputID + "').value='" + inputValue + "'; document.getElementById('" + formID + "').submit();\" class=\"buttonclass\" type=\"button\">" + display + "</button>";
 	}
