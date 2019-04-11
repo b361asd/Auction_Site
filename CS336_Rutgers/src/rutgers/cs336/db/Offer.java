@@ -92,7 +92,7 @@ public class Offer extends DBBase {
 			sb = FormatterOfferQuery.initQuerySearch();
 		}
 		else {
-			sb = FormatterOfferQuery.initQueryAlert(userID);
+			sb = FormatterOfferQuery.initQueryAlert();
 		}
 		//
 		if (isSearch) {                        // In alert, offerID placeholder will be replaced with real one
@@ -498,56 +498,47 @@ public class Offer extends DBBase {
 			ResultSet rs = pStmtSelectAlertCriterion.executeQuery();
 			while (rs.next()) {
 				Object criterionID   = rs.getObject(1);
-				Object buyer         = rs.getObject(1);
-				Object criterionName = rs.getObject(1);
-				Object triggerTxt    = rs.getObject(1);
-				Object generateDate  = rs.getObject(1);
+				Object buyer         = rs.getObject(2);
+				Object criterionName = rs.getObject(3);
+				Object triggerTxt    = rs.getObject(4);
+				Object generateDate  = rs.getObject(5);
 				//
 				//
-				List currentRow = new LinkedList();
+				Object[] currentRow = new Object[5];
 				lstRows.add(currentRow);
 				//
-				currentRow.add(criterionID);
-				currentRow.add(buyer);
-				currentRow.add(criterionName);
-				currentRow.add(triggerTxt);
-				currentRow.add(generateDate);
+				currentRow[0] = criterionID;
+				currentRow[1] = buyer;
+				currentRow[2] = criterionName;
+				currentRow[3] = triggerTxt;
+				currentRow[4] = generateDate;
 			}
 			rs.close();
 			//
-			for (Iterator iterator = lstRows.iterator(); iterator.hasNext(); ) {
-				Object object = (Object) iterator.next();
+			for (Object object : lstRows) {
 				//
-				//run the Insert allert
+				Object[] oneRow = (Object[]) object;
 				//
+				String context = "New offer met your criterion " + oneRow[2].toString() + " is posted.";
 				//
-				if (pStmtInsertAlert == null) {
-					pStmtInsertAlert = con.prepareStatement(SQL_ALERT_INSERT_BID);
+				if (pStmtInsertAlert != null) {
+					pStmtInsertAlert.close();
 				}
-				pStmtInsertAlert.setString(1, getUUID());
-				pStmtInsertAlert.setString(2, "");
-				pStmtInsertAlert.setString(3, "");
+				pStmtInsertAlert = con.prepareStatement(oneRow[3].toString());
+				pStmtInsertAlert.setString(1, oneRow[1].toString());
+				pStmtInsertAlert.setString(2, offerID);
+				pStmtInsertAlert.setString(3, context);
+				pStmtInsertAlert.setString(4, offerID);
 				pStmtInsertAlert.execute();
 			}
 		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		catch (ClassNotFoundException e) {
+		catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		finally {
 			if (pStmtSelectAlertCriterion != null) {
 				try {
 					pStmtSelectAlertCriterion.close();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-			if (pStmtInsertAlert != null) {
-				try {
-					pStmtInsertAlert.close();
 				}
 				catch (Throwable t) {
 					t.printStackTrace();
@@ -753,7 +744,7 @@ public class Offer extends DBBase {
 	}
 
 
-	public static void main(String[] args) {
+	public static void main1(String[] args) {
 		Map<String, String[]> parameters = new HashMap<>();
 		//
 		parameters.put("categoryName1", new String[]{"car"});
@@ -767,7 +758,7 @@ public class Offer extends DBBase {
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
 
-	public static void main1(String[] args) {
+	public static void main2(String[] args) {
 		Map<String, String[]> parameters = new HashMap<>();
 		//
 		parameters.put("categoryName2", new String[]{"motorbike"});
@@ -782,9 +773,14 @@ public class Offer extends DBBase {
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
+
+	public static void main(String[] args) {
+		System.out.println("Start");
+		//
+		doCreateAllerts("99936702ff2a428ba913dd02e5592fc4");
+	}
 }
 
 
-//
-//Params:categoryName1=car,offerIDOP=any,offerIDVal=,sellerOP=any,sellerVal=,conditionCode_1=yes,conditionCode_2=yes,conditionCode_3=yes,conditionCode_4=yes,conditionCode_5=yes,conditionCode_6=yes,descriptionOP=any,descriptionVal=,priceOP=any,priceVal1=,priceVal2=,fieldop_1=any,fieldval1_1=,fieldop_2=any,fieldval1_2=,fieldop_3=any,fieldval1_3=,fieldval2_3=,fieldop_4=any,fieldval1_4=,fieldop_5=any,fieldval1_5=,fieldval2_5=,fieldop_6=yes,fieldop_7=any,fieldval1_7=,lstFieldIDs=1,2,3,4,5,6,7,action=searchOffer
+//categoryName=motorbike,initPrice=1000,increment=100,minPrice=2000,conditionCode=1,description=OK,fieldID_1=SDD,fieldID_2=TOYATO,fieldID_3=1,fieldID_4=,fieldID_5=1,fieldID_10=1,endDate=2019-04-11T11:02:07
 

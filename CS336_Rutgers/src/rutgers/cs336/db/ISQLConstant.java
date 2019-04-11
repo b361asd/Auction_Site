@@ -60,8 +60,9 @@ public interface ISQLConstant {
 	//	String SIMILAR_ITEM
 
 	// Allert
-	String SQL_ALERT_INSERT_BID   = "INSERT INTO Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) VALUES (?, ?, NULL, ?, NOW(), NULL)";
-	String SQL_ALERT_INSERT_OFFER = "INSERT INTO Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) VALUES (?, ?, ?, NULL, NOW(), NULL)";
+	String SQL_ALERT_INSERT_BID = "INSERT INTO Alert (alertID, receiver, offerID, bidID, content, alertDate) VALUES (?, ?, ?, ?, ?, NOW())";
+	String SQL_ALERT_SELECT     = "SELECT alertID, receiver, offerID, bidID, content, alertDate FROM Alert WHERE receiver = ?";
+	String SQL_ALERT_DELETE     = "DELETE FROM Alert WHERE alertID = ?";
 
 
 	// OfferAlertCriterion

@@ -24,8 +24,6 @@
 
 <%
 	{
-		//String paramMap = getParamMap(request.getParameterMap());
-		//
 		Map data = CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
 		request.setAttribute("TEMP", data);
 	}

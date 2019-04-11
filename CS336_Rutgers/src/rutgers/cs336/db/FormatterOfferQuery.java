@@ -9,9 +9,9 @@ public class FormatterOfferQuery extends DBBase {
 		return sb;
 	}
 
-	public static StringBuilder initQueryAlert(String receiver) {
+	public static StringBuilder initQueryAlert() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("insert Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) select REPLACE(UUID(),'-',''), '").append(receiver).append("', o.offerID, NULL, NOW(), NULL from Offer o WHERE (o.offerID='$offerID$')");
+		sb.append("Insert Alert (alertID, receiver, offerID, bidID, content, alertDate) select REPLACE(UUID(),'-',''), ?, ?, NULL, ?, NOW() from Offer o WHERE (o.offerID = ?)");
 		//
 		return sb;
 	}
@@ -72,7 +72,7 @@ public class FormatterOfferQuery extends DBBase {
 		//
 		//
 		if (false) {
-			StringBuilder sb = initQueryAlert("creator");
+			StringBuilder sb = initQueryAlert();
 			//addCondition(sb, "o.offerID", OP_SZ_START_WITH, "Scratcges", null);
 			//addCondition(sb, "o.seller", OP_SZ_NOT_EQUAL, "us'er", null);
 			//addCondition(sb, "o.categoryName", OP_SZ_NOT_EQUAL, "car", null);
@@ -142,7 +142,7 @@ or (of2.fieldID = 4 and (not (of2.fieldText = 'yes')))
 */
 
 /* For Alert
-insert Alert (alertID, receiver, offerID, bidID, alertDate, dismissedDate) select REPLACE(UUID(),'-',''), '$receiver$', o.offerID, NULL, NOW(), NULL from Offer o WHERE (o.offerID='$offerID$') and 
+Insert Alert (alertID, receiver, offerID, bidID, content, alertDate) select REPLACE(UUID(),'-',''), ?, ?, NULL, ?, NOW() from Offer o WHERE (o.offerID = ?)
 and (o.seller='user')
 and (o.conditionCode in (1,2))
 and (o.description='Scratcges')

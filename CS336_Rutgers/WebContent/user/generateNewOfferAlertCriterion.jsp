@@ -1,8 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.CategoryAndField" %>
-<%@ page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
 <%@ page import="static rutgers.cs336.gui.Helper.*" %>
 
@@ -10,17 +8,14 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Generate Alert</title>
+	<title>BuyMe - Search Offers</title>
 	<link rel="stylesheet" href="../style.css?v=1.0"/>
 
 	<script type="text/javascript">
-       function onCategoryChange(value) {
-           value.action = "${pageContext.request.contextPath}/user/generateNewOfferAlertCriterion.jsp";	// Post to itself
-           value.submit();
-       }
-
-       function onIntegerOPChange(value) {
-           //nextElementSibling
+       function onCategoryChange() {
+           const form = document.getElementById('form');
+           form.action = "${pageContext.request.contextPath}/user/generateNewOfferAlertCriterion.jsp";
+           form.submit();
        }
 	</script>
 </head>
@@ -28,78 +23,21 @@
 <body>
 
 <%
-	Map data = CategoryAndField.getCategoryField(getStringFromParamMap("categoryName", request.getParameterMap()));
+	{
+		Map data = CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
+		request.setAttribute("TEMP", data);
+	}
 %>
 
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<form action="${pageContext.request.contextPath}/user/generateNewOfferAlertCriterionResult.jsp" method="post">
+<form id="form" action="${pageContext.request.contextPath}/user/generateNewOfferAlertCriterionResult.jsp" method="post">
 
+	<%@include file="../searchOfferCommon.jsp" %>
 
-	<div class='allField'>categoryName
-		<select name="categoryName" onchange="onCategoryChange(this.parentElement.parentElement);">
-			<%
-				List lstCategory = (List) data.get(CategoryAndField.DATA_CATEGORY_LIST);
-				for (Object o : lstCategory) {
-					CategoryAndField.Category temp = (CategoryAndField.Category) o;
-					out.println("<option " + (temp.isCurr() ? "selected " : "") + "value='" + temp.getCategoryName() + "'>" + temp.getCategoryName() + "</option>");
-				}
-			%>
-		</select></div>
-	<br/>
-
-	<%
-		out.println("<div class='allField'>seller");
-		out.println(getOPSZSelection("sellerOP"));
-		out.println("<input type='text' name='sellerVal'/></div><br/>");
-
-		out.println("<div class='allField'>conditionCode");
-		out.println(getConditionCodeCheckBox("conditionCode"));
-		out.println("</div><br/>");
-
-		out.println("<div class='allField'>description");
-		out.println(getOPSZSelection("descriptionOP"));
-		out.println("<input type='text' name='descriptionVal'/></div><br/>");
-
-		List lstField = (List) data.get(CategoryAndField.DATA_FIELD_LIST);
-		String lstFieldIDs = null;
-		for (Object o : lstField) {
-			String fieldName = ((CategoryAndField.Field) o).getFieldName();
-			int    fieldID   = ((CategoryAndField.Field) o).getFieldID();
-			int    fieldType = ((CategoryAndField.Field) o).getFieldType();
-			//
-			if (lstFieldIDs == null) {
-				lstFieldIDs = "" + fieldID;
-			}
-			else {
-				lstFieldIDs = lstFieldIDs + "," + fieldID;
-			}
-			// String
-			if (fieldType == 1) {
-				out.println("<div class='allField'>" + fieldName);
-				out.println(getOPSZSelection("fieldop_" + fieldID));
-				out.println("<input type='text' name='fieldval1_" + fieldID + "'/></div><br/>");
-			}
-			// Integer
-			else if (fieldType == 2) {
-				out.println("<div class='allField'>" + fieldName);
-				out.println(getOPIntSelection("fieldop_" + fieldID));
-				out.println("<input type='number' name = 'fieldval1_" + fieldID + "' / >");
-				out.println("<input type='number' name = 'fieldval2_" + fieldID + "' / ></div><br/>");
-			}
-			// Boolean
-			else {
-				out.println("<div class='allField'>" + fieldName);
-				out.println(getOPBoolSelection("fieldop_" + fieldID));
-				out.println("</div><br/>");
-			}
-		}
-		//
-		out.println("<input name='lstFieldIDs' type='hidden' value='" + lstFieldIDs + "'/>");
-	%>
-
-	<input type="submit" value="Submit">
+	<input type="hidden" name="action" value="searchOffer"/>
+	<input type="submit" value="Search">
 </form>
 
 </body>

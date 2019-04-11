@@ -20,9 +20,9 @@
 <br/>
 
 <%
-	out.println("<div class='allField'>offerID");
-	out.println(getOPSZSelection("offerIDOP"));
-	out.println("<input type='text' name='offerIDVal'/></div><br/>");
+	//out.println("<div class='allField'>offerID");
+	//out.println(getOPSZSelection("offerIDOP"));
+	//out.println("<input type='text' name='offerIDVal'/></div><br/>");
 
 	out.println("<div class='allField'>seller");
 	out.println(getOPSZSelection("sellerOP"));

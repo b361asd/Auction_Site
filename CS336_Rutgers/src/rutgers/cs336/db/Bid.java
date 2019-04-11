@@ -1,5 +1,6 @@
 package rutgers.cs336.db;
 
+import rutgers.cs336.gui.Helper;
 import rutgers.cs336.gui.TableData;
 
 import java.math.BigDecimal;
@@ -239,7 +240,12 @@ public class Bid extends DBBase {
 		String     bidID     = "";
 		BigDecimal initPrice = null;
 		BigDecimal increment = null;
-		int        status    = -1;
+		//
+		String seller        = "";
+		String categoryName  = "";
+		String conditionCode = "";
+		String description   = "";
+		int    status        = -1;
 		//
 		Object[] newBid = new Object[4];
 		if (isCreate) {
@@ -306,6 +312,14 @@ public class Bid extends DBBase {
 				//
 				initPrice = (BigDecimal) _initPrice;
 				increment = (BigDecimal) _increment;
+				//
+				seller = _seller == null ? "" : _seller.toString();
+				categoryName = _categoryName == null ? "" : _categoryName.toString();
+				;
+				conditionCode = _conditionCode == null ? "" : _conditionCode.toString();
+				;
+				description = _description == null ? "" : _description.toString();
+				;
 				status = (Integer) _status;
 				//
 				if (_bidID == null || _bidID.toString().length() == 0) {
@@ -395,16 +409,18 @@ public class Bid extends DBBase {
 							last[0] = getUUID();
 							last[2] = new_bid;
 						}
-						else {                  //Out bid alert
-							if (pStmtInsertAlert == null) {
-								pStmtInsertAlert = con.prepareStatement(SQL_ALERT_INSERT_BID);
-							}
+						else {                  // Out bid alert
+							String context = "Your bid for a " + categoryName + " (" + Helper.getConditionFromCode(conditionCode) + ", " + description + ") by seller " + seller + " is outbidded.";
+							//
+							pStmtInsertAlert = con.prepareStatement(SQL_ALERT_INSERT_BID);
 							pStmtInsertAlert.setString(1, getUUID());
 							pStmtInsertAlert.setString(2, last[1].toString());
-							pStmtInsertAlert.setString(3, last[0].toString());
+							pStmtInsertAlert.setString(3, offerId);
+							pStmtInsertAlert.setString(4, last[0].toString());
+							pStmtInsertAlert.setString(5, context);
 							pStmtInsertAlert.execute();
 							//
-							outcome = 5;                                                               // Out-bided
+							outcome = 5;                                                               // Out-bidded
 							break;
 						}
 					}
@@ -438,15 +454,10 @@ public class Bid extends DBBase {
 				output.put(DATA_NAME_STATUS, false);
 				output.put(DATA_NAME_MESSAGE, "FAILED TO " + (isCreate ? "CREATED" : "UPDATED") + " BID DUE TO LessThanLastPlusDelta");
 			}
-			else if (outcome == 4) {
+			else {   // outcome == 4
 				con.rollback();
 				output.put(DATA_NAME_STATUS, false);
 				output.put(DATA_NAME_MESSAGE, "FAILED TO " + (isCreate ? "CREATED" : "UPDATED") + " BID DUE TO Offer closed");
-			}
-			else {
-				con.rollback();
-				output.put(DATA_NAME_STATUS, false);
-				output.put(DATA_NAME_MESSAGE, "FAILED TO " + (isCreate ? "CREATED" : "UPDATED") + " BID DUE TO UNNOWN");
 			}
 		}
 		catch (SQLException e) {
