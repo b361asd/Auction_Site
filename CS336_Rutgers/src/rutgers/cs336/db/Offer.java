@@ -28,6 +28,16 @@ public class Offer extends DBBase {
 	}
 
 
+	// For search Bid
+	public static Map doSearchUserActivity(String userID) {
+		StringBuilder sb;
+		//
+		sb = FormatterOfferQuery.buildSQLUserActivityOffer(userID);
+		//
+		return doSearchOfferInternal(sb.toString(), true);
+	}
+
+
 	public static Map doSearchSimilar(String offeridcategorynameconditioncode) {
 		Map output;
 		//
@@ -515,8 +525,7 @@ public class Offer extends DBBase {
 			}
 			rs.close();
 			//
-			for (Iterator iterator = lstRows.iterator(); iterator.hasNext(); ) {
-				Object object = (Object) iterator.next();
+			for (Object object : lstRows) {
 				//
 				Object[] oneRow = (Object[]) object;
 				//

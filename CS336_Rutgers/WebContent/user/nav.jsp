@@ -3,6 +3,8 @@
 <table>
 	<thead>
 	<tr>
+
+		<th><A href="${pageContext.request.contextPath}/user/listActivity.jsp">Activity</A></th>
 		<th><A href="${pageContext.request.contextPath}/user/postOffer.jsp">Post an Offer</A></th>
 		<th><A href="${pageContext.request.contextPath}/user/postBid.jsp">Post a Bid</A></th>
 		<th><A href="${pageContext.request.contextPath}/user/listBidResult.jsp">List Bids</A></th>

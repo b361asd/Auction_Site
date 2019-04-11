@@ -9,9 +9,9 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class User extends DBBase {
-	static List  lstHeader_user = Arrays.asList("username", "password", "email", "firstname", "lastname", "address", "phone", "active");
-	static int[] colSeq_user    = {0, 1, 2, 3, 4, 5, 6, 7};
 
+	private static List  lstHeader_user = Arrays.asList("username", "password", "email", "firstname", "lastname", "address", "phone", "active");
+	private static int[] colSeq_user    = {0, 1, 2, 3, 4, 5, 6, 7};
 
 	public static Map selectUser(Map<String, String[]> parameters, int userType) {
 		Map  output  = new HashMap();
@@ -96,6 +96,53 @@ public class User extends DBBase {
 		}
 		//
 		return output;
+	}
+
+
+	public static List getUserList() {
+		List lst = new ArrayList();
+		//
+		Connection        con          = null;
+		PreparedStatement preparedStmt = null;
+		try {
+			con = getConnection();
+			//
+			preparedStmt = con.prepareStatement(sQL_USER_SELECTUSERID);
+			//
+			ResultSet rs = preparedStmt.executeQuery();
+			//
+			while (rs.next()) {
+				Object username = rs.getObject(1);
+				//
+				lst.add(username);
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if (preparedStmt != null) {
+				try {
+					preparedStmt.close();
+				}
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				}
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		//
+		return lst;
 	}
 
 

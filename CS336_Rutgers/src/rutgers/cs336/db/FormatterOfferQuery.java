@@ -44,21 +44,18 @@ public class FormatterOfferQuery extends DBBase {
 
 	public static StringBuilder buildSQLUserActivityOffer(String userID) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID and (o.status = 1) order by o.offerID");
-
-		addCondition(sb, "o1.seller", OP_SZ_EQUAL, userID, null);
-		sb.append(") OR EXISTS (SELECT * from Bid b1 where b1.offerID = o1.offerID");
-		addCondition(sb, "b1.buyer", OP_SZ_EQUAL, userID, null);
-		sb.append(")))");
-
-		// Edit
-		"  and (o.status = 1) order by o.offerID");
+		sb.append("select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o inner join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID");
+		sb.append(" and ((TRUE");
+		addCondition(sb, "o.seller", OP_SZ_EQUAL, userID, null);
+		sb.append(") OR EXISTS (SELECT * from Bid b2 where b2.offerID = o.offerID");
+		addCondition(sb, "b2.buyer", OP_SZ_EQUAL, userID, null);
+		sb.append(")) order by o.offerID");
 		//
 		return sb;
 	}
 
 
-	public static void main(String[] args) {
+	public static void main1(String[] args) {
 		if (false) {
 			StringBuilder sb = initQuerySearch();
 			//addCondition(sb, "o.offerID", OP_SZ_START_WITH, "Scratcges", null);
@@ -122,7 +119,11 @@ public class FormatterOfferQuery extends DBBase {
 		}
 	}
 
-
+	public static void main(String[] args) {
+		StringBuilder sb = buildSQLUserActivityOffer("user");
+		//
+		System.out.println(sb.toString());
+	}
 }
 
 

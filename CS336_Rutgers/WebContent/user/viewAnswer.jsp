@@ -12,14 +12,14 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Search Offers</title>
+	<title>BuyMe - View Answers</title>
 	<link type="text/css" rel="stylesheet" href="../style.css?v=1.0"/>
 </head>
 
 <body>
 
 <%
-	Map data = null;
+	Map data;
 	TableData dataTable = null;
 	//
 	String action = getStringFromParamMap("action", request.getParameterMap());

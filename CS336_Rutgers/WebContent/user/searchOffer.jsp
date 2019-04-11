@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
-<%@ page import="static rutgers.cs336.gui.Helper.*" %>
 
 <html>
 

@@ -8,10 +8,9 @@ import java.sql.*;
 import java.util.*;
 
 public class Bid extends DBBase {
+
 	private static List  lstHeader_bid = Arrays.asList("bidID", "offerID", "buyer", "price", "autoRebidLimit", "bidDate");
 	private static int[] colSeq_bid    = {0, 1, 2, 3, 4, 5};
-	//
-
 
 	private static List lstHeader_bid1 = Arrays.asList("bidID", "buyer", "price", "bidDate");
 
@@ -85,43 +84,49 @@ public class Bid extends DBBase {
 	}
 
 
-	public static Map searchBid(Map<String, String[]> parameters) {
-		StringBuilder sb = FormatterBidQuery.initQuerySearch();
+	public static Map searchBid(Map<String, String[]> parameters, String userActivity) {
+		String sql           = null;
+		String bidIDStandout = null;
 		//
-		{
-			String buyerOP  = getStringFromParamMap("buyerOP", parameters);
-			String buyerVal = getStringFromParamMap("buyerVal", parameters);
-			FormatterOfferQuery.addCondition(sb, "buyer", buyerOP, buyerVal, null);
-		}
-		//
-		String bidIDofferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
-		String bidIDStandout     = null;
-		if (!bidIDofferIDBuyer.equals("")) {
-			String[] temps = bidIDofferIDBuyer.split(",");
-			FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, temps[1], null);
-			bidIDStandout = temps[0];
+		if (userActivity != null && userActivity.length() > 0) {
+			StringBuilder sb = FormatterBidQuery.buildQueryUserActivity(userActivity);
+			//
+			sql = sb.toString();
 		}
 		else {
-			{
-				String bidID = getStringFromParamMap("bidID", parameters);
-				FormatterOfferQuery.addCondition(sb, "bidID", OP_SZ_EQUAL, bidID, null);
-			}
+			StringBuilder sb = FormatterBidQuery.initQuerySearch();
 			//
 			{
-				String offerID = getStringFromParamMap("offerID", parameters);
-				FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, offerID, null);
+				String buyerOP  = getStringFromParamMap("buyerOP", parameters);
+				String buyerVal = getStringFromParamMap("buyerVal", parameters);
+				FormatterOfferQuery.addCondition(sb, "buyer", buyerOP, buyerVal, null);
 			}
+			//
+			String bidIDofferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
+			bidIDStandout = null;
+			if (!bidIDofferIDBuyer.equals("")) {
+				String[] temps = bidIDofferIDBuyer.split(",");
+				FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, temps[1], null);
+				bidIDStandout = temps[0];
+			}
+			else {
+				{
+					String bidID = getStringFromParamMap("bidID", parameters);
+					FormatterOfferQuery.addCondition(sb, "bidID", OP_SZ_EQUAL, bidID, null);
+				}
+				//
+				{
+					String offerID = getStringFromParamMap("offerID", parameters);
+					FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, offerID, null);
+				}
+			}
+			//
+			sql = sb.toString();
 		}
-		//
-		String sql = sb.toString();
 		//
 		Map               output     = new HashMap();
 		Map<String, List> tempMap    = new HashMap<>();            //offerID -> Bids(in List)
 		Set<String>       offerIDSet = new HashSet<>();            //offerID set
-		//
-		//
-		//		Map<String, String>  mapFields         = new HashMap<>();
-		//		Map<String, Integer> mapFieldIDToIndex = new HashMap<>();
 		//
 		Connection con       = null;
 		Statement  statement = null;
@@ -152,18 +157,18 @@ public class Bid extends DBBase {
 				offerIDSet.add(offerID.toString());
 				//
 				List lstRows = tempMap.computeIfAbsent(offerID.toString(), k -> new ArrayList());
-				/*
-				List lstRows = tempMap.get(offerID.toString());
-				if (lstRows == null) {
-					lstRows = new ArrayList();
-					tempMap.put(offerID.toString(), lstRows);
-				}
-				 */
 				//
 				lstRows.add(currentRow);
 			}
 			//
-			Map       offerMap       = Offer.doSearchByOfferIDSet(offerIDSet);
+			Map offerMap = null;
+			if (userActivity.length() > 0) {
+				offerMap = Offer.doSearchUserActivity(userActivity);
+			}
+			else {
+				offerMap = Offer.doSearchByOfferIDSet(offerIDSet);
+			}
+			//
 			TableData dataTableOffer = (TableData) offerMap.get(DATA_NAME_DATA);
 			List      lstOfferRows   = dataTableOffer.getRows();
 			for (Object one : lstOfferRows) {
@@ -302,11 +307,8 @@ public class Bid extends DBBase {
 				//
 				seller = _seller == null ? "" : _seller.toString();
 				categoryName = _categoryName == null ? "" : _categoryName.toString();
-				;
 				conditionCode = _conditionCode == null ? "" : _conditionCode.toString();
-				;
 				description = _description == null ? "" : _description.toString();
-				;
 				status = (Integer) _status;
 				//
 				if (_bidID == null || _bidID.toString().length() == 0) {
@@ -327,7 +329,7 @@ public class Bid extends DBBase {
 				current[0] = getUUID();
 			}
 			//
-			int outcome = 1;                  //1 Start, 2 NotMeetInitPrice, 3 LessThanLastPlusDelta; 4: offerClosed 5 Out-bided; 10 OK
+			int outcome;               // 1 Start, 2 NotMeetInitPrice, 3 LessThanLastPlusDelta; 4: offerClosed 5 Out-bided; 10 OK
 			if (status != 1) {
 				outcome = 4;
 			}
@@ -580,7 +582,7 @@ public class Bid extends DBBase {
 	}
 
 
-	public static void main(String[] args) {
+	public static void main3(String[] args) {
 		Map<String, String[]> parameters = new HashMap<>();
 		//
 		parameters.put("offerId", new String[]{"d6ac071c449c46b4812dd96b9bc8f197"});
@@ -616,13 +618,22 @@ public class Bid extends DBBase {
 		//
 		parameters.put("bidID", new String[]{"11fe20aabc7a4025928e9522544be2e3"});
 		//
-		Map map = searchBid(parameters);
+		Map map = searchBid(parameters, null);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
 
+	public static void main(String[] args) {
+		System.out.println("Start");
+		//
+		Map map = searchBid(null, "user");
+		//
+		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
+		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
+		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
+	}
 }
 
 

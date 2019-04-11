@@ -9,8 +9,9 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class Alert extends DBBase {
-	static List  lstHeader_alert = Arrays.asList("alertID", "receiver", "offerID", "bidID", "content", "alertDate");
-	static int[] colSeq_alert    = {4, 5};
+
+	private static List  lstHeader_alert = Arrays.asList("alertID", "receiver", "offerID", "bidID", "content", "alertDate");
+	private static int[] colSeq_alert    = {4, 5};
 
 
 	public static Map selectAlert(String userID) {

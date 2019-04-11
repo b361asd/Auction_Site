@@ -8,7 +8,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - BuyMe - Generate Alert</title>
+	<title>BuyMe - Generate Alert</title>
 	<link rel="stylesheet" href="../style.css?v=1.0"/>
 </head>
 

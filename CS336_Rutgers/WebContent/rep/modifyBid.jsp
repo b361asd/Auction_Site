@@ -10,7 +10,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Search Offers</title>
+	<title>BuyMe - Modify Bids</title>
 	<link type="text/css" rel="stylesheet" href="../style.css?v=1.0"/>
 
 	<script type="text/javascript">
@@ -38,15 +38,15 @@
 	<input id="input-sort" type="hidden" name="sort" value="_"/>
 
 	<%
-		Map data = null;
-		TableData dataTable = null;
+		Map data;
+		TableData dataTable;
 		//
 		String action = getStringFromParamMap("action", request.getParameterMap());
 		if (action.equals("modifyBid")) {
 			Map dataModify = Bid.doCreateOrModifyBid(null, request.getParameterMap(), false);
 		}
 		//
-		data = Bid.searchBid(request.getParameterMap());
+		data = Bid.searchBid(request.getParameterMap(), null);
 		//
 		String bidIDofferIDBuyer = DBBase.getStringFromParamMap("bidIDofferIDBuyer", request.getParameterMap());
 		//

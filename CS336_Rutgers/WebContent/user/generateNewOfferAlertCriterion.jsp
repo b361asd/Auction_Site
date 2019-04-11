@@ -2,13 +2,12 @@
 <!DOCTYPE html>
 
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
-<%@ page import="static rutgers.cs336.gui.Helper.*" %>
 
 <html>
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Search Offers</title>
+	<title>BuyMe - Generate Alert</title>
 	<link rel="stylesheet" href="../style.css?v=1.0"/>
 
 	<script type="text/javascript">

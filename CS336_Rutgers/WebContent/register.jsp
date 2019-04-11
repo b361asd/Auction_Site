@@ -24,7 +24,7 @@
 	Street<input type="text" name="street"/><br/>
 	City<input type="text" name="city"/><br/>
 	State<input type="text" name="state"/><br/>
-	Zip Code<input type="text" name="zipCode"/><br/>
+	Zip Code<input type="number" name="zipCode"/><br/>
 	Phone Number<input type="text" name="phoneNumber"/><br/>
 
 	<input type="submit" value="Submit">

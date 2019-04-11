@@ -1,9 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
-<%@ page import="static rutgers.cs336.db.DBBase.*" %>
-
 <html>
 
 <head>

@@ -10,7 +10,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Search Offers</title>
+	<title>BuyMe - List Bids</title>
 	<link type="text/css" rel="stylesheet" href="../style.css?v=1.0"/>
 
 	<script type="text/javascript">
@@ -43,11 +43,11 @@
 		//
 		String action = getStringFromParamMap("action", request.getParameterMap());
 		if (action.equals("searchBid")) {
-			data = Bid.searchBid(request.getParameterMap());
+			data = Bid.searchBid(request.getParameterMap(), null);
 			request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 		}
 		else if (action.equals("browseBid")) {
-			data = Bid.searchBid(null);
+			data = Bid.searchBid(null, null);
 			request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 		}
 		else {

@@ -9,13 +9,14 @@ public interface ISQLConstant {
 
 
 	// User
-	String SQL_USER_INSERT     = "INSERT INTO User (username, password, email, firstname, lastname, address, phone, active, userType) SELECT ?, ?, ?, ?, ?, ?, ?, true, ? FROM DUAL WHERE NOT EXISTS (SELECT * FROM User u WHERE UPPER(u.username) = UPPER(?))";
-	String SQL_USER_AUTH       = "SELECT password, firstname, lastname, active, userType FROM User WHERE username = ?";
-	String SQL_USER_SELECT     = "SELECT username, password, email, firstname, lastname, address, phone, active FROM User WHERE userType = ?";
-	String SQL_USER_SELECT_ONE = "SELECT username, password, email, firstname, lastname, address, phone, active FROM User WHERE username = ? AND userType = ?";
-	String SQL_USER_ACTIVE     = "UPDATE User SET active = true where username = ?";
-	String SQL_USER_DEACTIVE   = "UPDATE User SET active = false where username = ?";
-	String SQL_USER_UPDATE     = "UPDATE User SET password = ?, email = ?, firstname = ?, lastname = ?, address = ?, phone = ? WHERE username = ? AND userType = ?";
+	String SQL_USER_INSERT       = "INSERT INTO User (username, password, email, firstname, lastname, address, phone, active, userType) SELECT ?, ?, ?, ?, ?, ?, ?, true, ? FROM DUAL WHERE NOT EXISTS (SELECT * FROM User u WHERE UPPER(u.username) = UPPER(?))";
+	String SQL_USER_AUTH         = "SELECT password, firstname, lastname, active, userType FROM User WHERE username = ?";
+	String SQL_USER_SELECT       = "SELECT username, password, email, firstname, lastname, address, phone, active FROM User WHERE userType = ?";
+	String SQL_USER_SELECT_ONE   = "SELECT username, password, email, firstname, lastname, address, phone, active FROM User WHERE username = ? AND userType = ?";
+	String sQL_USER_SELECTUSERID = "SELECT Distinct username FROM User WHERE userType = 3 order by username";
+	String SQL_USER_ACTIVE       = "UPDATE User SET active = true where username = ?";
+	String SQL_USER_DEACTIVE     = "UPDATE User SET active = false where username = ?";
+	String SQL_USER_UPDATE       = "UPDATE User SET password = ?, email = ?, firstname = ?, lastname = ?, address = ?, phone = ? WHERE username = ? AND userType = ?";
 
 
 	// Bid
@@ -59,7 +60,7 @@ public interface ISQLConstant {
 	//	String OFFER_BID_BY_USER
 	//	String SIMILAR_ITEM
 
-	// Allert
+	// Alert
 	String SQL_ALERT_INSERT_BID = "INSERT INTO Alert (alertID, receiver, offerID, bidID, content, alertDate) VALUES (?, ?, ?, ?, ?, NOW())";
 	String SQL_ALERT_SELECT     = "SELECT alertID, receiver, offerID, bidID, content, alertDate FROM Alert WHERE receiver = ?";
 	String SQL_ALERT_DELETE     = "DELETE FROM Alert WHERE alertID = ?";
