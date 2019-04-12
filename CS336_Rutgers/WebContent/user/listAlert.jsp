@@ -27,7 +27,7 @@
 
 <form id="form-viewAlertDetail" action="${pageContext.request.contextPath}/user/viewAlertDetail.jsp" method="post">
 	<input type="hidden" name="action" value="viewAlertDetail"/>
-	<input id="input-viewAlertDetail" type="hidden" name="username" value="_"/>
+	<input id="input-viewAlertDetail" type="hidden" name="offerIDbidID" value="_"/>
 </form>
 
 <%
@@ -83,7 +83,7 @@
 				//
 				out.println("<td>");
 				out.println(Helper.getButton("form-deleteAlert", "input-deleteAlert", "" + dataTable.getOneCell(i, 0), "Dismiss"));
-				out.println(Helper.getButton("form-viewAlertDetail", "input-viewAlertDetail", "" + dataTable.getOneCell(i, 1), "Detail"));
+				out.println(Helper.getButton("form-viewAlertDetail", "input-viewAlertDetail", "" + dataTable.getOneCell(i, 2) + "," + ((dataTable.getOneCell(i, 3) == null) ? "" : dataTable.getOneCell(i, 3)), "Detail"));
 				out.println("</td>");
 				//
 				out.println(dataTable.printOneRowInTable(i));

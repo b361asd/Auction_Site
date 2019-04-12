@@ -24,7 +24,7 @@ public class Offer extends DBBase {
 		//
 		FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL_MULTI_NO_ESCAPE, getListOfStringsFromSet(offerIDSet, "'"), null);
 		//
-		return doSearchOfferInternal(sb.toString(), true);
+		return doSearchOfferInternal(sb.toString(), false);
 	}
 
 
@@ -34,7 +34,7 @@ public class Offer extends DBBase {
 		//
 		sb = FormatterOfferQuery.buildSQLUserActivityOffer(userID);
 		//
-		return doSearchOfferInternal(sb.toString(), true);
+		return doSearchOfferInternal(sb.toString(), false);
 	}
 
 

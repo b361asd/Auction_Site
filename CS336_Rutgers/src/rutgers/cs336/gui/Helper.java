@@ -81,6 +81,25 @@ public class Helper implements IConstant {
 	}
 
 
+	public static String getSelection(String name, Object[] options, String selected) {
+		StringBuilder sb = new StringBuilder();
+		//
+		sb.append("<select name='").append(name).append("' onchange='onSelectChange();'>");
+		//
+		for (Object option : options) {
+			if (option.toString().equalsIgnoreCase(selected)) {
+				sb.append("<option value='").append(option).append("' selected>").append(option).append("</option>");
+			}
+			else {
+				sb.append("<option value='").append(option).append("'>").append(option).append("</option>");
+			}
+		}
+		sb.append("</select>");
+		//
+		return sb.toString();
+	}
+
+
 	public static String getYesNoSelection(String name, String selected) {
 		StringBuilder sb = new StringBuilder();
 		//

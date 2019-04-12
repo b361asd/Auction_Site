@@ -94,30 +94,42 @@ public class Bid extends DBBase {
 			sql = sb.toString();
 		}
 		else {
-			StringBuilder sb = FormatterBidQuery.initQuerySearch();
+			StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
 			//
-			{
-				String buyerOP  = getStringFromParamMap("buyerOP", parameters);
-				String buyerVal = getStringFromParamMap("buyerVal", parameters);
-				FormatterOfferQuery.addCondition(sb, "buyer", buyerOP, buyerVal, null);
-			}
-			//
-			String bidIDofferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
-			bidIDStandout = null;
-			if (!bidIDofferIDBuyer.equals("")) {
-				String[] temps = bidIDofferIDBuyer.split(",");
-				FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, temps[1], null);
-				bidIDStandout = temps[0];
+			String offerIDbidID = getStringFromParamMap("offerIDbidID", parameters);
+			if (offerIDbidID.length() > 0) {
+				String[] temps = offerIDbidID.split(",");
+				//
+				FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, temps[0], null);
+				//
+				if (temps.length >= 2) {
+					bidIDStandout = temps[1];
+				}
 			}
 			else {
 				{
-					String bidID = getStringFromParamMap("bidID", parameters);
-					FormatterOfferQuery.addCondition(sb, "bidID", OP_SZ_EQUAL, bidID, null);
+					String buyerOP  = getStringFromParamMap("buyerOP", parameters);
+					String buyerVal = getStringFromParamMap("buyerVal", parameters);
+					FormatterOfferQuery.addCondition(sb, "buyer", buyerOP, buyerVal, null);
 				}
 				//
-				{
-					String offerID = getStringFromParamMap("offerID", parameters);
-					FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, offerID, null);
+				String bidIDofferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
+				bidIDStandout = null;
+				if (!bidIDofferIDBuyer.equals("")) {
+					String[] temps = bidIDofferIDBuyer.split(",");
+					FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, temps[1], null);
+					bidIDStandout = temps[0];
+				}
+				else {
+					{
+						String bidID = getStringFromParamMap("bidID", parameters);
+						FormatterOfferQuery.addCondition(sb, "bidID", OP_SZ_EQUAL, bidID, null);
+					}
+					//
+					{
+						String offerID = getStringFromParamMap("offerID", parameters);
+						FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, offerID, null);
+					}
 				}
 			}
 			//
@@ -161,29 +173,42 @@ public class Bid extends DBBase {
 				lstRows.add(currentRow);
 			}
 			//
-			Map offerMap = null;
-			if (userActivity.length() > 0) {
+			Map       offerMap       = null;
+			TableData dataTableOffer = null;
+			if (userActivity != null && userActivity.length() > 0) {
 				offerMap = Offer.doSearchUserActivity(userActivity);
+				dataTableOffer = (TableData) offerMap.get(DATA_NAME_DATA);
+				dataTableOffer.setStandOut(userActivity, 1);
 			}
 			else {
-				offerMap = Offer.doSearchByOfferIDSet(offerIDSet);
+				if (offerIDSet.size() > 0) {
+					offerMap = Offer.doSearchByOfferIDSet(offerIDSet);
+					dataTableOffer = (TableData) offerMap.get(DATA_NAME_DATA);
+				}
 			}
 			//
-			TableData dataTableOffer = (TableData) offerMap.get(DATA_NAME_DATA);
-			List      lstOfferRows   = dataTableOffer.getRows();
-			for (Object one : lstOfferRows) {
-				List oneOfferRow = (List) one;
-				//
-				List lstBidRows = tempMap.get(oneOfferRow.get(0));
-				if (lstBidRows == null) {
-					oneOfferRow.add(null);
-				}
-				else {
-					TableData tableDataBiD = new TableData(lstHeader_bid, lstBidRows, colSeq_bid);
-					if (bidIDStandout != null) {
-						tableDataBiD.setStandOut(bidIDStandout, 0);
+			if (dataTableOffer != null) {
+				List lstOfferRows = dataTableOffer.getRows();
+				for (Object one : lstOfferRows) {
+					List oneOfferRow = (List) one;
+					//
+					List lstBidRows = tempMap.get(oneOfferRow.get(0));
+					if (lstBidRows == null) {
+						oneOfferRow.add(null);
 					}
-					oneOfferRow.add(tableDataBiD);
+					else {
+						TableData tableDataBiD = new TableData(lstHeader_bid, lstBidRows, colSeq_bid);
+						//
+						if (userActivity != null && userActivity.length() > 0) {
+							tableDataBiD.setStandOut(userActivity, 2);      //buyer
+						}
+						//
+						if (bidIDStandout != null) {
+							tableDataBiD.setStandOut(bidIDStandout, 0);
+						}
+						//
+						oneOfferRow.add(tableDataBiD);
+					}
 				}
 			}
 			//
@@ -625,10 +650,22 @@ public class Bid extends DBBase {
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
 
-	public static void main(String[] args) {
+	public static void main4(String[] args) {
 		System.out.println("Start");
 		//
 		Map map = searchBid(null, "user");
+		//
+		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
+		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
+		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
+	}
+
+	public static void main(String[] args) {
+		Map<String, String[]> parameters = new HashMap<>();
+		//
+		parameters.put("offerIDbidID", new String[]{"72a5ac2ac47c44ed8006c31b72e53725,"});
+		//
+		Map map = searchBid(parameters, null);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));

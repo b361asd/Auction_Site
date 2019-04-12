@@ -61,15 +61,19 @@
 		}
 	}
 	else {
-		if (action.equals("activateUser")) {
-			Map dataActivateUser = User.activateUser(request.getParameterMap(), true);
-			//request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
-		}
-		else if (action.equals("deactivateUser")) {
-			Map dataDeactivateUser = User.activateUser(request.getParameterMap(), false);
-		}
-		else if (action.equals("updateUser")) {
-			Map dataupdateUser = User.modifyUser(request.getParameterMap(), targetUsrType);
+		switch (action) {
+			case "activateUser":
+				Map dataActivateUser = User.activateUser(request.getParameterMap(), true);
+				//request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+				break;
+			case "deactivateUser":
+				Map dataDeactivateUser = User.activateUser(request.getParameterMap(), false);
+				break;
+			case "updateUser":
+				Map dataupdateUser = User.modifyUser(request.getParameterMap(), targetUsrType);
+				break;
+			//default:
+			//	throw new IllegalStateException("Unexpected value: " + action);
 		}
 	}
 	//

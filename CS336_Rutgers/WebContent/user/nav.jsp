@@ -10,7 +10,6 @@
 		<th><A href="${pageContext.request.contextPath}/user/listBidResult.jsp">List Bids</A></th>
 		<th><A href="${pageContext.request.contextPath}/user/searchOffer.jsp">Search Offer</A></th>
 		<th><A href="${pageContext.request.contextPath}/user/generateNewOfferAlertCriterion.jsp">Generate New Offer Alert Criterion</A></th>
-		<th><A href="${pageContext.request.contextPath}/user/viewBidHistory.jsp">View Bid History</A></th>
 		<th><A href="${pageContext.request.contextPath}/user/listOfferAlertCriterion.jsp">Manage OfferAlert Settings</A></th>
 		<th><A href="${pageContext.request.contextPath}/user/listAlert.jsp">Alerts</A></th>
 		<th><A href="${pageContext.request.contextPath}/user/postQuestion.jsp">Post Question</A></th>

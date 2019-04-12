@@ -2,13 +2,19 @@ package rutgers.cs336.db;
 
 public class FormatterBidQuery extends DBBase {
 
-	public static StringBuilder initQuerySearch() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT bidID, b.offerID, buyer, price, autoRebidLimit, bidDate FROM Bid b INNER JOIN Offer o ON b.offerID = o.offerID and o.status = 1");
+	public static StringBuilder initQuerySearchActive() {
+		StringBuilder sb = initQuerySearchAll();
+		sb.append(" and o.status = 1");
 		//
 		return sb;
 	}
 
+	public static StringBuilder initQuerySearchAll() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT bidID, b.offerID, buyer, price, autoRebidLimit, bidDate FROM Bid b INNER JOIN Offer o ON b.offerID = o.offerID");
+		//
+		return sb;
+	}
 
 	public static StringBuilder buildQueryUserActivity(String userID) {
 		StringBuilder sb = new StringBuilder();

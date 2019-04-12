@@ -76,7 +76,7 @@ public class TableData {
 	public Object getOneCell(int i, String header) {
 		int index = mapHeaderToIndex.get(header);
 		if (index >= 0) {
-			return ((List) (lstRows.get(i))).get(index);
+			return ((List) lstRows.get(i)).get(index);
 		}
 		else {
 			return "";
@@ -129,29 +129,30 @@ public class TableData {
 
 
 	public String printDescriptionForTable() {
-		String out = "";
-		//
-		out = "<th colspan='" + colCount() + "'>" + Helper.escapeHTML(description) + "</th>";
-		//
-		return out;
+		return "<th colspan='" + colCount() + "'>" + Helper.escapeHTML(description) + "</th>";
 	}
 
 
 	public String printHeaderForTable() {
-		return printHeaderForTable(false);
+		return internalPrintHeaderForTable(false, null);
 	}
 
-	public String printSubHeaderForTable() {
-		return printHeaderForTable(true);
+	public String printSubHeaderForTable(String width) {
+		return internalPrintHeaderForTable(true, width);
 	}
 
-	private String printHeaderForTable(boolean subTable) {
+	private String internalPrintHeaderForTable(boolean subTable, String width) {
 		String out = "";
 		if (lstHeader != null && lstHeader.size() > 0 && colSeq != null && colSeq.length > 0) {
 			for (int value : colSeq) {
 				Object one     = lstHeader.get(value);
 				String oneItem = (one == null) ? "" : one.toString();
-				out = out + "<th><div onclick=onClickHeader('" + (subTable ? SUB_TABLE_HEADER_SIGN : "") + oneItem + "')>" + oneItem + "</div></th>";
+				if (width == null) {
+					out = out + "<th><div onclick=onClickHeader('" + (subTable ? SUB_TABLE_HEADER_SIGN : "") + oneItem + "')>" + oneItem + "</div></th>";
+				}
+				else {
+					out = out + "<th width='" + width + "'><div onclick=onClickHeader('" + (subTable ? SUB_TABLE_HEADER_SIGN : "") + oneItem + "')>" + oneItem + "</div></th>";
+				}
 			}
 		}
 		return out;
@@ -159,13 +160,26 @@ public class TableData {
 
 
 	public String printOneRowInTable(int index) {
+		return internalPrintOneRowInTable(index, null);
+	}
+
+	public String printOneRowInTableWithWidth(int index, String width) {
+		return internalPrintOneRowInTable(index, width);
+	}
+
+	private String internalPrintOneRowInTable(int index, String width) {
 		List   row = (List) lstRows.get(index);
 		String out = "";
 		if (row != null && row.size() > 0 && colSeq != null && colSeq.length > 0) {
 			for (int value : colSeq) {
 				Object one     = row.get(value);
 				String oneItem = (one == null) ? "" : one.toString();
-				out = out + "<td>" + Helper.escapeHTML(oneItem) + "</td>";
+				if (width == null) {
+					out = out + "<td>" + Helper.escapeHTML(oneItem) + "</td>";
+				}
+				else {
+					out = out + "<td width='" + width + "'>" + Helper.escapeHTML(oneItem) + "</td>";
+				}
 			}
 		}
 		return out;
@@ -174,16 +188,20 @@ public class TableData {
 
 	public String printRowStart(int index) {
 		List   row = (List) lstRows.get(index);
-		String out = "";
+		String out;
 		//
-		boolean isStandOut = signStandOut != null && idxStandOut >= 0 && (row.get(idxStandOut)).toString().equals(signStandOut);
+		String sign = (signStandOut == null) ? "_NULL" : signStandOut.trim();
+		sign = (sign.equals("")) ? "_EMPTY" : sign;
+		//
+		String value = (idxStandOut < 0) ? "_NONE" : (row.get(idxStandOut).toString());
+		//
+		boolean isStandOut = sign.equalsIgnoreCase(value);
 		//
 		if (isStandOut) {
-			out = "<tr style='color: red;'>";
-			//out = "<tr name='standout' class='standout'>";
+			out = "<tr style='color: red;'>";               //out = "<tr name='standout' class='standout'>";
 		}
 		else {
-			out = "<tr>";
+			out = "<tr add='" + sign + "_" + value + "'>";
 		}
 		//
 		return out;
