@@ -22,17 +22,13 @@
 <body>
 
 <%
-	{
-		Map data = CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
-		request.setAttribute("TEMP", data);
-	}
+	Map data = CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
 %>
 
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
 <form id="form" action="${pageContext.request.contextPath}/user/generateNewOfferAlertCriterionResult.jsp" method="post">
-
 	<%@include file="../searchOfferCommon.jsp" %>
 
 	<input type="hidden" name="action" value="searchOffer"/>

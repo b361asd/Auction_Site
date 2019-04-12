@@ -22,12 +22,8 @@
 <body>
 
 <%
-	{
-		String paramMap = dumpParamMap(request.getParameterMap());
-		//
-		Map data = CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
-		request.setAttribute("TEMP", data);
-	}
+	Map data = null;
+	data = CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
 %>
 
 <%@include file="../header.jsp" %>
@@ -37,7 +33,6 @@
 	<input type="hidden" name="action" value="browseOffer"/>
 	<input type="submit" value="Browse">
 </form>
-
 
 <form id="form" action="${pageContext.request.contextPath}/rep/listOffer.jsp" method="post">
 	<%@include file="../searchOfferCommon.jsp" %>

@@ -22,10 +22,8 @@
 <body>
 
 <%
-	{
-		Map data = CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
-		request.setAttribute("TEMP", data);
-	}
+	Map data = null;
+	data = CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
 %>
 
 <%@include file="../header.jsp" %>
