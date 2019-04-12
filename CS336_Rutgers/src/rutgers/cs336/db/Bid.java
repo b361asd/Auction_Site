@@ -169,12 +169,6 @@ public class Bid extends DBBase {
 				offerIDSet.add(offerID.toString());
 				//
 				List lstRows = tempMap.computeIfAbsent(offerID.toString(), k -> new ArrayList());
-				/*
-				if (lstRows == null) {
-					lstRows = new ArrayList();
-					tempMap.put(offerID.toString(), lstRows);
-				}
-				 */
 				//
 				lstRows.add(currentRow);
 			}
