@@ -12,6 +12,10 @@ CS336_Rutgers/.idea/**
 CS336_Rutgers/lib
 CS336_Rutgers/out
 
+# Eclipse
+.classpath
+.project
+.settings/
 
 # User-specific stuff
 .idea/**/workspace.xml
