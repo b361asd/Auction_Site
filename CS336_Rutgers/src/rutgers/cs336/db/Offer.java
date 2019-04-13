@@ -562,10 +562,7 @@ public class Offer extends DBBase {
 				pStmtInsertAlert.execute();
 			}
 		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		catch (ClassNotFoundException e) {
+		catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		finally {

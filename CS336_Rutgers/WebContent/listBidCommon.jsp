@@ -4,6 +4,7 @@
 
 <%
 	//TableData dataTable = null;
+	//
 	boolean _isRep = false;
 	{
 		String _userType = (String) session.getAttribute(SESSION_ATTRIBUTE_USERTYPE);
@@ -13,6 +14,18 @@
 	}
 	String _colWidth = null;
 %>
+
+
+<%
+	if (dataTable == null) {
+%>
+
+
+<%
+}
+else {
+%>
+
 
 <table>
 	<thead>
@@ -96,3 +109,8 @@
 	%>
 	</tbody>
 </table>
+
+
+<%
+	}
+%>

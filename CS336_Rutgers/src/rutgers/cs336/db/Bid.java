@@ -88,6 +88,8 @@ public class Bid extends DBBase {
 		String sql           = null;
 		String bidIDStandout = null;
 		//
+		Set<String> offerIDSet = new HashSet<>();            //offerID set
+		//
 		if (userActivity != null && userActivity.length() > 0) {
 			StringBuilder sb = FormatterBidQuery.buildQueryUserActivity(userActivity);
 			//
@@ -96,11 +98,12 @@ public class Bid extends DBBase {
 		else {
 			StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
 			//
-			String offerIDbidID = getStringFromParamMap("offerIDbidID", parameters);
+			String offerIDbidID = getStringFromParamMap("offerIDbidID", parameters);               //Alert Details
 			if (offerIDbidID.length() > 0) {
 				String[] temps = offerIDbidID.split(",");
 				//
 				FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, temps[0], null);
+				offerIDSet.add(temps[0]);
 				//
 				if (temps.length >= 2) {
 					bidIDStandout = temps[1];
@@ -136,9 +139,8 @@ public class Bid extends DBBase {
 			sql = sb.toString();
 		}
 		//
-		Map               output     = new HashMap();
-		Map<String, List> tempMap    = new HashMap<>();            //offerID -> Bids(in List)
-		Set<String>       offerIDSet = new HashSet<>();            //offerID set
+		Map               output  = new HashMap();
+		Map<String, List> tempMap = new HashMap<>();            //offerID -> Bids(in List)
 		//
 		Connection con       = null;
 		Statement  statement = null;
@@ -663,7 +665,7 @@ public class Bid extends DBBase {
 	public static void main(String[] args) {
 		Map<String, String[]> parameters = new HashMap<>();
 		//
-		parameters.put("offerIDbidID", new String[]{"72a5ac2ac47c44ed8006c31b72e53725,"});
+		parameters.put("offerIDbidID", new String[]{"6bc17ded8d0e4300ae8ce80a5fa85b8d,"});
 		//
 		Map map = searchBid(parameters, null);
 		//
@@ -673,6 +675,8 @@ public class Bid extends DBBase {
 	}
 }
 
+
+//action=viewAlertDetail,offerIDbidID=6bc17ded8d0e4300ae8ce80a5fa85b8d,
 
 /* All
 SELECT t1.*, t2.currPrice FROM (SELECT b1.bidID, b1.buyer, b1.price, b1.autoRebidLimit, b1.bidDate, o1.offerID, o1.seller, o1.categoryName, o1.conditionCode, o1.description, o1.initPrice, o1.increment, o1.minPrice, o1.startDate, o1.endDate, o1.status FROM Bid b1 INNER JOIN Offer o1 ON b1.offerID = o1.offerID) t1 LEFT OUTER JOIN (SELECT b1.price as currPrice, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) t2 ON t1.offerID = t2.offerID order by bidDate

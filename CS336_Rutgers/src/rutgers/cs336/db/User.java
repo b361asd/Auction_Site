@@ -117,10 +117,7 @@ public class User extends DBBase {
 				lst.add(username);
 			}
 		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		catch (ClassNotFoundException e) {
+		catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		finally {

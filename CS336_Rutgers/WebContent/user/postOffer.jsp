@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
 
 <html>
@@ -40,8 +39,8 @@
 	List lstCategory = (List) data.get(CategoryAndField.DATA_CATEGORY_LIST);
 	List lstField = (List) data.get(CategoryAndField.DATA_FIELD_LIST);
 	//
-	TableData dataTable = null;                  //from Modify order
-	String offeridcategoryname = null;                  //from Modify order
+	TableData dataTable = null;				// From Modify order
+	String offeridcategoryname = null;		// From Modify order
 %>
 
 <%@include file="nav.jsp" %>

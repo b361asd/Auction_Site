@@ -3,8 +3,9 @@
 <%@ page import="rutgers.cs336.db.CategoryAndField" %>
 <%@ page import="rutgers.cs336.gui.Helper" %>
 <%@ page import="rutgers.cs336.gui.HelperDatetime" %>
-<%@ page import="rutgers.cs336.gui.TableData" %>	<!-- Needed Import -->
+<%@ page import="rutgers.cs336.gui.TableData" %>	<!-- Needed Import (postOffer) -->
 <%@ page import="static rutgers.cs336.gui.Helper.*" %>
+<%@ page import="java.util.List" %>						<!-- Needed Import (postOffer) -->
 
 
 <%
