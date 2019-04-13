@@ -11,8 +11,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - List Bids</title>
-	<link type="text/css" rel="stylesheet" href="../style.css?v=1.0"/>
-
+	<link rel="stylesheet" href="../style.css?v=1.0"/>
 	<script type="text/javascript">
        function onClickHeader(value) {
            document.getElementById('input-sort').value = value;
@@ -38,7 +37,7 @@
 	<input id="input-sort" type="hidden" name="sort" value="_"/>
 
 	<%
-		Map data = null;
+		Map data;
 		TableData dataTable = null;
 		//
 		String action = getStringFromParamMap("action", request.getParameterMap());

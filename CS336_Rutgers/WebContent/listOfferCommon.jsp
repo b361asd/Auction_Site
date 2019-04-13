@@ -11,7 +11,7 @@
 <%
 	String userType = (String) request.getSession().getAttribute("userType");
 	//
-	Map data = null;
+	Map data;
 	TableData dataTable = null;
 	//
 	String action = getStringFromParamMap("action", request.getParameterMap());
@@ -42,7 +42,9 @@
 		}
 	}
 	//
-	dataTable = (TableData) (data.get(DATA_NAME_DATA));
+	if (data != null) {
+		dataTable = (TableData) (data.get(DATA_NAME_DATA));
+	}
 %>
 
 <table>
@@ -51,13 +53,15 @@
 	<tr>
 		<td>Action</td>
 		<%
-			out.println(dataTable.printHeaderForTable());
+			if (dataTable != null) {
+				out.println(dataTable.printHeaderForTable());
+			}
 		%>
 	</tr>
 	</thead>
 	<tbody>
 	<%
-		if (dataTable.rowCount() > 0) {
+		if (dataTable != null && dataTable.rowCount() > 0) {
 			for (int i = 0; i < dataTable.rowCount(); i++) {
 				out.println(dataTable.printRowStart(i));
 				//

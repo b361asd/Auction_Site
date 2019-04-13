@@ -11,8 +11,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Search Offers</title>
-	<link type="text/css" rel="stylesheet" href="../style.css?v=1.0"/>
-
+	<link rel="stylesheet" href="../style.css?v=1.0"/>
 	<script type="text/javascript">
        function onClickHeader(value) {
            document.getElementById('input-sort').value = value;

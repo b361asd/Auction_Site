@@ -14,20 +14,9 @@
 <%@include file="header.jsp" %>
 
 <form action="${pageContext.request.contextPath}/home" method="post">
-	<input name="register" type="hidden" value="YES">
 
-	Username<input type="text" name="username"/><br/>
-	Password<input type="text" name="password"/><br/>
-	Email Address<input type="text" name="email"/><br/>
-	First Name<input type="text" name="firstName"/><br/>
-	Last Name<input type="text" name="lastName"/><br/>
-	Street<input type="text" name="street"/><br/>
-	City<input type="text" name="city"/><br/>
-	State<input type="text" name="state"/><br/>
-	Zip Code<input type="number" name="zipCode"/><br/>
-	Phone Number<input type="text" name="phoneNumber"/><br/>
+	<%@include file="registerCommon.jsp" %>
 
-	<input type="submit" value="Submit">
 </form>
 
 </body>
