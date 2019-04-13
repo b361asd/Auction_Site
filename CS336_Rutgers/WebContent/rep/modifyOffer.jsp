@@ -5,6 +5,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
+<%@ page import="static rutgers.cs336.db.DBBase.*" %>
 
 <html>
 

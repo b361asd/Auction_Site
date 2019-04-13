@@ -1,9 +1,8 @@
-<%@page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
+<%@page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
-<%@ page import="static rutgers.cs336.gui.Helper.*" %>
 
 <html>
 

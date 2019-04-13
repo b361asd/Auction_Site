@@ -3,6 +3,7 @@
 <%@ page import="rutgers.cs336.db.CategoryAndField" %>
 <%@ page import="rutgers.cs336.gui.Helper" %>
 <%@ page import="rutgers.cs336.gui.HelperDatetime" %>
+<%@ page import="rutgers.cs336.gui.TableData" %>	<!-- Needed Import -->
 <%@ page import="static rutgers.cs336.gui.Helper.*" %>
 
 
