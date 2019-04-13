@@ -36,8 +36,8 @@ public interface ISQLConstant {
 
 	// Offer
 	String SQL_OFFER_INSERT = "INSERT INTO Offer (offerID, categoryName, seller, initPrice, increment, minPrice, conditionCode, description, startDate, endDate, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), STR_TO_DATE(?,'%Y-%m-%dT%H:%i:%s'), 1)";
-	String SQL_OFFER_MODIFY = "UPDATE Offer SET (minPrice, conditionCode, description) VALUES (?, ?, ?) WHERE offerID = ? AND status = 1";
-	String SQL_OFFER_CANCEL = "UPDATE Offer SET status = 2 WHERE offerID = ? AND status = 1";
+	String SQL_OFFER_MODIFY = "UPDATE Offer SET minPrice = ?, conditionCode = ?, description = ? WHERE offerID = ? AND status = 1";
+	String SQL_OFFER_CANCEL = "DELETE FROM Offer WHERE offerID = ? AND status = 1";
 	String SQL_OFFER_SELECT = "SELECT categoryName, seller, min_price, description, startDate, endDate, status FROM Offer WHERE offerID = ?";
 	String SQL_OFFER_SEARCH = "SELECT offerID, categoryName, seller, min_price, description, startDate, endDate FROM Offer WHERE status = 1 and categoryName = ? and description LIKE ?";
 

@@ -16,7 +16,7 @@
 
 <%
 	String userID = (String) request.getSession().getAttribute("user");
-	Map data = Offer.doCreateOffer(userID, request.getParameterMap());
+	Map data = Offer.doCreateOrModifyOffer(userID, request.getParameterMap(), true);
 	//
 	String status = data.get(DATA_NAME_STATUS).toString();
 	String message = (String) data.get(DATA_NAME_MESSAGE);

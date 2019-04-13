@@ -74,12 +74,18 @@ public class TableData {
 	}
 
 	public Object getOneCell(int i, String header) {
-		int index = mapHeaderToIndex.get(header);
-		if (index >= 0) {
-			return ((List) lstRows.get(i)).get(index);
+		Integer objIndex = mapHeaderToIndex.get(header);
+		if (objIndex == null) {
+			return "";
 		}
 		else {
-			return "";
+			int index = objIndex;
+			if (index >= 0) {
+				return ((List) lstRows.get(i)).get(index);
+			}
+			else {
+				return "";
+			}
 		}
 	}
 
