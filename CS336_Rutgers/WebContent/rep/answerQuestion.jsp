@@ -9,8 +9,8 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Remove Bid</title>
-	<link rel="stylesheet" href="../style.css?v=1.0"/>
+	<title>BuyMe - Answer Question</title>
+	<link type="text/css" rel="stylesheet" href="../style.css?v=1.0"/>
 </head>
 
 <body>
@@ -23,7 +23,7 @@
 		String answer     = DBBase.getStringFromParamMap("answer", request.getParameterMap());
 		//
 		Map dataUpdate;
-		if (questionID != null && !questionID.equals("") && answer != null && !answer.equals("")) {
+		if (!questionID.equals("") && !answer.equals("")) {
 			dataUpdate = Question.answerQuestion(questionID, answer, repID);
 		}
 	}

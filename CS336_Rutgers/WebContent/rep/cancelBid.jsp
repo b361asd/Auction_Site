@@ -3,13 +3,12 @@
 
 <%@ page import="rutgers.cs336.db.Bid" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
-<%@ page import="static rutgers.cs336.db.DBBase.*" %>
 
 <html>
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Search Offers</title>
+	<title>BuyMe - Cancel Bid</title>
 	<link type="text/css" rel="stylesheet" href="../style.css?v=1.0"/>
 </head>
 
