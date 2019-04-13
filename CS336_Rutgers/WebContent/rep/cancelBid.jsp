@@ -8,7 +8,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Cancel Bid</title>
+	<title>BuyMe - Search Offers</title>
 	<link type="text/css" rel="stylesheet" href="../style.css?v=1.0"/>
 </head>
 

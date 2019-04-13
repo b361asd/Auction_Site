@@ -8,12 +8,12 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Generate Alert</title>
-	<link type="text/css" rel="stylesheet" href="../style.css?v=1.0"/>
+	<link rel="stylesheet" href="../style.css?v=1.0"/>
 
 	<script type="text/javascript">
        function onCategoryChange() {
            const form = document.getElementById('form');
-           form.action = "${pageContext.request.contextPath}/user/generateNewOfferAlertCriterion.jsp";
+           form.action = "${pageContext.request.contextPath}/user/createOfferAlertCriterion.jsp";
            form.submit();
        }
 	</script>
@@ -28,11 +28,12 @@
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<form id="form" action="${pageContext.request.contextPath}/user/generateNewOfferAlertCriterionResult.jsp" method="post">
+<form id="form" action="${pageContext.request.contextPath}/user/listOfferAlertCriterion.jsp" method="post">
+
 	<%@include file="../searchOfferCommon.jsp" %>
 
-	<input type="hidden" name="action" value="searchOffer"/>
-	<input type="submit" value="Search">
+	<input type="hidden" name="action" value="createAlertCriterion"/>
+	<input type="submit" value="Create Alert Criterion">
 </form>
 
 </body>

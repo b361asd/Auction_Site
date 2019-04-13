@@ -8,8 +8,24 @@
 	<tbody>
 
 	<%
+		//User Search Offer
+		//User Create Alert Criterion
+		//Rep Search Offer
+		//
 		//Map data = null;
 		List lstCategory = (List) data.get(CategoryAndField.DATA_CATEGORY_LIST);
+		//
+		String currUrl = request.getRequestURL().toString();
+		if (currUrl.toUpperCase().contains("createOfferAlertCriterion".toUpperCase())) {
+			out.println("<tr>");
+			out.println("<td align='left'>");
+			out.println("Name");
+			out.println("</td>");
+			out.println("<td align='left'>");
+			out.println("<input type='text' name='criterionName' value='My Alert' />");
+			out.println("</td>");
+			out.println("</tr>");
+		}
 		//
 		out.println("<tr>");
 		out.println("<td align='left'>");

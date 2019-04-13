@@ -9,8 +9,8 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Answer Question</title>
-	<link type="text/css" rel="stylesheet" href="../style.css?v=1.0"/>
+	<title>BuyMe - Remove Bid</title>
+	<link rel="stylesheet" href="../style.css?v=1.0"/>
 </head>
 
 <body>

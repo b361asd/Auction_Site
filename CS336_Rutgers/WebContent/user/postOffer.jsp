@@ -8,7 +8,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Post an Offer</title>
-	<link type="text/css" rel="stylesheet" href="../style.css?v=1.0"/>
+	<link rel="stylesheet" href="../style.css?v=1.0"/>
 
 	<script type="text/javascript">
        function onCategoryChange(value) {
@@ -39,8 +39,8 @@
 	List lstCategory = (List) data.get(CategoryAndField.DATA_CATEGORY_LIST);
 	List lstField = (List) data.get(CategoryAndField.DATA_FIELD_LIST);
 	//
-	TableData dataTable = null;				// From Modify order
-	String offeridcategoryname = null;		// From Modify order
+	TableData dataTable = null;            // From Modify order
+	String offeridcategoryname = null;      // From Modify order
 %>
 
 <%@include file="nav.jsp" %>
