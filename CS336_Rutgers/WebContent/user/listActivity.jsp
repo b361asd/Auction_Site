@@ -35,7 +35,7 @@
 
 <%
 	List lstUser = User.getUserList();
-
+	//
 	String userID = (String) request.getSession().getAttribute("user");
 	//
 	String userActivity = getStringFromParamMap("userActivity", request.getParameterMap());
@@ -60,7 +60,7 @@
 	}
 	//
 	if (data == null || dataTable == null) {
-		data = Bid.searchBid(null, userActivity);
+		data = Bid.searchBid(null, userActivity, null);
 		dataTable = (TableData) (data.get(DATA_NAME_DATA));
 		//
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
@@ -78,11 +78,10 @@
 		//
 		out.println("<tr>");
 		out.println("<td>");
-
-		out.println(Helper.getSelection("userActivity", lstUser.toArray(), userActivity));
-
+		out.println("Select A User:");
 		out.println("</td>");
 		out.println("<td>");
+		out.println(Helper.getSelection("userActivity", lstUser.toArray(), userActivity));
 		out.println("</td>");
 		out.println("</tr");
 		//

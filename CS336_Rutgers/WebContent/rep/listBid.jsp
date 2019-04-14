@@ -42,11 +42,11 @@
 		//
 		String action = getStringFromParamMap("action", request.getParameterMap());
 		if (action.equals("repSearchBid")) {
-			data = Bid.searchBid(request.getParameterMap(), null);
+			data = Bid.searchBid(request.getParameterMap(), null, null);
 			request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 		}
 		else if (action.equals("repBrowseBid")) {
-			data = Bid.searchBid(request.getParameterMap(), null);
+			data = Bid.searchBid(request.getParameterMap(), null, null);
 			request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 		}
 		else {
@@ -68,7 +68,7 @@
 	%>
 
 	<%
-		if (dataTable != null) {
+		if (dataTable!=null) {;
 	%>
 
 	<table>
@@ -129,7 +129,7 @@
 
 
 	<%
-		}
+		};
 	%>
 
 </form>

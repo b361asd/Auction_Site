@@ -38,7 +38,7 @@
 	<%@include file="../searchOfferCommon.jsp" %>
 
 	<input type="hidden" name="action" value="searchOffer"/>
-	<input type="submit" value="Search">
+	<input type="submit" value="Search"/>
 </form>
 
 </body>

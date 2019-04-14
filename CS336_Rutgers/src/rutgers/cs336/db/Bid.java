@@ -14,6 +14,8 @@ public class Bid extends DBBase {
 
 	private static List lstHeader_bid1 = Arrays.asList("bidID", "buyer", "price", "bidDate");
 
+
+	//From list Offer: List info for one OfferID
 	public static Map getBidsForOffer(String offerID) {
 		Map output = new HashMap();
 		//
@@ -84,7 +86,7 @@ public class Bid extends DBBase {
 	}
 
 
-	public static Map searchBid(Map<String, String[]> parameters, String userActivity) {
+	public static Map searchBid(Map<String, String[]> parameters, String userActivity, String userMyBid) {
 		String sql           = null;
 		String bidIDStandout = null;
 		//
@@ -95,22 +97,32 @@ public class Bid extends DBBase {
 			//
 			sql = sb.toString();
 		}
+		else if (userMyBid != null && userMyBid.length() > 0) {                        //User Activity
+			StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
+			//
+			{
+				FormatterOfferQuery.addCondition(sb, "buyer", OP_SZ_EQUAL, userMyBid, null);
+			}
+			//
+			FormatterOfferQuery.addCondition(sb, "status", OP_INT_EQUAL, "1", null);
+			//
+			sql = sb.toString();
+		}
 		else {
 			String action = getStringFromParamMap("action", parameters);
 			if (action.equals("repSearchBid")) {                                       //repSearchBid for cancel and modify, should be active Offer
 				StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
 				//
 				{
-					String buyerOP  = getStringFromParamMap("buyerOP", parameters);
-					String buyerVal = getStringFromParamMap("buyerVal", parameters);
-					FormatterOfferQuery.addCondition(sb, "buyer", buyerOP, buyerVal, null);
+					String userRepBidSearch = getStringFromParamMap("userRepBidSearch", parameters);
+					FormatterOfferQuery.addCondition(sb, "buyer", OP_SZ_EQUAL, userRepBidSearch, null);
 				}
 				//
 				FormatterOfferQuery.addCondition(sb, "status", OP_INT_EQUAL, "1", null);
 				//
 				sql = sb.toString();
 			}
-			else if (action.equals("repBrowseBid")) {       //repSearchBid for cancel and modify, should be active Offer
+			else if (action.equals("repBrowseBid")) {    //repSearchBid for cancel and modify, should be active Offer
 				StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
 				//
 				FormatterOfferQuery.addCondition(sb, "status", OP_INT_EQUAL, "1", null);
@@ -120,7 +132,7 @@ public class Bid extends DBBase {
 			else {
 				StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
 				//
-				String offerIDbidID = getStringFromParamMap("offerIDbidID", parameters);      //Alert Details
+				String offerIDbidID = getStringFromParamMap("offerIDbidID", parameters);               //Alert Details
 				if (offerIDbidID.length() > 0) {
 					String[] temps = offerIDbidID.split(",");
 					//
@@ -667,7 +679,7 @@ public class Bid extends DBBase {
 		//
 		//parameters.put("bidID", new String[]{"11fe20aabc7a4025928e9522544be2e3"});
 		//
-		Map map = searchBid(parameters, null);
+		Map map = searchBid(parameters, null, null);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
@@ -678,7 +690,7 @@ public class Bid extends DBBase {
 	public static void main4(String[] args) {
 		System.out.println("Start");
 		//
-		Map map = searchBid(null, "user");
+		Map map = searchBid(null, "user", null);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
@@ -692,7 +704,7 @@ public class Bid extends DBBase {
 		//
 		parameters.put("offerIDbidID", new String[]{"6bc17ded8d0e4300ae8ce80a5fa85b8d,"});
 		//
-		Map map = searchBid(parameters, null);
+		Map map = searchBid(parameters, null, null);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
@@ -709,99 +721,4 @@ SELECT t1.*, t2.currPrice FROM (SELECT b1.bidID, b1.buyer, b1.price, b1.autoRebi
 
 /* By Buyer
 SELECT t1.*, t2.currPrice FROM (SELECT b1.bidID, b1.buyer, b1.price, b1.autoRebidLimit, b1.bidDate, o1.offerID, o1.seller, o1.categoryName, o1.conditionCode, o1.description, o1.initPrice, o1.increment, o1.minPrice, o1.startDate, o1.endDate, o1.status FROM Bid b1 INNER JOIN Offer o1 ON b1.offerID = o1.offerID AND b1.buyer = 'user') t1 LEFT OUTER JOIN (SELECT b1.price as currPrice, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) t2 ON t1.offerID = t2.offerID order by bidDate
-*/
-
-
-
-
-/*
-	public static Map _doCreateBid(String userID, Map<String, String[]> parameters) {
-		Map output = new HashMap();
-		//
-		String bidId = getUUID();
-		//
-		Connection        con            = null;
-		PreparedStatement pStmtInsertBid = null;
-		try {
-			con = getConnection();
-			//
-			String offerId = getStringFromParamMap("offerId", parameters);
-			BigDecimal price = getBigDecimalFromParamMap("price", parameters);
-			//
-			pStmtInsertBid = con.prepareStatement(SQL_BID_INSERT);
-			pStmtInsertBid.setString(1, bidId);
-			pStmtInsertBid.setString(2, userID);
-			pStmtInsertBid.setBigDecimal(3, price);
-			pStmtInsertBid.setBigDecimal(4, getBigDecimalFromParamMap("autoRebidLimit", parameters));
-			pStmtInsertBid.setBigDecimal(5, price);
-			pStmtInsertBid.setString(6, offerId);
-			pStmtInsertBid.setString(7, offerId);
-			pStmtInsertBid.setBigDecimal(8, price);
-			pStmtInsertBid.setString(9, offerId);
-			//
-			pStmtInsertBid.execute();
-			//
-			int count = pStmtInsertBid.getUpdateCount();
-			//
-			if (count == 1) {
-				output.put(DATA_NAME_STATUS, true);
-				output.put(DATA_NAME_MESSAGE, "Bid Created!");
-			}
-			else {
-				output.put(DATA_NAME_STATUS, false);
-				output.put(DATA_NAME_MESSAGE, "No bid created.");
-			}
-		}
-		catch (SQLException e) {
-			if (con != null) {
-				try {
-					con.rollback();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-			//
-			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
-			e.printStackTrace();
-		}
-		catch (ClassNotFoundException e) {
-			if (con != null) {
-				try {
-					con.rollback();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-			//
-			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
-			e.printStackTrace();
-		}
-		finally {
-			if (pStmtInsertBid != null) {
-				try {
-					pStmtInsertBid.close();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-			//
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-		}
-		//
-		return output;
-	}
-	
-	
 */

@@ -46,7 +46,7 @@
 			Map dataModify = Bid.doCreateOrModifyBid(null, request.getParameterMap(), false);
 		}
 		//
-		data = Bid.searchBid(request.getParameterMap(), null);
+		data = Bid.searchBid(request.getParameterMap(), null, null);
 		//
 		String bidIDofferIDBuyer = DBBase.getStringFromParamMap("bidIDofferIDBuyer", request.getParameterMap());
 		//
