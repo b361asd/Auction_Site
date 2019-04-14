@@ -44,9 +44,9 @@
 		}
 	}
 	//
-	if (DEBUG_FLAG) {
-		out.println("<h5>" + DBBase.dumpParamMap(request.getParameterMap()) + "</h5>");
-	}
+	String _debug = DBBase.dumpParamMap(request.getParameterMap());
 %>
+<p hidden><%=_debug%>
+</p>
 <h5><%=_sessionMessage%>
 </h5>
