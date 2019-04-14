@@ -68,7 +68,7 @@
 		//
 		out.println("<tr>");
 		out.println("<td colspan='2'>");
-		out.println("<div align='left' class='allField'>Tags");
+		out.println("<div align='left' class='allField'>Keys(Comma Delimited. i.e.: good,toyato)");
 		out.println("<input type='text' name='tags'/></div>");
 		out.println("</td>");
 		out.println("<td>");

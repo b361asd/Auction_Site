@@ -27,7 +27,7 @@ public interface ISQLConstant {
 	String SQL_BID_SELECT_EX           = "SELECT bidID, offerID, buyer, price, autoRebidLimit, bidDate FROM Bid";
 	String SQL_BID_SELECT_BY_OFFERID   = "SELECT bidID, buyer, price, bidDate FROM Bid b WHERE b.offerID = ? ORDER BY price DESC";
 	String SQL_BID_SELECT_MAX_PRICE    = "SELECT o.offerID, seller, categoryName, conditionCode, description, initPrice, increment, minPrice, startDate, endDate, status, bidID, buyer, price, autoRebidLimit, bidDate FROM (select * from Offer where offerID = ?) o LEFT OUTER JOIN Bid b ON o.offerID = b.offerID AND b.price = (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = o.offerID)";
-	String SQL_BID_SELECT_MAX_PRICE_EX = "SELECT o.offerID, seller, categoryName, conditionCode, description, initPrice, increment, minPrice, startDate, endDate, status, bidID, buyer, price, autoRebidLimit, bidDate FROM (select * from Offer where offerID = ?) o LEFT OUTER JOIN Bid b ON o.offerID = b.offerID AND b.bidID <> ? AND b.price = (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = o.offerID)";
+	String SQL_BID_SELECT_MAX_PRICE_EX = "SELECT o.offerID, seller, categoryName, conditionCode, description, initPrice, increment, minPrice, startDate, endDate, status, bidID, buyer, price, autoRebidLimit, bidDate FROM (select * from Offer where offerID = ?) o LEFT OUTER JOIN Bid b ON o.offerID = b.offerID AND b.bidID <> ? AND b.price = (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = o.offerID AND b2.bidID <> ?)";
 
 
 	// CategoryField

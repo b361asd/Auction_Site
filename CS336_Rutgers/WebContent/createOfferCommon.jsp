@@ -88,7 +88,7 @@
 				out.println("<td align='left'>" + fieldName);
 				out.println("</td>");
 				out.println("<td align='left'>");
-				out.println("<input type='text' name='fieldID_" + fieldID + "' value='' />");
+				out.println("<input type='text' name='fieldID_" + fieldID + "' />");
 				out.println("</td>");
 				out.println("</tr>");
 			}
@@ -98,7 +98,7 @@
 				out.println("<td align='left'>" + fieldName);
 				out.println("</td>");
 				out.println("<td align='left'>");
-				out.println("<input type='number' name = 'fieldID_" + fieldID + "' value='1' />");
+				out.println("<input type='number' name = 'fieldID_" + fieldID + "' />");
 				out.println("</td>");
 				out.println("</tr>");
 			}

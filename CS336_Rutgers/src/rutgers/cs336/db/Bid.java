@@ -288,9 +288,9 @@ public class Bid extends DBBase {
 			BigDecimal autoRebidLimit = getBigDecimalFromParamMap("autoRebidLimit", parameters);
 			//
 			newBid[0] = bidID;
-			newBid[0] = temps[2];
-			newBid[0] = price;
-			newBid[0] = autoRebidLimit;
+			newBid[1] = temps[2];
+			newBid[2] = price;
+			newBid[3] = autoRebidLimit;
 		}
 		//
 		Connection        con                     = null;
@@ -308,6 +308,7 @@ public class Bid extends DBBase {
 			preparedStmtMaxPriceBid.setString(1, offerId);
 			if (!isCreate) {
 				preparedStmtMaxPriceBid.setString(2, bidID);
+				preparedStmtMaxPriceBid.setString(3, bidID);
 			}
 			//
 			ResultSet rs = preparedStmtMaxPriceBid.executeQuery();
@@ -623,12 +624,12 @@ public class Bid extends DBBase {
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
 
-	public static void main2(String[] args) {
+	public static void main(String[] args) {
 		Map<String, String[]> parameters = new HashMap<>();
 		//
-		parameters.put("bidIDofferIDBuyer", new String[]{"11fe20aabc7a4025928e9522544be2e3,8f0e1575b13040f88a840a6599174cc0,user"});
-		parameters.put("price", new String[]{"1900"});
-		parameters.put("autoRebidLimit", new String[]{"2500"});
+		parameters.put("bidIDofferIDBuyer", new String[]{"02b064d413c044c5bafb8155bf525b3d,721fef17f8d84e30b7b852ae62df0e19,user"});
+		parameters.put("price", new String[]{"1000"});
+		parameters.put("autoRebidLimit", new String[]{"10"});
 		//
 		Map map = doCreateOrModifyBid(null, parameters, false);
 		//
@@ -662,7 +663,7 @@ public class Bid extends DBBase {
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
 
-	public static void main(String[] args) {
+	public static void main5(String[] args) {
 		System.out.println(SQL_TRADE_TOTAL);
 		//
 		Map<String, String[]> parameters = new HashMap<>();

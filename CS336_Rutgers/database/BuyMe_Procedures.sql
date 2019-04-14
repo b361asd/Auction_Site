@@ -3,13 +3,13 @@ DROP PROCEDURE IF EXISTS DoTrade;
 DELIMITER $$
 CREATE PROCEDURE DoTrade()
 BEGIN
-	UPDATE Offer o SET o.status = 4 WHERE o.offerID <> 'A' AND o.status = 1 AND NOW() > endDate AND 
+	UPDATE Offer o SET o.status = 4 WHERE o.offerID <> 'A' AND o.status = 1 AND DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s')>DATE_FORMAT(endDate,'%Y-%m-%d %H:%i:%s') AND 
     NOT EXISTS (SELECT * FROM Bid b WHERE b.offerID = o.offerID);
 	--
-	UPDATE Offer o SET o.status = 5 WHERE o.offerID <> 'A' AND o.status = 1 AND NOW() > endDate AND 
+	UPDATE Offer o SET o.status = 5 WHERE o.offerID <> 'A' AND o.status = 1 AND DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s')>DATE_FORMAT(endDate,'%Y-%m-%d %H:%i:%s') AND 
     (o.minPrice >= o.initPrice AND NOT EXISTS (SELECT * FROM Bid b WHERE b.offerID = o.offerID AND b.price >= o.minPrice));
 	--
-	UPDATE Offer o SET o.status = 13 WHERE o.offerID <> 'A' AND o.status = 1 AND NOW() > endDate AND 
+	UPDATE Offer o SET o.status = 13 WHERE o.offerID <> 'A' AND o.status = 1 AND DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s')>DATE_FORMAT(endDate,'%Y-%m-%d %H:%i:%s') AND 
 	(
 		(o.minPrice >= o.initPrice AND EXISTS (SELECT * FROM Bid b WHERE b.offerID = o.offerID AND b.price >= o.minPrice))
         OR 
