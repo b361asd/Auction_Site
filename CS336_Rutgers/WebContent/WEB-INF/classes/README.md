@@ -1,0 +1,1 @@
+This folder is used to keep the compiled .class files.
