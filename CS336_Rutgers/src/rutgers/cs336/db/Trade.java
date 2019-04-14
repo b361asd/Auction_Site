@@ -10,18 +10,27 @@ import java.util.*;
 
 public class Trade extends DBBase {
 
-	private static List  lstHeader_trade = Arrays.asList("Buyer", "Total", "Average", "Count");
-	private static int[] colSeq_trade    = {0, 1, 2, 3};
+	private static List  lstHeader_tradebybuyer  = Arrays.asList("Buyer", "Total", "Average", "Count");
+	private static List  lstHeader_tradebyseller = Arrays.asList("Seller", "Total", "Average", "Count");
+	private static List  lstHeader_tradebyuser   = Arrays.asList("User", "Total", "Average", "Count");
+	private static int[] colSeq_trade            = {0, 1, 2, 3};
 
-	public static Map summaryByBuyer(Map<String, String[]> parameters) {
-		int lookbackdays = getIntFromParamMap("lookbackdays", parameters);
-		if (lookbackdays < 1) {
-			lookbackdays = 30;
+	public static Map summaryByBuyerSeller(int lookbackdays, boolean isBuyer, boolean isSeller, boolean isUser) {
+		Map  output  = new HashMap();
+		List lstRows = new ArrayList();
+		//
+		List lstHeader = null;
+		if (isBuyer) {
+			lstHeader = lstHeader_tradebybuyer;
+		}
+		else if (isSeller) {
+			lstHeader = lstHeader_tradebyseller;
+		}
+		else if (isUser) {
+			lstHeader = lstHeader_tradebyuser;
 		}
 		//
-		Map       output    = new HashMap();
-		List      lstRows   = new ArrayList();
-		TableData tableData = new TableData(lstHeader_trade, lstRows, colSeq_trade);
+		TableData tableData = new TableData(lstHeader, lstRows, colSeq_trade);
 		output.put(DATA_NAME_DATA, tableData);
 		//
 		Connection        con          = null;
@@ -29,14 +38,30 @@ public class Trade extends DBBase {
 		try {
 			con = getConnection();
 			//
-			preparedStmt = con.prepareStatement(SQL_TRADE_TOTAL_BY_USER);
+			String sql = null;
+			if (isBuyer) {
+				sql = SQL_TRADE_TOTAL_BY_BUYER;
+			}
+			else if (isSeller) {
+				sql = SQL_TRADE_TOTAL_BY_SELLER;
+			}
+			else if (isUser) {
+				sql = SQL_TRADE_TOTAL_BY_USER;
+			}
 			//
+			preparedStmt = con.prepareStatement(sql);
 			preparedStmt.setInt(1, lookbackdays);
+			//
+			if (!isBuyer && !isSeller) {
+				if (isUser) {
+					preparedStmt.setInt(2, lookbackdays);
+				}
+			}
 			//
 			ResultSet rs = preparedStmt.executeQuery();
 			//
 			while (rs.next()) {
-				Object buyer   = rs.getObject(1);
+				Object person  = rs.getObject(1);
 				Object Total   = rs.getObject(2);
 				Object Average = rs.getObject(3);
 				Object Count   = rs.getObject(4);
@@ -44,7 +69,7 @@ public class Trade extends DBBase {
 				List currentRow = new LinkedList();
 				lstRows.add(currentRow);
 				//
-				currentRow.add(buyer);
+				currentRow.add(person);
 				currentRow.add(Total);
 				currentRow.add(Average);
 				currentRow.add(Count);
@@ -53,7 +78,15 @@ public class Trade extends DBBase {
 			output.put(DATA_NAME_STATUS, true);
 			output.put(DATA_NAME_MESSAGE, "OK");
 			//
-			tableData.setDescription("Summary Bu Buyers");
+			if (isBuyer) {
+				tableData.setDescription("Sales by Buyers For The Last " + lookbackdays + " Days");
+			}
+			else if (isSeller) {
+				tableData.setDescription("Sales by Sellers For The Last " + lookbackdays + " Days");
+			}
+			else if (isUser) {
+				tableData.setDescription("Sales by Users (as Either Buyer or Seller) For The Last " + lookbackdays + " Days");
+			}
 		}
 		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
@@ -93,9 +126,9 @@ public class Trade extends DBBase {
 	public static void main(String[] args) {
 		Map<String, String[]> parameters = new HashMap<>();
 		//
-		//parameters.put("bidID", new String[]{"11fe20aabc7a4025928e9522544be2e3"});
+		parameters.put("bidID", new String[]{"11fe20aabc7a4025928e9522544be2e3"});
 		//
-		Map map = summaryByBuyer(parameters);
+		Map map = summaryByBuyerSeller(30, false, false, true);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));

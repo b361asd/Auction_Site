@@ -50,8 +50,11 @@ public interface ISQLConstant {
 
 
 	// Trade
-	String SQL_TRADE_VIEW          = "(SELECT t.tradeID, o.offerID, b.bidID, tradeDate, seller, categoryName, conditionCode, description, status, buyer, price from Trade t, Offer o, Bid b WHERE t.offerID = o.offerID and t.bidID = b.bidID AND tradeDate > DATE_SUB(NOW(), INTERVAL ? DAY)) tob";
-	String SQL_TRADE_TOTAL_BY_USER = "SELECT buyer, SUM(price) as Total, AVG(price) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By buyer order by Total DESC";
+	String SQL_TRADE_VIEW            = "(SELECT t.tradeID, o.offerID, b.bidID, tradeDate, seller, categoryName, conditionCode, description, status, buyer, price from Trade t, Offer o, Bid b WHERE t.offerID = o.offerID and t.bidID = b.bidID AND tradeDate > DATE_SUB(NOW(), INTERVAL ? DAY)) tob";
+	String SQL_TRADE_TOTAL_BY_BUYER  = "SELECT buyer as person, SUM(price) as Total, AVG(price) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By buyer order by Total DESC";
+	String SQL_TRADE_TOTAL_BY_SELLER = "SELECT seller as person, SUM(price) as Total, AVG(price) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By seller order by Total DESC";
+	String SQL_TRADE_TOTAL_BY_USER   = "SELECT person, SUM(Total) AS Total, SUM(Total)/SUM(Count) AS Average, SUM(Count) AS Count FROM " + "((SELECT buyer as person, SUM(price) as Total, AVG(price) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By buyer)" + " UNION ALL " + "(SELECT seller as person, SUM(price) as Total, AVG(price) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By seller))" + " TWO GROUP By person order by Total DESC";
+
 
 	// Browse
 	//	String BROWSE_OPEN_OFFER (including current bid, sorted by different criteria)

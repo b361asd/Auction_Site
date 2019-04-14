@@ -5,7 +5,6 @@
 <%@ page import="rutgers.cs336.gui.TableData" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
-<%@ page import="static rutgers.cs336.db.DBBase.*" %>
 
 <html>
 
@@ -18,7 +17,7 @@
 <body>
 
 <%
-	Map data;
+	Map data = null;
 	TableData dataTable = null;
 	//
 	String action = getStringFromParamMap("action", request.getParameterMap());
@@ -30,12 +29,16 @@
 		String sort = getStringFromParamMap("sort", request.getParameterMap());
 		dataTable.sortRowPerHeader(sort);
 	}
-	else {
-		data = Trade.summaryByBuyer(request.getParameterMap());
-		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+	//
+	int lookbackdays = getIntFromParamMap("lookbackdays", request.getParameterMap());
+	if (lookbackdays < 1) {
+		lookbackdays = 30;
 	}
 	//
-	if (data != null && dataTable == null) {
+	if (data == null) {
+		data = Trade.summaryByBuyerSeller(lookbackdays, false, false, true);
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+		//
 		dataTable = (TableData) (data.get(DATA_NAME_DATA));
 	}
 %>
@@ -48,17 +51,16 @@
 		out.println("<input type='hidden' name='action' value='buyerSummary'/>");
 		//
 		out.println("<table>");
-		//
-		out.println("<tr>");
-		out.println("<td>");
-		out.println("<div align='left' class='allField'>Lookback Days");
-		out.println("<input type='NUMBER' name='lookbackdays'/></div>");
-		out.println("</td>");
-		out.println("<td>");
-		out.println("<input type='submit' value='Submit'>");
-		out.println("</td>");
-		out.println("</tr");
-		//
+			out.println("<tr>");
+				out.println("<td>");
+				out.println("<div align='left' class='allField'>Lookback Days");
+				out.println("<input type='NUMBER' name='lookbackdays'value='" + lookbackdays +"' /></div>");
+				out.println("</td>");
+				//
+				out.println("<td>");
+				out.println("<input type='submit' value='Submit'>");
+				out.println("</td>");
+			out.println("</tr");
 		out.println("</table>");
 	%>
 </form>
