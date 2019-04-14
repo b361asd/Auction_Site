@@ -107,7 +107,7 @@ public class User extends DBBase {
 		try {
 			con = getConnection();
 			//
-			preparedStmt = con.prepareStatement(sQL_USER_SELECTUSERID);
+			preparedStmt = con.prepareStatement(SQL_USER_SELECTUSERID);
 			//
 			ResultSet rs = preparedStmt.executeQuery();
 			//

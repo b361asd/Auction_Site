@@ -90,53 +90,70 @@ public class Bid extends DBBase {
 		//
 		Set<String> offerIDSet = new HashSet<>();            //offerID set
 		//
-		if (userActivity != null && userActivity.length() > 0) {
+		if (userActivity != null && userActivity.length() > 0) {                        //User Activity
 			StringBuilder sb = FormatterBidQuery.buildQueryUserActivity(userActivity);
 			//
 			sql = sb.toString();
 		}
 		else {
-			StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
-			//
-			String offerIDbidID = getStringFromParamMap("offerIDbidID", parameters);               //Alert Details
-			if (offerIDbidID.length() > 0) {
-				String[] temps = offerIDbidID.split(",");
+			String action = getStringFromParamMap("action", parameters);
+			if (action.equals("repSearchBid")) {                                       //repSearchBid for cancel and modify, should be active Offer
+				StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
 				//
-				FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, temps[0], null);
-				offerIDSet.add(temps[0]);
-				//
-				if (temps.length >= 2) {
-					bidIDStandout = temps[1];
-				}
-			}
-			else {
 				{
 					String buyerOP  = getStringFromParamMap("buyerOP", parameters);
 					String buyerVal = getStringFromParamMap("buyerVal", parameters);
 					FormatterOfferQuery.addCondition(sb, "buyer", buyerOP, buyerVal, null);
 				}
 				//
-				String bidIDofferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
-				bidIDStandout = null;
-				if (!bidIDofferIDBuyer.equals("")) {
-					String[] temps = bidIDofferIDBuyer.split(",");
-					FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, temps[1], null);
-					bidIDStandout = temps[0];
+				FormatterOfferQuery.addCondition(sb, "status", OP_INT_EQUAL, "1", null);
+				//
+				sql = sb.toString();
+			}
+			else if (action.equals("repBrowseBid")) {       //repSearchBid for cancel and modify, should be active Offer
+				StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
+				//
+				FormatterOfferQuery.addCondition(sb, "status", OP_INT_EQUAL, "1", null);
+				//
+				sql = sb.toString();
+			}
+			else {
+				StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
+				//
+				String offerIDbidID = getStringFromParamMap("offerIDbidID", parameters);      //Alert Details
+				if (offerIDbidID.length() > 0) {
+					String[] temps = offerIDbidID.split(",");
+					//
+					FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, temps[0], null);
+					offerIDSet.add(temps[0]);
+					//
+					if (temps.length >= 2) {
+						bidIDStandout = temps[1];
+					}
 				}
 				else {
-					{
-						String bidID = getStringFromParamMap("bidID", parameters);
-						FormatterOfferQuery.addCondition(sb, "bidID", OP_SZ_EQUAL, bidID, null);
+					String bidIDofferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
+					bidIDStandout = null;
+					if (!bidIDofferIDBuyer.equals("")) {
+						String[] temps = bidIDofferIDBuyer.split(",");
+						FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, temps[1], null);
+						bidIDStandout = temps[0];
 					}
-					//
-					{
-						String offerID = getStringFromParamMap("offerID", parameters);
-						FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, offerID, null);
+					else {
+						{
+							String bidID = getStringFromParamMap("bidID", parameters);
+							FormatterOfferQuery.addCondition(sb, "bidID", OP_SZ_EQUAL, bidID, null);
+						}
+						//
+						{
+							String offerID = getStringFromParamMap("offerID", parameters);
+							FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, offerID, null);
+						}
 					}
 				}
+				//
+				sql = sb.toString();
 			}
-			//
-			sql = sb.toString();
 		}
 		//
 		Map               output  = new HashMap();
@@ -212,6 +229,9 @@ public class Bid extends DBBase {
 						oneOfferRow.add(tableDataBiD);
 					}
 				}
+			}
+			else {
+				dataTableOffer = new TableData(Offer.lstHeader_offerdefault, new LinkedList(), Offer.colSeq_offerdefault);
 			}
 			//
 			output.put(DATA_NAME_DATA, dataTableOffer);
@@ -624,7 +644,7 @@ public class Bid extends DBBase {
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
 
-	public static void main(String[] args) {
+	public static void main8(String[] args) {
 		Map<String, String[]> parameters = new HashMap<>();
 		//
 		parameters.put("bidIDofferIDBuyer", new String[]{"02b064d413c044c5bafb8155bf525b3d,721fef17f8d84e30b7b852ae62df0e19,user"});
@@ -638,13 +658,14 @@ public class Bid extends DBBase {
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
 
-	public static void main1(String[] args) {
+	public static void main(String[] args) {
 		Map<String, String[]> parameters = new HashMap<>();
 		//
-		//parameters.put("buyerOP", new String[]{"11fe20aabc7a4025928e9522544be2e3"});
-		//parameters.put("buyerVal", new String[]{OP_SZ_EQUAL});
+		parameters.put("action", new String[]{"repSearchBid"});
+		parameters.put("buyerOP", new String[]{"any"});
+		parameters.put("buyerVal", new String[]{""});
 		//
-		parameters.put("bidID", new String[]{"11fe20aabc7a4025928e9522544be2e3"});
+		//parameters.put("bidID", new String[]{"11fe20aabc7a4025928e9522544be2e3"});
 		//
 		Map map = searchBid(parameters, null);
 		//
@@ -652,6 +673,7 @@ public class Bid extends DBBase {
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
+
 
 	public static void main4(String[] args) {
 		System.out.println("Start");

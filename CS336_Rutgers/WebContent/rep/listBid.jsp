@@ -41,12 +41,12 @@
 		TableData dataTable = null;
 		//
 		String action = getStringFromParamMap("action", request.getParameterMap());
-		if (action.equals("searchBid")) {
+		if (action.equals("repSearchBid")) {
 			data = Bid.searchBid(request.getParameterMap(), null);
 			request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 		}
-		else if (action.equals("browseBid")) {
-			data = Bid.searchBid(null, null);
+		else if (action.equals("repBrowseBid")) {
+			data = Bid.searchBid(request.getParameterMap(), null);
 			request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 		}
 		else {
@@ -65,10 +65,10 @@
 		//
 		//
 		dataTable = (TableData) (data.get(DATA_NAME_DATA));
-		//List lstHeader = dataTable.getLstHeader();
-		//List lstRows = dataTable.getLstRows();
-		//int[] colSeq = dataTable.getColSeq();
-		//String offerIDStandOut = dataTable.getOfferIDStandOut();
+	%>
+
+	<%
+		if (dataTable != null) {
 	%>
 
 	<table>
@@ -126,6 +126,11 @@
 		%>
 		</tbody>
 	</table>
+
+
+	<%
+		}
+	%>
 
 </form>
 

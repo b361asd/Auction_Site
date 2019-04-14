@@ -5,7 +5,6 @@
 <%@ page import="rutgers.cs336.gui.TableData" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
-<%@ page import="static rutgers.cs336.db.DBBase.*" %>
 
 <html>
 
@@ -41,7 +40,7 @@
 		limit = 10;
 	}
 	//
-	if (data == null || dataTable == null) {
+	if (data == null) {
 		data = Trade.selectBestSellingItems(lookbackdays, limit);
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 		//

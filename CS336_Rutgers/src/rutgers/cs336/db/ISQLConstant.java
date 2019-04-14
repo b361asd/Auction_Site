@@ -13,7 +13,7 @@ public interface ISQLConstant {
 	String SQL_USER_AUTH         = "SELECT password, firstname, lastname, active, userType FROM User WHERE username = ?";
 	String SQL_USER_SELECT       = "SELECT username, password, email, firstname, lastname, address, phone, active FROM User WHERE userType = ?";
 	String SQL_USER_SELECT_ONE   = "SELECT username, password, email, firstname, lastname, address, phone, active FROM User WHERE username = ? AND userType = ?";
-	String sQL_USER_SELECTUSERID = "SELECT Distinct username FROM User WHERE userType = 3 order by username";
+	String SQL_USER_SELECTUSERID = "SELECT Distinct username FROM User WHERE userType = 3 order by username";
 	String SQL_USER_ACTIVE       = "UPDATE User SET active = true where username = ?";
 	String SQL_USER_DEACTIVE     = "UPDATE User SET active = false where username = ?";
 	String SQL_USER_UPDATE       = "UPDATE User SET password = ?, email = ?, firstname = ?, lastname = ?, address = ?, phone = ? WHERE username = ? AND userType = ?";

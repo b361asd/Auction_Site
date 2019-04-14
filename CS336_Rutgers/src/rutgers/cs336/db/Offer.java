@@ -8,9 +8,9 @@ import java.util.*;
 
 public class Offer extends DBBase {
 
-	private static List  lstHeader_offerdefault = Arrays.asList("offerId", "Seller", "Category", "Condition", "Desc", "initPrice", "increment", "minPrice", "Start", "End", "status", "CurrBid");
+	public static List  lstHeader_offerdefault = Arrays.asList("offerId", "Seller", "Category", "Condition", "Desc", "initPrice", "increment", "minPrice", "Start", "End", "status", "CurrBid");
 	//
-	private static int[] colSeq_offerdefault    = {2, 3, 4, 1, 5, 11, 8, 9, 10};
+	public static int[] colSeq_offerdefault    = {2, 3, 4, 1, 5, 11, 8, 9, 10};
 
 
 	private static final int FIELD_START_INDEX = 12;
