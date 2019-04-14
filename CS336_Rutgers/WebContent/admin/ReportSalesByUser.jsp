@@ -36,7 +36,7 @@
 	}
 	//
 	if (data == null) {
-		data = Trade.summaryByBuyerSeller(lookbackdays, false, false, true);
+		data = Trade.summaryBy(lookbackdays, false, false, false, false, true);
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 		//
 		dataTable = (TableData) (data.get(DATA_NAME_DATA));
@@ -51,16 +51,16 @@
 		out.println("<input type='hidden' name='action' value='buyerSummary'/>");
 		//
 		out.println("<table>");
-			out.println("<tr>");
-				out.println("<td>");
-				out.println("<div align='left' class='allField'>Lookback Days");
-				out.println("<input type='NUMBER' name='lookbackdays'value='" + lookbackdays +"' /></div>");
-				out.println("</td>");
-				//
-				out.println("<td>");
-				out.println("<input type='submit' value='Submit'>");
-				out.println("</td>");
-			out.println("</tr");
+		out.println("<tr>");
+		out.println("<td>");
+		out.println("<div align='left' class='allField'>Lookback Days");
+		out.println("<input type='NUMBER' name='lookbackdays'value='" + lookbackdays + "' /></div>");
+		out.println("</td>");
+		//
+		out.println("<td>");
+		out.println("<input type='submit' value='Submit'>");
+		out.println("</td>");
+		out.println("</tr");
 		out.println("</table>");
 	%>
 </form>

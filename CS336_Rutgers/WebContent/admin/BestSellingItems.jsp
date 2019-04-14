@@ -5,6 +5,7 @@
 <%@ page import="rutgers.cs336.gui.TableData" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
+<%@ page import="static rutgers.cs336.db.DBBase.*" %>
 
 <html>
 
@@ -35,8 +36,13 @@
 		lookbackdays = 30;
 	}
 	//
-	if (data == null) {
-		data = Trade.summaryBy(lookbackdays, false, false, false, true, false);
+	int limit = getIntFromParamMap("limit", request.getParameterMap());
+	if (limit < 1) {
+		limit = 10;
+	}
+	//
+	if (data == null || dataTable == null) {
+		data = Trade.selectBestSellingItems(lookbackdays, limit);
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 		//
 		dataTable = (TableData) (data.get(DATA_NAME_DATA));
@@ -51,16 +57,21 @@
 		out.println("<input type='hidden' name='action' value='buyerSummary'/>");
 		//
 		out.println("<table>");
-		out.println("<tr>");
-		out.println("<td>");
-		out.println("<div align='left' class='allField'>Lookback Days");
-		out.println("<input type='NUMBER' name='lookbackdays'value='" + lookbackdays + "' /></div>");
-		out.println("</td>");
-		//
-		out.println("<td>");
-		out.println("<input type='submit' value='Submit'>");
-		out.println("</td>");
-		out.println("</tr");
+			out.println("<tr>");
+				out.println("<td>");
+				out.println("<div align='left' class='allField'>Lookback Days");
+				out.println("<input type='NUMBER' name='lookbackdays'value='" + lookbackdays +"' /></div>");
+				out.println("</td>");
+				//
+				out.println("<td>");
+				out.println("<div align='left' class='allField'>Limit");
+				out.println("<input type='NUMBER' name='limit'value='" + limit +"' /></div>");
+				out.println("</td>");
+				//
+				out.println("<td>");
+				out.println("<input type='submit' value='Submit'>");
+				out.println("</td>");
+			out.println("</tr");
 		out.println("</table>");
 	%>
 </form>

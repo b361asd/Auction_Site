@@ -36,7 +36,7 @@
 	}
 	//
 	if (data == null) {
-		data = Trade.summaryByBuyerSeller(lookbackdays, true, false, false);
+		data = Trade.summaryBy(lookbackdays, false, false, true, false, false);
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 		//
 		dataTable = (TableData) (data.get(DATA_NAME_DATA));

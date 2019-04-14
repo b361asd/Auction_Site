@@ -663,6 +663,8 @@ public class Bid extends DBBase {
 	}
 
 	public static void main(String[] args) {
+		System.out.println(SQL_TRADE_TOTAL);
+		//
 		Map<String, String[]> parameters = new HashMap<>();
 		//
 		parameters.put("offerIDbidID", new String[]{"6bc17ded8d0e4300ae8ce80a5fa85b8d,"});

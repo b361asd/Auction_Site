@@ -50,12 +50,34 @@ public interface ISQLConstant {
 
 
 	// Trade
-	String SQL_TRADE_VIEW            = "(SELECT t.tradeID, o.offerID, b.bidID, tradeDate, seller, categoryName, conditionCode, description, status, buyer, price from Trade t, Offer o, Bid b WHERE t.offerID = o.offerID and t.bidID = b.bidID AND tradeDate > DATE_SUB(NOW(), INTERVAL ? DAY)) tob";
-	String SQL_TRADE_TOTAL_BY_BUYER  = "SELECT buyer as person, SUM(price) as Total, AVG(price) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By buyer order by Total DESC";
-	String SQL_TRADE_TOTAL_BY_SELLER = "SELECT seller as person, SUM(price) as Total, AVG(price) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By seller order by Total DESC";
-	String SQL_TRADE_TOTAL_BY_USER   = "SELECT person, SUM(Total) AS Total, SUM(Total)/SUM(Count) AS Average, SUM(Count) AS Count FROM " + "((SELECT buyer as person, SUM(price) as Total, AVG(price) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By buyer)" + " UNION ALL " + "(SELECT seller as person, SUM(price) as Total, AVG(price) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By seller))" + " TWO GROUP By person order by Total DESC";
+	String SQL_TRADE_VIEW          		= "(SELECT t.tradeID, o.offerID, b.bidID, tradeDate, seller, categoryName, conditionCode, description, status, buyer, price from Trade t, Offer o, Bid b WHERE t.offerID = o.offerID and t.bidID = b.bidID AND tradeDate > DATE_SUB(NOW(), INTERVAL ? DAY)) tob";
+	//
+	String SQL_TRADE_TOTAL 		=  "(SELECT 'For Last 24 Hours' as Period, IFNULL(SUM(price),0) AS Total, IFNULL(AVG(price),0) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW.replaceFirst("\\?", "1") + ")" +
+			" UNION ALL " +
+			"(SELECT 'For Last Week' as Period, IFNULL(SUM(price),0) AS Total, IFNULL(AVG(price),0) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW.replaceFirst("\\?", "7") + ")" +
+			" UNION ALL " +
+			"(SELECT 'For Last Month' as Period, IFNULL(SUM(price),0) AS Total, IFNULL(AVG(price),0) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW.replaceFirst("\\?", "30") + ")" +
+			" UNION ALL " +
+			"(SELECT 'For Last Quarter' as Period, IFNULL(SUM(price),0) AS Total, IFNULL(AVG(price),0) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW.replaceFirst("\\?", "90") + ")" +
+			" UNION ALL " +
+			"(SELECT 'For Last Year' as Period, IFNULL(SUM(price),0) AS Total, IFNULL(AVG(price),0) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW.replaceFirst("\\?", "365") + ")" +
+			"";
+	String SQL_TRADE_TOTAL_BY_CATEGORY 		= "SELECT categoryName, SUM(price) as Total, AVG(price) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By categoryName order by Total DESC";
+	String SQL_TRADE_TOTAL_BY_SIMILARGROUP = "SELECT categoryName, conditionCode, SUM(price) as Total, AVG(price) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By categoryName, conditionCode order by Total DESC";
+	String SQL_TRADE_TOTAL_BY_BUYER 		= "SELECT buyer as person, SUM(price) as Total, AVG(price) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By buyer order by Total DESC";
+	String SQL_TRADE_TOTAL_BY_SELLER 	= "SELECT seller as person, SUM(price) as Total, AVG(price) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By seller order by Total DESC";
+	String SQL_TRADE_TOTAL_BY_USER 		=  "SELECT person, SUM(Total) AS Total, SUM(Total)/SUM(Count) AS Average, SUM(Count) AS Count FROM " + 
+														"((SELECT buyer as person, SUM(price) as Total, AVG(price) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By buyer)" + 
+														" UNION ALL " +
+														"(SELECT seller as person, SUM(price) as Total, AVG(price) as Average, COUNT(*) AS Count FROM " + SQL_TRADE_VIEW + " Group By seller))" +
+														" TWO GROUP By person order by Total DESC";
+	//
+	String SQL_TRADE_BEST_ITEM				= "SELECT price, categoryName, conditionCode, description, seller, buyer, tradeDate FROM " + SQL_TRADE_VIEW + " ORDER BY price DESC LIMIT 0, ?";
+											
 
+	
 
+	
 	// Browse
 	//	String BROWSE_OPEN_OFFER (including current bid, sorted by different criteria)
 	//	String SEARCH_BY_CRITERIA
