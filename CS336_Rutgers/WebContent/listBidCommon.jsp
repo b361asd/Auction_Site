@@ -42,9 +42,10 @@ else {
 					_colWidth = "" + iWidth + "%";
 					//
 					out.println("<tr>");
+					out.println("<td></td>");
 					out.println("<td>Bids</td>");
 					{
-						out.println("<td colspan='" + (dataTable.colCount() - 1) + "'>");
+						out.println("<td colspan='" + (dataTable.colCount() - 2) + "'>");
 						//
 						out.println("<table width='100%'>");
 						out.println("<thead>");
@@ -77,9 +78,10 @@ else {
 				TableData dataTableBid = (TableData) (dataTable.getLastCellInRow(i));
 				if (dataTableBid != null) {
 					out.println("<tr>");
+					out.println("<td></td>");
 					out.println("<td>Bids</td>");
 					{
-						out.println("<td colspan='" + (dataTable.colCount() - 1) + "'>");
+						out.println("<td colspan='" + (dataTable.colCount() - 2) + "'>");
 						//
 						out.println("<table width='100%'>");
 						out.println("<tbody>");

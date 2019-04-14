@@ -1,8 +1,10 @@
 package rutgers.cs336.db;
 
 public class FormatterOfferQuery extends DBBase {
-	private static String PLACEHOLDER              = "$";
 	private static String BASE_SQL_REAL            = "select o2.offerID, o2.seller, o2.categoryName, o2.conditionCode, o2.description, o2.initPrice, o2.increment, o2.minPrice, o2.startDate, o2.endDate, o2.status, o2.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o2 LEFT OUTER join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o2.offerID = of1.offerID order by o2.offerID";
+	//
+	private static String SQL_BROWSE_ACTIVE        = "select o2.offerID, o2.seller, o2.categoryName, o2.conditionCode, o2.description, o2.initPrice, o2.increment, o2.minPrice, o2.startDate, o2.endDate, o2.status, o2.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM (SELECT * FROM Offer WHERE status = 1) o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o2 LEFT OUTER join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o2.offerID = of1.offerID order by o2.offerID";
+	private static String PLACEHOLDER              = "$";
 	private static String BASE_SQL_PLACEHOLDER     = "select o2.offerID, o2.seller, o2.categoryName, o2.conditionCode, o2.description, o2.initPrice, o2.increment, o2.minPrice, o2.startDate, o2.endDate, o2.status, o2.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM ($) o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o2 LEFT OUTER join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o2.offerID = of1.offerID order by o2.offerID";
 	private static String BASE_SQL_PLACEHOLDER_1ST = "select o2.offerID, o2.seller, o2.categoryName, o2.conditionCode, o2.description, o2.initPrice, o2.increment, o2.minPrice, o2.startDate, o2.endDate, o2.status, o2.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM (";
 	private static String BASE_SQL_PLACEHOLDER_2ND = ") o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o2 LEFT OUTER join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o2.offerID = of1.offerID order by o2.offerID";
@@ -55,7 +57,7 @@ public class FormatterOfferQuery extends DBBase {
 
 
 	public static String buildSQLBrowseOffer() {
-		return BASE_SQL_REAL;
+		return SQL_BROWSE_ACTIVE;
 	}
 
 

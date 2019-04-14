@@ -31,7 +31,16 @@
 
 <form action="${pageContext.request.contextPath}/rep/listOffer.jsp" method="post">
 	<input type="hidden" name="action" value="browseOffer"/>
-	<input type="submit" value="Browse">
+	<table>
+		<tbody>
+		<tr>
+			<td>Browse</td>
+			<td>
+				<input type="submit" value="Browse">
+			</td>
+		</tr>
+		</tbody>
+	</table>
 </form>
 
 <form id="form" action="${pageContext.request.contextPath}/rep/listOffer.jsp" method="post">

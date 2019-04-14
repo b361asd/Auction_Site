@@ -89,6 +89,7 @@ public class Bid extends DBBase {
 	public static Map searchBid(Map<String, String[]> parameters, String userActivity, String userMyBid) {
 		String sql           = null;
 		String bidIDStandout = null;
+		String userStandout  = null;
 		//
 		Set<String> offerIDSet = new HashSet<>();            //offerID set
 		//
@@ -96,17 +97,17 @@ public class Bid extends DBBase {
 			StringBuilder sb = FormatterBidQuery.buildQueryUserActivity(userActivity);
 			//
 			sql = sb.toString();
+			//
+			userStandout = userActivity;
 		}
-		else if (userMyBid != null && userMyBid.length() > 0) {                        //User Activity
+		else if (userMyBid != null && userMyBid.length() > 0) {                        //My Bid for User
 			StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
-			//
-			{
-				FormatterOfferQuery.addCondition(sb, "buyer", OP_SZ_EQUAL, userMyBid, null);
-			}
-			//
+			FormatterOfferQuery.addCondition(sb, "buyer", OP_SZ_EQUAL, userMyBid, null);
 			FormatterOfferQuery.addCondition(sb, "status", OP_INT_EQUAL, "1", null);
 			//
 			sql = sb.toString();
+			//
+			userStandout = userMyBid;
 		}
 		else {
 			String action = getStringFromParamMap("action", parameters);
@@ -122,7 +123,7 @@ public class Bid extends DBBase {
 				//
 				sql = sb.toString();
 			}
-			else if (action.equals("repBrowseBid")) {    //repSearchBid for cancel and modify, should be active Offer
+			else if (action.equals("repBrowseBid")) {                                       //repSearchBid for cancel and modify, should be active Offer
 				StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
 				//
 				FormatterOfferQuery.addCondition(sb, "status", OP_INT_EQUAL, "1", null);
@@ -230,12 +231,15 @@ public class Bid extends DBBase {
 					else {
 						TableData tableDataBiD = new TableData(lstHeader_bid, lstBidRows, colSeq_bid);
 						//
-						if (userActivity != null && userActivity.length() > 0) {
-							tableDataBiD.setStandOut(userActivity, 2);      //buyer
-						}
-						//
+						//if (userActivity != null && userActivity.length() > 0) {
+						//	tableDataBiD.setStandOut(userActivity, 2);      //buyer
+						//}
+						//else 
 						if (bidIDStandout != null) {
-							tableDataBiD.setStandOut(bidIDStandout, 0);
+							tableDataBiD.setStandOut(bidIDStandout, 0);      //bidID
+						}
+						else if (userStandout != null) {
+							tableDataBiD.setStandOut(userStandout, 2);      //user
 						}
 						//
 						oneOfferRow.add(tableDataBiD);
@@ -685,7 +689,6 @@ public class Bid extends DBBase {
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
-
 
 	public static void main4(String[] args) {
 		System.out.println("Start");
