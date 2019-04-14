@@ -11,7 +11,7 @@
 CS336_Rutgers/.idea/**
 CS336_Rutgers/lib
 CS336_Rutgers/out
-.class
+*.class
 
 # Eclipse
 .classpath
