@@ -229,7 +229,7 @@ public class Trade extends DBBase {
 	}
 
 
-	public static Map selectBestSellingItems(int lookbackdays, int limit) {
+	public static Map selectBestSellingMostRecentItems(int lookbackdays, int limit, boolean isBestSellings) {
 		Map  output  = new HashMap();
 		List lstRows = new ArrayList();
 		//
@@ -241,7 +241,7 @@ public class Trade extends DBBase {
 		try {
 			con = getConnection();
 			//
-			preparedStmt = con.prepareStatement(SQL_TRADE_BEST_ITEM);
+			preparedStmt = con.prepareStatement(isBestSellings ? SQL_TRADE_BEST_ITEM : SQL_TRADE_RECENT_ITEM);
 			preparedStmt.setInt(1, lookbackdays);
 			preparedStmt.setInt(2, limit);
 			ResultSet rs = preparedStmt.executeQuery();
@@ -270,7 +270,12 @@ public class Trade extends DBBase {
 			output.put(DATA_NAME_STATUS, true);
 			output.put(DATA_NAME_MESSAGE, "OK");
 			//
-			tableData.setDescription("Top " + limit + " Best Selling Item(s) For The Last " + lookbackdays + " Days");
+			if (isBestSellings) { 
+				tableData.setDescription("Top " + limit + " Best Selling Item(s) For The Last " + lookbackdays + " Days");
+			}
+			else {
+				tableData.setDescription("Most Recent " + limit + " Trades, Limited For The Last " + lookbackdays + " Days");
+			}
 		}
 		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
@@ -313,7 +318,7 @@ public class Trade extends DBBase {
 		parameters.put("bidID", new String[]{"11fe20aabc7a4025928e9522544be2e3"});
 		//
 		//Map map = summaryByBuyerSellerUser(30, false, false, true);
-		Map map = selectBestSellingItems(30, 10);
+		Map map = selectBestSellingMostRecentItems(30, 10, true);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));

@@ -10,7 +10,7 @@ public class Offer extends DBBase {
 
 	public static List  lstHeader_offerdefault = Arrays.asList("offerId", "Seller", "Category", "Condition", "Desc", "initPrice", "increment", "minPrice", "Start", "End", "status", "CurrBid");
 	//
-	public static int[] colSeq_offerdefault    = {2, 3, 4, 1, 5, 11, 8, 9, 10};
+	public static int[] colSeq_offerdefault    = {2, 3, 4, 1, 5, 6, 11, 8, 9, 10};
 
 
 	private static final int FIELD_START_INDEX = 12;
@@ -301,22 +301,22 @@ public class Offer extends DBBase {
 				colSeq = colSeq_offerdefault;
 			}
 			else {
-				colSeq = new int[lstHeader.size() - 3];
+				colSeq = new int[lstHeader.size() - 2];
 				//
-				colSeq[0] = 2;         //Category
-				colSeq[1] = 3;         //Condition
+				colSeq[0] = 2;               //Category
+				colSeq[1] = 3;               //Condition
 				colSeq[2] = 4;            //Desc
 				colSeq[3] = 1;            //Seller
 				colSeq[4] = 5;            //initPrice
-				colSeq[5] = 11;         //CurrBid
-				colSeq[6] = 8;            //Start
-				colSeq[7] = 9;            //End
-				colSeq[8] = 10;         //status
+				colSeq[5] = 6;               //increment
+				colSeq[6] = 11;            //CurrBid
+				colSeq[7] = 8;            //Start
+				colSeq[8] = 9;            //End
+				colSeq[9] = 10;         //status
 				//lstHeader.add("offerId");		0
-				//lstHeader.add("increment");		6
 				//lstHeader.add("minPrice");		7
 				for (int i = FIELD_START_INDEX; i < lstHeader.size(); i++) {
-					colSeq[i + 9 - FIELD_START_INDEX] = i;
+					colSeq[i + 10 - FIELD_START_INDEX] = i;                        //10 Starting Index for property
 				}
 			}
 			//
@@ -722,7 +722,7 @@ public class Offer extends DBBase {
 	public static void main(String[] args) {
 		System.out.println("Start");
 		//
-		doSearchOfferByID("c842d666ac5d4a71a4c79d1d4552e6c4");
+		doSearchOfferByID("5948e21eeae14dcaa8d58ada0d79a773");
 	}
 }
 

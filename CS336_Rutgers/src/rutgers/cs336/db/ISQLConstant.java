@@ -73,6 +73,7 @@ public interface ISQLConstant {
 														" TWO GROUP By person order by Total DESC";
 	//
 	String SQL_TRADE_BEST_ITEM				= "SELECT price, categoryName, conditionCode, description, seller, buyer, tradeDate FROM " + SQL_TRADE_VIEW + " ORDER BY price DESC LIMIT 0, ?";
+	String SQL_TRADE_RECENT_ITEM			= "SELECT price, categoryName, conditionCode, description, seller, buyer, tradeDate FROM " + SQL_TRADE_VIEW + " ORDER BY tradeDate DESC LIMIT 0, ?";
 											
 
 	

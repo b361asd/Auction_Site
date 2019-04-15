@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 public class HelperDatetime {
 
 	public static String getDatetimeSZ(int delta) {
-		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		//
 		java.util.Date today   = new java.util.Date();
 		long           ltime   = today.getTime() + 7 * 24 * 60 * 60 * 1000;         //One week
@@ -17,7 +17,7 @@ public class HelperDatetime {
 	}
 
 	public static String getDatetimeSZ(java.util.Date date) {
-		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		//
 		return formatter.format(date);
 	}
@@ -26,7 +26,7 @@ public class HelperDatetime {
 	public static java.util.Date getDatetime(String input) {
 		java.util.Date output;
 		//
-		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");         //yyyy-MM-dd'T'HH:mm:ss
 		try {
 			output = formatter.parse(input);
 		}
@@ -55,15 +55,17 @@ public class HelperDatetime {
 	public static void main(String[] args) {
 		String datetimeSZString = "2019-04-07T11:01:20";
 		//
-		System.out.println(HelperDatetime.convertToSQLDate(HelperDatetime.getDatetime(datetimeSZString)));
-		//
 		System.out.println(getDatetimeSZ(7));
 		//
-		System.out.println(getDatetime(""));
+		//System.out.println(HelperDatetime.convertToSQLDate(HelperDatetime.getDatetime(datetimeSZString)));
 		//
-		System.out.println(convertToSQLDate(getDatetime("")));
+		//System.out.println(getDatetimeSZ(7));
 		//
-		System.out.println(convertToUTILDate(convertToSQLDate(getDatetime(""))));
+		//System.out.println(getDatetime(""));
+		//
+		//System.out.println(convertToSQLDate(getDatetime("")));
+		//
+		//System.out.println(convertToUTILDate(convertToSQLDate(getDatetime(""))));
 	}
 
 }
