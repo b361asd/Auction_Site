@@ -59,12 +59,14 @@
 		//
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 	}
+	//
+	request.setAttribute("dataTable", dataTable);
 %>
 
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<%@include file="../listBidCommon.jsp" %>
+<%@include file="../showTableTwo.jsp" %>
 
 </body>
 

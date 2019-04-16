@@ -65,6 +65,8 @@
 		//
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 	}
+	//
+	request.setAttribute("dataTable", dataTable);
 %>
 
 <%@include file="../header.jsp" %>
@@ -89,7 +91,7 @@
 	%>
 </form>
 
-<%@include file="../listBidCommon.jsp" %>
+<%@include file="../showTableTwo.jsp" %>
 
 </body>
 

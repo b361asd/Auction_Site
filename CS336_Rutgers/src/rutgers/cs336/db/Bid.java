@@ -9,13 +9,14 @@ import java.util.*;
 
 public class Bid extends DBBase {
 
-	private static List  lstHeader_bid = Arrays.asList("bidID", "offerID", "buyer", "price", "autoRebidLimit", "bidDate");
-	private static int[] colSeq_bid    = {0, 1, 2, 3, 4, 5};
+	private static List  lstHeader_bid  = Arrays.asList("bidID", "offerID", "buyer", "price", "autoRebidLimit", "bidDate");
+	private static int[] colSeq_bid     = {2, 3, 5};
+	private static int[] colSeq_bid_add = {2, 3, 4, 5};
 
 	private static List lstHeader_bid1 = Arrays.asList("bidID", "buyer", "price", "bidDate");
 
 
-	//From list Offer: List info for one OfferID
+	//From list Offer: Get info for one OfferID
 	public static Map getBidsForOffer(String offerID) {
 		Map output = new HashMap();
 		//
@@ -87,20 +88,37 @@ public class Bid extends DBBase {
 
 
 	public static Map searchBid(Map<String, String[]> parameters, String userActivity, String userMyBid) {
+		String _offerIDbidID = getStringFromParamMap("offerIDbidID", parameters);
+		//
+		boolean _listActivity    = false;
+		boolean _listMyBid       = false;
+		boolean _viewAlertDetail = false;
+		boolean _listBid         = false;
+		boolean _modifyBid       = false;
+		if (userActivity != null) {
+			_listActivity = true;
+		}
+		if (userMyBid != null) {
+			_listMyBid = true;
+		}
+		if (_offerIDbidID.length() > 0) {
+			_viewAlertDetail = true;
+		}
+		//
 		String sql           = null;
 		String bidIDStandout = null;
 		String userStandout  = null;
 		//
 		Set<String> offerIDSet = new HashSet<>();            //offerID set
 		//
-		if (userActivity != null && userActivity.length() > 0) {                        //User Activity
+		if (userActivity != null && userActivity.length() > 0) {                                          //User: ListActivity.jsp
 			StringBuilder sb = FormatterBidQuery.buildQueryUserActivity(userActivity);
 			//
 			sql = sb.toString();
 			//
 			userStandout = userActivity;
 		}
-		else if (userMyBid != null && userMyBid.length() > 0) {                        //My Bid for User
+		else if (userMyBid != null && userMyBid.length() > 0) {                                          //User: listMyBid.jsp
 			StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
 			FormatterOfferQuery.addCondition(sb, "buyer", OP_SZ_EQUAL, userMyBid, null);
 			FormatterOfferQuery.addCondition(sb, "status", OP_INT_EQUAL, "1", null);
@@ -111,7 +129,7 @@ public class Bid extends DBBase {
 		}
 		else {
 			String action = getStringFromParamMap("action", parameters);
-			if (action.equals("repSearchBid")) {                                       //repSearchBid for cancel and modify, should be active Offer
+			if (action.equals("repSearchBid")) {                                                         //repSearchBid for cancel and modify, should be active Offer
 				StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
 				//
 				{
@@ -123,7 +141,7 @@ public class Bid extends DBBase {
 				//
 				sql = sb.toString();
 			}
-			else if (action.equals("repBrowseBid")) {                                       //repSearchBid for cancel and modify, should be active Offer
+			else if (action.equals("repBrowseBid")) {                                                      //repSearchBid for cancel and modify, should be active Offer
 				StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
 				//
 				FormatterOfferQuery.addCondition(sb, "status", OP_INT_EQUAL, "1", null);
@@ -133,7 +151,7 @@ public class Bid extends DBBase {
 			else {
 				StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
 				//
-				String offerIDbidID = getStringFromParamMap("offerIDbidID", parameters);               //Alert Details
+				String offerIDbidID = getStringFromParamMap("offerIDbidID", parameters);                  //user: listAlert.jsp(offerIDbidID) -> viewAlertDetail.jsp
 				if (offerIDbidID.length() > 0) {
 					String[] temps = offerIDbidID.split(",");
 					//
@@ -145,7 +163,7 @@ public class Bid extends DBBase {
 					}
 				}
 				else {
-					String bidIDofferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
+					String bidIDofferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);      //Rep: ListBid.jsp(bidIDofferIDBuyer) -> modifyBid.jsp
 					bidIDStandout = null;
 					if (!bidIDofferIDBuyer.equals("")) {
 						String[] temps = bidIDofferIDBuyer.split(",");
@@ -229,7 +247,7 @@ public class Bid extends DBBase {
 						oneOfferRow.add(null);
 					}
 					else {
-						TableData tableDataBiD = new TableData(lstHeader_bid, lstBidRows, colSeq_bid);
+						TableData tableDataBiD = new TableData(lstHeader_bid, lstBidRows, ((_listActivity || _viewAlertDetail) ? colSeq_bid : colSeq_bid_add));
 						//
 						//if (userActivity != null && userActivity.length() > 0) {
 						//	tableDataBiD.setStandOut(userActivity, 2);      //buyer

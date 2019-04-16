@@ -13,6 +13,7 @@
 		//Rep Search Offer
 		//
 		//Map data = null;
+		//
 		List lstCategory = (List) data.get(CategoryAndField.DATA_CATEGORY_LIST);
 		//
 		String currUrl = request.getRequestURL().toString();

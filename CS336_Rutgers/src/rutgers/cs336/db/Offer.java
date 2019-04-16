@@ -15,6 +15,7 @@ public class Offer extends DBBase {
 
 	private static final int FIELD_START_INDEX = 12;
 
+
 	// For search Bid
 	public static Map doSearchByOfferIDSet(Set<String> offerIDSet) {
 		StringBuilder sb;
@@ -346,7 +347,6 @@ public class Offer extends DBBase {
 					e.printStackTrace();
 				}
 			}
-			//
 			if (con != null) {
 				try {
 					con.close();

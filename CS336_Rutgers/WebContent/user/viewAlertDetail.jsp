@@ -43,12 +43,14 @@
 	}
 	//
 	dataTable = (TableData) (data.get(DATA_NAME_DATA));
+	//
+	request.setAttribute("dataTable", dataTable);
 %>
 
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<%@include file="../listBidCommon.jsp" %>
+<%@include file="../showTableTwo.jsp" %>
 
 </body>
 
