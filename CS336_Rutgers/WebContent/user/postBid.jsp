@@ -30,6 +30,9 @@
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
+<br/>
+<br/>
+
 <table>
 	<tr>
 		<%
@@ -49,10 +52,14 @@
 
 </table>
 
+<br/>
+<br/>
+
 
 <form action="${pageContext.request.contextPath}/user/postBidResult.jsp" method="post">
-
 	<%
+		out.println("<input type='hidden' name='offerId' value='" + offerid + "'/>");
+		//
 		BigDecimal initPrice = (BigDecimal) dataTable.getOneCell(0, 5);
 		BigDecimal increment = (BigDecimal) dataTable.getOneCell(0, 6);
 		BigDecimal curPrice = (BigDecimal) dataTable.getOneCell(0, 11);
@@ -65,7 +72,6 @@
 			minPrice = curPrice.add(increment);
 		}
 		//
-		out.println("<input type='hidden' name='offerId' value='" + offerid + "'/>");
 		out.println("<div>Price(min " + minPrice + ")<input type='number' name='price' min='" + minPrice + "' VALUE='" + minPrice + "'></div>");
 	%>
 

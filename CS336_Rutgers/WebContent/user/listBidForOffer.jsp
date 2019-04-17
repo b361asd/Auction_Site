@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 
 <%@ page import="rutgers.cs336.db.Bid" %>
-<%@ page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
+<%@ page import="static rutgers.cs336.db.DBBase.*" %>
 
 <html>
 
@@ -16,53 +16,35 @@
 <body>
 
 <%
-	String offeridcategoryname = DBBase.getStringFromParamMap("offeridcategoryname", request.getParameterMap());
+	Map data = null;
+	TableData dataTable = null;
 	//
-	String[] temp = offeridcategoryname.split(",");
+	String action = getStringFromParamMap("action", request.getParameterMap());
+	if (action.equals("sort")) {
+		data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
+		if (data != null) {
+			dataTable = (TableData) (data.get(DATA_NAME_DATA));
+			//
+			if (dataTable != null) {
+				String sort = getStringFromParamMap("sort", request.getParameterMap());
+				dataTable.sortRowPerHeader(sort);
+			}
+		}
+	}
 	//
-	Map data = Bid.getBidsForOffer(temp[0]);
+	if (data == null || dataTable == null) {
+		data = Bid.searchBid(request.getParameterMap(), null, null);
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+	}
 	//
-	request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
-	//
-	List lstHeader = (List) (data.get(DATA_NAME_DATA_ADD));
-	List lstRows = (List) (data.get(DATA_NAME_DATA));
+	dataTable = (TableData) (data.get(DATA_NAME_DATA));
+	request.setAttribute("dataTable", dataTable);
 %>
 
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<table>
-	<tr>
-		<%
-			// Header
-			if (lstHeader != null && lstHeader.size() > 0) {
-				for (int i = 1; i < lstHeader.size(); i++) {
-					Object one = lstHeader.get(i);
-					out.println("<td>" + one.toString() + "</td>");
-				}
-			}
-		%>
-	</tr>
-
-	<%
-		if (lstRows != null) {
-			for (Object oneRow : lstRows) {
-				List lstOneRow = (List) oneRow;
-				//
-				out.println("<tr>");
-				for (int i = 1; i < lstOneRow.size(); i++) {   // Skip offerID
-					Object oneField = lstOneRow.get(i);
-					//
-					String oneItem = oneField == null ? "" : oneField.toString();
-					out.println("<td>" + oneItem + "</td>");
-				}
-				//
-				out.println("</tr>");
-			}
-		}
-	%>
-
-</table>
+<%@include file="../showTableTwo.jsp" %>
 
 </body>
 

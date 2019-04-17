@@ -50,7 +50,11 @@
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<%@include file="../showTableTwo.jsp" %>
+<form id="form-sort" target="_self" method="post">
+	<input id="input-sort" type="hidden" name="sort" value="_"/>
+
+	<%@include file="../showTableTwo.jsp" %>
+</form>
 
 </body>
 

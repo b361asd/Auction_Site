@@ -143,8 +143,8 @@ public class TableData {
 		return internalPrintHeaderForTable(false, null);
 	}
 
-	public String printSubHeaderForTable(String width) {
-		return internalPrintHeaderForTable(true, width);
+	public String printSubHeaderForTable() {
+		return internalPrintHeaderForTable(true, null);
 	}
 
 	private String internalPrintHeaderForTable(boolean subTable, String width) {

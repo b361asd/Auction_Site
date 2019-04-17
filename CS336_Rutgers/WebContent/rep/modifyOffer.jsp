@@ -11,13 +11,6 @@
 	<meta charset="utf-8">
 	<title>BuyMe - Modify Offers</title>
 	<link rel="stylesheet" href="../style.css?v=1.0"/>
-
-	<script type="text/javascript">
-       function onClickHeader(value) {
-           document.getElementById('input-sort').value = value;
-           document.getElementById('form-sort').submit();
-       }
-	</script>
 </head>
 
 <body>

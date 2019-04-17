@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="rutgers.cs336.gui.Helper" %>
 <%@ page import="rutgers.cs336.gui.TableData" %>
 
 <%
@@ -7,6 +8,7 @@
 	//
 	boolean _listActivity = _uri.toUpperCase().contains("listActivity.jsp".toUpperCase());         //User
 	boolean _listMyBid = _uri.toUpperCase().contains("listMyBid.jsp".toUpperCase());               //User
+	boolean _listBidForOffer = _uri.toUpperCase().contains("listBidForOffer.jsp".toUpperCase());      //User
 	boolean _viewAlertDetail = _uri.toUpperCase().contains("viewAlertDetail.jsp".toUpperCase());      //User
 	boolean _listBid = _uri.toUpperCase().contains("listBid.jsp".toUpperCase());                  //Rep
 	boolean _modifyBid = _uri.toUpperCase().contains("modifyBid.jsp".toUpperCase());               //Rep
@@ -18,6 +20,10 @@
 		//addCol2nd = 0;
 	}
 	else if (_listMyBid) {
+		//addCol1st = 0;
+		//addCol2nd = 0;
+	}
+	else if (_listBidForOffer) {
 		//addCol1st = 0;
 		//addCol2nd = 0;
 	}
@@ -68,7 +74,7 @@
 						if (addCol2nd == 1) {
 							out.println("<td>Action</td>");
 						}
-						out.println(_dataTableBid.printHeaderForTable());
+						out.println(_dataTableBid.printSubHeaderForTable());
 						out.println("</tr>");
 						out.println("</thead>");
 						out.println("</table>");
@@ -96,8 +102,13 @@
 					else if (_listMyBid) {
 						out.println("NEVER");
 					}
-					else if (_viewAlertDetail) {
+					else if (_listBidForOffer) {
 						out.println("NEVER");
+					}
+					else if (_viewAlertDetail) {
+						if (_dataTable.getOneCell(i, 10).toString().equalsIgnoreCase("Active")) {         //status
+							out.println(Helper.getButton("form-id-doBid", "input-id-doBid", "" + _dataTable.getOneCell(i, 0), "Bid"));
+						}
 					}
 					else if (_listBid) {
 						out.println("NEVER");
@@ -126,13 +137,7 @@
 							//
 							if (addCol2nd == 1) {
 								out.println("<td>");
-								if (_listActivity) {
-									out.println("NEVER");
-								}
-								else if (_listMyBid) {
-									out.println("NEVER");
-								}
-								else if (_viewAlertDetail) {
+								if (_listActivity || _listMyBid || _listBidForOffer || _viewAlertDetail) {
 									out.println("NEVER");
 								}
 								else if (_listBid) {

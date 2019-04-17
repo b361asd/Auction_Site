@@ -3,7 +3,6 @@
 
 <%@ page import="rutgers.cs336.db.Bid" %>
 <%@ page import="rutgers.cs336.db.User" %>
-<%@ page import="rutgers.cs336.gui.Helper" %>
 <%@ page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
@@ -23,15 +22,8 @@
 	</script>
 </head>
 
+
 <body>
-
-<form id="form-id-cancelBid" action="${pageContext.request.contextPath}/rep/cancelBid.jsp" method="post">
-	<input id="input-id-cancelBid" type="hidden" name="bidID" value="_"/>
-</form>
-
-<form id="form-id-modifyBid" action="${pageContext.request.contextPath}/rep/modifyBid.jsp" method="post">
-	<input id="input-id-modifyBid" type="hidden" name="bidIDofferIDBuyer" value="_"/>
-</form>
 
 <%
 	List lstUser = User.getUserList();
@@ -72,6 +64,9 @@
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
+<br/>
+<br/>
+
 <form id='form-getActivity' method='post'>
 	<%
 		out.println("<input type='hidden' name='action' value='getActivity'/>");
@@ -90,6 +85,9 @@
 		out.println("</table>");
 	%>
 </form>
+
+<br/>
+<br/>
 
 <%@include file="../showTableTwo.jsp" %>
 

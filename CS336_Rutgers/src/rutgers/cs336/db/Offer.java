@@ -61,17 +61,8 @@ public class Offer extends DBBase {
 	public static Map doSearchOfferByID(String offerid) {
 		StringBuilder sb = FormatterOfferQuery.initQuerySearch();
 		//
-		{
-			String offerIDOP  = FormatterOfferQuery.OP_SZ_EQUAL;
-			String offerIDVal = offerid;
-			FormatterOfferQuery.addCondition(sb, "o.offerID", offerIDOP, offerIDVal, null);
-		}
-		//
-		{
-			String statusOP  = FormatterOfferQuery.OP_INT_EQUAL;
-			String statusVal = "1";    // Active
-			FormatterOfferQuery.addCondition(sb, "o.status", statusOP, statusVal, null);
-		}
+		FormatterOfferQuery.addCondition(sb, "o.offerID", FormatterOfferQuery.OP_SZ_EQUAL, offerid, null);
+		FormatterOfferQuery.addCondition(sb, "o.status", FormatterOfferQuery.OP_INT_EQUAL, "1", null);
 		//
 		FormatterOfferQuery.doneQuerySearch(sb);
 		//
@@ -86,6 +77,7 @@ public class Offer extends DBBase {
 		//
 		return doSearchOfferInternal(sql);
 	}
+
 
 	public static Map doSearchOffer(Map<String, String[]> parameters) {
 		StringBuilder sb  = formatSQLWithParametersForSearchOrAlert(parameters, null, true);

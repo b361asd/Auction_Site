@@ -18,19 +18,14 @@
 	String userID = (String) request.getSession().getAttribute("user");
 	Map data = Offer.doCreateOrModifyOffer(userID, request.getParameterMap(), true);
 	//
-	String status = data.get(DATA_NAME_STATUS).toString();
-	String message = (String) data.get(DATA_NAME_MESSAGE);
-	//
-	String sessionMessage = "Welcome to BuyMe!";
-	if (request.getSession() == null) {
-		sessionMessage = "Welcome to BuyMe no session!";
+	String message = "";
+	if ((Boolean) data.get(DATA_NAME_STATUS)) {
+		message = "Bid Posted.";
 	}
 	else {
-		sessionMessage = (String) request.getSession().getAttribute("message");
-		if (sessionMessage == null) {
-			sessionMessage = "Welcome to BuyMe.";
-		}
+		message = "Error in Posting Offer: " + data.get(DATA_NAME_MESSAGE);
 	}
+	;
 %>
 
 
@@ -40,8 +35,8 @@
 <%@include file="nav.jsp" %>
 <%@include file="../header.jsp" %>
 
-<h1><%=message%>
-</h1>
+<h3><%=message%>
+</h3>
 
 </body>
 

@@ -18,29 +18,21 @@
 	String userID = (String) request.getSession().getAttribute("user");
 	Map data = Bid.doCreateOrModifyBid(userID, request.getParameterMap(), true);
 	//
-	String status = data.get(DATA_NAME_STATUS).toString();
-	String message = (String) data.get(DATA_NAME_MESSAGE);
-	//
-	String sessionMessage = "Welcome to BuyMe!";
-	if (request.getSession() == null) {
-		sessionMessage = "Welcome to BuyMe no session!";
+	String message;
+	if ((Boolean) data.get(DATA_NAME_STATUS)) {
+		message = "Bid Posted.";
 	}
 	else {
-		sessionMessage = (String) request.getSession().getAttribute("message");
-		if (sessionMessage == null) {
-			sessionMessage = "Welcome to BuyMe.";
-		}
+		message = "Error in Posting Bid: " + data.get(DATA_NAME_MESSAGE);
 	}
+	;
 %>
-<h1><%=sessionMessage%>
-</h1>
-<h1><%=status%>
-</h1>
-<h1><%=message%>
-</h1>
 
-<%@include file="nav.jsp" %>
 <%@include file="../header.jsp" %>
+<%@include file="nav.jsp" %>
+
+<h3><%=message%>
+</h3>
 
 </body>
 

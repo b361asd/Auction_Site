@@ -16,3 +16,16 @@
 	</tr>
 	</thead>
 </table>
+
+<form id="form-id-doBid" action="${pageContext.request.contextPath}/user/postBid.jsp" method="post">
+	<input id="input-id-doBid" type="hidden" name="offerid" value="_"/>
+</form>
+
+<form id="form-id-listBid" action="${pageContext.request.contextPath}/user/listBidForOffer.jsp" method="post">
+	<input id="input-id-listBid" type="hidden" name="offeridcategoryname" value="_"/>
+</form>
+
+<form id="form-id-listSimilar" action="${pageContext.request.contextPath}/user/listOffer.jsp" method="post">
+	<input type="hidden" name="action" value="listSimilar"/>
+	<input id="input-id-listSimilar" type="hidden" name="offeridcategorynameconditioncode" value="_"/>
+</form>
