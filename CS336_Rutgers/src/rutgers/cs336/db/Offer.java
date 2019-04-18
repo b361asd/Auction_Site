@@ -173,6 +173,58 @@ public class Offer extends DBBase {
 		return sb;
 	}
 
+	public static StringBuilder formatAlertDescription(Map<String, String[]> parameters, String userID) {
+		StringBuilder sb = new StringBuilder();
+		//
+		{
+			String sellerOP  = getStringFromParamMap("sellerOP", parameters);
+			String sellerVal = getStringFromParamMap("sellerVal", parameters);
+			oneConditionDesc(sb, "seller", sellerOP, sellerVal, null);
+		}
+		//
+		{
+			String categoryNameOP = FormatterOfferQuery.OP_SZ_EQUAL_MULTI_NO_ESCAPE;
+			String categoryNames  = getListOfStringsFromParamMap("categoryName", 1, parameters, "");
+			//
+			oneConditionDesc(sb, "categoryName", categoryNameOP, categoryNames, null);
+		}
+		//
+		{
+			String lstCondition = "";
+			for (int i = 1; i <= 6; i++) {
+				String temp = getStringFromParamMap("conditionCode_" + i, parameters);
+				if (temp.length() > 0) {
+					if (lstCondition.equals("")) {
+						lstCondition = Helper.getConditionFromCode("" + i);
+					}
+					else {
+						lstCondition = lstCondition + "," + Helper.getConditionFromCode("" + i);
+					}
+				}
+			}
+			oneConditionDesc(sb, "conditionCode", FormatterOfferQuery.OP_SZ_EQUAL_MULTI_NO_ESCAPE, lstCondition, null);
+		}
+		{
+			String descriptionOP  = getStringFromParamMap("descriptionOP", parameters);
+			String descriptionVal = getStringFromParamMap("descriptionVal", parameters);
+			oneConditionDesc(sb, "description", descriptionOP, descriptionVal, null);
+		}
+		//
+		Map<String, String> mapFieldIDTotext = CategoryAndField.getMapFieldIDToText();
+		//
+		String   lstFieldIDs = getStringFromParamMap("lstFieldIDs", parameters);
+		String[] fieldIDs    = lstFieldIDs.split(",");
+		for (String fieldID : fieldIDs) {
+			//
+			String fieldOP   = getStringFromParamMap("fieldop_" + fieldID, parameters);
+			String fieldVal1 = getStringFromParamMap("fieldval1_" + fieldID, parameters);
+			String fieldVal2 = getStringFromParamMap("fieldval2_" + fieldID, parameters);
+			oneConditionDesc(sb, mapFieldIDTotext.get(fieldID), fieldOP, fieldVal1, fieldVal2);
+		}
+		//
+		return sb;
+	}
+
 
 	private static Map doSearchOfferInternal(String sql) {
 		Map output = new HashMap();
@@ -523,17 +575,19 @@ public class Offer extends DBBase {
 				Object buyer         = rs.getObject(2);
 				Object criterionName = rs.getObject(3);
 				Object triggerTxt    = rs.getObject(4);
-				Object generateDate  = rs.getObject(5);
+				Object description   = rs.getObject(5);
+				Object generateDate  = rs.getObject(6);
 				//
 				//
-				Object[] currentRow = new Object[5];
+				Object[] currentRow = new Object[6];
 				lstRows.add(currentRow);
 				//
 				currentRow[0] = criterionID;
 				currentRow[1] = buyer;
 				currentRow[2] = criterionName;
 				currentRow[3] = triggerTxt;
-				currentRow[4] = generateDate;
+				currentRow[4] = description;
+				currentRow[5] = generateDate;
 			}
 			rs.close();
 			//
@@ -546,7 +600,7 @@ public class Offer extends DBBase {
 				if (pStmtInsertAlert != null) {
 					pStmtInsertAlert.close();
 				}
-				pStmtInsertAlert = con.prepareStatement(oneRow[3].toString());
+				pStmtInsertAlert = con.prepareStatement(oneRow[3].toString());            //triggerTxt
 				pStmtInsertAlert.setString(1, oneRow[1].toString());
 				pStmtInsertAlert.setString(2, offerID);
 				pStmtInsertAlert.setString(3, context);
@@ -714,9 +768,11 @@ public class Offer extends DBBase {
 	public static void main(String[] args) {
 		System.out.println("Start");
 		//
-		doSearchOfferByID("5948e21eeae14dcaa8d58ada0d79a773");
+		//doSearchOfferByID("5948e21eeae14dcaa8d58ada0d79a773");
+		doCreateAllerts("faa5701026484feb930533ca6e3d8f16");
 	}
 }
+
 
 //Search
 //,,,,fieldval1_2=wefrwefr,fieldval2_3=2222,fieldval1_4=sdfsdfs,fieldval2_5=34234,fieldop_6=no,fieldval1_7=234234,action=modifyOffer,offeridcategoryname=6bc17ded8d0e4300ae8ce80a5fa85b8d,car,lstFieldIDs=1,2,3,4,5,6,7

@@ -32,6 +32,7 @@ public interface ISQLConstant {
 
 	// CategoryField
 	String SQL_CATEGORYFIELD_SELECT = "SELECT categoryName, CategoryField.fieldID, fieldName, fieldType FROM CategoryField INNER JOIN Field ON CategoryField.fieldID = Field.fieldID ORDER BY categoryName, CategoryField.fieldID";
+	String SQL_FIELD_SELECT         = "SELECT fieldID, fieldName, fieldType FROM Field";
 
 
 	// Offer
@@ -70,9 +71,9 @@ public interface ISQLConstant {
 
 
 	// OfferAlertCriterion
-	String SQL_OFFERALERTCRITERION_INSERT      = "INSERT INTO OfferAlertCriterion (criterionID, buyer, criterionName, triggerTxt, generateDate) VALUES (?, ?, ?, ?, NOW())";
-	String SQL_OFFERALERTCRITERION_SELECT      = "select criterionID, buyer, criterionName, triggerTxt, generateDate FROM OfferAlertCriterion";
-	String SQL_OFFERALERTCRITERION_SELECT_USER = "select criterionID, buyer, criterionName, triggerTxt, generateDate FROM OfferAlertCriterion Where buyer = ?";
+	String SQL_OFFERALERTCRITERION_INSERT      = "INSERT INTO OfferAlertCriterion (criterionID, buyer, criterionName, triggerTxt, description, generateDate) VALUES (?, ?, ?, ?, ?, NOW())";
+	String SQL_OFFERALERTCRITERION_SELECT      = "select criterionID, buyer, criterionName, triggerTxt, description, generateDate FROM OfferAlertCriterion";
+	String SQL_OFFERALERTCRITERION_SELECT_USER = "select criterionID, buyer, criterionName, triggerTxt, description, generateDate FROM OfferAlertCriterion Where buyer = ?";
 	String SQL_OFFERALERTCRITERION_DELETE      = "DELETE from OfferAlertCriterion WHERE criterionID = ?";
 
 
@@ -81,6 +82,8 @@ public interface ISQLConstant {
 	String SQL_QUESTION_UPDATE_WITH_ANSWER = "UPDATE Question SET answer = ?, repID = ?, answerDate = NOW() WHERE questionID = ? AND (answer IS NULL OR answer = '')";
 	String SQL_QUESTION_QUERY_OPEN         = "SELECT questionID, userID, question, questionDate FROM Question WHERE (answer IS NULL OR answer = '')";
 }
+
+
 
 /*
 Project Checklist:

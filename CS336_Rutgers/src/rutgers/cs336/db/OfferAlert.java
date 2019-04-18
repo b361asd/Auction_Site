@@ -9,8 +9,8 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class OfferAlert extends DBBase {
-	private static List  lstHeader_offeralert = Arrays.asList("criterionID", "buyer", "criterionName", "triggerTxt", "generateDate");
-	private static int[] colSeq_offeralert    = {1, 2, 3, 4};
+	private static List  lstHeader_offeralert = Arrays.asList("criterionID", "buyer", "criterionName", "triggerTxt", "description", "generateDate");
+	private static int[] colSeq_offeralert    = {1, 2, 4, 5};
 
 
 	public static Map doGenerateNewOfferAlertCriterion(String userID, Map<String, String[]> parameters) {
@@ -21,7 +21,8 @@ public class OfferAlert extends DBBase {
 			criterionName = "Unnamed";
 		}
 		//
-		StringBuilder sb = Offer.formatSQLWithParametersForSearchOrAlert(parameters, userID, false);
+		StringBuilder sbTrigger = Offer.formatSQLWithParametersForSearchOrAlert(parameters, userID, false);
+		StringBuilder sbDesc 	= Offer.formatAlertDescription(parameters, userID);
 		//
 		Connection        con          = null;
 		PreparedStatement preparedStmt = null;
@@ -33,7 +34,8 @@ public class OfferAlert extends DBBase {
 			preparedStmt.setString(1, getUUID());
 			preparedStmt.setString(2, userID);
 			preparedStmt.setString(3, criterionName);
-			preparedStmt.setString(4, sb.toString());
+			preparedStmt.setString(4, sbTrigger.toString());
+			preparedStmt.setString(5, sbDesc.toString());
 			//
 			preparedStmt.execute();
 			//
@@ -42,7 +44,7 @@ public class OfferAlert extends DBBase {
 		}
 		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sb != null ? sb.toString() : null));
+			output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() );
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
@@ -51,22 +53,8 @@ public class OfferAlert extends DBBase {
 			e.printStackTrace();
 		}
 		finally {
-			if (preparedStmt != null) {
-				try {
-					preparedStmt.close();
-				}
-				catch (Throwable e) {
-					e.printStackTrace();
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (Throwable e) {
-					e.printStackTrace();
-				}
-			}
+			if (preparedStmt != null) {try {preparedStmt.close();} catch (Throwable e) {e.printStackTrace();}}
+			if (con != null) {try {con.close();} catch (Throwable e) {e.printStackTrace();}}
 		}
 		//
 		return output;
@@ -97,7 +85,8 @@ public class OfferAlert extends DBBase {
 				Object buyer         = rs.getObject(2);
 				Object criterionName = rs.getObject(3);
 				Object triggerTxt    = rs.getObject(4);
-				Object generateDate  = rs.getObject(5);
+				Object description	= rs.getObject(5);
+				Object generateDate  = rs.getObject(6);
 				//
 				List currentRow = new LinkedList();
 				lstRows.add(currentRow);
@@ -106,6 +95,7 @@ public class OfferAlert extends DBBase {
 				currentRow.add(buyer);
 				currentRow.add(criterionName);
 				currentRow.add(triggerTxt);
+				currentRow.add(description);
 				currentRow.add(generateDate);
 			}
 			//
@@ -125,22 +115,8 @@ public class OfferAlert extends DBBase {
 			e.printStackTrace();
 		}
 		finally {
-			if (preparedStmt != null) {
-				try {
-					preparedStmt.close();
-				}
-				catch (Throwable e) {
-					e.printStackTrace();
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (Throwable e) {
-					e.printStackTrace();
-				}
-			}
+			if (preparedStmt != null) {try {preparedStmt.close();}catch (Throwable e) {e.printStackTrace();}}
+			if (con != null) {try {con.close();} catch (Throwable e) {e.printStackTrace();}}
 		}
 		//
 		return output;
@@ -183,22 +159,8 @@ public class OfferAlert extends DBBase {
 			e.printStackTrace();
 		}
 		finally {
-			if (preparedStmt != null) {
-				try {
-					preparedStmt.close();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
+			if (preparedStmt != null) {try {preparedStmt.close();} catch (Throwable t) {t.printStackTrace();}}
+			if (con != null) {try {con.close();} catch (Throwable t) {t.printStackTrace();}}
 		}
 		//
 		return output;

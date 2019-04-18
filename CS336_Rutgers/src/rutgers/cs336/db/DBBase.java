@@ -171,7 +171,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		else if (op.equals(OP_BOOL_TRUE) || op.equals(OP_BOOL_FALSE)) {                  // Boolean
 			if (op.equals(OP_BOOL_TRUE)) {
 				if (isCasting) {
-					output = "(UPPER(" + columnName + ") = 'YES')";                           	//UPPER('yes')
+					output = "(UPPER(" + columnName + ") = 'YES')";                              //UPPER('yes')
 				}
 				else {
 					output = "(" + columnName + ")";
@@ -237,6 +237,108 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 			}
 		}
 		//
+	}
+
+
+	public static void oneConditionDesc(StringBuilder sb, String columnName, String op, String value, String valueAdd) {
+		if (columnName == null) {
+			columnName = "Unknown";
+		}
+		//
+		if (op.equalsIgnoreCase(OP_BOOL_TRUE)) {
+			sb.append(columnName);
+			sb.append("; ");
+		}
+		else if (op.equalsIgnoreCase(OP_BOOL_FALSE)) {
+			sb.append("not ");
+			sb.append(columnName);
+			sb.append("; ");
+		}
+		else {
+			if (value != null && value.trim().length() != 0) {
+				if (op.equalsIgnoreCase(OP_ANY)) {
+					sb.append("any ");
+					sb.append(columnName);
+					sb.append("; ");
+				}
+				else if (op.equalsIgnoreCase(OP_SZ_EQUAL)) {
+					sb.append(columnName);
+					sb.append(" is ");
+					sb.append(value);
+					sb.append("; ");
+				}
+				else if (op.equalsIgnoreCase(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
+					sb.append(columnName);
+					sb.append(" is among ");
+					sb.append(value);
+					sb.append("; ");
+				}
+				else if (op.equalsIgnoreCase(OP_SZ_NOT_EQUAL)) {
+					sb.append(columnName);
+					sb.append(" is not ");
+					sb.append(value);
+					sb.append("; ");
+				}
+				else if (op.equalsIgnoreCase(OP_SZ_START_WITH)) {
+					sb.append(columnName);
+					sb.append(" starts with ");
+					sb.append(value);
+					sb.append("; ");
+				}
+				else if (op.equalsIgnoreCase(OP_SZ_CONTAIN)) {
+					sb.append(columnName);
+					sb.append(" contains ");
+					sb.append(value);
+					sb.append("; ");
+				}
+				else if (op.equalsIgnoreCase(OP_INT_EQUAL)) {
+					sb.append(columnName);
+					sb.append(" is ");
+					sb.append(value);
+					sb.append("; ");
+				}
+				else if (op.equalsIgnoreCase(OP_INT_EQUAL_MULTI)) {
+					sb.append(columnName);
+					sb.append(" is among ");
+					sb.append(value);
+					sb.append("; ");
+				}
+				else if (op.equalsIgnoreCase(OP_INT_NOT_EQUAL)) {
+					sb.append(columnName);
+					sb.append(" is not ");
+					sb.append(value);
+					sb.append("; ");
+				}
+				else if (op.equalsIgnoreCase(OP_INT_EQUAL_OR_OVER)) {
+					sb.append(columnName);
+					sb.append(" is equal or over ");
+					sb.append(value);
+					sb.append("; ");
+				}
+				else if (op.equalsIgnoreCase(OP_INT_EQUAL_OR_UNDER)) {
+					sb.append(columnName);
+					sb.append(" is equal or under ");
+					sb.append(value);
+					sb.append("; ");
+				}
+				else if (op.equalsIgnoreCase(OP_INT_BETWEEN)) {
+					if (valueAdd != null && valueAdd.trim().length() != 0) {
+						sb.append(columnName);
+						sb.append(" is between ");
+						sb.append(value);
+						sb.append(" and ");
+						sb.append(valueAdd);
+						sb.append("; ");
+					}
+				}
+				else {
+					sb.append(columnName);
+					sb.append(" is unknow: ");
+					sb.append(value);
+					sb.append("; ");
+				}
+			}
+		}
 	}
 
 

@@ -66,17 +66,6 @@
 		out.println("</td>");
 		out.println("</tr>");
 		//
-		out.println("<tr>");
-		out.println("<td align='left'>");
-		out.println("currentBidPrice");
-		out.println("</td>");
-		out.println("<td align='left'>");
-		out.println(getOPIntSelection("priceOP"));
-		out.println("<input type='number' name='priceVal1'/>");
-		out.println("<input type='number' name='priceVal2'/>");
-		out.println("</td>");
-		out.println("</tr>");
-		//
 		List lstField = (List) data.get(CategoryAndField.DATA_FIELD_LIST);
 		String lstFieldIDs = null;
 		for (Object o : lstField) {

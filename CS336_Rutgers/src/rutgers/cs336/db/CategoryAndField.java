@@ -152,7 +152,57 @@ public class CategoryAndField extends DBBase {
 	}
 
 
+	public static Map<String, String> getMapFieldIDToText() {
+		Map<String, String> output = new HashMap<>();
+		//
+		Connection con  = null;
+		Statement  stmt = null;
+		try {
+			con = getConnection();
+			//
+			stmt = con.createStatement();
+			//
+			ResultSet rs = stmt.executeQuery(SQL_FIELD_SELECT);
+			//
+			while (rs.next()) {
+				Object fieldID   = rs.getObject(1);
+				Object fieldName = rs.getObject(2);
+				Object fieldType = rs.getObject(3);
+				//
+				output.put(fieldID.toString(), fieldName.toString());
+			}
+		}
+		catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				}
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		//
+		return output;
+	}
+
+
 	public static void main(String[] args) {
+		System.out.println("Start");
+		//
+		Map map1 = getMapFieldIDToText();
+		//
 		Map map = getCategoryField(null);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));

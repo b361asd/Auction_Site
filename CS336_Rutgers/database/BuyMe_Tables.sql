@@ -170,6 +170,7 @@ CREATE TABLE OfferAlertCriterion
 	criterionName VARCHAR(64)   NOT NULL,
     --
 	triggerTxt   VARCHAR(2048) NOT NULL,
+	description  VARCHAR(2048) NOT NULL,
     --
 	generateDate DATETIME    NOT NULL,
 	--
