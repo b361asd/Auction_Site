@@ -17,7 +17,7 @@
 <body>
 
 <%
-	Map data = Offer.doSearchOffer(request.getParameterMap());
+	Map data = Offer.doSearchOffer(request.getParameterMap(), false);
 	//
 	request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 	//

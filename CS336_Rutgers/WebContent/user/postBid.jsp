@@ -19,7 +19,7 @@
 <%
 	String offerid = getStringFromParamMap("offerid", request.getParameterMap());
 	//
-	Map data = Offer.doSearchOfferByID(offerid);
+	Map data = Offer.doSearchOfferByID(offerid, false);
 	//
 	request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 	//

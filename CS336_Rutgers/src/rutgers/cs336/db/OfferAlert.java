@@ -22,7 +22,7 @@ public class OfferAlert extends DBBase {
 		}
 		//
 		StringBuilder sbTrigger = Offer.formatSQLWithParametersForSearchOrAlert(parameters, userID, false);
-		StringBuilder sbDesc 	= Offer.formatAlertDescription(parameters, userID);
+		StringBuilder sbDesc    = Offer.formatAlertDescription(parameters, userID);
 		//
 		Connection        con          = null;
 		PreparedStatement preparedStmt = null;
@@ -44,7 +44,7 @@ public class OfferAlert extends DBBase {
 		}
 		catch (SQLException e) {
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() );
+			output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState());
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
@@ -53,8 +53,22 @@ public class OfferAlert extends DBBase {
 			e.printStackTrace();
 		}
 		finally {
-			if (preparedStmt != null) {try {preparedStmt.close();} catch (Throwable e) {e.printStackTrace();}}
-			if (con != null) {try {con.close();} catch (Throwable e) {e.printStackTrace();}}
+			if (preparedStmt != null) {
+				try {
+					preparedStmt.close();
+				}
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				}
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		//
 		return output;
@@ -72,11 +86,8 @@ public class OfferAlert extends DBBase {
 		try {
 			con = getConnection();
 			//
-			preparedStmt = con.prepareStatement(isUser ? SQL_OFFERALERTCRITERION_SELECT_USER : SQL_OFFERALERTCRITERION_SELECT);
-			//
-			if (isUser) {
-				preparedStmt.setString(1, userName);
-			}
+			preparedStmt = con.prepareStatement(isUser ? SQL_OFFERALERTCRITERION_SELECT_USER : SQL_OFFERALERTCRITERION_SELECT_EX_USER);
+			preparedStmt.setString(1, userName);
 			//
 			ResultSet rs = preparedStmt.executeQuery();
 			//
@@ -85,7 +96,7 @@ public class OfferAlert extends DBBase {
 				Object buyer         = rs.getObject(2);
 				Object criterionName = rs.getObject(3);
 				Object triggerTxt    = rs.getObject(4);
-				Object description	= rs.getObject(5);
+				Object description   = rs.getObject(5);
 				Object generateDate  = rs.getObject(6);
 				//
 				List currentRow = new LinkedList();
@@ -115,8 +126,22 @@ public class OfferAlert extends DBBase {
 			e.printStackTrace();
 		}
 		finally {
-			if (preparedStmt != null) {try {preparedStmt.close();}catch (Throwable e) {e.printStackTrace();}}
-			if (con != null) {try {con.close();} catch (Throwable e) {e.printStackTrace();}}
+			if (preparedStmt != null) {
+				try {
+					preparedStmt.close();
+				}
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				}
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		//
 		return output;
@@ -159,8 +184,22 @@ public class OfferAlert extends DBBase {
 			e.printStackTrace();
 		}
 		finally {
-			if (preparedStmt != null) {try {preparedStmt.close();} catch (Throwable t) {t.printStackTrace();}}
-			if (con != null) {try {con.close();} catch (Throwable t) {t.printStackTrace();}}
+			if (preparedStmt != null) {
+				try {
+					preparedStmt.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
 		}
 		//
 		return output;

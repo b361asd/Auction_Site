@@ -1,17 +1,20 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="rutgers.cs336.gui.Helper" %>
+<%@ page import="static rutgers.cs336.db.DBBase.*" %>
 <%@ page import="rutgers.cs336.gui.TableData" %>
 
 <%
+	String __userID = (String) session.getAttribute(SESSION_ATTRIBUTE_USER);
+	//
 	TableData _dataTable = (TableData) request.getAttribute("dataTable");
 	String _uri = request.getRequestURI();
 	//
-	boolean _listActivity = _uri.toUpperCase().contains("listActivity.jsp".toUpperCase());         //User
-	boolean _listMyBid = _uri.toUpperCase().contains("listMyBid.jsp".toUpperCase());               //User
-	boolean _listBidForOffer = _uri.toUpperCase().contains("listBidForOffer.jsp".toUpperCase());      //User
-	boolean _viewAlertDetail = _uri.toUpperCase().contains("viewAlertDetail.jsp".toUpperCase());      //User
-	boolean _listBid = _uri.toUpperCase().contains("listBid.jsp".toUpperCase());                  //Rep
-	boolean _modifyBid = _uri.toUpperCase().contains("modifyBid.jsp".toUpperCase());               //Rep
+	boolean _listActivity = _uri.toUpperCase().indexOf("listActivity.jsp".toUpperCase()) >= 0;         //User
+	boolean _listMyBid = _uri.toUpperCase().indexOf("listMyBid.jsp".toUpperCase()) >= 0;               //User
+	boolean _listBidForOffer = _uri.toUpperCase().indexOf("listBidForOffer.jsp".toUpperCase()) >= 0;      //User
+	boolean _viewAlertDetail = _uri.toUpperCase().indexOf("viewAlertDetail.jsp".toUpperCase()) >= 0;      //User
+	boolean _listBid = _uri.toUpperCase().indexOf("listBid.jsp".toUpperCase()) >= 0;                  //Rep
+	boolean _modifyBid = _uri.toUpperCase().indexOf("modifyBid.jsp".toUpperCase()) >= 0;               //Rep
 	//
 	int addCol1st = 0;
 	int addCol2nd = 0;
@@ -106,7 +109,9 @@
 						out.println("NEVER");
 					}
 					else if (_viewAlertDetail) {
-						if (_dataTable.getOneCell(i, 10).toString().equalsIgnoreCase("Active")) {         //status
+						String _seller = _dataTable.getOneCell(i, 1).toString();
+						String _status = _dataTable.getOneCell(i, 10).toString();
+						if (!__userID.equalsIgnoreCase(_seller) && _status.equalsIgnoreCase("Active")) {         //status
 							out.println(Helper.getButton("form-id-doBid", "input-id-doBid", "" + _dataTable.getOneCell(i, 0), "Bid"));
 						}
 					}
@@ -137,7 +142,16 @@
 							//
 							if (addCol2nd == 1) {
 								out.println("<td>");
-								if (_listActivity || _listMyBid || _listBidForOffer || _viewAlertDetail) {
+								if (_listActivity) {
+									out.println("NEVER");
+								}
+								else if (_listMyBid) {
+									out.println("NEVER");
+								}
+								else if (_listBidForOffer) {
+									out.println("NEVER");
+								}
+								else if (_viewAlertDetail) {
 									out.println("NEVER");
 								}
 								else if (_listBid) {

@@ -35,13 +35,13 @@
 		Map categoryAndField = null;
 		TableData dataTable = null;
 		//
-		String offeridcategoryname = DBBase.getStringFromParamMap("offeridcategoryname", request.getParameterMap());
+		String offeridcategorynameuser = DBBase.getStringFromParamMap("offeridcategorynameuser", request.getParameterMap());
 		//
-		String[] temps = offeridcategoryname.split(",");
+		String[] temps = offeridcategorynameuser.split(",");
 		//
 		String action = getStringFromParamMap("action", request.getParameterMap());
 		if (action.equals("modifyOffer")) {
-			dataModify = Offer.doCreateOrModifyOffer(null, request.getParameterMap(), false);
+			dataModify = Offer.doCreateOrModifyOffer(temps[2], request.getParameterMap(), false);
 		}
 		else if (action.equals("startModifyOffer")) {
 		}
@@ -50,7 +50,7 @@
 		List lstCategory = (List) categoryAndField.get(CategoryAndField.DATA_CATEGORY_LIST);
 		List lstField = (List) categoryAndField.get(CategoryAndField.DATA_FIELD_LIST);
 		//
-		data = Offer.doSearchOfferByID(temps[0]);
+		data = Offer.doSearchOfferByID(temps[0], true);
 		//
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 		//

@@ -10,13 +10,13 @@ public interface ISQLConstant {
 
 	// User
 	String SQL_USER_INSERT       = "INSERT INTO User (username, password, email, firstname, lastname, address, phone, active, userType) SELECT ?, ?, ?, ?, ?, ?, ?, true, ? FROM DUAL WHERE NOT EXISTS (SELECT * FROM User u WHERE UPPER(u.username) = UPPER(?))";
-	String SQL_USER_AUTH         = "SELECT password, firstname, lastname, active, userType FROM User WHERE username = ?";
+	String SQL_USER_AUTH         = "SELECT password, firstname, lastname, active, userType FROM User WHERE UPPER(username) = UPPER(?)";
 	String SQL_USER_SELECT       = "SELECT username, password, email, firstname, lastname, address, phone, active FROM User WHERE userType = ?";
-	String SQL_USER_SELECT_ONE   = "SELECT username, password, email, firstname, lastname, address, phone, active FROM User WHERE username = ? AND userType = ?";
+	String SQL_USER_SELECT_ONE   = "SELECT username, password, email, firstname, lastname, address, phone, active FROM User WHERE UPPER(username) = UPPER(?) AND userType = ?";
 	String SQL_USER_SELECTUSERID = "SELECT Distinct username FROM User WHERE userType = 3 order by username";
-	String SQL_USER_ACTIVE       = "UPDATE User SET active = true where username = ?";
-	String SQL_USER_DEACTIVE     = "UPDATE User SET active = false where username = ?";
-	String SQL_USER_UPDATE       = "UPDATE User SET password = ?, email = ?, firstname = ?, lastname = ?, address = ?, phone = ? WHERE username = ? AND userType = ?";
+	String SQL_USER_ACTIVE       = "UPDATE User SET active = true where UPPER(username) = UPPER(?)";
+	String SQL_USER_DEACTIVE     = "UPDATE User SET active = false where UPPER(username) = UPPER(?)";
+	String SQL_USER_UPDATE       = "UPDATE User SET password = ?, email = ?, firstname = ?, lastname = ?, address = ?, phone = ? WHERE UPPER(username) = UPPER(?) AND userType = ?";
 
 
 	// Bid
@@ -71,10 +71,10 @@ public interface ISQLConstant {
 
 
 	// OfferAlertCriterion
-	String SQL_OFFERALERTCRITERION_INSERT      = "INSERT INTO OfferAlertCriterion (criterionID, buyer, criterionName, triggerTxt, description, generateDate) VALUES (?, ?, ?, ?, ?, NOW())";
-	String SQL_OFFERALERTCRITERION_SELECT      = "select criterionID, buyer, criterionName, triggerTxt, description, generateDate FROM OfferAlertCriterion";
-	String SQL_OFFERALERTCRITERION_SELECT_USER = "select criterionID, buyer, criterionName, triggerTxt, description, generateDate FROM OfferAlertCriterion Where buyer = ?";
-	String SQL_OFFERALERTCRITERION_DELETE      = "DELETE from OfferAlertCriterion WHERE criterionID = ?";
+	String SQL_OFFERALERTCRITERION_INSERT         = "INSERT INTO OfferAlertCriterion (criterionID, buyer, criterionName, triggerTxt, description, generateDate) VALUES (?, ?, ?, ?, ?, NOW())";
+	String SQL_OFFERALERTCRITERION_SELECT_EX_USER = "select criterionID, buyer, criterionName, triggerTxt, description, generateDate FROM OfferAlertCriterion Where NOT UPPER(buyer) = UPPER(?)";
+	String SQL_OFFERALERTCRITERION_SELECT_USER    = "select criterionID, buyer, criterionName, triggerTxt, description, generateDate FROM OfferAlertCriterion Where UPPER(buyer) = UPPER(?)";
+	String SQL_OFFERALERTCRITERION_DELETE         = "DELETE from OfferAlertCriterion WHERE criterionID = ?";
 
 
 	// Question

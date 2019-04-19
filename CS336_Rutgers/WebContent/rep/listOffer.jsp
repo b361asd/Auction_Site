@@ -20,7 +20,7 @@
 
 <form id="form-id-modifyOffer" action="${pageContext.request.contextPath}/rep/modifyOffer.jsp" method="post">
 	<input type="hidden" name="action" value="startModifyOffer"/>
-	<input id="input-id-modifyOffer" type="hidden" name="offeridcategoryname" value="_"/>
+	<input id="input-id-modifyOffer" type="hidden" name="offeridcategorynameuser" value="_"/>
 </form>
 
 <form id="form-sort" target="_self" method="post">

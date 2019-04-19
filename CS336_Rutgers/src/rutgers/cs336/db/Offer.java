@@ -17,7 +17,7 @@ public class Offer extends DBBase {
 
 
 	// For search Bid
-	public static Map doSearchByOfferIDSet(Set<String> offerIDSet) {
+	public static Map doSearchByOfferIDSet(Set<String> offerIDSet, boolean showAll) {
 		StringBuilder sb;
 		//
 		sb = FormatterOfferQuery.initQuerySearch();
@@ -26,7 +26,7 @@ public class Offer extends DBBase {
 		//
 		FormatterOfferQuery.doneQuerySearch(sb);
 		//
-		return doSearchOfferInternal(sb.toString());
+		return doSearchOfferInternal(sb.toString(), showAll);
 	}
 
 
@@ -34,10 +34,11 @@ public class Offer extends DBBase {
 	public static Map doSearchUserActivity(String userID) {
 		String sql = FormatterOfferQuery.buildSQLUserActivityOffer(userID);
 		//
-		return doSearchOfferInternal(sql);
+		return doSearchOfferInternal(sql, false);
 	}
 
 
+	// From user
 	public static Map doSearchSimilar(String offeridcategorynameconditioncode) {
 		Map output;
 		//
@@ -48,7 +49,7 @@ public class Offer extends DBBase {
 		//
 		String sql = FormatterOfferQuery.buildSQLSimilarOffer(categoryName, conditionCode);
 		//
-		output = doSearchOfferInternal(sql);
+		output = doSearchOfferInternal(sql, false);
 		//
 		TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
 		//
@@ -58,7 +59,9 @@ public class Offer extends DBBase {
 	}
 
 
-	public static Map doSearchOfferByID(String offerid) {
+	//postBit (user)
+	//modifyOffer (rep)
+	public static Map doSearchOfferByID(String offerid, boolean showAll) {
 		StringBuilder sb = FormatterOfferQuery.initQuerySearch();
 		//
 		FormatterOfferQuery.addCondition(sb, "o.offerID", FormatterOfferQuery.OP_SZ_EQUAL, offerid, null);
@@ -68,22 +71,22 @@ public class Offer extends DBBase {
 		//
 		String sql = sb.toString();
 		//
-		return doSearchOfferInternal(sql);
+		return doSearchOfferInternal(sql, showAll);
 	}
 
 
 	public static Map doBrowseOffer() {
 		String sql = FormatterOfferQuery.buildSQLBrowseOffer();
 		//
-		return doSearchOfferInternal(sql);
+		return doSearchOfferInternal(sql, false);
 	}
 
 
-	public static Map doSearchOffer(Map<String, String[]> parameters) {
+	public static Map doSearchOffer(Map<String, String[]> parameters, boolean showAll) {
 		StringBuilder sb  = formatSQLWithParametersForSearchOrAlert(parameters, null, true);
 		String        sql = sb.toString();
 		//
-		return doSearchOfferInternal(sql);
+		return doSearchOfferInternal(sql, showAll);
 	}
 
 
@@ -226,7 +229,7 @@ public class Offer extends DBBase {
 	}
 
 
-	private static Map doSearchOfferInternal(String sql) {
+	private static Map doSearchOfferInternal(String sql, boolean showAll) {
 		Map output = new HashMap();
 		//
 		List lstHeader = new LinkedList();
@@ -346,22 +349,47 @@ public class Offer extends DBBase {
 				colSeq = colSeq_offerdefault;
 			}
 			else {
-				colSeq = new int[lstHeader.size() - 2];
-				//
-				colSeq[0] = 2;               //Category
-				colSeq[1] = 3;               //Condition
-				colSeq[2] = 4;            //Desc
-				colSeq[3] = 1;            //Seller
-				colSeq[4] = 5;            //initPrice
-				colSeq[5] = 6;               //increment
-				colSeq[6] = 11;            //CurrBid
-				colSeq[7] = 8;            //Start
-				colSeq[8] = 9;            //End
-				colSeq[9] = 10;         //status
-				//lstHeader.add("offerId");		0
-				//lstHeader.add("minPrice");		7
-				for (int i = FIELD_START_INDEX; i < lstHeader.size(); i++) {
-					colSeq[i + 10 - FIELD_START_INDEX] = i;                        //10 Starting Index for property
+				if (showAll) {
+					colSeq = new int[lstHeader.size() - 1];                        //1 less than headers
+					//
+					colSeq[0] = 2;               //Category
+					colSeq[1] = 3;               //Condition
+					colSeq[2] = 4;            //Desc
+					colSeq[3] = 1;            //Seller
+					colSeq[4] = 5;            //initPrice
+					colSeq[5] = 6;               //increment
+					colSeq[6] = 7;               //minPrice
+					colSeq[7] = 11;            //CurrBid
+					colSeq[8] = 8;            //Start
+					colSeq[9] = 9;            //End
+					colSeq[10] = 10;         //status
+					//lstHeader.add("offerId");		0
+					//
+					int FIELD_STARTING_INDEX = 11;                                 //11 Starting Index for property
+					for (int i = FIELD_START_INDEX; i < lstHeader.size(); i++) {
+						colSeq[i + FIELD_STARTING_INDEX - FIELD_START_INDEX] = i;
+					}
+				}
+				else {
+					colSeq = new int[lstHeader.size() - 2];                        //2 less than headers
+					//
+					colSeq[0] = 2;               //Category
+					colSeq[1] = 3;               //Condition
+					colSeq[2] = 4;            //Desc
+					colSeq[3] = 1;            //Seller
+					colSeq[4] = 5;            //initPrice
+					colSeq[5] = 6;               //increment
+					colSeq[6] = 11;            //CurrBid
+					colSeq[7] = 8;            //Start
+					colSeq[8] = 9;            //End
+					colSeq[9] = 10;         //status
+					//lstHeader.add("offerId");		0
+					//lstHeader.add("minPrice");		7
+					//
+					int FIELD_STARTING_INDEX = 10;                                 //10 Starting Index for property
+					for (int i = FIELD_START_INDEX; i < lstHeader.size(); i++) {
+						colSeq[i + FIELD_STARTING_INDEX - FIELD_START_INDEX] = i;
+					}
 				}
 			}
 			//
@@ -409,13 +437,14 @@ public class Offer extends DBBase {
 	public static Map doCreateOrModifyOffer(String userID, Map<String, String[]> parameters, boolean isCreate) {
 		Map output = new HashMap();
 		//
-		String offerid = null;
+		String   offerid = null;
+		String[] temps   = null;
 		if (isCreate) {
 			offerid = getUUID();
 		}
 		else {
-			String   offeridcategoryname = getStringFromParamMap("offeridcategoryname", parameters);
-			String[] temps               = offeridcategoryname.split(",");
+			String offeridcategorynameuser = getStringFromParamMap("offeridcategorynameuser", parameters);
+			temps = offeridcategorynameuser.split(",");
 			//
 			offerid = temps[0];
 		}
@@ -550,14 +579,20 @@ public class Offer extends DBBase {
 		}
 		//
 		if ((Boolean) output.get(DATA_NAME_STATUS)) {
-			doCreateAllerts(offerid);
+			if (isCreate) {
+				doCreateAllerts(userID, offerid);
+			}
+			else {
+				doCreateAllerts(temps[2], offerid);
+			}
+			;
 		}
 		//
 		return output;
 	}
 
 
-	public static void doCreateAllerts(String offerID) {
+	public static void doCreateAllerts(String userName, String offerID) {
 		Connection        con                       = null;
 		PreparedStatement pStmtSelectAlertCriterion = null;
 		PreparedStatement pStmtInsertAlert          = null;
@@ -567,7 +602,8 @@ public class Offer extends DBBase {
 		try {
 			con = getConnection();
 			//
-			pStmtSelectAlertCriterion = con.prepareStatement(SQL_OFFERALERTCRITERION_SELECT);
+			pStmtSelectAlertCriterion = con.prepareStatement(SQL_OFFERALERTCRITERION_SELECT_EX_USER);
+			pStmtSelectAlertCriterion.setString(1, userName);
 			//
 			ResultSet rs = pStmtSelectAlertCriterion.executeQuery();
 			while (rs.next()) {
@@ -706,7 +742,7 @@ public class Offer extends DBBase {
 		parameters.put("fieldop_6", new String[]{"yes"});
 		parameters.put("lstFieldIDs", new String[]{"1,2,3,4,5,6,7"});
 		//
-		Map map = doSearchOffer(parameters);
+		Map map = doSearchOffer(parameters, true);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
@@ -732,44 +768,38 @@ public class Offer extends DBBase {
 	public static void main3(String[] args) {
 		System.out.println("Start");
 		//
-		doCreateAllerts("99936702ff2a428ba913dd02e5592fc4");
+		doCreateAllerts("user1", "99936702ff2a428ba913dd02e5592fc4");
 	}
 
-	public static void main4(String[] args) {
+	public static void main6(String[] args) {
+		System.out.println("Start");
+		//
+		//doSearchOfferByID("5948e21eeae14dcaa8d58ada0d79a773");
+		doCreateAllerts("user1", "faa5701026484feb930533ca6e3d8f16");
+	}
+
+	public static void main(String[] args) {
 		Map<String, String[]> parameters = new HashMap<>();
 		//
-		parameters.put("minPrice", new String[]{"3500.00"});
+		parameters.put("minPrice", new String[]{"3000.00"});
 		parameters.put("conditionCode", new String[]{"1"});
-		parameters.put("description", new String[]{"good"});
-		parameters.put("fieldval1_1", new String[]{"fwef"});
-		parameters.put("", new String[]{""});
-		parameters.put("", new String[]{""});
-		parameters.put("", new String[]{""});
-		parameters.put("", new String[]{""});
-		parameters.put("", new String[]{""});
-		parameters.put("", new String[]{""});
-		parameters.put("", new String[]{""});
-		parameters.put("", new String[]{""});
-		parameters.put("", new String[]{""});
-		parameters.put("", new String[]{""});
-		parameters.put("", new String[]{""});
-		parameters.put("", new String[]{""});
-		parameters.put("", new String[]{""});
-		parameters.put("", new String[]{""});
-		parameters.put("", new String[]{""});
+		parameters.put("description", new String[]{"23423"});
+		parameters.put("fieldID_1", new String[]{"123423  "});
+		parameters.put("fieldID_2", new String[]{"234234  "});
+		parameters.put("fieldID_3", new String[]{"234567"});
+		parameters.put("fieldID_4", new String[]{"1234123  "});
+		parameters.put("fieldID_5", new String[]{"2345"});
+		parameters.put("fieldID_6", new String[]{"no"});
+		parameters.put("fieldID_7", new String[]{"234234"});
+		parameters.put("action", new String[]{"modifyOffer"});
+		parameters.put("offeridcategorynameuser", new String[]{"9dee3107cdf444a7b4f0cd79524cfe53,car,user"});
+		parameters.put("lstFieldIDs", new String[]{"1,2,3,4,5,6,7"});
 		//
-		Map map = doCreateOrModifyOffer(null, parameters, false);
+		Map map = doCreateOrModifyOffer("user", parameters, false);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
-	}
-
-	public static void main(String[] args) {
-		System.out.println("Start");
-		//
-		//doSearchOfferByID("5948e21eeae14dcaa8d58ada0d79a773");
-		doCreateAllerts("faa5701026484feb930533ca6e3d8f16");
 	}
 }
 

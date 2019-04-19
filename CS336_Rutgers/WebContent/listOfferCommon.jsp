@@ -9,7 +9,8 @@
 <!DOCTYPE html>
 
 <%
-	String userType = (String) request.getSession().getAttribute("userType");
+	String userID = (String) session.getAttribute(SESSION_ATTRIBUTE_USER);
+	String userType = (String) request.getSession().getAttribute(SESSION_ATTRIBUTE_USERTYPE);
 	//
 	Map data;
 	TableData dataTable = null;
@@ -21,7 +22,7 @@
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 	}
 	else if (action.equalsIgnoreCase("searchOffer")) {
-		data = Offer.doSearchOffer(request.getParameterMap());
+		data = Offer.doSearchOffer(request.getParameterMap(), true);
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 	}
 	else if (action.equalsIgnoreCase("browseOffer")) {
@@ -67,7 +68,11 @@
 				//
 				out.println("<td>");
 				if (userType != null && userType.equalsIgnoreCase("3")) {
-					out.println(Helper.getButton("form-id-doBid", "input-id-doBid", "" + dataTable.getOneCell(i, 0), "Bid"));
+					String seller = dataTable.getOneCell(i, 1).toString();
+					String status = dataTable.getOneCell(i, 10).toString();
+					if (!seller.equalsIgnoreCase(userID) && status.equalsIgnoreCase("Active")) {
+						out.println(Helper.getButton("form-id-doBid", "input-id-doBid", "" + dataTable.getOneCell(i, 0), "Bid"));
+					}
 					out.println(Helper.getButton("form-id-listBid", "input-id-listBid", dataTable.getOneCell(i, 0) + "," + dataTable.getOneCell(i, 2), "List Bid"));
 					if (!action.equals("listSimilar")) {
 						out.println(Helper.getButton("form-id-listSimilar", "input-id-listSimilar", dataTable.getOneCell(i, 0) + "," + dataTable.getOneCell(i, 2) + "," + dataTable.getOneCell(i, 3), "List Similar"));
@@ -75,7 +80,7 @@
 				}
 				else {
 					out.println(Helper.getButton("form-id-cancelOffer", "input-id-cancelOffer", "" + dataTable.getOneCell(i, 0), "Cancel"));
-					out.println(Helper.getButton("form-id-modifyOffer", "input-id-modifyOffer", dataTable.getOneCell(i, 0) + "," + dataTable.getOneCell(i, 2), "Modify"));
+					out.println(Helper.getButton("form-id-modifyOffer", "input-id-modifyOffer", dataTable.getOneCell(i, 0) + "," + dataTable.getOneCell(i, 2) + "," + dataTable.getOneCell(i, 1), "Modify"));
 				}
 				out.println("</td>");
 				//

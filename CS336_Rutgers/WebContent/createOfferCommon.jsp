@@ -11,10 +11,10 @@
 
 
 <%
-	//List lstCategory			= null;
-	//List lstField 				= null;
-	//TableData dataTable 		= null;						//IN  from Modify order
-	//String offeridcategoryname 	= null;						//IN  from Modify order
+	//List lstCategory		= null;
+	//List lstField 			= null;
+	//TableData dataTable 	= null;						//IN  from Modify order
+	//String offeridcategorynameuser 		= null;						//IN  from Modify order
 	//
 	String lstFieldIDs = null;                  //OUT from Modify order
 	//
@@ -198,7 +198,7 @@
 	//
 	if (!userType.equalsIgnoreCase("3")) {
 		out.println("<input type='hidden' name='action' value='modifyOffer'/>");
-		out.println("<input type='hidden' name='offeridcategoryname' value='" + offeridcategoryname + "'/>");
+		out.println("<input type='hidden' name='offeridcategorynameuser' value='" + offeridcategorynameuser + "'/>");
 		//
 		out.println("<input name='lstFieldIDs' type='hidden' value='" + lstFieldIDs + "'/>");
 	}
