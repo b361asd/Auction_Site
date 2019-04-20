@@ -1,5 +1,6 @@
 package rutgers.cs336.gui;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -134,8 +135,8 @@ public class TableData {
 	}
 
 
-	public String printDescriptionForTable() {
-		return "<th colspan='" + colCount() + "'>" + Helper.escapeHTML(description) + "</th>";
+	public String printDescriptionForTable(boolean addOne) {
+		return "<th colspan='" + (colCount() + (addOne ? 1 : 0)) + "'>" + Helper.escapeHTML(description) + "</th>";
 	}
 
 
@@ -178,8 +179,15 @@ public class TableData {
 		String out = "";
 		if (row != null && row.size() > 0 && colSeq != null && colSeq.length > 0) {
 			for (int value : colSeq) {
-				Object one     = row.get(value);
+				Object one = row.get(value);
+				//
 				String oneItem = (one == null) ? "" : one.toString();
+				if (one instanceof BigDecimal) {
+					if (((BigDecimal) one).compareTo(new BigDecimal(-1)) == 0) {
+						oneItem = "";
+					}
+				}
+				//
 				if (width == null) {
 					out = out + "<td>" + Helper.escapeHTML(oneItem) + "</td>";
 				}
@@ -213,4 +221,16 @@ public class TableData {
 		return out;
 	}
 
+
+	public static void main(String[] args) {
+		//Object one     = new BigDecimal(100.0);
+		Object one = null;
+		//
+		if (one instanceof BigDecimal) {
+			System.out.println("YES");
+		}
+		else {
+			System.out.println("NO");
+		}
+	}
 }

@@ -1,39 +1,24 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
-<%@ page import="rutgers.cs336.db.Bid" %>
-<%@ page import="rutgers.cs336.db.User" %>
-<%@ page import="java.util.List" %>
-<%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
-<%@ page import="static rutgers.cs336.db.DBBase.*" %>
-
 <html>
 
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Search Offers</title>
 	<link rel="stylesheet" href="../style.css?v=1.0"/>
-
-	<script type="text/javascript">
-       function onSelectChange() {
-           const form = document.getElementById('form-getActivity');
-           form.submit();
-       }
-	</script>
 </head>
 
 <body>
 
 <%
-	List lstUser = User.getUserList();
-	//
-	String userID = (String) request.getSession().getAttribute("user");
-	//
 	Map data = null;
 	TableData dataTable = null;
 	//
+	String userID = (String) session.getAttribute(SESSION_ATTRIBUTE_USER);
+	//
 	String action = getStringFromParamMap("action", request.getParameterMap());
-	if (action.equals("sort")) {
+	if (action.equalsIgnoreCase("sort")) {
 		data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
 		if (data != null) {
 			dataTable = (TableData) (data.get(DATA_NAME_DATA));
@@ -48,12 +33,14 @@
 		}
 	}
 	//
-	if (data == null || dataTable == null) {
-		data = Bid.searchBid(null, null, userID);
+	if (data == null) {
+		data = Offer.doSearchMyOffer(userID);
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 	}
 	//
-	dataTable = (TableData) (data.get(DATA_NAME_DATA));
+	if (data != null) {
+		dataTable = (TableData) (data.get(DATA_NAME_DATA));
+	}
 	//
 	request.setAttribute("dataTable", dataTable);
 %>
@@ -61,7 +48,7 @@
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<%@include file="../showTableTwo.jsp" %>
+<%@include file="../listOfferCommon.jsp" %>
 
 </body>
 

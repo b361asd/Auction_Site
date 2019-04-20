@@ -1,5 +1,3 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <%@ page import="rutgers.cs336.db.CategoryAndField" %>
 <%@ page import="rutgers.cs336.gui.Helper" %>
 <%@ page import="rutgers.cs336.gui.HelperDatetime" %>

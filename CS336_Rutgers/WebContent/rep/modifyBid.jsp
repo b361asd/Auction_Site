@@ -18,38 +18,25 @@
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<form id="form-id-cancelBid" action="${pageContext.request.contextPath}/rep/cancelBid.jsp" method="post">
-	<input id="input-id-cancelBid" type="hidden" name="bidID" value="_"/>
-</form>
+<%
+	Map data;
+	TableData dataTable;
+	//
+	String action = getStringFromParamMap("action", request.getParameterMap());
+	if (action.equals("modifyBid")) {
+		Map dataModify = Bid.doCreateOrModifyBid(null, request.getParameterMap(), false);
+	}
+	//
+	data = Bid.searchBid(request.getParameterMap(), null, null);
+	//
+	String bidIDofferIDBuyer = DBBase.getStringFromParamMap("bidIDofferIDBuyer", request.getParameterMap());
+	//
+	dataTable = (TableData) (data.get(DATA_NAME_DATA));
+	//
+	request.setAttribute("dataTable", dataTable);
+%>
 
-<form id="form-id-modifyBid" action="${pageContext.request.contextPath}/rep/modifyBid.jsp" method="post">
-	<input id="input-id-modifyBid" type="hidden" name="bidID" value="_"/>
-</form>
-
-<form id="form-sort" target="_self" method="post">
-	<input id="input-sort" type="hidden" name="sort" value="_"/>
-
-	<%
-		Map data;
-		TableData dataTable;
-		//
-		String action = getStringFromParamMap("action", request.getParameterMap());
-		if (action.equals("modifyBid")) {
-			Map dataModify = Bid.doCreateOrModifyBid(null, request.getParameterMap(), false);
-		}
-		//
-		data = Bid.searchBid(request.getParameterMap(), null, null);
-		//
-		String bidIDofferIDBuyer = DBBase.getStringFromParamMap("bidIDofferIDBuyer", request.getParameterMap());
-		//
-		dataTable = (TableData) (data.get(DATA_NAME_DATA));
-		//
-		request.setAttribute("dataTable", dataTable);
-	%>
-
-	<%@include file="../showTableTwo.jsp" %>
-
-</form>
+<%@include file="../showTableTwo.jsp" %>
 
 <form method="post">
 	<%

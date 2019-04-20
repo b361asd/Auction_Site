@@ -3,6 +3,7 @@
 
 <%@ page import="rutgers.cs336.db.User" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
+<%@ page import="static rutgers.cs336.gui.Helper.*" %>
 <%@ page import="rutgers.cs336.gui.Helper" %>
 <%@ page import="java.util.List" %>
 

@@ -270,7 +270,7 @@ public class Trade extends DBBase {
 			output.put(DATA_NAME_STATUS, true);
 			output.put(DATA_NAME_MESSAGE, "OK");
 			//
-			if (isBestSellings) { 
+			if (isBestSellings) {
 				tableData.setDescription("Top " + limit + " Best Selling Item(s) For The Last " + lookbackdays + " Days");
 			}
 			else {

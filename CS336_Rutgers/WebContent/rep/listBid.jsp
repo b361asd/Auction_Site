@@ -18,14 +18,6 @@
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<form id="form-id-cancelBid" action="${pageContext.request.contextPath}/rep/cancelBid.jsp" method="post">
-	<input id="input-id-cancelBid" type="hidden" name="bidID" value="_"/>
-</form>
-
-<form id="form-id-modifyBid" action="${pageContext.request.contextPath}/rep/modifyBid.jsp" method="post">
-	<input id="input-id-modifyBid" type="hidden" name="bidIDofferIDBuyer" value="_"/>
-</form>
-
 <form id="form-sort" target="_self" method="post">
 	<input id="input-sort" type="hidden" name="sort" value="_"/>
 

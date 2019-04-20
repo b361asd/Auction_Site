@@ -48,13 +48,15 @@
 				String sort = getStringFromParamMap("sort", request.getParameterMap());
 				dataTable.sortRowPerHeader(sort);
 			}
+			else {
+				data = null;
+			}
 		}
 	}
 	//
-	if (data == null || dataTable == null) {
+	if (data == null) {
 		data = Bid.searchBid(null, userActivity, null);
 		dataTable = (TableData) (data.get(DATA_NAME_DATA));
-		//
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 	}
 	//
@@ -63,9 +65,6 @@
 
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
-
-<br/>
-<br/>
 
 <form id='form-getActivity' method='post'>
 	<%
@@ -85,9 +84,6 @@
 		out.println("</table>");
 	%>
 </form>
-
-<br/>
-<br/>
 
 <%@include file="../showTableTwo.jsp" %>
 

@@ -43,6 +43,9 @@
 	</table>
 </form>
 
+<br/>
+<br/>
+
 <form id="form" action="${pageContext.request.contextPath}/rep/listOffer.jsp" method="post">
 	<%@include file="../searchOfferCommon.jsp" %>
 

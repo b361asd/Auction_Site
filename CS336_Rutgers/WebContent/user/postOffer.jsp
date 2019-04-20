@@ -22,25 +22,12 @@
 <body>
 
 <%
-	String message = "Welcome to BuyMe!";
-	if (session == null) {
-	}
-	else {
-		message = (String) session.getAttribute("message");
-		if (message == null) {
-			message = "Welcome to BuyMe.";
-		}
-	}
-	//
-	String categoryNameFromParam = "CAT=" + getStringFromParamMap("categoryName", request.getParameterMap());
-	//String paramMap = getParamMap(request.getParameterMap());
-	//
 	Map data = CategoryAndField.getCategoryField(getStringFromParamMap("categoryName", request.getParameterMap()));
 	List lstCategory = (List) data.get(CategoryAndField.DATA_CATEGORY_LIST);
 	List lstField = (List) data.get(CategoryAndField.DATA_FIELD_LIST);
 	//
-	TableData dataTable = null;            // From Modify order
-	String offeridcategoryname = null;      // From Modify order
+	TableData dataTable = null;                     // From Modify order only
+	String offeridcategorynameuser = null;      // From Modify order only
 %>
 
 <%@include file="nav.jsp" %>

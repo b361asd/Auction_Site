@@ -15,82 +15,69 @@
 
 <body>
 
+<%
+	Map dataModify = null;
+	Map data = null;
+	Map categoryAndField = null;
+	TableData dataTable = null;
+	//
+	String offeridcategorynameuser = DBBase.getStringFromParamMap("offeridcategorynameuser", request.getParameterMap());
+	//
+	String[] temps = offeridcategorynameuser.split(",");
+	//
+	String action = getStringFromParamMap("action", request.getParameterMap());
+	if (action.equals("modifyOffer")) {
+		dataModify = Offer.doCreateOrModifyOffer(temps[2], request.getParameterMap(), false);
+	}
+	else if (action.equals("modifyOffer")) {
+	}
+	//
+	categoryAndField = CategoryAndField.getCategoryField(temps[1]);
+	List lstCategory = (List) categoryAndField.get(CategoryAndField.DATA_CATEGORY_LIST);
+	List lstField = (List) categoryAndField.get(CategoryAndField.DATA_FIELD_LIST);
+	//
+	data = Offer.doSearchOfferByID(temps[0], true);
+	//
+	request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+	//
+	dataTable = (TableData) (data.get(DATA_NAME_DATA));
+	//
+	if (dataModify != null) {
+		boolean _status  = Helper.getStatus(dataModify);
+		String  _message = Helper.getMessage(dataModify);
+		if (!_status) {
+			Helper.setStatus(data, false);
+			Helper.appendMessage(data, Helper.getMessage(dataModify));
+		}
+	}
+%>
+
+
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<form id="form-id-cancelBid" action="${pageContext.request.contextPath}/rep/cancelBid.jsp" method="post">
-	<input id="input-id-cancelBid" type="hidden" name="bidID" value="_"/>
-</form>
-
-<form id="form-id-modifyBid" action="${pageContext.request.contextPath}/rep/modifyBid.jsp" method="post">
-	<input id="input-id-modifyBid" type="hidden" name="bidID" value="_"/>
-</form>
-
-<form id="form-sort" target="_self" method="post">
-	<input id="input-sort" type="hidden" name="sort" value="_"/>
-
+<table>
+	<thead>
+	<tr>
+		<%
+			out.println(dataTable.printHeaderForTable());
+		%>
+	</tr>
+	</thead>
+	<tbody>
 	<%
-		Map dataModify = null;
-		Map data = null;
-		Map categoryAndField = null;
-		TableData dataTable = null;
-		//
-		String offeridcategorynameuser = DBBase.getStringFromParamMap("offeridcategorynameuser", request.getParameterMap());
-		//
-		String[] temps = offeridcategorynameuser.split(",");
-		//
-		String action = getStringFromParamMap("action", request.getParameterMap());
-		if (action.equals("modifyOffer")) {
-			dataModify = Offer.doCreateOrModifyOffer(temps[2], request.getParameterMap(), false);
-		}
-		else if (action.equals("startModifyOffer")) {
-		}
-		//
-		categoryAndField = CategoryAndField.getCategoryField(temps[1]);
-		List lstCategory = (List) categoryAndField.get(CategoryAndField.DATA_CATEGORY_LIST);
-		List lstField = (List) categoryAndField.get(CategoryAndField.DATA_FIELD_LIST);
-		//
-		data = Offer.doSearchOfferByID(temps[0], true);
-		//
-		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
-		//
-		dataTable = (TableData) (data.get(DATA_NAME_DATA));
-		//
-		if (dataModify != null) {
-			boolean _status  = Helper.getStatus(dataModify);
-			String  _message = Helper.getMessage(dataModify);
-			if (!_status) {
-				Helper.setStatus(data, false);
-				Helper.appendMessage(data, Helper.getMessage(dataModify));
+		if (dataTable.rowCount() > 0) {
+			for (int i = 0; i < dataTable.rowCount(); i++) {
+				out.println("<tr>");
+				out.println(dataTable.printOneRowInTable(i));
+				out.println("</tr>");
 			}
 		}
 	%>
-
-	<table>
-		<thead>
-		<tr>
-			<%
-				out.println(dataTable.printHeaderForTable());
-			%>
-		</tr>
-		</thead>
-		<tbody>
-		<%
-			if (dataTable.rowCount() > 0) {
-				for (int i = 0; i < dataTable.rowCount(); i++) {
-					out.println("<tr>");
-					out.println(dataTable.printOneRowInTable(i));
-					out.println("</tr>");
-				}
-			}
-		%>
-		</tbody>
-	</table>
-
-</form>
+	</tbody>
+</table>
 
 <form id="form" method="post">
-
 	<%@include file="../createOfferCommon.jsp" %>
 
 	<input type="submit" value="Submit">

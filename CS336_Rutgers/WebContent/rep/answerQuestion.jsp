@@ -28,7 +28,7 @@
 		}
 	}
 	//
-	Map data = Question.retrieveOneQuestion();
+	Map data = Question.retrieveOpenQuestion();
 	//
 	List lstRows = (List) Helper.getData(data);
 %>

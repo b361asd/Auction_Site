@@ -18,29 +18,29 @@
 </form>
 
 <%
-	Map _dataMapHeader = (Map) session.getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
-	if (_dataMapHeader != null && !(Boolean) _dataMapHeader.get(DATA_NAME_STATUS)) {
-		String _message = (String) _dataMapHeader.get(DATA_NAME_MESSAGE);
+	Map _dataMapHeader_ = (Map) session.getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
+	if (_dataMapHeader_ != null && !(Boolean) _dataMapHeader_.get(DATA_NAME_STATUS)) {
+		String _message = (String) _dataMapHeader_.get(DATA_NAME_MESSAGE);
 		out.println("<h2>" + _message + "</h2>");
 	}
 	//
-	String _sessionMessage;
+	String _sessionMessage_;
 	{
-		String _userID    = (String) session.getAttribute(SESSION_ATTRIBUTE_USER);
-		String _userType  = (String) session.getAttribute(SESSION_ATTRIBUTE_USERTYPE);
-		String _userFName = (String) session.getAttribute(SESSION_ATTRIBUTE_USER_FNAME);
-		String _userLName = (String) session.getAttribute(SESSION_ATTRIBUTE_USER_LNAME);
-		String _message   = (String) session.getAttribute(SESSION_ATTRIBUTE_MESSAGE);
+		String _userID_    = (String) session.getAttribute(SESSION_ATTRIBUTE_USER);
+		String _userType_  = (String) session.getAttribute(SESSION_ATTRIBUTE_USERTYPE);
+		String _userFName_ = (String) session.getAttribute(SESSION_ATTRIBUTE_USER_FNAME);
+		String _userLName_ = (String) session.getAttribute(SESSION_ATTRIBUTE_USER_LNAME);
+		String _message_   = (String) session.getAttribute(SESSION_ATTRIBUTE_MESSAGE);
 		//
-		if (_userID == null) {
-			_sessionMessage = "Welcome to BuyMe!";
+		if (_userID_ == null) {
+			_sessionMessage_ = "Welcome to BuyMe!";
 		}
 		else {
-			_sessionMessage = "Welcome to BuyMe " + (_userType.equals("1") ? "Admin Site" : _userType.equals("2") ? "Representative Site" : "User Site") + ", " + _userFName + " " + _userLName + "!";
+			_sessionMessage_ = "Welcome to BuyMe " + (_userType_.equals("1") ? "Admin Site" : _userType_.equals("2") ? "Representative Site" : "User Site") + ", " + _userFName_ + " " + _userLName_ + "!";
 		}
 		//
-		if (_message != null && _message.length() > 0) {
-			_sessionMessage = _sessionMessage + " (" + _message + ")";
+		if (_message_ != null && _message_.length() > 0) {
+			_sessionMessage_ = _sessionMessage_ + " (" + _message_ + ")";
 		}
 	}
 	//
@@ -48,5 +48,5 @@
 %>
 <p hidden><%=_debug%>
 </p>
-<h5><%=_sessionMessage%>
+<h5><%=_sessionMessage_%>
 </h5>

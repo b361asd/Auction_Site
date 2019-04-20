@@ -242,7 +242,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 
 	public static void oneConditionDesc(StringBuilder sb, String columnName, String op, String value, String valueAdd) {
 		if (columnName == null) {
-			columnName = "Unknown";
+			columnName = "Unknown_Field";
 		}
 		//
 		if (op.equalsIgnoreCase(OP_BOOL_TRUE)) {
@@ -269,9 +269,9 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 				}
 				else if (op.equalsIgnoreCase(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
 					sb.append(columnName);
-					sb.append(" is among ");
+					sb.append(" is among (");
 					sb.append(value);
-					sb.append("; ");
+					sb.append("); ");
 				}
 				else if (op.equalsIgnoreCase(OP_SZ_NOT_EQUAL)) {
 					sb.append(columnName);
@@ -299,9 +299,9 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 				}
 				else if (op.equalsIgnoreCase(OP_INT_EQUAL_MULTI)) {
 					sb.append(columnName);
-					sb.append(" is among ");
+					sb.append(" is among (");
 					sb.append(value);
-					sb.append("; ");
+					sb.append("); ");
 				}
 				else if (op.equalsIgnoreCase(OP_INT_NOT_EQUAL)) {
 					sb.append(columnName);
@@ -333,7 +333,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 				}
 				else {
 					sb.append(columnName);
-					sb.append(" is unknow: ");
+					sb.append(" is in unknown relation to ");
 					sb.append(value);
 					sb.append("; ");
 				}
@@ -404,7 +404,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		if (temps != null && temps.length > 0) {
 			String szTemp = temps[0].trim();
 			//
-			return szTemp.equalsIgnoreCase("checked");
+			return szTemp.equalsIgnoreCase("checked") || szTemp.equalsIgnoreCase("yes") || szTemp.equalsIgnoreCase("true");
 		}
 		return false;
 	}
@@ -452,6 +452,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		return out;
 	}
 
+	/*
 	public static int getPrefixIntFromParamMap(String name, Map<String, String[]> parameters, char delimiter) {
 		int out = -1;
 		//
@@ -470,6 +471,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		//
 		return out;
 	}
+	*/
 
 
 	// For debug

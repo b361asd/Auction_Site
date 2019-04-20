@@ -10,14 +10,11 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>BuyMe - Search Offers</title>
+	<title>BuyMe - Modify Rep</title>
 	<link rel="stylesheet" href="../style.css?v=1.0"/>
 </head>
 
 <body>
-
-<%@include file="../header.jsp" %>
-<%@include file="nav.jsp" %>
 
 <%
 	Map data = null;
@@ -37,6 +34,9 @@
 	//
 	dataTable = (TableData) (data.get(DATA_NAME_DATA));
 %>
+
+<%@include file="../header.jsp" %>
+<%@include file="nav.jsp" %>
 
 <table>
 	<thead>
@@ -61,20 +61,59 @@
 	</tbody>
 </table>
 
+<br/>
+<br/>
+
 <form action="${pageContext.request.contextPath}/admin/listUser.jsp" method="post">
-	<input type="hidden" name="action" value="updateUser"/>
 	<%
+		out.println("<input type='hidden' name='action' value='updateUser'/>");
 		out.println("<div><input type='hidden' name='username' value='" + dataTable.getOneCell(0, 0) + "'></div>");
 		//
-		out.println("<div><input type='text' name='password' value='" + dataTable.getOneCell(0, 1) + "'></div>");
-		out.println("<div><input type='text' name='email' value='" + dataTable.getOneCell(0, 2) + "'></div>");
-		out.println("<div><input type='text' name='firstname' value='" + dataTable.getOneCell(0, 3) + "'></div>");
-		out.println("<div><input type='text' name='lastname' value='" + dataTable.getOneCell(0, 4) + "'></div>");
-		out.println("<div><input type='text' name='address' value='" + dataTable.getOneCell(0, 5) + "'></div>");
-		out.println("<div><input type='text' name='phone' value='" + dataTable.getOneCell(0, 6) + "'></div>");
+		out.println("<table>");
+		out.println("<tr>");
+		out.println("<td style='text-align:left'>Password</td>");
+		out.println("<td style='text-align:left'>");
+		out.println("<input type='text' name='password' value='" + dataTable.getOneCell(0, 1) + "' />");
+		out.println("</td>");
+		out.println("</tr>");
+		out.println("<tr>");
+		out.println("<td style='text-align:left'>Email Address</td>");
+		out.println("<td style='text-align:left'>");
+		out.println("<input type='text' name='email' value='" + dataTable.getOneCell(0, 2) + "' />");
+		out.println("</td>");
+		out.println("</tr>");
+		out.println("<tr>");
+		out.println("<td style='text-align:left'>First Name</td>");
+		out.println("<td style='text-align:left'>");
+		out.println("<input type='text' name='firstname' value='" + dataTable.getOneCell(0, 3) + "' />");
+		out.println("</td>");
+		out.println("</tr>");
+		out.println("<tr>");
+		out.println("<td style='text-align:left'>Last Name</td>");
+		out.println("<td style='text-align:left'>");
+		out.println("<input type='text' name='lastname' value='" + dataTable.getOneCell(0, 4) + "' />");
+		out.println("</td>");
+		out.println("</tr>");
+		out.println("<tr>");
+		out.println("<td style='text-align:left'>Address</td>");
+		out.println("<td style='text-align:left'>");
+		out.println("<input type='text' name='address' value='" + dataTable.getOneCell(0, 5) + "' />");
+		out.println("</td>");
+		out.println("</tr>");
+		out.println("<tr>");
+		out.println("<td style='text-align:left'>Phone Number</td>");
+		out.println("<td style='text-align:left'>");
+		out.println("<input type='text' name='phone' value='" + dataTable.getOneCell(0, 6) + "' />");
+		out.println("</td>");
+		out.println("</tr>");
+		out.println("<tr>");
+		out.println("<td style='text-align:left'></td>");
+		out.println("<td style='text-align:left'>");
+		out.println("<input type='submit' value='Submit'>");
+		out.println("</td>");
+		out.println("</tr>");
+		out.println("</table>");
 	%>
-
-	<input type="submit" value="Submit">
 </form>
 
 </body>

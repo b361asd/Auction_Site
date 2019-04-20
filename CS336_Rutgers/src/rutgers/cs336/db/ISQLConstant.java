@@ -22,7 +22,6 @@ public interface ISQLConstant {
 	// Bid
 	String SQL_BID_INSERT              = "INSERT Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) VALUES (?, ?, ?, ?, ?, NOW())";
 	String SQL_BID_UPDATE              = "UPDATE Bid SET price = ?, autoRebidLimit = ?, bidDate = NOW() WHERE bidID = ?";
-	//String SQL_BID_INSERT    			= "INSERT Bid (bidID, offerID, buyer, price, autoRebidLimit, bidDate) SELECT ?, o.offerID, ?, ?, ?, NOW() FROM Offer o WHERE o.endDate >= NOW() AND (NOT o.minPrice > ?) AND o.offerID = ? AND o.status = 1 AND ((NOT EXISTS (SELECT * FROM Bid b3 WHERE b3.offerID = ?)) OR (? > (SELECT MAX(b2.price) FROM Bid b2 WHERE b2.offerID = ?)))";
 	String SQL_BID_DELETE              = "DELETE from Bid where bidID = ?";
 	String SQL_BID_SELECT_EX           = "SELECT bidID, offerID, buyer, price, autoRebidLimit, bidDate FROM Bid";
 	String SQL_BID_SELECT_BY_OFFERID   = "SELECT bidID, buyer, price, bidDate FROM Bid b WHERE b.offerID = ? ORDER BY price DESC";
@@ -39,15 +38,15 @@ public interface ISQLConstant {
 	String SQL_OFFER_INSERT = "INSERT INTO Offer (offerID, categoryName, seller, initPrice, increment, minPrice, conditionCode, description, startDate, endDate, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), STR_TO_DATE(?,'%Y-%m-%dT%H:%i:%s'), 1)";
 	String SQL_OFFER_MODIFY = "UPDATE Offer SET minPrice = ?, conditionCode = ?, description = ? WHERE offerID = ? AND status = 1";
 	String SQL_OFFER_CANCEL = "DELETE FROM Offer WHERE offerID = ? AND status = 1";
-	String SQL_OFFER_SELECT = "SELECT categoryName, seller, min_price, description, startDate, endDate, status FROM Offer WHERE offerID = ?";
-	String SQL_OFFER_SEARCH = "SELECT offerID, categoryName, seller, min_price, description, startDate, endDate FROM Offer WHERE status = 1 and categoryName = ? and description LIKE ?";
+	//String SQL_OFFER_SELECT = "SELECT categoryName, seller, min_price, description, startDate, endDate, status FROM Offer WHERE offerID = ?";
+	//String SQL_OFFER_SEARCH = "SELECT offerID, categoryName, seller, min_price, description, startDate, endDate FROM Offer WHERE status = 1 and categoryName = ? and description LIKE ?";
 
 
 	// OfferField
 	String SQL_OFFERFIELD_INSERT = "INSERT INTO OfferField (offerID, fieldID, fieldText) VALUES (?, ?, ?)";
 	String SQL_OFFERFIELD_DELETE = "DELETE from OfferField WHERE offerID = ?";
-	String SQL_OFFERFIELD_SELECT = "SELECT OfferField.fieldID, fieldName, fieldType, fieldText FROM OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID WHERE OfferField.offerID = ? ORDER BY OfferField.fieldID";
-	String SQL_OFFERFIELD_SEARCH = "SELECT OfferField.offerID, OfferField.fieldID, fieldName, fieldType, fieldText FROM OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID WHERE OfferField.offerID IN (SELECT offerID FROM Offer WHERE status = 1 and categoryName = ? and description LIKE ?)";
+	//String SQL_OFFERFIELD_SELECT = "SELECT OfferField.fieldID, fieldName, fieldType, fieldText FROM OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID WHERE OfferField.offerID = ? ORDER BY OfferField.fieldID";
+	//String SQL_OFFERFIELD_SEARCH = "SELECT OfferField.offerID, OfferField.fieldID, fieldName, fieldType, fieldText FROM OfferField INNER JOIN Field ON OfferField.fieldID = Field.fieldID WHERE OfferField.offerID IN (SELECT offerID FROM Offer WHERE status = 1 and categoryName = ? and description LIKE ?)";
 
 
 	// Trade
@@ -66,7 +65,7 @@ public interface ISQLConstant {
 
 	// Alert
 	String SQL_ALERT_INSERT_BID = "INSERT INTO Alert (alertID, receiver, offerID, bidID, content, alertDate) VALUES (?, ?, ?, ?, ?, NOW())";
-	String SQL_ALERT_SELECT     = "SELECT alertID, receiver, offerID, bidID, content, alertDate FROM Alert WHERE receiver = ?";
+	String SQL_ALERT_SELECT     = "SELECT alertID, receiver, offerID, bidID, content, alertDate FROM Alert WHERE UPPER(receiver) = UPPER(?)";
 	String SQL_ALERT_DELETE     = "DELETE FROM Alert WHERE alertID = ?";
 
 

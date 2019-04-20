@@ -52,6 +52,7 @@ public class Question extends DBBase {
 		Map       output    = new HashMap();
 		List      lstRows   = new ArrayList();
 		TableData tableData = new TableData(lstHeader_question, lstRows, colSeq_question);
+		//
 		output.put(DATA_NAME_DATA, tableData);
 		//
 		Connection con       = null;
@@ -242,7 +243,7 @@ public class Question extends DBBase {
 	}
 
 
-	public static Map retrieveOneQuestion() {
+	public static Map retrieveOpenQuestion() {
 		Map output = new HashMap();
 		//
 		List lstRows = new LinkedList();

@@ -18,15 +18,22 @@
 	Map data = Bid.cancelBid(request.getParameterMap());
 	//
 	request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+	//
+	String message = "";
+	if ((Boolean) data.get(DATA_NAME_STATUS)) {
+		message = "Bid Cancelled.";
+	}
+	else {
+		message = "Error in Cancelling Bid: " + data.get(DATA_NAME_MESSAGE);
+	}
 %>
 
 
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<form id="form-sort" target="_self" method="post">
-	<input type="submit" value="Go Back">
-</form>
+<h3><%=message%>
+</h3>
 
 </body>
 

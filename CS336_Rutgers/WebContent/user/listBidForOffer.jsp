@@ -29,6 +29,9 @@
 				String sort = getStringFromParamMap("sort", request.getParameterMap());
 				dataTable.sortRowPerHeader(sort);
 			}
+			else {
+				data = null;
+			}
 		}
 	}
 	//
@@ -38,6 +41,7 @@
 	}
 	//
 	dataTable = (TableData) (data.get(DATA_NAME_DATA));
+	//
 	request.setAttribute("dataTable", dataTable);
 %>
 

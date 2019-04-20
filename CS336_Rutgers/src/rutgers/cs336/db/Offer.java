@@ -26,7 +26,16 @@ public class Offer extends DBBase {
 		//
 		FormatterOfferQuery.doneQuerySearch(sb);
 		//
-		return doSearchOfferInternal(sb.toString(), showAll);
+		Map output = doSearchOfferInternal(sb.toString(), showAll);
+		//
+		if (output != null) {
+			TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
+			if (dataTable != null) {
+				dataTable.setDescription("Search Bids");
+			}
+		}
+		//
+		return output;
 	}
 
 
@@ -34,14 +43,45 @@ public class Offer extends DBBase {
 	public static Map doSearchUserActivity(String userID) {
 		String sql = FormatterOfferQuery.buildSQLUserActivityOffer(userID);
 		//
-		return doSearchOfferInternal(sql, false);
+		Map output = doSearchOfferInternal(sql, false);
+		//
+		if (output != null) {
+			TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
+			if (dataTable != null) {
+				dataTable.setDescription("User Activity");
+			}
+		}
+		//
+		return output;
+	}
+
+
+	//ListMyOffer (rep)
+	public static Map doSearchMyOffer(String userID) {
+		StringBuilder sb = FormatterOfferQuery.initQuerySearch();
+		//
+		FormatterOfferQuery.addCondition(sb, "o.seller", OP_SZ_EQUAL, userID, null);
+		FormatterOfferQuery.addCondition(sb, "o.status", FormatterOfferQuery.OP_INT_EQUAL, "1", null);
+		//
+		FormatterOfferQuery.doneQuerySearch(sb);
+		//
+		String sql = sb.toString();
+		//
+		Map output = doSearchOfferInternal(sql, true);
+		//
+		if (output != null) {
+			TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
+			if (dataTable != null) {
+				dataTable.setDescription("My Offers");
+			}
+		}
+		//
+		return output;
 	}
 
 
 	// From user
 	public static Map doSearchSimilar(String offeridcategorynameconditioncode) {
-		Map output;
-		//
 		String[] temp = offeridcategorynameconditioncode.split(",");
 		//
 		String categoryName  = temp[1];
@@ -49,11 +89,15 @@ public class Offer extends DBBase {
 		//
 		String sql = FormatterOfferQuery.buildSQLSimilarOffer(categoryName, conditionCode);
 		//
-		output = doSearchOfferInternal(sql, false);
+		Map output = doSearchOfferInternal(sql, false);
 		//
-		TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
-		//
-		dataTable.setStandOut(temp[0], 0);
+		if (output != null) {
+			TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
+			if (dataTable != null) {
+				dataTable.setStandOut(temp[0], 0);
+				dataTable.setDescription("Similar Offers");
+			}
+		}
 		//
 		return output;
 	}
@@ -71,14 +115,32 @@ public class Offer extends DBBase {
 		//
 		String sql = sb.toString();
 		//
-		return doSearchOfferInternal(sql, showAll);
+		Map output = doSearchOfferInternal(sql, showAll);
+		//
+		if (output != null) {
+			TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
+			if (dataTable != null) {
+				dataTable.setDescription("Bids for One Offer");
+			}
+		}
+		//
+		return output;
 	}
 
 
 	public static Map doBrowseOffer() {
 		String sql = FormatterOfferQuery.buildSQLBrowseOffer();
 		//
-		return doSearchOfferInternal(sql, false);
+		Map output = doSearchOfferInternal(sql, false);
+		//
+		if (output != null) {
+			TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
+			if (dataTable != null) {
+				dataTable.setDescription("Browse Offer");
+			}
+		}
+		//
+		return output;
 	}
 
 
@@ -86,7 +148,16 @@ public class Offer extends DBBase {
 		StringBuilder sb  = formatSQLWithParametersForSearchOrAlert(parameters, null, true);
 		String        sql = sb.toString();
 		//
-		return doSearchOfferInternal(sql, showAll);
+		Map output = doSearchOfferInternal(sql, showAll);
+		//
+		if (output != null) {
+			TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
+			if (dataTable != null) {
+				dataTable.setDescription("Search Offer");
+			}
+		}
+		//
+		return output;
 	}
 
 
@@ -98,12 +169,6 @@ public class Offer extends DBBase {
 		}
 		else {
 			sb = FormatterOfferQuery.initQueryAlert();
-		}
-		//
-		if (isSearch) {                        // In alert, offerID placeholder will be replaced with real one
-			String offerIDOP  = getStringFromParamMap("offerIDOP", parameters);
-			String offerIDVal = getStringFromParamMap("offerIDVal", parameters);
-			FormatterOfferQuery.addCondition(sb, "o.offerID", offerIDOP, offerIDVal, null);
 		}
 		//
 		{
@@ -139,13 +204,6 @@ public class Offer extends DBBase {
 			String descriptionOP  = getStringFromParamMap("descriptionOP", parameters);
 			String descriptionVal = getStringFromParamMap("descriptionVal", parameters);
 			FormatterOfferQuery.addCondition(sb, "o.description", descriptionOP, descriptionVal, null);
-		}
-		//
-		if (isSearch) {                     // In alert, new offer has no bid / price yet
-			String priceOP   = getStringFromParamMap("priceOP", parameters);
-			String priceVal1 = getStringFromParamMap("priceVal1", parameters);
-			String priceVal2 = getStringFromParamMap("priceVal2", parameters);
-			FormatterOfferQuery.addCondition(sb, "o.price", priceOP, priceVal1, priceVal2);
 		}
 		//
 		{

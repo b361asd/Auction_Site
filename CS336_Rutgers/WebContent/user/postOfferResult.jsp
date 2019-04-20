@@ -20,7 +20,7 @@
 	//
 	String message = "";
 	if ((Boolean) data.get(DATA_NAME_STATUS)) {
-		message = "Bid Posted.";
+		message = "Offer Posted.";
 	}
 	else {
 		message = "Error in Posting Offer: " + data.get(DATA_NAME_MESSAGE);
@@ -28,12 +28,8 @@
 	;
 %>
 
-
-<h1><%=message%>
-</h1>
-
-<%@include file="nav.jsp" %>
 <%@include file="../header.jsp" %>
+<%@include file="nav.jsp" %>
 
 <h3><%=message%>
 </h3>

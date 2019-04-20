@@ -65,6 +65,7 @@
 	dataTable = (TableData) (data.get(DATA_NAME_DATA));
 %>
 
+
 <table>
 	<thead>
 	<tr>

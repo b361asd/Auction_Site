@@ -83,7 +83,7 @@
 	<thead>
 	<tr>
 		<%
-			out.println(dataTable.printDescriptionForTable());
+			out.println(dataTable.printDescriptionForTable(false));
 		%>
 	</tr>
 	<tr>

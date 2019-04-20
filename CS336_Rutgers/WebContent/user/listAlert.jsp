@@ -17,19 +17,6 @@
 
 <body>
 
-<%@include file="../header.jsp" %>
-<%@include file="nav.jsp" %>
-
-<form id="form-deleteAlert" method="post">
-	<input type="hidden" name="action" value="deleteAlert"/>
-	<input id="input-deleteAlert" type="hidden" name="alertID" value="_"/>
-</form>
-
-<form id="form-viewAlertDetail" action="${pageContext.request.contextPath}/user/viewAlertDetail.jsp" method="post">
-	<input type="hidden" name="action" value="viewAlertDetail"/>
-	<input id="input-viewAlertDetail" type="hidden" name="offerIDbidID" value="_"/>
-</form>
-
 <%
 	Map data = null;
 	TableData dataTable = null;
@@ -54,7 +41,6 @@
 	else {
 		if (action.equals("deleteAlert")) {
 			Map dataActivateUser = Alert.deleteAlert(request.getParameterMap());
-			//request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 		}
 	}
 	//
@@ -65,6 +51,9 @@
 	//
 	dataTable = (TableData) (data.get(DATA_NAME_DATA));
 %>
+
+<%@include file="../header.jsp" %>
+<%@include file="nav.jsp" %>
 
 <table>
 	<thead>

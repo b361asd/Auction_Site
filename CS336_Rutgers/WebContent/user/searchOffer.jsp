@@ -29,9 +29,6 @@
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<br/>
-<br/>
-
 <form action="${pageContext.request.contextPath}/user/listOffer.jsp" method="post">
 	<input type="hidden" name="action" value="browseOffer"/>
 	<input type="submit" value="Browse All Open Offer">
@@ -46,7 +43,6 @@
 	<input type="hidden" name="action" value="searchOffer"/>
 	<input type="submit" value="Search">
 </form>
-
 
 </body>
 

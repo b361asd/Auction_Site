@@ -24,52 +24,35 @@
 	if (action.equals("sort")) {
 		data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
 		//
-		dataTable = (TableData) (data.get(DATA_NAME_DATA));
-		//
-		String sort = getStringFromParamMap("sort", request.getParameterMap());
-		dataTable.sortRowPerHeader(sort);
-	}
-	//
-	int lookbackdays = getIntFromParamMap("lookbackdays", request.getParameterMap());
-	if (lookbackdays < 1) {
-		lookbackdays = 30;
+		if (data != null) {
+			dataTable = (TableData) (data.get(DATA_NAME_DATA));
+			//
+			if (dataTable != null) {
+				String sort = getStringFromParamMap("sort", request.getParameterMap());
+				dataTable.sortRowPerHeader(sort);
+			}
+			else {
+				data = null;
+			}
+		}
 	}
 	//
 	if (data == null) {
-		data = Trade.summaryBy(lookbackdays, true, false, false, false, false);
+		data = Trade.summaryBy(-1, true, false, false, false, false);
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
-		//
-		dataTable = (TableData) (data.get(DATA_NAME_DATA));
 	}
+	//
+	dataTable = (TableData) (data.get(DATA_NAME_DATA));
 %>
 
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<form method="post">
-	<%
-		out.println("<input type='hidden' name='action' value='buyerSummary'/>");
-		//
-		out.println("<table>");
-		out.println("<tr>");
-		out.println("<td>");
-		out.println("<div align='left' class='allField'>Lookback Days");
-		out.println("<input type='NUMBER' name='lookbackdays'value='" + lookbackdays + "' /></div>");
-		out.println("</td>");
-		//
-		out.println("<td>");
-		out.println("<input type='submit' value='Submit'>");
-		out.println("</td>");
-		out.println("</tr");
-		out.println("</table>");
-	%>
-</form>
-
 <table>
 	<thead>
 	<tr>
 		<%
-			out.println(dataTable.printDescriptionForTable());
+			out.println(dataTable.printDescriptionForTable(false));
 		%>
 	</tr>
 	<tr>

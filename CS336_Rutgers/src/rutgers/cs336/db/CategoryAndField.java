@@ -9,8 +9,7 @@ import java.util.*;
 public class CategoryAndField extends DBBase {
 
 	public static final String DATA_CATEGORY_LIST = "DATA_CATEGORY_LIST";
-
-	public static final String DATA_FIELD_LIST = "DATA_FIELD_LIST";
+	public static final String DATA_FIELD_LIST    = "DATA_FIELD_LIST";
 
 
 	public static class Category {
@@ -28,7 +27,6 @@ public class CategoryAndField extends DBBase {
 			return categoryName;
 		}
 
-		//
 		public boolean isCurr() {
 			return isCurr;
 		}
@@ -52,12 +50,10 @@ public class CategoryAndField extends DBBase {
 			return fieldID;
 		}
 
-		//
 		public String getFieldName() {
 			return fieldName;
 		}
 
-		//
 		public int getFieldType() {
 			return fieldType;
 		}

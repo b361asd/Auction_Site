@@ -9,21 +9,21 @@
 	TableData _dataTable = (TableData) request.getAttribute("dataTable");
 	String _uri = request.getRequestURI();
 	//
-	boolean _listActivity = _uri.toUpperCase().indexOf("listActivity.jsp".toUpperCase()) >= 0;         //User
-	boolean _listMyBid = _uri.toUpperCase().indexOf("listMyBid.jsp".toUpperCase()) >= 0;               //User
-	boolean _listBidForOffer = _uri.toUpperCase().indexOf("listBidForOffer.jsp".toUpperCase()) >= 0;      //User
-	boolean _viewAlertDetail = _uri.toUpperCase().indexOf("viewAlertDetail.jsp".toUpperCase()) >= 0;      //User
-	boolean _listBid = _uri.toUpperCase().indexOf("listBid.jsp".toUpperCase()) >= 0;                  //Rep
-	boolean _modifyBid = _uri.toUpperCase().indexOf("modifyBid.jsp".toUpperCase()) >= 0;               //Rep
+	boolean _listActivity = _uri.toUpperCase().contains("listActivity.jsp".toUpperCase());         //User
+	boolean _listMyBid = _uri.toUpperCase().contains("listMyBid.jsp".toUpperCase());               //User
+	boolean _listBidForOffer = _uri.toUpperCase().contains("listBidForOffer.jsp".toUpperCase());      //User
+	boolean _viewAlertDetail = _uri.toUpperCase().contains("viewAlertDetail.jsp".toUpperCase());      //User
+	boolean _listBid = _uri.toUpperCase().contains("listBid.jsp".toUpperCase());                  //Rep
+	boolean _modifyBid = _uri.toUpperCase().contains("modifyBid.jsp".toUpperCase());               //Rep
 	//
 	int addCol1st = 0;
 	int addCol2nd = 0;
 	if (_listActivity) {
-		//addCol1st = 0;
+		addCol1st = 1;
 		//addCol2nd = 0;
 	}
 	else if (_listMyBid) {
-		//addCol1st = 0;
+		addCol1st = 1;
 		//addCol2nd = 0;
 	}
 	else if (_listBidForOffer) {
@@ -44,6 +44,8 @@
 	}
 %>
 
+<br/>
+<br/>
 <%
 	if (_dataTable != null) {
 %>
@@ -52,7 +54,7 @@
 	<thead>
 	<%
 		out.println("<tr>");
-		out.println(_dataTable.printDescriptionForTable());
+		out.println(_dataTable.printDescriptionForTable((addCol1st > 0)));
 		out.println("</tr>");
 		out.println("<tr>");
 		if (addCol1st == 1) {
@@ -99,21 +101,16 @@
 				out.println(_dataTable.printRowStart(i));
 				if (addCol1st == 1) {
 					out.println("<td>");
-					if (_listActivity) {
-						out.println("NEVER");
-					}
-					else if (_listMyBid) {
-						out.println("NEVER");
-					}
-					else if (_listBidForOffer) {
-						out.println("NEVER");
-					}
-					else if (_viewAlertDetail) {
+					if (_listActivity || _viewAlertDetail || _listMyBid) {
 						String _seller = _dataTable.getOneCell(i, 1).toString();
 						String _status = _dataTable.getOneCell(i, 10).toString();
 						if (!__userID.equalsIgnoreCase(_seller) && _status.equalsIgnoreCase("Active")) {         //status
 							out.println(Helper.getButton("form-id-doBid", "input-id-doBid", "" + _dataTable.getOneCell(i, 0), "Bid"));
 						}
+						out.println(Helper.getButton("form-id-listSimilar", "input-id-listSimilar", _dataTable.getOneCell(i, 0) + "," + _dataTable.getOneCell(i, 2) + "," + _dataTable.getOneCell(i, 3), "List Similar"));
+					}
+					else if (_listBidForOffer) {
+						out.println("NEVER");
 					}
 					else if (_listBid) {
 						out.println("NEVER");
@@ -155,8 +152,10 @@
 									out.println("NEVER");
 								}
 								else if (_listBid) {
-									out.println("<button onclick=\"document.getElementById('input-id-cancelBid').value='" + _dataTableBid.getOneCell(j, 0) + "'; document.getElementById('form-id-cancelBid').submit();\" class=\"favorite styled\" type=\"button\">Cancel Bid</button>");
-									out.println("<button onclick=\"document.getElementById('input-id-modifyBid').value='" + _dataTableBid.getOneCell(j, 0) + "," + _dataTableBid.getOneCell(j, 1) + "," + _dataTableBid.getOneCell(j, 2) + "'; document.getElementById('form-id-modifyBid').submit();\" class=\"favorite styled\" type=\"button\">Modify Bid</button>");
+									out.println(Helper.getButton("form-id-cancelBid", "input-id-cancelBid", _dataTableBid.getOneCell(j, 0) + "", "Cancel Bid"));
+									out.println(Helper.getButton("form-id-modifyBid", "input-id-modifyBid", _dataTableBid.getOneCell(j, 0) + "," + _dataTableBid.getOneCell(j, 1) + "," + _dataTableBid.getOneCell(j, 2), "Modify Bid"));
+									//out.println("<button onclick=\"document.getElementById('input-id-cancelBid').value='" + _dataTableBid.getOneCell(j, 0) + "'; document.getElementById('form-id-cancelBid').submit();\" class=\"favorite styled\" type=\"button\">Cancel Bid</button>");
+									//out.println("<button onclick=\"document.getElementById('input-id-modifyBid').value='" + _dataTableBid.getOneCell(j, 0) + "," + _dataTableBid.getOneCell(j, 1) + "," + _dataTableBid.getOneCell(j, 2) + "'; document.getElementById('form-id-modifyBid').submit();\" class=\"favorite styled\" type=\"button\">Modify Bid</button>");
 								}
 								else if (_modifyBid) {
 									out.println("NEVER");

@@ -11,24 +11,55 @@
 
 <body>
 
+<%
+	Map data;
+	TableData dataTable = null;
+	//
+	String action = getStringFromParamMap("action", request.getParameterMap());
+	if (action.equalsIgnoreCase("cancelOffer")) {
+		Map dataCancelOffer = Offer.doCancelOffer(request.getParameterMap());
+		//
+		data = Offer.doBrowseOffer();
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+	}
+	else if (action.equalsIgnoreCase("listSimilar")) {
+		String offeridcategorynameconditioncode = getStringFromParamMap("offeridcategorynameconditioncode", request.getParameterMap());
+		data = Offer.doSearchSimilar(offeridcategorynameconditioncode);
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+	}
+	else if (action.equalsIgnoreCase("searchOffer")) {
+		data = Offer.doSearchOffer(request.getParameterMap(), true);
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+	}
+	else if (action.equalsIgnoreCase("browseOffer")) {
+		data = Offer.doBrowseOffer();
+		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+	}
+	else {
+		data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
+		if (data != null) {
+			dataTable = (TableData) (data.get(DATA_NAME_DATA));
+		}
+		//
+		if (dataTable == null) {
+		}
+		else {
+			String sort = getStringFromParamMap("sort", request.getParameterMap());
+			dataTable.sortRowPerHeader(sort);
+		}
+	}
+	//
+	if (data != null) {
+		dataTable = (TableData) (data.get(DATA_NAME_DATA));
+	}
+	//
+	request.setAttribute("dataTable", dataTable);
+%>
+
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<form id="form-id-cancelOffer" action="${pageContext.request.contextPath}/rep/cancelOffer.jsp" method="post">
-	<input id="input-id-cancelOffer" type="hidden" name="offerid" value="_"/>
-</form>
-
-<form id="form-id-modifyOffer" action="${pageContext.request.contextPath}/rep/modifyOffer.jsp" method="post">
-	<input type="hidden" name="action" value="startModifyOffer"/>
-	<input id="input-id-modifyOffer" type="hidden" name="offeridcategorynameuser" value="_"/>
-</form>
-
-<form id="form-sort" target="_self" method="post">
-	<input id="input-sort" type="hidden" name="sort" value="_"/>
-
-	<%@include file="../listOfferCommon.jsp" %>
-
-</form>
+<%@include file="../listOfferCommon.jsp" %>
 
 </body>
 

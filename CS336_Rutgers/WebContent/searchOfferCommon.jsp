@@ -2,8 +2,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.gui.Helper.*" %>
 
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <table>
 	<tbody>
 
