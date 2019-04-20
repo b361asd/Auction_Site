@@ -3,6 +3,7 @@ package rutgers.cs336.db;
 import rutgers.cs336.gui.Helper;
 import rutgers.cs336.gui.TableData;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
 
@@ -521,12 +522,21 @@ public class Offer extends DBBase {
 			con.setAutoCommit(false);
 			//
 			if (isCreate) {
+				BigDecimal initPrice = getBigDecimalFromParamMap("initPrice", parameters);
+				BigDecimal increment = getBigDecimalFromParamMap("increment", parameters);
+				if (initPrice.compareTo(new BigDecimal(0)) <= 0) {
+					throw new Exception("initPrice is invalid: " + initPrice);
+				}
+				if (increment.compareTo(new BigDecimal(0)) <= 0) {
+					throw new Exception("increment is invalid: " + increment);
+				}
+				//
 				pStmtInsertOfferOrModify = con.prepareStatement(SQL_OFFER_INSERT);
 				pStmtInsertOfferOrModify.setString(1, offerid);
 				pStmtInsertOfferOrModify.setString(2, getStringFromParamMap("categoryName", parameters));
 				pStmtInsertOfferOrModify.setString(3, userID);
-				pStmtInsertOfferOrModify.setBigDecimal(4, getBigDecimalFromParamMap("initPrice", parameters));
-				pStmtInsertOfferOrModify.setBigDecimal(5, getBigDecimalFromParamMap("increment", parameters));
+				pStmtInsertOfferOrModify.setBigDecimal(4, initPrice);
+				pStmtInsertOfferOrModify.setBigDecimal(5, increment);
 				pStmtInsertOfferOrModify.setBigDecimal(6, getBigDecimalFromParamMap("minPrice", parameters));
 				pStmtInsertOfferOrModify.setInt(7, getIntFromParamMap("conditionCode", parameters));
 				pStmtInsertOfferOrModify.setString(8, getStringFromParamMap("description", parameters));
@@ -603,6 +613,19 @@ public class Offer extends DBBase {
 			//
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			if (con != null) {
+				try {
+					con.rollback();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			output.put(DATA_NAME_STATUS, false);
+			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getMessage());
 			e.printStackTrace();
 		}
 		finally {

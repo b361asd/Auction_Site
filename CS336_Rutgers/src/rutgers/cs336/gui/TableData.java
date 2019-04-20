@@ -2,6 +2,8 @@ package rutgers.cs336.gui;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -9,6 +11,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 public class TableData {
 	public static final String SUB_TABLE_HEADER_SIGN = "-";
@@ -27,38 +31,6 @@ public class TableData {
 	int                  idxStandOut  = -1;
 
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String input) {
-		description = input;
-	}
-
-
-	public int rowCount() {
-		return (lstRows == null) ? 0 : lstRows.size();
-	}
-
-	public int colCount() {
-		return (colSeq == null) ? 0 : colSeq.length;
-	}
-
-
-	public List getRows() {
-		return lstRows;
-	}
-
-
-	public String getSignStandOut() {
-		return signStandOut;
-	}
-
-	public void setStandOut(String input, int idx) {
-		signStandOut = input;
-		idxStandOut = idx;
-	}
-
 	public TableData(List _lstHeader, List _lstRows, int[] _colSeq) {
 		lstHeader = _lstHeader;
 		lstRows = _lstRows;
@@ -73,6 +45,46 @@ public class TableData {
 		}
 	}
 
+	public static void main(String[] args) {
+		//Object one     = new BigDecimal(100.0);
+		Object one = null;
+		//
+		if (one instanceof BigDecimal) {
+			System.out.println("YES");
+		}
+		else {
+			System.out.println("NO");
+		}
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String input) {
+		description = input;
+	}
+
+	public int rowCount() {
+		return (lstRows == null) ? 0 : lstRows.size();
+	}
+
+	public int colCount() {
+		return (colSeq == null) ? 0 : colSeq.length;
+	}
+
+	public List getRows() {
+		return lstRows;
+	}
+
+	public String getSignStandOut() {
+		return signStandOut;
+	}
+
+	public void setStandOut(String input, int idx) {
+		signStandOut = input;
+		idxStandOut = idx;
+	}
 
 	public Object getOneCell(int i, int j) {
 		return ((List) (lstRows.get(i))).get(j);
@@ -98,7 +110,6 @@ public class TableData {
 		List lst = (List) (lstRows.get(i));
 		return lst.get(lst.size() - 1);
 	}
-
 
 	public void sortRowPerHeader(String header) {
 		if (header != null && header.startsWith(SUB_TABLE_HEADER_SIGN)) {
@@ -138,11 +149,9 @@ public class TableData {
 		}
 	}
 
-
 	public String printDescriptionForTable(boolean addOne) {
 		return "<th colspan='" + (colCount() + (addOne ? 1 : 0)) + "'>" + Helper.escapeHTML(description) + "</th>";
 	}
-
 
 	public String printHeaderForTable() {
 		return internalPrintHeaderForTable(false, null);
@@ -168,7 +177,6 @@ public class TableData {
 		}
 		return out;
 	}
-
 
 	public String printOneRowInTable(int index) {
 		return internalPrintOneRowInTable(index, null);
@@ -211,7 +219,6 @@ public class TableData {
 		return out;
 	}
 
-
 	public String printRowStart(int index) {
 		List   row = (List) lstRows.get(index);
 		String out;
@@ -231,18 +238,5 @@ public class TableData {
 		}
 		//
 		return out;
-	}
-
-
-	public static void main(String[] args) {
-		//Object one     = new BigDecimal(100.0);
-		Object one = null;
-		//
-		if (one instanceof BigDecimal) {
-			System.out.println("YES");
-		}
-		else {
-			System.out.println("NO");
-		}
 	}
 }

@@ -36,11 +36,15 @@ public class LoginFilter implements Filter, IConstant {
 		String logoutURL   = request.getContextPath() + "/logout";
 		//
 		boolean isLogoutRequest = request.getRequestURI().equals(logoutURL);
+		boolean isCSSRequest    = request.getRequestURI().toLowerCase().contains("style");
 		if (isLogoutRequest) {
 			session.invalidate();
 			//
 			//request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "redirect to login 0");
 			response.sendRedirect(loginURL);
+		}
+		else if (isCSSRequest) {
+			chain.doFilter(request, response);
 		}
 		else {
 			boolean isLoggedIn = session.getAttribute(SESSION_ATTRIBUTE_USER) != null;
@@ -63,8 +67,7 @@ public class LoginFilter implements Filter, IConstant {
 				}
 				else {      // Including login.jsp
 					boolean isHomeRequest = request.getRequestURI().equals(homeURL);
-					boolean isCSSRequest  = request.getRequestURI().toLowerCase().contains("style");
-					if (isHomeRequest || isCSSRequest) {
+					if (isHomeRequest) {
 						chain.doFilter(request, response);
 					}
 					else {

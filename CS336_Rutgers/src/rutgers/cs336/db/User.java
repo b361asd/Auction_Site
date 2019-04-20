@@ -13,6 +13,7 @@ public class User extends DBBase {
 	private static List  lstHeader_user = Arrays.asList("username", "password", "email", "firstname", "lastname", "address", "phone", "active");
 	private static int[] colSeq_user    = {0, 1, 2, 3, 4, 5, 6, 7};
 
+
 	public static Map selectUser(Map<String, String[]> parameters, int userType) {
 		Map  output  = new HashMap();
 		List lstRows = new ArrayList();
@@ -295,61 +296,70 @@ public class User extends DBBase {
 	public static Map doAddUser(String username, String password, String email, String firstName, String lastName, String street, String city, String state, String zipCode, String phone, int usertype) {
 		Map output = new HashMap();
 		//
-		Connection        con          = null;
-		PreparedStatement preparedStmt = null;
-		try {
-			con = getConnection();
-			//
-			preparedStmt = con.prepareStatement(SQL_USER_INSERT);
-			//
-			preparedStmt.setString(1, username);
-			preparedStmt.setString(2, password);
-			preparedStmt.setString(3, email);
-			preparedStmt.setString(4, firstName);
-			preparedStmt.setString(5, lastName);
-			preparedStmt.setString(6, street + " " + city + " " + state + " " + zipCode);      // Address = street + city + state + zipCode
-			preparedStmt.setString(7, phone);
-			preparedStmt.setInt(8, usertype);
-			preparedStmt.setString(9, username);
-			//
-			preparedStmt.execute();
-			//
-			int count = preparedStmt.getUpdateCount();
-			if (count == 0) {
+		if (username == null || username.trim().length() == 0) {
+			output.put(DATA_NAME_STATUS, false);
+			output.put(DATA_NAME_MESSAGE, "username is mandatory.");
+		}
+		else if (password == null || password.trim().length() == 0) {
+			output.put(DATA_NAME_STATUS, false);
+			output.put(DATA_NAME_MESSAGE, "password is mandatory.");
+		}
+		else {
+			Connection        con          = null;
+			PreparedStatement preparedStmt = null;
+			try {
+				con = getConnection();
+				//
+				preparedStmt = con.prepareStatement(SQL_USER_INSERT);
+				//
+				preparedStmt.setString(1, username);
+				preparedStmt.setString(2, password);
+				preparedStmt.setString(3, email);
+				preparedStmt.setString(4, firstName);
+				preparedStmt.setString(5, lastName);
+				preparedStmt.setString(6, street + " " + city + " " + state + " " + zipCode);      // Address = street + city + state + zipCode
+				preparedStmt.setString(7, phone);
+				preparedStmt.setInt(8, usertype);
+				preparedStmt.setString(9, username);
+				//
+				preparedStmt.execute();
+				//
+				int count = preparedStmt.getUpdateCount();
+				if (count == 0) {
+					output.put(DATA_NAME_STATUS, false);
+					output.put(DATA_NAME_MESSAGE, "Could not register user.");
+				}
+				else {
+					output.put(DATA_NAME_STATUS, true);
+					output.put(DATA_NAME_MESSAGE, "User registered");
+				}
+			}
+			catch (SQLException e) {
 				output.put(DATA_NAME_STATUS, false);
-				output.put(DATA_NAME_MESSAGE, "Could not register user.");
+				output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
+				e.printStackTrace();
 			}
-			else {
-				output.put(DATA_NAME_STATUS, true);
-				output.put(DATA_NAME_MESSAGE, "User registered");
+			catch (ClassNotFoundException e) {
+				output.put(DATA_NAME_STATUS, false);
+				output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
+				e.printStackTrace();
 			}
-		}
-		catch (SQLException e) {
-			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
-			e.printStackTrace();
-		}
-		catch (ClassNotFoundException e) {
-			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
-			e.printStackTrace();
-		}
-		finally {
-			if (preparedStmt != null) {
-				try {
-					preparedStmt.close();
+			finally {
+				if (preparedStmt != null) {
+					try {
+						preparedStmt.close();
+					}
+					catch (Throwable e) {
+						e.printStackTrace();
+					}
 				}
-				catch (Throwable e) {
-					e.printStackTrace();
-				}
-			}
-			//
-			if (con != null) {
-				try {
-					con.close();
-				}
-				catch (Throwable e) {
-					e.printStackTrace();
+				if (con != null) {
+					try {
+						con.close();
+					}
+					catch (Throwable e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -420,7 +430,6 @@ public class User extends DBBase {
 					e.printStackTrace();
 				}
 			}
-			//
 			if (con != null) {
 				try {
 					con.close();
