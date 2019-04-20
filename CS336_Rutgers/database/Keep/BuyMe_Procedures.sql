@@ -4,7 +4,8 @@ DELIMITER $$
 CREATE PROCEDURE DoTrade()
 BEGIN
 	DECLARE process_date DATETIME;
-    set process_date = DATE_SUB(NOW(), INTERVAL 4 HOUR);
+    -- set process_date = DATE_SUB(NOW(), INTERVAL 4 HOUR);
+    set process_date = NOW();
 	--
 	UPDATE Offer o SET o.status = 4 WHERE o.offerID <> 'A' AND o.status = 1 AND process_date > endDate AND 
     NOT EXISTS (SELECT * FROM Bid b WHERE b.offerID = o.offerID);

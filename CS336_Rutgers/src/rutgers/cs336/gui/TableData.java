@@ -1,6 +1,10 @@
 package rutgers.cs336.gui;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -174,6 +178,7 @@ public class TableData {
 		return internalPrintOneRowInTable(index, width);
 	}
 
+	//timezone="America/New_York"
 	private String internalPrintOneRowInTable(int index, String width) {
 		List   row = (List) lstRows.get(index);
 		String out = "";
@@ -186,6 +191,13 @@ public class TableData {
 					if (((BigDecimal) one).compareTo(new BigDecimal(-1)) == 0) {
 						oneItem = "";
 					}
+				}
+				else if (one instanceof Timestamp) {
+					Timestamp     ts  = (Timestamp) one;
+					LocalDateTime ldt = LocalDateTime.ofInstant(ts.toInstant(), ZoneId.of("America/New_York"));
+					//
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+					oneItem = ldt.format(formatter);
 				}
 				//
 				if (width == null) {

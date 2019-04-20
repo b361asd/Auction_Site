@@ -312,6 +312,86 @@ public class Trade extends DBBase {
 	}
 
 
+	public static Map selectMyTrade(String userName, int lookbackdays, int limit) {
+		Map  output  = new HashMap();
+		List lstRows = new ArrayList();
+		//
+		TableData tableData = new TableData(lstHeader_tradebybestsellingitem, lstRows, colSeq_tradebybestsellingitem);
+		output.put(DATA_NAME_DATA, tableData);
+		//
+		Connection        con          = null;
+		PreparedStatement preparedStmt = null;
+		try {
+			con = getConnection();
+			//
+			preparedStmt = con.prepareStatement(SQL_TRADE_MY_TRADE);
+			preparedStmt.setInt(1, lookbackdays);
+			preparedStmt.setString(2, userName);
+			preparedStmt.setString(3, userName);
+			preparedStmt.setInt(4, limit);
+			ResultSet rs = preparedStmt.executeQuery();
+			//
+			while (rs.next()) {
+				Object price         = rs.getObject(1);
+				Object categoryName  = rs.getObject(2);
+				Object conditionCode = rs.getObject(3);
+				Object description   = rs.getObject(4);
+				Object seller        = rs.getObject(5);
+				Object buyer         = rs.getObject(6);
+				Object tradeDate     = rs.getObject(7);
+				//
+				List currentRow = new LinkedList();
+				lstRows.add(currentRow);
+				//
+				currentRow.add(price);
+				currentRow.add(categoryName);
+				currentRow.add(Helper.getConditionFromCode(conditionCode.toString()));
+				currentRow.add(description);
+				currentRow.add(seller);
+				currentRow.add(buyer);
+				currentRow.add(tradeDate);
+			}
+			//
+			output.put(DATA_NAME_STATUS, true);
+			output.put(DATA_NAME_MESSAGE, "OK");
+			//
+			tableData.setDescription("My Most Recent " + limit + " Trades, Limited For The Last " + lookbackdays + " Days");
+		}
+		catch (SQLException e) {
+			output.put(DATA_NAME_STATUS, false);
+			output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState());
+			tableData.setDescription((String) output.get(DATA_NAME_MESSAGE));
+			e.printStackTrace();
+		}
+		catch (ClassNotFoundException e) {
+			output.put(DATA_NAME_STATUS, false);
+			output.put(DATA_NAME_MESSAGE, "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
+			tableData.setDescription((String) output.get(DATA_NAME_MESSAGE));
+			e.printStackTrace();
+		}
+		finally {
+			if (preparedStmt != null) {
+				try {
+					preparedStmt.close();
+				}
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				}
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		//
+		return output;
+	}
+
+
 	public static void main(String[] args) {
 		Map<String, String[]> parameters = new HashMap<>();
 		//

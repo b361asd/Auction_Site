@@ -8,7 +8,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Post an Offer</title>
-	<link rel="stylesheet" href="../style.css?v=1.0"/>
+	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css?v=1.0'/>
 
 	<script type="text/javascript">
        function onCategoryChange(value) {
@@ -30,8 +30,8 @@
 	String offeridcategorynameuser = null;      // From Modify order only
 %>
 
-<%@include file="nav.jsp" %>
 <%@include file="../header.jsp" %>
+<%@include file="nav.jsp" %>
 
 <form id="form" action="${pageContext.request.contextPath}/user/postOfferResult.jsp" method="post">
 

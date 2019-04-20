@@ -2,15 +2,17 @@
 <!DOCTYPE html>
 
 <%@ page import="rutgers.cs336.db.Bid" %>
+<%@ page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
+<%@ page import="rutgers.cs336.gui.TableData" %>
 
 <html>
 
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - List Bids</title>
-	<link rel="stylesheet" href="../style.css?v=1.0"/>
+	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css?v=1.0'/>
 </head>
 
 <body>
@@ -35,7 +37,7 @@
 		}
 	}
 	//
-	if (data == null || dataTable == null) {
+	if (data == null) {
 		data = Bid.searchBid(request.getParameterMap(), null, null);
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 	}

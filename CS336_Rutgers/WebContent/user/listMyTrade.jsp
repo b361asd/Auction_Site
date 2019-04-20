@@ -20,6 +20,8 @@
 	Map data = null;
 	TableData dataTable = null;
 	//
+	String userID = (String) session.getAttribute(SESSION_ATTRIBUTE_USER);
+	//
 	String action = getStringFromParamMap("action", request.getParameterMap());
 	if (action.equals("sort")) {
 		data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
@@ -35,8 +37,13 @@
 		lookbackdays = 30;
 	}
 	//
+	int limit = getIntFromParamMap("limit", request.getParameterMap());
+	if (limit < 1) {
+		limit = 10;
+	}
+	//
 	if (data == null) {
-		data = Trade.summaryBy(lookbackdays, false, false, false, false, true);
+		data = Trade.selectMyTrade(userID, lookbackdays, limit);
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 		//
 		dataTable = (TableData) (data.get(DATA_NAME_DATA));
@@ -55,6 +62,11 @@
 		out.println("<td>");
 		out.println("<div align='left' class='allField'>Lookback Days");
 		out.println("<input type='NUMBER' name='lookbackdays'value='" + lookbackdays + "' /></div>");
+		out.println("</td>");
+		//
+		out.println("<td>");
+		out.println("<div align='left' class='allField'>Limit");
+		out.println("<input type='NUMBER' name='limit'value='" + limit + "' /></div>");
 		out.println("</td>");
 		//
 		out.println("<td>");

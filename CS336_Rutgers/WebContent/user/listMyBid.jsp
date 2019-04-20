@@ -12,7 +12,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Search Offers</title>
-	<link rel="stylesheet" href="../style.css?v=1.0"/>
+	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css?v=1.0'/>
 
 	<script type="text/javascript">
        function onSelectChange() {
@@ -48,7 +48,7 @@
 		}
 	}
 	//
-	if (data == null || dataTable == null) {
+	if (data == null) {
 		data = Bid.searchBid(null, null, userID);
 		request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
 	}

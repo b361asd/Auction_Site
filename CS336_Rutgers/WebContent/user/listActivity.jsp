@@ -3,6 +3,7 @@
 
 <%@ page import="rutgers.cs336.db.Bid" %>
 <%@ page import="rutgers.cs336.db.User" %>
+<%@ page import="rutgers.cs336.gui.Helper" %>
 <%@ page import="java.util.List" %>
 <%@ page import="static rutgers.cs336.servlet.IConstant.*" %>
 <%@ page import="static rutgers.cs336.db.DBBase.*" %>
@@ -12,7 +13,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Search Offers</title>
-	<link rel="stylesheet" href="../style.css?v=1.0"/>
+	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css?v=1.0'/>
 
 	<script type="text/javascript">
        function onSelectChange() {

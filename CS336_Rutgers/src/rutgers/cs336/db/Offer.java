@@ -351,6 +351,11 @@ public class Offer extends DBBase {
 					currentRow.add(minPrice);
 					currentRow.add(startDate);
 					currentRow.add(endDate);
+
+					Timestamp tmsTimestamp = (Timestamp) endDate;
+					System.out.println(tmsTimestamp);
+
+
 					currentRow.add(Helper.getStatusFromCode(status.toString()));
 					currentRow.add(price);
 					//
@@ -829,37 +834,41 @@ public class Offer extends DBBase {
 		doCreateAllerts("user1", "99936702ff2a428ba913dd02e5592fc4");
 	}
 
-	public static void main6(String[] args) {
+	public static void main9(String[] args) {
 		System.out.println("Start");
 		//
 		//doSearchOfferByID("5948e21eeae14dcaa8d58ada0d79a773");
-		doCreateAllerts("user1", "faa5701026484feb930533ca6e3d8f16");
+		doSearchUserActivity("user");
 	}
 
 	public static void main(String[] args) {
 		Map<String, String[]> parameters = new HashMap<>();
 		//
-		parameters.put("minPrice", new String[]{"3000.00"});
+		parameters.put("categoryName", new String[]{"car"});
+		parameters.put("initPrice", new String[]{"2000"});
+		parameters.put("increment", new String[]{"100"});
+		parameters.put("minPrice", new String[]{""});
 		parameters.put("conditionCode", new String[]{"1"});
-		parameters.put("description", new String[]{"23423"});
-		parameters.put("fieldID_1", new String[]{"123423  "});
-		parameters.put("fieldID_2", new String[]{"234234  "});
-		parameters.put("fieldID_3", new String[]{"234567"});
-		parameters.put("fieldID_4", new String[]{"1234123  "});
-		parameters.put("fieldID_5", new String[]{"2345"});
-		parameters.put("fieldID_6", new String[]{"no"});
-		parameters.put("fieldID_7", new String[]{"234234"});
-		parameters.put("action", new String[]{"modifyOffer"});
-		parameters.put("offeridcategorynameuser", new String[]{"9dee3107cdf444a7b4f0cd79524cfe53,car,user"});
-		parameters.put("lstFieldIDs", new String[]{"1,2,3,4,5,6,7"});
+		parameters.put("description", new String[]{"go"});
+		parameters.put("fieldID_1", new String[]{""});
+		parameters.put("fieldID_2", new String[]{""});
+		parameters.put("fieldID_3", new String[]{""});
+		parameters.put("fieldID_4", new String[]{""});
+		parameters.put("fieldID_5", new String[]{""});
+		parameters.put("fieldID_6", new String[]{"yes"});
+		parameters.put("fieldID_7", new String[]{""});
+		parameters.put("endDate", new String[]{"2019-04-20T13:10:48"});
 		//
-		Map map = doCreateOrModifyOffer("user", parameters, false);
+		Map map = doCreateOrModifyOffer("user", parameters, true);
 		//
 		System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
 }
+
+
+//categoryName=car,initPrice=2000,increment=100,minPrice=,conditionCode=1,description=go,fieldID_1=,fieldID_2=,fieldID_3=,fieldID_4=,fieldID_5=,fieldID_6=yes,fieldID_7=,endDate=2019-04-20T13:10:48
 
 
 //Search

@@ -3,7 +3,8 @@ package rutgers.cs336.db;
 public interface ISQLConstant {
 	// MySQL JDBC Connector URL
 	//init("jdbc:mysql://localhost:3306/BuyMe", "cs336", "cs336_password");
-	String MySQL_URL      = "jdbc:mysql://cs336-buyme.cf7jfkoilx7f.us-east-1.rds.amazonaws.com:3306/cs336buyme";
+	String MySQL_URL      = "jdbc:mysql://cs336-buyme.cf7jfkoilx7f.us-east-1.rds.amazonaws.com:3306/cs336buyme?useLegacyDatetimeCode=false&serverTimezone=America/New_York";
+	//String MySQL_URL      = "jdbc:mysql://cs336-buyme.cf7jfkoilx7f.us-east-1.rds.amazonaws.com:3306/cs336buyme";
 	String MySQL_USER_ID  = "cs336";
 	String MySQL_PASSWORD = "cs336_password";
 
@@ -35,7 +36,8 @@ public interface ISQLConstant {
 
 
 	// Offer
-	String SQL_OFFER_INSERT = "INSERT INTO Offer (offerID, categoryName, seller, initPrice, increment, minPrice, conditionCode, description, startDate, endDate, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), STR_TO_DATE(?,'%Y-%m-%dT%H:%i:%s'), 1)";
+	String SQL_OFFER_INSERT = "INSERT INTO Offer (offerID, categoryName, seller, initPrice, increment, minPrice, conditionCode, description, startDate, endDate, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), DATE_SUB(STR_TO_DATE(?,'%Y-%m-%dT%H:%i:%s'), INTERVAL 0 HOUR), 1)";
+	//String SQL_OFFER_INSERT = "INSERT INTO Offer (offerID, categoryName, seller, initPrice, increment, minPrice, conditionCode, description, startDate, endDate, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), DATE_SUB(STR_TO_DATE(?,'%Y-%m-%dT%H:%i:%s'), INTERVAL 4 HOUR), 1)";
 	String SQL_OFFER_MODIFY = "UPDATE Offer SET minPrice = ?, conditionCode = ?, description = ? WHERE offerID = ? AND status = 1";
 	String SQL_OFFER_CANCEL = "DELETE FROM Offer WHERE offerID = ? AND status = 1";
 	//String SQL_OFFER_SELECT = "SELECT categoryName, seller, min_price, description, startDate, endDate, status FROM Offer WHERE offerID = ?";
@@ -61,6 +63,7 @@ public interface ISQLConstant {
 	//
 	String SQL_TRADE_BEST_ITEM             = "SELECT price, categoryName, conditionCode, description, seller, buyer, tradeDate FROM " + SQL_TRADE_VIEW + " ORDER BY price DESC LIMIT 0, ?";
 	String SQL_TRADE_RECENT_ITEM           = "SELECT price, categoryName, conditionCode, description, seller, buyer, tradeDate FROM " + SQL_TRADE_VIEW + " ORDER BY tradeDate DESC LIMIT 0, ?";
+	String SQL_TRADE_MY_TRADE              = "SELECT price, categoryName, conditionCode, description, seller, buyer, tradeDate FROM " + SQL_TRADE_VIEW + " WHERE UPPER(seller) = UPPER(?) OR UPPER(buyer) = UPPER(?) ORDER BY tradeDate DESC LIMIT 0, ?";
 
 
 	// Alert

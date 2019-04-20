@@ -45,7 +45,7 @@
 					}
 					out.println(Helper.getButton("form-id-listBid", "input-id-listBid", _dataTable.getOneCell(i, 0) + "," + _dataTable.getOneCell(i, 2), "List Bid"));
 					if (!_action.equals("listSimilar")) {
-						out.println(Helper.getButton("form-id-listSimilar", "input-id-listSimilar", _dataTable.getOneCell(i, 0) + "," + _dataTable.getOneCell(i, 2) + "," + _dataTable.getOneCell(i, 3), "List Similar"));
+						out.println(Helper.getButton("form-id-listSimilar", "input-id-listSimilar", _dataTable.getOneCell(i, 0) + "," + _dataTable.getOneCell(i, 2) + "," + _dataTable.getOneCell(i, 3), "Similars"));
 					}
 				}
 				else {

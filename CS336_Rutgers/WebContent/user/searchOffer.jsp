@@ -8,7 +8,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Search Offers</title>
-	<link rel="stylesheet" href="../style.css?v=1.0"/>
+	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css?v=1.0'/>
 
 	<script type="text/javascript">
        function onCategoryChange() {

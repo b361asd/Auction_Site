@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="rutgers.cs336.gui.Helper" %>
-<%@ page import="static rutgers.cs336.db.DBBase.*" %>
 <%@ page import="rutgers.cs336.gui.TableData" %>
+<%@ page import="static rutgers.cs336.db.DBBase.*" %>
+<%@ page import="rutgers.cs336.gui.Helper" %>
 
 <%
 	String __userID = (String) session.getAttribute(SESSION_ATTRIBUTE_USER);
@@ -107,7 +107,7 @@
 						if (!__userID.equalsIgnoreCase(_seller) && _status.equalsIgnoreCase("Active")) {         //status
 							out.println(Helper.getButton("form-id-doBid", "input-id-doBid", "" + _dataTable.getOneCell(i, 0), "Bid"));
 						}
-						out.println(Helper.getButton("form-id-listSimilar", "input-id-listSimilar", _dataTable.getOneCell(i, 0) + "," + _dataTable.getOneCell(i, 2) + "," + _dataTable.getOneCell(i, 3), "List Similar"));
+						out.println(Helper.getButton("form-id-listSimilar", "input-id-listSimilar", _dataTable.getOneCell(i, 0) + "," + _dataTable.getOneCell(i, 2) + "," + _dataTable.getOneCell(i, 3), "Similars"));
 					}
 					else if (_listBidForOffer) {
 						out.println("NEVER");

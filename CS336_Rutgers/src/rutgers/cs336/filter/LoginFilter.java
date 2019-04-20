@@ -63,7 +63,7 @@ public class LoginFilter implements Filter, IConstant {
 				}
 				else {      // Including login.jsp
 					boolean isHomeRequest = request.getRequestURI().equals(homeURL);
-					boolean isCSSRequest  = request.getRequestURI().toLowerCase().endsWith(".css");
+					boolean isCSSRequest  = request.getRequestURI().toLowerCase().contains("style");
 					if (isHomeRequest || isCSSRequest) {
 						chain.doFilter(request, response);
 					}
