@@ -11,7 +11,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Modify Rep</title>
-	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css?v=1.0'/>
+	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
 </head>
 
 <body>

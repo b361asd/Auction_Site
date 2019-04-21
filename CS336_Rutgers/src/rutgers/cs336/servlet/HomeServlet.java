@@ -13,6 +13,12 @@ import java.util.Map;
 public class HomeServlet extends HttpServlet implements IConstant {
 
 
+	/**
+	 * Serial Version UID
+	 */
+	private static final long serialVersionUID = -8617808045057289714L;
+
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);

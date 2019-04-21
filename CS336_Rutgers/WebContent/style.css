@@ -3,10 +3,6 @@ td, th {
 	padding: 10px;
 }
 
-.standout {
-	background-color: red;
-}
-
 td {
 	text-align: center;
 }
@@ -36,22 +32,6 @@ table {
 	font-family: sans-serif;
 	font-size: .8rem;
 }
-
-
-/*
-tr[name="standout"] {
-	background-color: red;
-}
-
-.standout {
-	background-color: red;
-}
-
-
-table, th, td {
-  border: 1px solid black;
-}
-*/
 
 body {
 	background-color: Azure;

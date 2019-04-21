@@ -127,7 +127,13 @@
 		out.println("<td align='left'>Minimal Price");
 		out.println("</td>");
 		out.println("<td align='left'>");
-		out.println("<input type='Number' name='minPrice' value='" + Helper.escapeHTML(dataTable.getOneCell(0, "minPrice").toString()) + "' />");
+		String minPrice = "";
+		{	minPrice = Helper.escapeHTML(dataTable.getOneCell(0, "minPrice").toString());
+			if (minPrice.startsWith("-1")) {
+				minPrice = "";				
+			}
+		}
+		out.println("<input type='Number' name='minPrice' value='" + minPrice + "' />");
 		out.println("</td>");
 		out.println("</tr>");
 		//

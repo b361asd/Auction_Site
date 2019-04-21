@@ -12,7 +12,7 @@
 	</tr>
 	<tr>
 		<td style='text-align:left'>Email Address</td>
-		<td style='text-align:left'><input type='text' name='email' value=''/></td>
+		<td style='text-align:left'><input type='email' name='email' value=''/></td>
 	</tr>
 	<tr>
 		<td style='text-align:left'>First Name</td>
@@ -40,7 +40,7 @@
 	</tr>
 	<tr>
 		<td style='text-align:left'>Phone Number</td>
-		<td style='text-align:left'><input type='text' name='phoneNumber' value=''/></td>
+		<td style='text-align:left'><input type='tel' id='phoneNumber' value='' placeholder='xxx-xxx-xxxx' pattern='[0-9]{3}-[0-9]{3}-[0-9]{4}' maxlength="12"></td>
 	</tr>
 	<tr>
 		<td style='text-align:left'></td>

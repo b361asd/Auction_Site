@@ -11,7 +11,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Search Offers</title>
-	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css?v=1.0'/>
+	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
 </head>
 
 <body>
@@ -26,10 +26,17 @@
 	if (action.equals("sort")) {
 		data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
 		//
-		dataTable = (TableData) (data.get(DATA_NAME_DATA));
-		//
-		String sort = getStringFromParamMap("sort", request.getParameterMap());
-		dataTable.sortRowPerHeader(sort);
+		if (data!=null) {
+			dataTable = (TableData) (data.get(DATA_NAME_DATA));
+			//
+			if (dataTable!=null) {
+				String sort = getStringFromParamMap("sort", request.getParameterMap());
+				dataTable.sortRowPerHeader(sort);
+			}
+			else {
+				data = null;
+			}
+		}
 	}
 	//
 	int lookbackdays = getIntFromParamMap("lookbackdays", request.getParameterMap());

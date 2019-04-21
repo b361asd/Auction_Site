@@ -524,11 +524,15 @@ public class Offer extends DBBase {
 			if (isCreate) {
 				BigDecimal initPrice = getBigDecimalFromParamMap("initPrice", parameters);
 				BigDecimal increment = getBigDecimalFromParamMap("increment", parameters);
+				BigDecimal minPrice  = getBigDecimalFromParamMap("minPrice", parameters);
 				if (initPrice.compareTo(new BigDecimal(0)) <= 0) {
 					throw new Exception("initPrice is invalid: " + initPrice);
 				}
 				if (increment.compareTo(new BigDecimal(0)) <= 0) {
 					throw new Exception("increment is invalid: " + increment);
+				}
+				if (minPrice.compareTo(new BigDecimal(0)) > 0 && minPrice.compareTo(initPrice) < 0) {
+					throw new Exception("minPrice is invalid: " + minPrice + "" + initPrice);
 				}
 				//
 				pStmtInsertOfferOrModify = con.prepareStatement(SQL_OFFER_INSERT);
@@ -537,7 +541,7 @@ public class Offer extends DBBase {
 				pStmtInsertOfferOrModify.setString(3, userID);
 				pStmtInsertOfferOrModify.setBigDecimal(4, initPrice);
 				pStmtInsertOfferOrModify.setBigDecimal(5, increment);
-				pStmtInsertOfferOrModify.setBigDecimal(6, getBigDecimalFromParamMap("minPrice", parameters));
+				pStmtInsertOfferOrModify.setBigDecimal(6, minPrice);
 				pStmtInsertOfferOrModify.setInt(7, getIntFromParamMap("conditionCode", parameters));
 				pStmtInsertOfferOrModify.setString(8, getStringFromParamMap("description", parameters));
 				pStmtInsertOfferOrModify.setString(9, getStringFromParamMap("endDate", parameters));

@@ -12,7 +12,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Search Offers</title>
-	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css?v=1.0'/>
+	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
 
 	<script type="text/javascript">
        function onSelectChange() {
@@ -25,7 +25,7 @@
 <body>
 
 <%
-	List lstUser = User.getUserList();
+	//List lstUser = User.getUserList();
 	//
 	String userID = (String) request.getSession().getAttribute("user");
 	//
