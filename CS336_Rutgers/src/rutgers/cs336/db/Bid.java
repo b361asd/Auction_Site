@@ -13,7 +13,13 @@ public class Bid extends DBBase {
 	private static int[] colSeq_bid     = {2, 3, 5};
 	private static int[] colSeq_bid_add = {2, 3, 4, 5};
 
-
+	/**
+	 * Search bid and their relevant offers
+	 * @param parameters Map containing parameters for other conditions
+	 * @param userActivity User ID for my activity screen
+	 * @param userMyBid User ID for my bid screen
+	 * @return Data for GUI rendering
+	 */
 	public static Map searchBid(Map<String, String[]> parameters, String userActivity, String userMyBid) {
 		String _offeridcategoryname = getStringFromParamMap("offeridcategoryname", parameters);
 		String _offerIDbidID        = getStringFromParamMap("offerIDbidID", parameters);                  //viewAlertDetail
@@ -50,7 +56,6 @@ public class Bid extends DBBase {
 			_modifyBid = true;
 		}
 
-		;
 		//
 		String      sql           = null;
 		String      bidIDStandout = null;
@@ -282,7 +287,13 @@ public class Bid extends DBBase {
 		return output;
 	}
 
-
+	/**
+	 * Create or modify a bid
+	 * @param userID User ID
+	 * @param parameters Map containing other parameters
+	 * @param isCreate True when created, false when modified
+	 * @return Data for GUI rendering
+	 */
 	public static Map doCreateOrModifyBid(String userID, Map<String, String[]> parameters, boolean isCreate) {
 		Map output = new HashMap();
 		//
@@ -583,7 +594,11 @@ public class Bid extends DBBase {
 	}
 
 
-	//Alert cascading delete
+	/**
+	 * Delete a bid
+	 * @param parameters Map containing bidID to be deleted
+	 * @return Data for GUI rendering
+	 */
 	public static Map cancelBid(Map<String, String[]> parameters) {
 		Map output = new HashMap();
 		//

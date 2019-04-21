@@ -1,5 +1,8 @@
 package rutgers.cs336.db;
 
+/**
+ * Constants and SQL statement patterns.
+ */
 public interface ISQLConstant {
 	// MySQL JDBC Connector URL
 	//init("jdbc:mysql://localhost:3306/BuyMe", "cs336", "cs336_password");

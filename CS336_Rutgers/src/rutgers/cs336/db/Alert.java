@@ -14,6 +14,11 @@ public class Alert extends DBBase {
 	private static int[] colSeq_alert    = {4, 5};
 
 
+	/**
+	 * Select alert for a user
+	 * @param userID User ID
+	 * @return Data for GUI rendering
+	 */
 	public static Map selectAlert(String userID) {
 		Map  output  = new HashMap();
 		List lstRows = new ArrayList();
@@ -86,7 +91,11 @@ public class Alert extends DBBase {
 		return output;
 	}
 
-
+	/**
+	 * Delete an alert
+	 * @param parameters Map containing alertID to deletes
+	 * @return Data for GUI rendering
+	 */
 	public static Map deleteAlert(Map<String, String[]> parameters) {
 		Map output = new HashMap();
 		//

@@ -8,6 +8,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Used for authorization of an account.
+ * 
+ * Ex: User cannot access admin page. Rep cannot access user page.
+ */
 public class LoginFilter implements Filter, IConstant {
 
 	public static final String USER_PATH  = "user";

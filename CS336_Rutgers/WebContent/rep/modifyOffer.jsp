@@ -29,8 +29,6 @@
 	if (action.equals("modifyOffer")) {
 		dataModify = Offer.doCreateOrModifyOffer(temps[2], request.getParameterMap(), false);
 	}
-	else if (action.equals("modifyOffer")) {
-	}
 	//
 	categoryAndField = CategoryAndField.getCategoryField(temps[1]);
 	List lstCategory = (List) categoryAndField.get(CategoryAndField.DATA_CATEGORY_LIST);

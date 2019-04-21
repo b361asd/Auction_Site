@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Dispatch Servlet based on userType: 1 is admin, 2 is rep, 3 is user.
+ */
 public class HomeServlet extends HttpServlet implements IConstant {
 
 

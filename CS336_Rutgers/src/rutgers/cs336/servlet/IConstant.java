@@ -1,5 +1,8 @@
 package rutgers.cs336.servlet;
 
+/**
+ * Constants for either Session or Map from DB to GUI.
+ */
 public interface IConstant {
 
 	// DB output map

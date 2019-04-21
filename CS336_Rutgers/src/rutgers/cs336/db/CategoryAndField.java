@@ -59,7 +59,11 @@ public class CategoryAndField extends DBBase {
 		}
 	}
 
-
+	/**
+	 * Get fields for a list of CategoryNames. Ex: "car,truck" will return all fields for them
+	 * @param categoryNamesFromParam
+	 * @return Data for GUI rendering
+	 */
 	public static Map getCategoryField(String categoryNamesFromParam) {
 		Map output = new HashMap();
 		//
@@ -147,7 +151,10 @@ public class CategoryAndField extends DBBase {
 		return output;
 	}
 
-
+	/**
+	 * Get Map
+	 * @return Map of fieldId to fieldText
+	 */
 	public static Map<String, String> getMapFieldIDToText() {
 		Map<String, String> output = new HashMap<>();
 		//

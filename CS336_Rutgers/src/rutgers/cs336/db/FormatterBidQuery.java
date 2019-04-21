@@ -1,5 +1,8 @@
 package rutgers.cs336.db;
 
+/**
+ * Format SQL querying the Bid table
+ */
 public class FormatterBidQuery extends DBBase {
 
 	public static StringBuilder initQuerySearchActive() {

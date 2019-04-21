@@ -1,5 +1,8 @@
 package rutgers.cs336.db;
 
+/**
+ * Format SQL querying the Question table
+ */
 public class FormatterQuestionQuery extends DBBase {
 
 	public static StringBuilder initQuerySearch() {

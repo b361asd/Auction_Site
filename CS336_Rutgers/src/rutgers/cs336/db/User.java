@@ -13,7 +13,12 @@ public class User extends DBBase {
 	private static List  lstHeader_user = Arrays.asList("username", "password", "email", "firstname", "lastname", "address", "phone", "active");
 	private static int[] colSeq_user    = {0, 1, 2, 3, 4, 5, 6, 7};
 
-
+	/**
+	 * Select a list of Users
+	 * @param parameters Map of all parameters
+	 * @param userType 2 for rep, 3 for user
+	 * @return Data for GUI rendering
+	 */
 	public static Map selectUser(Map<String, String[]> parameters, int userType) {
 		Map  output  = new HashMap();
 		List lstRows = new ArrayList();
@@ -99,7 +104,11 @@ public class User extends DBBase {
 		return output;
 	}
 
-
+	
+	/**
+	 * Get list of all active users
+	 * @return List of active users
+	 */
 	public static List getUserList() {
 		List lst = new ArrayList();
 		//
@@ -143,7 +152,13 @@ public class User extends DBBase {
 		return lst;
 	}
 
-
+	
+	/**
+	 * Enable or disable either an user or rep.
+	 * @param parameters Map of all parameters
+	 * @param isActivate True to activate, false to deactivate it
+	 * @return Data for GUI rendering
+	 */
 	public static Map activateUser(Map<String, String[]> parameters, boolean isActivate) {
 		Map output = new HashMap();
 		//
@@ -201,7 +216,13 @@ public class User extends DBBase {
 		return output;
 	}
 
-
+	
+	/**
+	 * Modify user information
+	 * @param parameters Map of all parameters
+	 * @param userType 2 for user, 3 for rep
+	 * @return Data for GUI rendering
+	 */
 	public static Map modifyUser(Map<String, String[]> parameters, int userType) {
 		Map output = new HashMap();
 		//
@@ -292,7 +313,22 @@ public class User extends DBBase {
 		return output;
 	}
 
-
+	
+	/**
+	 * Add an user
+	 * @param username
+	 * @param password
+	 * @param email
+	 * @param firstName
+	 * @param lastName
+	 * @param street
+	 * @param city
+	 * @param state
+	 * @param zipCode
+	 * @param phone
+	 * @param usertype
+	 * @return Data for GUI rendering
+	 */
 	public static Map doAddUser(String username, String password, String email, String firstName, String lastName, String street, String city, String state, String zipCode, String phone, int usertype) {
 		Map output = new HashMap();
 		//
@@ -367,7 +403,13 @@ public class User extends DBBase {
 		return output;
 	}
 
-
+	
+	/**
+	 * Authenticate and authorize an user
+	 * @param userID User ID
+	 * @param pwd Password
+	 * @return Data for GUI rendering
+	 */
 	public static Map doVerifyLogin(String userID, String pwd) {
 		Map output = new HashMap();
 		//

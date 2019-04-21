@@ -6,6 +6,9 @@ import rutgers.cs336.servlet.IConstant;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Helper functions
+ */
 public class Helper implements IConstant {
 
 	private final static String[] S_CONDITIONS = {"New", "Like New", "Manufacturer Refurbished", "Seller Refurbished", "Used", "For parts or Not Working"};

@@ -12,7 +12,12 @@ public class OfferAlert extends DBBase {
 	private static List  lstHeader_offeralert = Arrays.asList("criterionID", "buyer", "criterionName", "triggerTxt", "description", "generateDate");
 	private static int[] colSeq_offeralert    = {1, 2, 4, 5};
 
-
+	/**
+	 * Generate Offer Alert Criterion
+	 * @param userID User ID
+	 * @param parameters Map of all parameters
+	 * @return Data for GUI rendering
+	 */
 	public static Map doGenerateNewOfferAlertCriterion(String userID, Map<String, String[]> parameters) {
 		Map output = new HashMap();
 		//
@@ -74,7 +79,12 @@ public class OfferAlert extends DBBase {
 		return output;
 	}
 
-
+	/**
+	 * Select an Offer Alert for an user 
+	 * @param userName User name
+	 * @param isUser True if User
+	 * @return Data for GUI rendering
+	 */
 	public static Map selectOfferAlert(String userName, boolean isUser) {
 		Map       output    = new HashMap();
 		List      lstRows   = new ArrayList();
@@ -147,7 +157,11 @@ public class OfferAlert extends DBBase {
 		return output;
 	}
 
-
+	/**
+	 * Delete Offer Alert
+	 * @param parameters Map of all parameters
+	 * @return Data for GUI rendering
+	 */
 	public static Map deleteOfferAlert(Map<String, String[]> parameters) {
 		Map output = new HashMap();
 		//

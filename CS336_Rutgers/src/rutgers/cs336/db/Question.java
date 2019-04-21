@@ -11,7 +11,11 @@ public class Question extends DBBase {
 	private static List  lstHeader_question = Arrays.asList("questionID", "userID", "question", "answer", "repID", "questionDate", "answerDate");
 	private static int[] colSeq_question    = {1, 4, 2, 3, 5, 6};
 
-
+	/**
+	 * Search Questions
+	 * @param parameters Map of all parameters
+	 * @return Data for GUI rendering
+	 */
 	public static Map searchClosedQuestion(Map<String, String[]> parameters) {
 		StringBuilder sb = FormatterQuestionQuery.initQuerySearch();
 		//
@@ -124,7 +128,12 @@ public class Question extends DBBase {
 		return output;
 	}
 
-
+	/**
+	 * Insert a Question
+	 * @param userID User ID
+	 * @param question Question to insert
+	 * @return Data for GUI rendering
+	 */
 	public static Map insertQuestion(String userID, String question) {
 		Map output = new HashMap();
 		//
@@ -183,7 +192,13 @@ public class Question extends DBBase {
 		return output;
 	}
 
-
+	/**
+	 * Answer a Question
+	 * @param questionID Question ID
+	 * @param answer The answer
+	 * @param repID Rep ID
+	 * @return Data for GUI rendering
+	 */
 	public static Map answerQuestion(String questionID, String answer, String repID) {
 		Map output = new HashMap();
 		//
@@ -242,7 +257,11 @@ public class Question extends DBBase {
 		return output;
 	}
 
-
+	
+	/**
+	 * Retrieve List of open questions
+	 * @return Data for GUI rendering
+	 */
 	public static Map retrieveOpenQuestion() {
 		Map output = new HashMap();
 		//

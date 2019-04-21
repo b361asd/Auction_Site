@@ -2,8 +2,6 @@ package rutgers.cs336.gui;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -12,8 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
+/**
+ * Class to hold data for a 2 layer table. Provides a function to sort tables based on column header.
+ */
 public class TableData {
 	public static final String SUB_TABLE_HEADER_SIGN = "-";
 

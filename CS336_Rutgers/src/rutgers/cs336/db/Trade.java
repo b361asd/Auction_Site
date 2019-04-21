@@ -21,7 +21,16 @@ public class Trade extends DBBase {
 	private static List  lstHeader_tradebybestsellingitem = Arrays.asList("price", "categoryName", "conditionCode", "description", "seller", "buyer", "tradeDate");
 	private static int[] colSeq_tradebybestsellingitem    = {0, 1, 2, 3, 4, 5, 6};
 
-
+	/**
+	 * Summary of Trade for Report
+	 * @param lookbackdays Days to look back
+	 * @param isTotal If true, then run total sales report.
+	 * @param isCategoryName If true, then run category name report.
+	 * @param isBuyer If true, then run buyer report.
+	 * @param isSeller If true, then run seller report.
+	 * @param isUser If true, then run user report (buyer and seller)
+	 * @return Data for GUI rendering
+	 */
 	public static Map summaryBy(int lookbackdays, boolean isTotal, boolean isCategoryName, boolean isBuyer, boolean isSeller, boolean isUser) {
 		Map  output  = new HashMap();
 		List lstRows = new ArrayList();
@@ -156,7 +165,11 @@ public class Trade extends DBBase {
 		return output;
 	}
 
-
+	/**
+	 * Select similar (same category and condition) group reports
+	 * @param lookbackdays Lookback days
+	 * @return Data for GUI rendering
+	 */
 	public static Map selectGroupSimilar(int lookbackdays) {
 		Map  output  = new HashMap();
 		List lstRows = new ArrayList();
@@ -228,7 +241,13 @@ public class Trade extends DBBase {
 		return output;
 	}
 
-
+	/**
+	 * Select best selling or most recent items
+	 * @param lookbackdays Lookback days
+	 * @param limit Limit how many rows returned
+	 * @param isBestSellings True for best selling, false for most recent
+	 * @return Data for GUI rendering
+	 */
 	public static Map selectBestSellingMostRecentItems(int lookbackdays, int limit, boolean isBestSellings) {
 		Map  output  = new HashMap();
 		List lstRows = new ArrayList();
@@ -311,7 +330,14 @@ public class Trade extends DBBase {
 		return output;
 	}
 
-
+	
+	/**
+	 * Trade report for User (seller or buyer)
+	 * @param userName User name
+	 * @param lookbackdays Lookback days
+	 * @param limit Limit how many rows returned
+	 * @return Data for GUI rendering
+	 */
 	public static Map selectMyTrade(String userName, int lookbackdays, int limit) {
 		Map  output  = new HashMap();
 		List lstRows = new ArrayList();

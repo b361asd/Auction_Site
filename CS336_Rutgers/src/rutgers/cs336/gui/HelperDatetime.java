@@ -9,6 +9,9 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * Helper functions for time
+ */
 public class HelperDatetime {
 	static DateFormat        formatter      = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 	static DateTimeFormatter formatterzoned = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");

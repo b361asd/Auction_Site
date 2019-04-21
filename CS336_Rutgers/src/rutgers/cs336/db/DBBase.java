@@ -14,6 +14,9 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Tools and utilities for handling database calls
+ */
 public class DBBase extends Utils implements ISQLConstant, IConstant {
 	private static final int MAX_CATEGORY_COUNT = 16;
 

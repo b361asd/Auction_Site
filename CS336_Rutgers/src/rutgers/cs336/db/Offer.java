@@ -17,7 +17,12 @@ public class Offer extends DBBase {
 	private static final int FIELD_START_INDEX = 12;
 
 
-	// For search Bid
+	/**
+	 * Get Offers records for a set of offerIDs
+	 * @param offerIDSet Set of offerIDs
+	 * @param showAll If true, include minPrice. 
+	 * @return Data for GUI rendering
+	 */
 	public static Map doSearchByOfferIDSet(Set<String> offerIDSet, boolean showAll) {
 		StringBuilder sb;
 		//
@@ -40,7 +45,11 @@ public class Offer extends DBBase {
 	}
 
 
-	// For search Bid
+	/**
+	 * Get Offer records for a user (including all records, active or closed)
+	 * @param userID User ID
+	 * @return Data for GUI rendering
+	 */
 	public static Map doSearchUserActivity(String userID) {
 		String sql = FormatterOfferQuery.buildSQLUserActivityOffer(userID);
 		//
@@ -57,7 +66,11 @@ public class Offer extends DBBase {
 	}
 
 
-	//ListMyOffer (rep)
+	/**
+	 * Get Offer records for a user (active only)
+	 * @param userID User ID
+	 * @return Data for GUI rendering
+	 */
 	public static Map doSearchMyOffer(String userID) {
 		StringBuilder sb = FormatterOfferQuery.initQuerySearch();
 		//
@@ -81,7 +94,11 @@ public class Offer extends DBBase {
 	}
 
 
-	// From user
+	/**
+	 * Get similar Offer records for a user (active only)
+	 * @param offeridcategorynameconditioncode Offer ID + Category Name + Condition Code
+	 * @return Data for GUI rendering
+	 */
 	public static Map doSearchSimilar(String offeridcategorynameconditioncode) {
 		String[] temp = offeridcategorynameconditioncode.split(",");
 		//
@@ -104,8 +121,12 @@ public class Offer extends DBBase {
 	}
 
 
-	//postBit (user)
-	//modifyOffer (rep)
+	/**
+	 * Get Offer by Offer ID. Used in postBid (user) and modifyOffer (rep)
+	 * @param offerid Offer ID
+	 * @param showAll True will show minPrice
+	 * @return Data for GUI rendering
+	 */
 	public static Map doSearchOfferByID(String offerid, boolean showAll) {
 		StringBuilder sb = FormatterOfferQuery.initQuerySearch();
 		//
@@ -128,7 +149,10 @@ public class Offer extends DBBase {
 		return output;
 	}
 
-
+	/**
+	 * Browse all active offers
+	 * @return Data for GUI rendering
+	 */
 	public static Map doBrowseOffer() {
 		String sql = FormatterOfferQuery.buildSQLBrowseOffer();
 		//
@@ -144,7 +168,12 @@ public class Offer extends DBBase {
 		return output;
 	}
 
-
+	/**
+	 * Perform search
+	 * @param parameters Map of all parameters
+	 * @param showAll True will show minPrice
+	 * @return Data for GUI rendering
+	 */
 	public static Map doSearchOffer(Map<String, String[]> parameters, boolean showAll) {
 		StringBuilder sb  = formatSQLWithParametersForSearchOrAlert(parameters, null, true);
 		String        sql = sb.toString();
@@ -161,7 +190,13 @@ public class Offer extends DBBase {
 		return output;
 	}
 
-
+	/**
+	 * Format SQL for searching offers
+	 * @param parameters Map of all parameters
+	 * @param userID User ID
+	 * @param isSearch If true, will search. Otherwise, alert criteria for user interests
+	 * @return Formatted SQL
+	 */
 	public static StringBuilder formatSQLWithParametersForSearchOrAlert(Map<String, String[]> parameters, String userID, boolean isSearch) {      //Search or Alert
 		StringBuilder sb;
 		//
@@ -234,7 +269,14 @@ public class Offer extends DBBase {
 		//
 		return sb;
 	}
-
+	
+	
+	/**
+	 * Format description for user interests
+	 * @param parameters Map of all parameters
+	 * @param userID User ID
+	 * @return Formatted description
+	 */
 	public static StringBuilder formatAlertDescription(Map<String, String[]> parameters, String userID) {
 		StringBuilder sb = new StringBuilder();
 		//
@@ -287,7 +329,12 @@ public class Offer extends DBBase {
 		return sb;
 	}
 
-
+	/**
+	 * Actual searching function
+	 * @param sql SQL statement
+	 * @param showAll If true, include minPrice
+	 * @return Data for GUI rendering
+	 */
 	private static Map doSearchOfferInternal(String sql, boolean showAll) {
 		Map output = new HashMap();
 		//
@@ -497,7 +544,13 @@ public class Offer extends DBBase {
 	}
 
 
-	//For both createOffer or modifyOffer
+	/**
+	 * Create or modify offer
+	 * @param userID User ID
+	 * @param parameters Map of all parameters
+	 * @param isCreate True if a new offer is created, false if modify
+	 * @return Data for GUI rendering
+	 */
 	public static Map doCreateOrModifyOffer(String userID, Map<String, String[]> parameters, boolean isCreate) {
 		Map output = new HashMap();
 		//
@@ -524,7 +577,7 @@ public class Offer extends DBBase {
 			if (isCreate) {
 				BigDecimal initPrice = getBigDecimalFromParamMap("initPrice", parameters);
 				BigDecimal increment = getBigDecimalFromParamMap("increment", parameters);
-				BigDecimal minPrice  = getBigDecimalFromParamMap("minPrice", parameters);
+				BigDecimal minPrice = getBigDecimalFromParamMap("minPrice", parameters);
 				if (initPrice.compareTo(new BigDecimal(0)) <= 0) {
 					throw new Exception("initPrice is invalid: " + initPrice);
 				}
@@ -532,7 +585,7 @@ public class Offer extends DBBase {
 					throw new Exception("increment is invalid: " + increment);
 				}
 				if (minPrice.compareTo(new BigDecimal(0)) > 0 && minPrice.compareTo(initPrice) < 0) {
-					throw new Exception("minPrice is invalid: " + minPrice + "" + initPrice);
+					throw new Exception("minPrice is invalid: " + minPrice + " less than " + initPrice);
 				}
 				//
 				pStmtInsertOfferOrModify = con.prepareStatement(SQL_OFFER_INSERT);
@@ -675,13 +728,16 @@ public class Offer extends DBBase {
 			else {
 				doCreateAllerts(temps[2], offerid);
 			}
-			;
 		}
 		//
 		return output;
 	}
 
-
+	/**
+	 * Create Alerts when a new offer match the alert criteria
+	 * @param userName User name
+	 * @param offerID Offer ID
+	 */
 	public static void doCreateAllerts(String userName, String offerID) {
 		Connection        con                       = null;
 		PreparedStatement pStmtSelectAlertCriterion = null;
@@ -766,7 +822,11 @@ public class Offer extends DBBase {
 	}
 
 
-	//Bid Alert cascading delete
+	/**
+	 * Delete an Offer. Bid & Alert will be cascading delete
+	 * @param parameters Map of all parameters
+	 * @return Data for GUI rendering
+	 */
 	public static Map doCancelOffer(Map<String, String[]> parameters) {
 		String offerid = getStringFromParamMap("offerid", parameters);
 		//
