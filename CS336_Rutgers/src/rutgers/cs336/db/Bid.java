@@ -55,7 +55,6 @@ public class Bid extends DBBase {
 		else if (!_bidIDofferIDBuyer.equals("")) {
 			_modifyBid = true;
 		}
-
 		//
 		String      sql           = null;
 		String      bidIDStandout = null;
@@ -343,6 +342,22 @@ public class Bid extends DBBase {
 		//
 		Object[] lastMaxBid = new Object[4];
 		try {
+			BigDecimal price = (BigDecimal) newBid[2];
+			BigDecimal autoRebidLimit = (BigDecimal) newBid[3];
+			if (price == null) {
+				throw new Exception("Invalid bid: need to set price");
+			}
+			else if (price.compareTo(new BigDecimal(0)) <= 0) {
+				throw new Exception("Invalid bid: price needs to be greater than 0: " + price);
+			}
+			//
+			if (autoRebidLimit == null) {
+				autoRebidLimit = new BigDecimal(-1);
+			}
+			else if (autoRebidLimit.compareTo(new BigDecimal(0)) > 0 && autoRebidLimit.compareTo(price) < 0) {
+				throw new Exception("Invalid bid: autoRebidLimit needs to be greater than price: " + autoRebidLimit + " less than " + price);
+			}
+			//
 			con = getConnection();
 			con.setAutoCommit(false);
 			//
@@ -544,6 +559,20 @@ public class Bid extends DBBase {
 			//
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			if (con != null) {
+				try {
+					con.rollback();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			//
+			output.put(DATA_NAME_STATUS, false);
+			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "Exception" + ", Message=" + e.getMessage());
 			e.printStackTrace();
 		}
 		finally {

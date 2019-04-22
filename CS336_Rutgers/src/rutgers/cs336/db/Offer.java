@@ -20,7 +20,7 @@ public class Offer extends DBBase {
 	/**
 	 * Get Offers records for a set of offerIDs
 	 * @param offerIDSet Set of offerIDs
-	 * @param showAll If true, include minPrice. 
+	 * @param showAll If true, include minPrice.
 	 * @return Data for GUI rendering
 	 */
 	public static Map doSearchByOfferIDSet(Set<String> offerIDSet, boolean showAll) {
@@ -269,8 +269,8 @@ public class Offer extends DBBase {
 		//
 		return sb;
 	}
-	
-	
+
+
 	/**
 	 * Format description for user interests
 	 * @param parameters Map of all parameters

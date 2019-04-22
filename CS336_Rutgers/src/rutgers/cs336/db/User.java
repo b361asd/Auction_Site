@@ -332,6 +332,14 @@ public class User extends DBBase {
 	public static Map doAddUser(String username, String password, String email, String firstName, String lastName, String street, String city, String state, String zipCode, String phone, int usertype) {
 		Map output = new HashMap();
 		//
+		if (email==null) {email = " ";}
+		if (firstName==null) 	{firstName = " ";}
+		if (lastName==null) 		{lastName = " ";}
+		if (street==null) 		{street = " ";}
+		if (city==null) 			{city = " ";}
+		if (state==null) 			{state = " ";}
+		if (phone==null) 			{phone = " ";}
+		//
 		if (username == null || username.trim().length() == 0) {
 			output.put(DATA_NAME_STATUS, false);
 			output.put(DATA_NAME_MESSAGE, "username is mandatory.");
