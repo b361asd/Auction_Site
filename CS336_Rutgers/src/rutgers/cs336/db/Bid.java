@@ -686,7 +686,108 @@ public class Bid extends DBBase {
 		return output;
 	}
 
+	
+	
+	
+	
+	/**
+	 * Get min when modify a bid
+	 * @param parameters Map containing other parameters
+	 * @return Min Bid
+	 */
+	public static BigDecimal getMinForModifyBid(Map<String, String[]> parameters) {
+		BigDecimal output = null;
+		//
+		String _bidIDofferIDBuyer   = getStringFromParamMap("bidIDofferIDBuyer", parameters);
+		//
+		String[] temps 	= _bidIDofferIDBuyer.split(",");
+		String bidID 		= temps[0];
+		String offerID 	= temps[1];
+		//
+		BigDecimal initPrice 		= null;
+		BigDecimal increment 		= null;
+		//
+		BigDecimal price 				= null;
+		BigDecimal autoRebidLimit 	= null;
+		//
+		Connection        con                     = null;
+		PreparedStatement preparedStmtMaxPriceBid = null;
+		try {
+			con = getConnection();
+			//
+			preparedStmtMaxPriceBid = con.prepareStatement(SQL_BID_SELECT_MAX_PRICE_EX);
+			preparedStmtMaxPriceBid.setString(1, offerID);
+			preparedStmtMaxPriceBid.setString(2, bidID);
+			preparedStmtMaxPriceBid.setString(3, bidID);
+			//
+			ResultSet rs = preparedStmtMaxPriceBid.executeQuery();
+			if (rs.next()) {
+				Object _offerID        = rs.getObject(1);
+				Object _seller         = rs.getObject(2);
+				Object _categoryName   = rs.getObject(3);
+				Object _conditionCode  = rs.getObject(4);
+				Object _description    = rs.getObject(5);
+				Object _initPrice      = rs.getObject(6);
+				Object _increment      = rs.getObject(7);
+				Object _minPrice       = rs.getObject(8);
+				Object _startDate      = rs.getObject(9);
+				Object _endDate        = rs.getObject(10);
+				Object _status         = rs.getObject(11);
+				Object _bidID          = rs.getObject(12);
+				Object _buyer          = rs.getObject(13);
+				Object _price          = rs.getObject(14);
+				Object _autoRebidLimit = rs.getObject(15);
+				Object _bidDate        = rs.getObject(16);
+				//
+				initPrice = (BigDecimal) _initPrice;
+				increment = (BigDecimal) _increment;
+				//
+				if (_bidID == null || _bidID.toString().length() == 0) {
+				}
+				else {
+					price 			= (BigDecimal) _price;
+					autoRebidLimit = (BigDecimal) _autoRebidLimit;
+				}
+			}
+			//
+			if (initPrice!=null && increment!=null) {
+				if (price==null) {
+					output = initPrice;
+				}
+				else {
+					output = price.add(increment);
+				}
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			if (preparedStmtMaxPriceBid != null) {
+				try {
+					preparedStmtMaxPriceBid.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				}
+				catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+		}
+		//
+		return output;
+	}
+	
+	
 
+	
+	
 	public static void main3(String[] args) {
 		Map<String, String[]> parameters = new HashMap<>();
 		//
@@ -741,7 +842,7 @@ public class Bid extends DBBase {
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
 
-	public static void main(String[] args) {
+	public static void main0(String[] args) {
 		System.out.println(SQL_TRADE_TOTAL);
 		//
 		Map<String, String[]> parameters = new HashMap<>();
@@ -754,7 +855,22 @@ public class Bid extends DBBase {
 		System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
 		System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
 	}
+
+	public static void main(String[] args) {
+		System.out.println(SQL_TRADE_TOTAL);
+		//
+		Map<String, String[]> parameters = new HashMap<>();
+		//
+		parameters.put("bidIDofferIDBuyer", new String[]{"b2d4ba68a1d84841aebc0434988d7261,1ccf77b4a6cc46a5b9a471db65ae4618,test1"});
+		//
+		BigDecimal output = getMinForModifyBid(parameters);
+		//
+		System.out.println(output);
+	}
 }
+
+
+
 
 
 //action=viewAlertDetail,offerIDbidID=6bc17ded8d0e4300ae8ce80a5fa85b8d,

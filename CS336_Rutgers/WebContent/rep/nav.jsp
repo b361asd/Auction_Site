@@ -29,6 +29,6 @@
 </form>
 
 <form id="form-id-modifyBid" action="${pageContext.request.contextPath}/rep/modifyBid.jsp" method="post">
-	<input type="hidden" name="action" value="modifyBid"/>
+	<input type="hidden" name="action" value="startModifyBid"/>
 	<input id="input-id-modifyBid" type="hidden" name="bidIDofferIDBuyer" value="_"/>
 </form>
