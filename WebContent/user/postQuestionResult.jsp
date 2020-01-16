@@ -19,7 +19,7 @@
    Map data = Question.insertQuestion(userID, DBBase.getStringFromParamMap("question", request.getParameterMap()));
    //
    //
-   String message = "";
+   String message;
    if ((Boolean) data.get(DATA_NAME_STATUS)) {
       message = "Question Posted.";
    }

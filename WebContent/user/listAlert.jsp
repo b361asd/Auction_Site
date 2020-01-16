@@ -19,7 +19,7 @@
 
 <%
    Map data = null;
-   TableData dataTable = null;
+   TableData dataTable;
    //
    String userID = (String) request.getSession().getAttribute("user");
    //

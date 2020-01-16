@@ -12,7 +12,7 @@
 <head>
    <meta charset="utf-8">
    <title>BuyMe - Search Offers</title>
-   <link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+   <link rel="stylesheet" href='../style.css'/>
 </head>
 
 <body>
@@ -27,7 +27,7 @@
 
 <%
    Map data = null;
-   TableData dataTable = null;
+   TableData dataTable;
    //
    String userID = (String) session.getAttribute(SESSION_ATTRIBUTE_USER);
    //

@@ -6,7 +6,7 @@
 <head>
    <meta charset="utf-8">
    <title>BuyMe - Search Offers</title>
-   <link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+   <link rel="stylesheet" href='../style.css'/>
 </head>
 
 <body>

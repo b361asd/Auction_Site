@@ -8,7 +8,7 @@
 <head>
    <meta charset="utf-8">
    <title>BuyMe - Search Offers</title>
-   <link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+   <link rel="stylesheet" href='../style.css'/>
 
    <script type="text/javascript">
        function onCategoryChange() {
@@ -22,8 +22,7 @@
 <body>
 
 <%
-   Map data = null;
-   data = CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
+   CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
 %>
 
 <%@include file="../header.jsp" %>

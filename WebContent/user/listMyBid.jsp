@@ -10,7 +10,7 @@
 <head>
    <meta charset="utf-8">
    <title>BuyMe - Search Offers</title>
-   <link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+   <link rel="stylesheet" href='../style.css'/>
 
    <script type="text/javascript">
        function onSelectChange() {
@@ -28,7 +28,7 @@
    String userID = (String) request.getSession().getAttribute("user");
    //
    Map data = null;
-   TableData dataTable = null;
+   TableData dataTable;
    //
    String action = getStringFromParamMap("action", request.getParameterMap());
    if (action.equals("sort")) {

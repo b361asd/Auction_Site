@@ -18,7 +18,7 @@
 
 <%
    Map data = null;
-   TableData dataTable = null;
+   TableData dataTable;
    //
    String action = getStringFromParamMap("action", request.getParameterMap());
    if (action.equals("sort")) {

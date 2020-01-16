@@ -5,20 +5,21 @@
 <%@ page import="b361asd.auction.gui.TableData" %>
 <%@ page import="static b361asd.auction.servlet.IConstant.*" %>
 <%@ page import="static b361asd.auction.db.DBBase.*" %>
+<%@ page import="java.util.Objects" %>
 
 <html>
 
 <head>
    <meta charset="utf-8">
    <title>BuyMe - Modify User</title>
-   <link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+   <link rel="stylesheet" href='../style.css'/>
 </head>
 
 <body>
 
 <%
    Map data = null;
-   TableData dataTable = null;
+   TableData dataTable;
    //
    String _userType = (String) session.getAttribute(SESSION_ATTRIBUTE_USERTYPE);
    int targetUsrType = 3;
@@ -32,7 +33,7 @@
       request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
    }
    //
-   dataTable = (TableData) (data.get(DATA_NAME_DATA));
+   dataTable = (TableData) (Objects.requireNonNull(data).get(DATA_NAME_DATA));
 %>
 
 
@@ -65,7 +66,7 @@
 <br/>
 <br/>
 
-<form action="${pageContext.request.contextPath}/rep/listUser.jsp" method="post">
+<form action="listUser.jsp" method="post">
    <%
       out.println("<input type='hidden' name='action' value='updateUser'/>");
       out.println("<div><input type='hidden' name='username' value='" + dataTable.getOneCell(0, 0) + "'></div>");

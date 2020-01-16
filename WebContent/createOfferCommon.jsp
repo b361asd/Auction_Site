@@ -127,7 +127,7 @@
       out.println("<td align='left'>Minimal Price");
       out.println("</td>");
       out.println("<td align='left'>");
-      String minPrice = "";
+      String minPrice;
       {
          minPrice = Helper.escapeHTML(dataTable.getOneCell(0, "minPrice").toString());
          if (minPrice.startsWith("-1")) {

@@ -58,7 +58,7 @@
       BigDecimal increment = (BigDecimal) dataTable.getOneCell(0, 6);
       BigDecimal curPrice = (BigDecimal) dataTable.getOneCell(0, 11);
       //
-      BigDecimal minPrice = null;
+      BigDecimal minPrice;
       if (curPrice == null) {
          minPrice = initPrice;
       }

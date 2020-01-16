@@ -10,16 +10,16 @@
 <head>
    <meta charset="utf-8">
    <title>BuyMe - Modify Offers</title>
-   <link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+   <link rel="stylesheet" href='../style.css'/>
 </head>
 
 <body>
 
 <%
    Map dataModify = null;
-   Map data = null;
-   Map categoryAndField = null;
-   TableData dataTable = null;
+   Map data;
+   Map categoryAndField;
+   TableData dataTable;
    //
    String offeridcategorynameuser = DBBase.getStringFromParamMap("offeridcategorynameuser", request.getParameterMap());
    //

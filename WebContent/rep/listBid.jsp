@@ -4,6 +4,7 @@
 <%@ page import="b361asd.auction.db.Bid" %>
 <%@ page import="static b361asd.auction.servlet.IConstant.*" %>
 <%@ page import="static b361asd.auction.db.DBBase.*" %>
+<%@ page import="java.util.Objects" %>
 
 <html>
 
@@ -49,7 +50,7 @@
       }
       //
       //
-      dataTable = (TableData) (data.get(DATA_NAME_DATA));
+      dataTable = (TableData) (Objects.requireNonNull(data).get(DATA_NAME_DATA));
       //
       request.setAttribute("dataTable", dataTable);
    %>

@@ -10,14 +10,14 @@
 <head>
    <meta charset="utf-8">
    <title>BuyMe - List Bids</title>
-   <link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+   <link rel="stylesheet" href='../style.css'/>
 </head>
 
 <body>
 
 <%
    Map data = null;
-   TableData dataTable = null;
+   TableData dataTable;
    //
    String action = getStringFromParamMap("action", request.getParameterMap());
    if (action.equals("sort")) {

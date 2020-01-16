@@ -5,6 +5,7 @@
 <%@ page import="b361asd.auction.gui.TableData" %>
 <%@ page import="static b361asd.auction.servlet.IConstant.*" %>
 <%@ page import="static b361asd.auction.db.DBBase.*" %>
+<%@ page import="java.util.Objects" %>
 
 <html>
 
@@ -32,7 +33,7 @@
       request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
    }
    //
-   dataTable = (TableData) (data.get(DATA_NAME_DATA));
+   dataTable = (TableData) (Objects.requireNonNull(data).get(DATA_NAME_DATA));
 %>
 
 <%@include file="../header.jsp" %>
@@ -64,7 +65,7 @@
 <br/>
 <br/>
 
-<form action="${pageContext.request.contextPath}/admin/listUser.jsp" method="post">
+<form action="listUser.jsp" method="post">
    <%
       out.println("<input type='hidden' name='action' value='updateUser'/>");
       out.println("<div><input type='hidden' name='username' value='" + dataTable.getOneCell(0, 0) + "'></div>");

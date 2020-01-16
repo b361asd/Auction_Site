@@ -11,13 +11,13 @@
 <head>
    <meta charset="utf-8">
    <title>BuyMe - Modify Bids</title>
-   <link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+   <link rel="stylesheet" href='../style.css'/>
 </head>
 
 <body>
 
 <%
-   Map data = null;
+   Map data;
    TableData dataTable;
    //
    String message = "";

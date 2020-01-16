@@ -29,7 +29,7 @@
    //
    String userRepBidSearch = getStringFromParamMap("userRepBidSearch", request.getParameterMap());
    if (userRepBidSearch.length() == 0) {
-      if (lstUser != null && lstUser.size() > 0) {
+      if (lstUser.size() > 0) {
          userRepBidSearch = lstUser.get(0).toString();
       }
    }

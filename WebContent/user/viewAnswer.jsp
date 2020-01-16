@@ -35,7 +35,7 @@
       request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
    }
    //
-   if (data != null && dataTable == null) {
+   if (dataTable == null) {
       dataTable = (TableData) (data.get(DATA_NAME_DATA));
    }
 %>

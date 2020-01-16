@@ -30,7 +30,7 @@
    <input id="input-deactivateUser" type="hidden" name="username" value="_"/>
 </form>
 
-<form id="form-updateUser" action="${pageContext.request.contextPath}/admin/modifyUser.jsp" method="post">
+<form id="form-updateUser" action="modifyUser.jsp" method="post">
    <input type="hidden" name="action" value="updateUser"/>
    <input id="input-updateUser" type="hidden" name="username" value="_"/>
 </form>

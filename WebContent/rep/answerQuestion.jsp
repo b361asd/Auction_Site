@@ -21,10 +21,8 @@
       String repID      = (String) request.getSession().getAttribute(SESSION_ATTRIBUTE_USER);
       String questionID = DBBase.getStringFromParamMap("questionID", request.getParameterMap());
       String answer     = DBBase.getStringFromParamMap("answer", request.getParameterMap());
-      //
-      Map dataUpdate;
       if (!questionID.equals("") && !answer.equals("")) {
-         dataUpdate = Question.answerQuestion(questionID, answer, repID);
+         Question.answerQuestion(questionID, answer, repID);
       }
    }
    //

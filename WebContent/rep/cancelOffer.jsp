@@ -20,7 +20,7 @@
    //
    request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
    //
-   String message = "";
+   String message;
    if ((Boolean) data.get(DATA_NAME_STATUS)) {
       message = "Offer Cancelled.";
    }

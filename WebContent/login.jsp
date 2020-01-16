@@ -6,7 +6,7 @@
 <head>
    <meta charset="utf-8">
    <title>BuyMe - Login</title>
-   <link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+   <link rel="stylesheet" href='./style.css'/>
 </head>
 
 <body>
@@ -22,7 +22,7 @@
 
 </form>
 
-<h2><A href="${pageContext.request.contextPath}/register.jsp">Register</A></h2>
+<h2><A href="register.jsp">Register</A></h2>
 
 
 </body>
