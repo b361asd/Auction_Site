@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="b361asd.auction.gui.TableData" %>
 <%@ page import="static b361asd.auction.db.DBBase.*" %>
 <%@ page import="b361asd.auction.gui.Helper" %>

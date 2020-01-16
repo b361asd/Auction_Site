@@ -65,17 +65,17 @@
 		out.println("</tr>");
 		//
 		List lstField = (List) data.get(CategoryAndField.DATA_FIELD_LIST);
-		String lstFieldIDs = null;
+		StringBuilder lstFieldIDs = null;
 		for (Object o : lstField) {
 			String fieldName = ((CategoryAndField.Field) o).getFieldName();
 			int    fieldID   = ((CategoryAndField.Field) o).getFieldID();
 			int    fieldType = ((CategoryAndField.Field) o).getFieldType();
 			//
 			if (lstFieldIDs == null) {
-				lstFieldIDs = "" + fieldID;
+				lstFieldIDs = new StringBuilder("" + fieldID);
 			}
 			else {
-				lstFieldIDs = lstFieldIDs + "," + fieldID;
+				lstFieldIDs.append(",").append(fieldID);
 			}
 			// String
 			if (fieldType == 1) {

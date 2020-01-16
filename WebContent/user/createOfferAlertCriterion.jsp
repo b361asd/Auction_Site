@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
 <%@ page import="static b361asd.auction.db.DBBase.*" %>
@@ -8,7 +8,8 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Generate Alert</title>
-	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+<%--	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>--%>
+	<link rel="stylesheet" href="../style.css">
 
 	<script type="text/javascript">
        function onCategoryChange() {
@@ -28,7 +29,8 @@
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<form id="form" action="${pageContext.request.contextPath}/user/listOfferAlertCriterion.jsp" method="post">
+<%--<form id="form" action="${pageContext.request.contextPath}/listOfferAlertCriterion.jsp" method="post">--%>
+<form id="form" action="listOfferAlertCriterion.jsp" method="post">
 
 	<%@include file="../searchOfferCommon.jsp" %>
 

@@ -14,7 +14,7 @@
 	//TableData dataTable 	= null;						//IN  from Modify order
 	//String offeridcategorynameuser 		= null;						//IN  from Modify order
 	//
-	String lstFieldIDs = null;                  //OUT from Modify order
+	StringBuilder lstFieldIDs = null;                  //OUT from Modify order
 	//
 	String userType = (String) request.getSession().getAttribute("userType");
 %>
@@ -159,10 +159,10 @@
 			int    fieldType = ((CategoryAndField.Field) o).getFieldType();
 			//
 			if (lstFieldIDs == null) {
-				lstFieldIDs = "" + fieldID;
+				lstFieldIDs = new StringBuilder("" + fieldID);
 			}
 			else {
-				lstFieldIDs = lstFieldIDs + "," + fieldID;
+				lstFieldIDs.append(",").append(fieldID);
 			}
 			// String
 			if (fieldType == 1) {

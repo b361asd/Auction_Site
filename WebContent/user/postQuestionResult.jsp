@@ -1,5 +1,5 @@
 <%@page import="b361asd.auction.db.Question" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
 <%@ page import="static b361asd.auction.servlet.IConstant.*" %>

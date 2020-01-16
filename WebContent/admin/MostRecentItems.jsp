@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
 <%@ page import="b361asd.auction.db.Trade" %>
@@ -11,7 +11,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Search Offers</title>
-	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+	<link rel="stylesheet" href="../style.css">
 </head>
 
 <body>

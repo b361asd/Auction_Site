@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
 <%@ page import="static b361asd.auction.db.DBBase.*" %>
@@ -8,11 +8,11 @@
 <head>
 	<meta charset="utf-8">
 	<title>BuyMe - Post an Offer</title>
-	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
-
+<%--	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>--%>
+	<link rel="stylesheet" href="../style.css">
 	<script type="text/javascript">
        function onCategoryChange(value) {
-           var form = document.getElementById('form');
+           let form = document.getElementById('form');
            form.action = "${pageContext.request.contextPath}/user/postOffer.jsp";
            form.submit();
        }
