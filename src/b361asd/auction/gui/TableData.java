@@ -154,28 +154,23 @@ public class TableData {
    }
 
    public String printHeaderForTable() {
-      return internalPrintHeaderForTable(false, null);
+      return internalPrintHeaderForTable(false);
    }
 
    public String printSubHeaderForTable() {
-      return internalPrintHeaderForTable(true, null);
+      return internalPrintHeaderForTable(true);
    }
 
-   private String internalPrintHeaderForTable(boolean subTable, String width) {
-      String out = "";
+   private String internalPrintHeaderForTable(boolean subTable) {
+      StringBuilder out = new StringBuilder();
       if (lstHeader != null && lstHeader.size() > 0 && colSeq != null && colSeq.length > 0) {
          for (int value : colSeq) {
             Object one     = lstHeader.get(value);
             String oneItem = (one == null) ? "" : one.toString();
-            if (width == null) {
-               out = out + "<th><div onclick=onClickHeader('" + (subTable ? SUB_TABLE_HEADER_SIGN : "") + oneItem + "')>" + oneItem + "</div></th>";
-            }
-            else {
-               out = out + "<th width='" + width + "'><div onclick=onClickHeader('" + (subTable ? SUB_TABLE_HEADER_SIGN : "") + oneItem + "')>" + oneItem + "</div></th>";
-            }
+            out.append("<th><div onclick=onClickHeader('").append(subTable ? SUB_TABLE_HEADER_SIGN : "").append(oneItem).append("')>").append(oneItem).append("</div></th>");
          }
       }
-      return out;
+      return out.toString();
    }
 
    public String printOneRowInTable(int index) {
@@ -188,8 +183,8 @@ public class TableData {
 
    //timezone="America/New_York"
    private String internalPrintOneRowInTable(int index, String width) {
-      List   row = (List) lstRows.get(index);
-      String out = "";
+      List          row = (List) lstRows.get(index);
+      StringBuilder out = new StringBuilder();
       if (row != null && row.size() > 0 && colSeq != null && colSeq.length > 0) {
          for (int value : colSeq) {
             Object one = row.get(value);
@@ -209,14 +204,14 @@ public class TableData {
             }
             //
             if (width == null) {
-               out = out + "<td>" + Helper.escapeHTML(oneItem) + "</td>";
+               out.append("<td>").append(Helper.escapeHTML(oneItem)).append("</td>");
             }
             else {
-               out = out + "<td width='" + width + "'>" + Helper.escapeHTML(oneItem) + "</td>";
+               out.append("<td width='").append(width).append("'>").append(Helper.escapeHTML(oneItem)).append("</td>");
             }
          }
       }
-      return out;
+      return out.toString();
    }
 
    public String printRowStart(int index) {

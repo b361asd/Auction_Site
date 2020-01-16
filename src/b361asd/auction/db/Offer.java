@@ -213,19 +213,19 @@ public class Offer extends DBBase {
       }
       //
       {
-         String lstConditionCode = "";
+         StringBuilder lstConditionCode = new StringBuilder();
          for (int i = 1; i <= 6; i++) {
             String temp = getStringFromParamMap("conditionCode_" + i, parameters);
             if (temp.length() > 0) {
-               if (lstConditionCode.equals("")) {
-                  lstConditionCode = "" + i;
+               if (lstConditionCode.toString().equals("")) {
+                  lstConditionCode = new StringBuilder("" + i);
                }
                else {
-                  lstConditionCode = lstConditionCode + "," + i;
+                  lstConditionCode.append(",").append(i);
                }
             }
          }
-         addCondition(sb, "o.conditionCode", OP_INT_EQUAL_MULTI, lstConditionCode, null);
+         addCondition(sb, "o.conditionCode", OP_INT_EQUAL_MULTI, lstConditionCode.toString(), null);
       }
       {
          String descriptionOP  = getStringFromParamMap("descriptionOP", parameters);
@@ -286,19 +286,19 @@ public class Offer extends DBBase {
       }
       //
       {
-         String lstCondition = "";
+         StringBuilder lstCondition = new StringBuilder();
          for (int i = 1; i <= 6; i++) {
             String temp = getStringFromParamMap("conditionCode_" + i, parameters);
             if (temp.length() > 0) {
-               if (lstCondition.equals("")) {
-                  lstCondition = Helper.getConditionFromCode("" + i);
+               if (lstCondition.toString().equals("")) {
+                  lstCondition = new StringBuilder(Helper.getConditionFromCode("" + i));
                }
                else {
-                  lstCondition = lstCondition + "," + Helper.getConditionFromCode("" + i);
+                  lstCondition.append(",").append(Helper.getConditionFromCode("" + i));
                }
             }
          }
-         oneConditionDesc(sb, "conditionCode", OP_SZ_EQUAL_MULTI_NO_ESCAPE, lstCondition, null);
+         oneConditionDesc(sb, "conditionCode", OP_SZ_EQUAL_MULTI_NO_ESCAPE, lstCondition.toString(), null);
       }
       {
          String descriptionOP  = getStringFromParamMap("descriptionOP", parameters);
@@ -548,7 +548,7 @@ public class Offer extends DBBase {
    public static Map doCreateOrModifyOffer(String userID, Map<String, String[]> parameters, boolean isCreate) {
       Map output = new HashMap();
       //
-      String   offerid = null;
+      String   offerid;
       String[] temps   = null;
       if (isCreate) {
          offerid = getUUID();
@@ -593,7 +593,6 @@ public class Offer extends DBBase {
             pStmtInsertOfferOrModify.setString(8, getStringFromParamMap("description", parameters));
             pStmtInsertOfferOrModify.setString(9, getStringFromParamMap("endDate", parameters));
             //
-            pStmtInsertOfferOrModify.execute();
          }
          else {
             pStmtInsertOfferOrModify = con.prepareStatement(SQL_OFFER_MODIFY);
@@ -602,8 +601,8 @@ public class Offer extends DBBase {
             pStmtInsertOfferOrModify.setString(3, getStringFromParamMap("description", parameters));
             pStmtInsertOfferOrModify.setString(4, offerid);
             //
-            pStmtInsertOfferOrModify.execute();
          }
+         pStmtInsertOfferOrModify.execute();
          //
          int count = pStmtInsertOfferOrModify.getUpdateCount();
          if (count == 1) {

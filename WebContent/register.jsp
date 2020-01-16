@@ -4,9 +4,9 @@
 <html>
 
 <head>
-	<meta charset="utf-8">
-	<title>BuyMe - Register</title>
-	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+   <meta charset="utf-8">
+   <title>BuyMe - Register</title>
+   <link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
 </head>
 
 <body>
@@ -15,7 +15,7 @@
 
 <form action="${pageContext.request.contextPath}/home" method="post">
 
-	<%@include file="registerCommon.jsp" %>
+   <%@include file="registerCommon.jsp" %>
 
 </form>
 

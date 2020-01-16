@@ -4,9 +4,9 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <title>BuyMe - Register a Representative</title>
-    <link rel="stylesheet" href='../style.css'/>
+   <meta charset="utf-8">
+   <title>BuyMe - Register a Representative</title>
+   <link rel="stylesheet" href='../style.css'/>
 
 </head>
 
@@ -17,7 +17,7 @@
 
 <form action="registerRepResult.jsp" method="post">
 
-    <%@include file="../registerCommon.jsp" %>
+   <%@include file="../registerCommon.jsp" %>
 
 </form>
 

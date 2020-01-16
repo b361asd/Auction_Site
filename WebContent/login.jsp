@@ -4,9 +4,9 @@
 <html>
 
 <head>
-	<meta charset="utf-8">
-	<title>BuyMe - Login</title>
-	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+   <meta charset="utf-8">
+   <title>BuyMe - Login</title>
+   <link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
 </head>
 
 <body>
@@ -15,10 +15,10 @@
 
 <form action="${pageContext.request.contextPath}/home" method="post">
 
-	Please enter your username<input type="text" name="username"/><br>
-	Please enter your password<input type="password" name="password"/>
+   Please enter your username<input type="text" name="username"/><br>
+   Please enter your password<input type="password" name="password"/>
 
-	<input type="submit" value="Submit">
+   <input type="submit" value="Submit">
 
 </form>
 

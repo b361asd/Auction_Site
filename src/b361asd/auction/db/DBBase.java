@@ -413,25 +413,25 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 
 
    public static String getListOfStringsFromSet(Set<String> set, String delimiter) {
-      String out = "";
+      StringBuilder out = new StringBuilder();
       if (set != null) {
          for (String one : set) {
             if (one != null && one.length() > 0) {
-               if (out.equals("")) {
-                  out = delimiter + one + delimiter;
+               if (out.toString().equals("")) {
+                  out = new StringBuilder(delimiter + one + delimiter);
                }
                else {
-                  out = out + "," + delimiter + one + delimiter;
+                  out.append(",").append(delimiter).append(one).append(delimiter);
                }
             }
          }
       }
-      return out;
+      return out.toString();
    }
 
 
    public static String getListOfStringsFromParamMap(String name, int startIndex, Map<String, String[]> parameters, String delimiter) {
-      String out = "";
+      StringBuilder out = new StringBuilder();
       if (parameters != null) {
          String[] temps;
          for (int i = startIndex; i < MAX_CATEGORY_COUNT; i++) {
@@ -440,18 +440,18 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
             if (temps != null) {
                String one = temps[0];
                if (one != null && one.length() > 0) {
-                  if (out.equals("")) {
-                     out = delimiter + one + delimiter;
+                  if (out.toString().equals("")) {
+                     out = new StringBuilder(delimiter + one + delimiter);
                   }
                   else {
-                     out = out + "," + delimiter + one + delimiter;
+                     out.append(",").append(delimiter).append(one).append(delimiter);
                   }
                }
             }
          }
       }
       //
-      return out;
+      return out.toString();
    }
 
 	/*

@@ -57,7 +57,7 @@ public class Bid extends DBBase {
          _modifyBid = true;
       }
       //
-      String      sql           = null;
+      String      sql;
       String      bidIDStandout = null;
       String      userStandout  = null;
       Set<String> offerIDSet    = new HashSet<>();            //offerID set
@@ -180,7 +180,7 @@ public class Bid extends DBBase {
             offerIDSet.add(offerID.toString());
          }
          //
-         Map       offerMap       = null;
+         Map       offerMap;
          TableData dataTableOffer = null;
          if (_listActivity) {
             offerMap = Offer.doSearchUserActivity(userActivity);
@@ -298,8 +298,8 @@ public class Bid extends DBBase {
    public static Map doCreateOrModifyBid(String userID, Map<String, String[]> parameters, boolean isCreate) {
       Map output = new HashMap();
       //
-      String     offerId   = "";
-      String     bidID     = "";
+      String     offerId;
+      String     bidID;
       BigDecimal initPrice = null;
       BigDecimal increment = null;
       //
@@ -416,7 +416,8 @@ public class Bid extends DBBase {
             current[0] = getUUID();
          }
          //
-         int outcome = 1;               // 1 Start, 2 NotMeetInitPrice, 3 LessThanLastPlusDelta; 4: offerClosed 5 Out-bided; 10 OK
+         // 1 Start, 2 NotMeetInitPrice, 3 LessThanLastPlusDelta; 4: offerClosed 5 Out-bided; 10 OK
+         int outcome;
          if (status != 1) {
             outcome = 4;
          }
@@ -743,11 +744,8 @@ public class Bid extends DBBase {
             initPrice = (BigDecimal) _initPrice;
             increment = (BigDecimal) _increment;
             //
-            if (_bidID == null || _bidID.toString().length() == 0) {
-            }
-            else {
+            if (_bidID != null && _bidID.toString().length() != 0) {
                price = (BigDecimal) _price;
-               autoRebidLimit = (BigDecimal) _autoRebidLimit;
             }
          }
          //

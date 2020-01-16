@@ -6,24 +6,24 @@
 <html>
 
 <head>
-	<meta charset="utf-8">
-	<title>BuyMe - Generate Alert</title>
-<%--	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>--%>
-	<link rel="stylesheet" href="../style.css">
+   <meta charset="utf-8">
+   <title>BuyMe - Generate Alert</title>
+   <%--	<link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>--%>
+   <link rel="stylesheet" href="../style.css">
 
-	<script type="text/javascript">
+   <script type="text/javascript">
        function onCategoryChange() {
            const form = document.getElementById('form');
            form.action = "${pageContext.request.contextPath}/user/createOfferAlertCriterion.jsp";
            form.submit();
        }
-	</script>
+   </script>
 </head>
 
 <body>
 
 <%
-	Map data = CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
+   Map data = CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
 %>
 
 <%@include file="../header.jsp" %>
@@ -32,10 +32,10 @@
 <%--<form id="form" action="${pageContext.request.contextPath}/listOfferAlertCriterion.jsp" method="post">--%>
 <form id="form" action="listOfferAlertCriterion.jsp" method="post">
 
-	<%@include file="../searchOfferCommon.jsp" %>
+   <%@include file="../searchOfferCommon.jsp" %>
 
-	<input type="hidden" name="action" value="createAlertCriterion"/>
-	<input type="submit" value="Create Alert Criterion">
+   <input type="hidden" name="action" value="createAlertCriterion"/>
+   <input type="submit" value="Create Alert Criterion">
 </form>
 
 </body>

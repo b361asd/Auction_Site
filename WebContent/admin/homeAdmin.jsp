@@ -3,9 +3,9 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <title>BuyMe - Admin Home</title>
-    <link rel="stylesheet" href="../style.css">
+   <meta charset="utf-8">
+   <title>BuyMe - Admin Home</title>
+   <link rel="stylesheet" href="../style.css">
 </head>
 
 <body>

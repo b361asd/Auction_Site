@@ -6,32 +6,32 @@
 <html>
 
 <head>
-	<meta charset="utf-8">
-	<title>BuyMe - Search Offers</title>
-	<link rel="stylesheet" href='../style.css'/>
+   <meta charset="utf-8">
+   <title>BuyMe - Search Offers</title>
+   <link rel="stylesheet" href='../style.css'/>
 
-	<script type="text/javascript">
+   <script type="text/javascript">
        function onCategoryChange() {
            const form = document.getElementById('form');
            form.action = "${pageContext.request.contextPath}/user/searchOffer.jsp";
            form.submit();
        }
-	</script>
+   </script>
 </head>
 
 <body>
 
 <%
-	Map data = null;
-	data = CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
+   Map data = null;
+   data = CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
 %>
 
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
 <form action="${pageContext.request.contextPath}/user/listOffer.jsp" method="post">
-	<input type="hidden" name="action" value="browseOffer"/>
-	<input type="submit" value="Browse All Open Offer">
+   <input type="hidden" name="action" value="browseOffer"/>
+   <input type="submit" value="Browse All Open Offer">
 </form>
 
 <br/>
@@ -39,9 +39,9 @@
 
 
 <form id="form" action="${pageContext.request.contextPath}/user/listOffer.jsp" method="post">
-	<%@include file="../searchOfferCommon.jsp" %>
-	<input type="hidden" name="action" value="searchOffer"/>
-	<input type="submit" value="Search">
+   <%@include file="../searchOfferCommon.jsp" %>
+   <input type="hidden" name="action" value="searchOffer"/>
+   <input type="submit" value="Search">
 </form>
 
 </body>

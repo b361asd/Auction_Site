@@ -12,9 +12,10 @@ public class CategoryAndField extends DBBase {
    public static final String DATA_FIELD_LIST    = "DATA_FIELD_LIST";
 
    /**
-    * Get fields for a list of CategoryNames. Ex: "car,truck" will return all fields for them
+    * Get fields for a list of CategoryNames.
+    * Ex: "car,truck" will return all fields for them
     *
-    * @param categoryNamesFromParam
+    * @param categoryNamesFromParam Category Names
     * @return Data for GUI rendering
     */
    public static Map getCategoryField(String categoryNamesFromParam) {
@@ -49,7 +50,7 @@ public class CategoryAndField extends DBBase {
             String sz_fieldName    = fieldName.toString();
             int    i_fieldType     = (Integer) fieldType;
             //
-            //Default the first one
+            // Default the first one
             if (categoryNamesFromParam.equals("")) {
                categoryNamesFromParam = sz_categoryName;
             }
