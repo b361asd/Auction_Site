@@ -8,11 +8,11 @@
 
 
 # Ignore
-CS336_Rutgers/.idea/**
-CS336_Rutgers/lib
-CS336_Rutgers/out
+.idea/**
+lib
+out
 
-!CS336_Rutgers/WebContent/WEB-INF/classes
+!WebContent/WEB-INF/classes
 
 # Eclipse
 .classpath
