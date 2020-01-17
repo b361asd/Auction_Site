@@ -48,12 +48,12 @@
    }
    else {
       if (action.equals("deleteOfferAlert")) {
-         Map datadeleteOfferAlert = OfferAlert.deleteOfferAlert(request.getParameterMap());
+         OfferAlert.deleteOfferAlert(request.getParameterMap());
          //request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
       }
       else if (action.equals("createAlertCriterion")) {
          //String userID = (String) request.getSession().getAttribute("user");
-         Map dataCreateOfferAlert = OfferAlert.doGenerateNewOfferAlertCriterion(userID, request.getParameterMap());
+         OfferAlert.doGenerateNewOfferAlertCriterion(userID, request.getParameterMap());
       }
    }
    //

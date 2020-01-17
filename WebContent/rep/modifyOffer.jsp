@@ -31,8 +31,8 @@
    }
    //
    categoryAndField = CategoryAndField.getCategoryField(temps[1]);
-   List lstCategory = (List) categoryAndField.get(CategoryAndField.DATA_CATEGORY_LIST);
-   List lstField = (List) categoryAndField.get(CategoryAndField.DATA_FIELD_LIST);
+   categoryAndField.get(CategoryAndField.DATA_CATEGORY_LIST);
+   categoryAndField.get(CategoryAndField.DATA_FIELD_LIST);
    //
    data = Offer.doSearchOfferByID(temps[0], true);
    //
@@ -42,7 +42,7 @@
    //
    if (dataModify != null) {
       boolean _status  = Helper.getStatus(dataModify);
-      String  _message = Helper.getMessage(dataModify);
+      Helper.getMessage(dataModify);
       if (!_status) {
          Helper.setStatus(data, false);
          Helper.appendMessage(data, Helper.getMessage(dataModify));

@@ -23,7 +23,7 @@
 <body>
 
 <%
-   Map data = CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
+   CategoryAndField.getCategoryField(getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
 %>
 
 <%@include file="../header.jsp" %>

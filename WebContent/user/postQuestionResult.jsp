@@ -26,7 +26,6 @@
    else {
       message = "Error in Posting Question: " + data.get(DATA_NAME_MESSAGE);
    }
-   ;
 %>
 
 <%@include file="../header.jsp" %>

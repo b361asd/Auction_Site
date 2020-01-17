@@ -40,7 +40,7 @@
    }
    else {
       if (action.equals("deleteAlert")) {
-         Map dataActivateUser = Alert.deleteAlert(request.getParameterMap());
+         Alert.deleteAlert(request.getParameterMap());
       }
    }
    //

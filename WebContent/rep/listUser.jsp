@@ -62,14 +62,14 @@
    }
    else {
       if (action.equalsIgnoreCase("activateUser")) {
-         Map dataActivateUser = User.activateUser(request.getParameterMap(), true);
+         User.activateUser(request.getParameterMap(), true);
          //request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
       }
       else if (action.equalsIgnoreCase("deactivateUser")) {
-         Map dataDeactivateUser = User.activateUser(request.getParameterMap(), false);
+         User.activateUser(request.getParameterMap(), false);
       }
       else if (action.equalsIgnoreCase("updateUser")) {
-         Map dataupdateUser = User.modifyUser(request.getParameterMap(), targetUsrType);
+         User.modifyUser(request.getParameterMap(), targetUsrType);
       }
    }
    //

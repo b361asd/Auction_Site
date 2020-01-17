@@ -23,11 +23,8 @@
 
 <%
    Map data = CategoryAndField.getCategoryField(getStringFromParamMap("categoryName", request.getParameterMap()));
-   List lstCategory = (List) data.get(CategoryAndField.DATA_CATEGORY_LIST);
-   List lstField = (List) data.get(CategoryAndField.DATA_FIELD_LIST);
-   //
-   TableData dataTable = null;                     // From Modify order only
-   String offeridcategorynameuser = null;      // From Modify order only
+   data.get(CategoryAndField.DATA_CATEGORY_LIST);
+   data.get(CategoryAndField.DATA_FIELD_LIST);
 %>
 
 <%@include file="../header.jsp" %>

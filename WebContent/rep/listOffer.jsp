@@ -17,7 +17,7 @@
    //
    String action = getStringFromParamMap("action", request.getParameterMap());
    if (action.equalsIgnoreCase("cancelOffer")) {
-      Map dataCancelOffer = Offer.doCancelOffer(request.getParameterMap());
+      Offer.doCancelOffer(request.getParameterMap());
       //
       data = Offer.doBrowseOffer();
       request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
