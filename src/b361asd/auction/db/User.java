@@ -120,7 +120,7 @@ public class User extends DBBase {
       try {
          con = getConnection();
          //
-         preparedStmt = con.prepareStatement(SQL_USER_SELECTUSERID);
+         preparedStmt = con.prepareStatement(SQL_USER_SELECT_USERID);
          //
          ResultSet rs = preparedStmt.executeQuery();
          //
@@ -173,7 +173,7 @@ public class User extends DBBase {
       try {
          con = getConnection();
          //
-         preparedStmt = con.prepareStatement(isActivate ? SQL_USER_ACTIVE : SQL_USER_DEACTIVE);
+         preparedStmt = con.prepareStatement(isActivate ? SQL_USER_ACTIVE : SQL_USER_INACTIVE);
          preparedStmt.setString(1, username);
          //
          preparedStmt.execute();

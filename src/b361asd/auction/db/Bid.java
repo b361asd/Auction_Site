@@ -354,7 +354,7 @@ public class Bid extends DBBase {
          }
          //
          if (autoRebidLimit == null) {
-            autoRebidLimit = new BigDecimal(-1);
+            new BigDecimal(-1);
          }
          else if (autoRebidLimit.compareTo(new BigDecimal(0)) > 0 && autoRebidLimit.compareTo(price) < 0) {
             throw new Exception("Invalid bid: autoRebidLimit needs to be greater than price: " + autoRebidLimit + " less than " + price);

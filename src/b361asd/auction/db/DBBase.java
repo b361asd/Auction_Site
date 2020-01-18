@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * Tools and utilities for handling database calls
  */
 public class DBBase extends Utils implements ISQLConstant, IConstant {
-   private static final int MAX_CATEGORY_COUNT = 16;
+   private static final int                     MAX_CATEGORY_COUNT          = 16;
    //
    private static final HashMap<String, String> sqlTokens;
    public static        String                  OP_ANY                      = "any";
@@ -100,7 +100,8 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
    private static String oneCondition(String columnName, String op, String value, String valueAdd, boolean isCasting) {
       String output = "";
       //
-      if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE) || op.equals(OP_SZ_NOT_EQUAL) || op.equals(OP_SZ_START_WITH) || op.equals(OP_SZ_CONTAIN)) {   // String
+      // String
+      if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE) || op.equals(OP_SZ_NOT_EQUAL) || op.equals(OP_SZ_START_WITH) || op.equals(OP_SZ_CONTAIN)) {
          if (op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
             value = toUpperCaseTrimNoNull(value);
          }
@@ -170,7 +171,8 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
             }
          }
       }
-      else if (op.equals(OP_BOOL_TRUE) || op.equals(OP_BOOL_FALSE)) {                  // Boolean
+      // Boolean
+      else if (op.equals(OP_BOOL_TRUE) || op.equals(OP_BOOL_FALSE)) {
          if (op.equals(OP_BOOL_TRUE)) {
             if (isCasting) {
                output = "(UPPER(" + columnName + ") = 'YES')";                              //UPPER('yes')
@@ -216,29 +218,21 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
    }
 
    public static void addCondition(StringBuilder sb, String columnName, String op, String value, String valueAdd) {
-      if (op.equals(OP_ANY)) {
-         // Do Nothing
-      }
-      else {
+      if (!op.equals(OP_ANY)) {
          String temp = oneCondition(columnName, op, value, valueAdd, false);
          if (temp.length() > 0) {
             sb.append(" and ").append(temp);
          }
       }
-      //
    }
 
    public static void addFieldCondition(StringBuilder sb, String fieldID, String op, String value, String valueAdd) {
-      if (op.equals(OP_ANY)) {
-         // Do Nothing
-      }
-      else {
+      if (!op.equals(OP_ANY)) {
          String temp = oneCondition("of2.fieldText", op, value, valueAdd, true);
          if (temp.length() > 0) {
             sb.append(" or (of2.fieldID = ").append(fieldID).append(" and (not ").append(temp).append("))");
          }
       }
-      //
    }
 
 
@@ -256,89 +250,87 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
          sb.append(columnName);
          sb.append("; ");
       }
-      else {
-         if (value != null && value.trim().length() != 0) {
-            if (op.equalsIgnoreCase(OP_ANY)) {
-               sb.append("any ");
+      else if (value != null && value.trim().length() != 0) {
+         if (op.equalsIgnoreCase(OP_ANY)) {
+            sb.append("any ");
+            sb.append(columnName);
+            sb.append("; ");
+         }
+         else if (op.equalsIgnoreCase(OP_SZ_EQUAL)) {
+            sb.append(columnName);
+            sb.append(" is ");
+            sb.append(value);
+            sb.append("; ");
+         }
+         else if (op.equalsIgnoreCase(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
+            sb.append(columnName);
+            sb.append(" is among (");
+            sb.append(value);
+            sb.append("); ");
+         }
+         else if (op.equalsIgnoreCase(OP_SZ_NOT_EQUAL)) {
+            sb.append(columnName);
+            sb.append(" is not ");
+            sb.append(value);
+            sb.append("; ");
+         }
+         else if (op.equalsIgnoreCase(OP_SZ_START_WITH)) {
+            sb.append(columnName);
+            sb.append(" starts with ");
+            sb.append(value);
+            sb.append("; ");
+         }
+         else if (op.equalsIgnoreCase(OP_SZ_CONTAIN)) {
+            sb.append(columnName);
+            sb.append(" contains ");
+            sb.append(value);
+            sb.append("; ");
+         }
+         else if (op.equalsIgnoreCase(OP_INT_EQUAL)) {
+            sb.append(columnName);
+            sb.append(" is ");
+            sb.append(value);
+            sb.append("; ");
+         }
+         else if (op.equalsIgnoreCase(OP_INT_EQUAL_MULTI)) {
+            sb.append(columnName);
+            sb.append(" is among (");
+            sb.append(value);
+            sb.append("); ");
+         }
+         else if (op.equalsIgnoreCase(OP_INT_NOT_EQUAL)) {
+            sb.append(columnName);
+            sb.append(" is not ");
+            sb.append(value);
+            sb.append("; ");
+         }
+         else if (op.equalsIgnoreCase(OP_INT_EQUAL_OR_OVER)) {
+            sb.append(columnName);
+            sb.append(" is equal or over ");
+            sb.append(value);
+            sb.append("; ");
+         }
+         else if (op.equalsIgnoreCase(OP_INT_EQUAL_OR_UNDER)) {
+            sb.append(columnName);
+            sb.append(" is equal or under ");
+            sb.append(value);
+            sb.append("; ");
+         }
+         else if (op.equalsIgnoreCase(OP_INT_BETWEEN)) {
+            if (valueAdd != null && valueAdd.trim().length() != 0) {
                sb.append(columnName);
+               sb.append(" is between ");
+               sb.append(value);
+               sb.append(" and ");
+               sb.append(valueAdd);
                sb.append("; ");
             }
-            else if (op.equalsIgnoreCase(OP_SZ_EQUAL)) {
-               sb.append(columnName);
-               sb.append(" is ");
-               sb.append(value);
-               sb.append("; ");
-            }
-            else if (op.equalsIgnoreCase(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
-               sb.append(columnName);
-               sb.append(" is among (");
-               sb.append(value);
-               sb.append("); ");
-            }
-            else if (op.equalsIgnoreCase(OP_SZ_NOT_EQUAL)) {
-               sb.append(columnName);
-               sb.append(" is not ");
-               sb.append(value);
-               sb.append("; ");
-            }
-            else if (op.equalsIgnoreCase(OP_SZ_START_WITH)) {
-               sb.append(columnName);
-               sb.append(" starts with ");
-               sb.append(value);
-               sb.append("; ");
-            }
-            else if (op.equalsIgnoreCase(OP_SZ_CONTAIN)) {
-               sb.append(columnName);
-               sb.append(" contains ");
-               sb.append(value);
-               sb.append("; ");
-            }
-            else if (op.equalsIgnoreCase(OP_INT_EQUAL)) {
-               sb.append(columnName);
-               sb.append(" is ");
-               sb.append(value);
-               sb.append("; ");
-            }
-            else if (op.equalsIgnoreCase(OP_INT_EQUAL_MULTI)) {
-               sb.append(columnName);
-               sb.append(" is among (");
-               sb.append(value);
-               sb.append("); ");
-            }
-            else if (op.equalsIgnoreCase(OP_INT_NOT_EQUAL)) {
-               sb.append(columnName);
-               sb.append(" is not ");
-               sb.append(value);
-               sb.append("; ");
-            }
-            else if (op.equalsIgnoreCase(OP_INT_EQUAL_OR_OVER)) {
-               sb.append(columnName);
-               sb.append(" is equal or over ");
-               sb.append(value);
-               sb.append("; ");
-            }
-            else if (op.equalsIgnoreCase(OP_INT_EQUAL_OR_UNDER)) {
-               sb.append(columnName);
-               sb.append(" is equal or under ");
-               sb.append(value);
-               sb.append("; ");
-            }
-            else if (op.equalsIgnoreCase(OP_INT_BETWEEN)) {
-               if (valueAdd != null && valueAdd.trim().length() != 0) {
-                  sb.append(columnName);
-                  sb.append(" is between ");
-                  sb.append(value);
-                  sb.append(" and ");
-                  sb.append(valueAdd);
-                  sb.append("; ");
-               }
-            }
-            else {
-               sb.append(columnName);
-               sb.append(" is in unknown relation to ");
-               sb.append(value);
-               sb.append("; ");
-            }
+         }
+         else {
+            sb.append(columnName);
+            sb.append(" is in unknown relation to ");
+            sb.append(value);
+            sb.append("; ");
          }
       }
    }
