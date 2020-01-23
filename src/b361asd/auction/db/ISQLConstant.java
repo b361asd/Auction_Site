@@ -4,10 +4,10 @@ package b361asd.auction.db;
  * Constants and SQL statement patterns.
  */
 public interface ISQLConstant {
-   //   String MySQL_URL_LOCAL = "jdbc:mysql://localhost:3306/BuyMe";
-   String MySQL_URL      = "jdbc:mysql://cs336-buyme.cf7jfkoilx7f.us-east-1.rds.amazonaws.com:3306/cs336buyme";
-   String MySQL_USER_ID  = "cs336";
-   String MySQL_PASSWORD = "cs336_password";
+   //   String MySQL_URL      = "jdbc:mysql://cs336-buyme.cf7jfkoilx7f.us-east-1.rds.amazonaws.com:3306/cs336buyme";
+   String MySQL_URL      = "jdbc:mysql://localhost:3306/BuyMe";
+   String MySQL_USER_ID  = "user1";
+   String MySQL_PASSWORD = "user_password";
 
 
    // User
