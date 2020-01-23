@@ -24,3 +24,6 @@ To get the project running.
 6. Click `Manager App` and enter your username and password.
 7. Under `WAR file to deploy`, select the `.war` file created.
 8. Under `Applications`, you should see the name of the `.war` file created. Click on that to enter the application.
+
+# License
+[MIT](LICENSE)
