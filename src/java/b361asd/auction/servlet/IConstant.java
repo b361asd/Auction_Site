@@ -1,4 +1,4 @@
-package b361asd.auction.servlet;
+package java.b361asd.auction.servlet;
 
 /**
  * Constants for either Session or Map from DB to GUI.

@@ -1,4 +1,4 @@
-package b361asd.auction.servlet;
+package java.b361asd.auction.servlet;
 
 import b361asd.auction.db.User;
 

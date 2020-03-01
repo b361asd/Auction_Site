@@ -1,6 +1,6 @@
 package java.b361asd.auction.filter;
 
-import b361asd.auction.servlet.IConstant;
+import java.b361asd.auction.servlet.IConstant;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

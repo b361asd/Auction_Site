@@ -1,7 +1,7 @@
-package b361asd.auction.db;
+package java.b361asd.auction.db;
 
-import b361asd.auction.gui.TableData;
-import b361asd.auction.servlet.IConstant;
+import java.b361asd.auction.gui.TableData;
+import java.b361asd.auction.servlet.IConstant;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,7 +30,7 @@ public class Alert extends DBBase {
       try {
          con = getConnection();
          //
-         preparedStmt = con.prepareStatement(SQL_ALERT_SELECT);
+         preparedStmt = con.prepareStatement(ISQLConstant.SQL_ALERT_SELECT);
          //
          preparedStmt.setString(1, userID);
          //
@@ -109,7 +109,7 @@ public class Alert extends DBBase {
       try {
          con = getConnection();
          //
-         preparedStmt = con.prepareStatement(SQL_ALERT_DELETE);
+         preparedStmt = con.prepareStatement(ISQLConstant.SQL_ALERT_DELETE);
          preparedStmt.setString(1, alertID);
          //
          preparedStmt.execute();

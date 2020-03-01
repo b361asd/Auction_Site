@@ -1,7 +1,7 @@
-package b361asd.auction.gui;
+package java.b361asd.auction.gui;
 
-import b361asd.auction.db.CategoryAndField;
-import b361asd.auction.servlet.IConstant;
+import java.b361asd.auction.db.CategoryAndField;
+import java.b361asd.auction.servlet.IConstant;
 
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package b361asd.auction.db;
+package java.b361asd.auction.db;
 
 /**
  * Format SQL querying the Bid table

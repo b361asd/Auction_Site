@@ -1,8 +1,9 @@
-package b361asd.auction.db;
+package java.b361asd.auction.db;
 
-import b361asd.auction.gui.Helper;
-import b361asd.auction.gui.TableData;
+import java.b361asd.auction.gui.Helper;
+import java.b361asd.auction.gui.TableData;
 
+import java.b361asd.auction.servlet.IConstant;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
@@ -185,7 +186,7 @@ public class Bid extends DBBase {
          if (_listActivity) {
             offerMap = Offer.doSearchUserActivity(userActivity);
             if (offerMap != null) {
-               dataTableOffer = (TableData) offerMap.get(DATA_NAME_DATA);
+               dataTableOffer = (TableData) offerMap.get(IConstant.DATA_NAME_DATA);
                dataTableOffer.setStandOut(userActivity, 1);
             }
          }
@@ -193,7 +194,7 @@ public class Bid extends DBBase {
             if (offerIDSet.size() > 0) {
                offerMap = Offer.doSearchByOfferIDSet(offerIDSet, _listBid_Search || _listBid_Browse || _modifyBid);
                if (offerMap != null) {
-                  dataTableOffer = (TableData) offerMap.get(DATA_NAME_DATA);
+                  dataTableOffer = (TableData) offerMap.get(IConstant.DATA_NAME_DATA);
                }
             }
          }
@@ -250,19 +251,19 @@ public class Bid extends DBBase {
             dataTableOffer.setDescription("List of Bids");
          }
          //
-         output.put(DATA_NAME_DATA, dataTableOffer);
+         output.put(IConstant.DATA_NAME_DATA, dataTableOffer);
          //
-         output.put(DATA_NAME_STATUS, true);
-         output.put(DATA_NAME_MESSAGE, "OK");
+         output.put(IConstant.DATA_NAME_STATUS, true);
+         output.put(IConstant.DATA_NAME_MESSAGE, "OK");
       }
       catch (SQLException e) {
-         output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sql));
+         output.put(IConstant.DATA_NAME_STATUS, false);
+         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", SQL=" + (sql));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
-         output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
+         output.put(IConstant.DATA_NAME_STATUS, false);
+         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
          e.printStackTrace();
       }
       finally {
@@ -363,7 +364,7 @@ public class Bid extends DBBase {
          con = getConnection();
          con.setAutoCommit(false);
          //
-         preparedStmtMaxPriceBid = con.prepareStatement(isCreate ? SQL_BID_SELECT_MAX_PRICE : SQL_BID_SELECT_MAX_PRICE_EX);
+         preparedStmtMaxPriceBid = con.prepareStatement(isCreate ? ISQLConstant.SQL_BID_SELECT_MAX_PRICE : ISQLConstant.SQL_BID_SELECT_MAX_PRICE_EX);
          preparedStmtMaxPriceBid.setString(1, offerId);
          if (!isCreate) {
             preparedStmtMaxPriceBid.setString(2, bidID);
@@ -455,7 +456,7 @@ public class Bid extends DBBase {
                   isModifyAndDoit = false;
                   //
                   if (pStmtModifyBid == null) {
-                     pStmtModifyBid = con.prepareStatement(SQL_BID_UPDATE);
+                     pStmtModifyBid = con.prepareStatement(ISQLConstant.SQL_BID_UPDATE);
                   }
                   pStmtModifyBid.setBigDecimal(1, (BigDecimal) current[2]);
                   pStmtModifyBid.setBigDecimal(2, (BigDecimal) current[3]);
@@ -464,7 +465,7 @@ public class Bid extends DBBase {
                }
                else {
                   if (pStmtInsertBid == null) {
-                     pStmtInsertBid = con.prepareStatement(SQL_BID_INSERT);
+                     pStmtInsertBid = con.prepareStatement(ISQLConstant.SQL_BID_INSERT);
                   }
                   pStmtInsertBid.setString(1, current[0].toString());
                   pStmtInsertBid.setString(2, offerId);
@@ -488,7 +489,7 @@ public class Bid extends DBBase {
                   else {                  //Out bid alert
                      String context = "Your bid for a " + categoryName + " (" + Helper.getConditionFromCode(conditionCode) + ", " + description + ") by seller " + seller + " is outbidded.";
                      //
-                     pStmtInsertAlert = con.prepareStatement(SQL_ALERT_INSERT_BID);
+                     pStmtInsertAlert = con.prepareStatement(ISQLConstant.SQL_ALERT_INSERT_BID);
                      pStmtInsertAlert.setString(1, getUUID());
                      pStmtInsertAlert.setString(2, last[1].toString());                     //user
                      pStmtInsertAlert.setString(3, offerId);
@@ -512,28 +513,28 @@ public class Bid extends DBBase {
          //
          if (outcome == 5) {
             con.commit();
-            output.put(DATA_NAME_STATUS, true);
-            output.put(DATA_NAME_MESSAGE, "BID " + (isCreate ? "CREATED" : "UPDATED") + " WITH AUTOREBID");
+            output.put(IConstant.DATA_NAME_STATUS, true);
+            output.put(IConstant.DATA_NAME_MESSAGE, "BID " + (isCreate ? "CREATED" : "UPDATED") + " WITH AUTOREBID");
          }
          else if (outcome == 10) {
             con.commit();
-            output.put(DATA_NAME_STATUS, true);
-            output.put(DATA_NAME_MESSAGE, "BID " + (isCreate ? "CREATED" : "UPDATED"));
+            output.put(IConstant.DATA_NAME_STATUS, true);
+            output.put(IConstant.DATA_NAME_MESSAGE, "BID " + (isCreate ? "CREATED" : "UPDATED"));
          }
          else if (outcome == 2) {
             con.rollback();
-            output.put(DATA_NAME_STATUS, false);
-            output.put(DATA_NAME_MESSAGE, "FAILED TO " + (isCreate ? "CREATED" : "UPDATED") + " BID DUE TO NotMeetInitPrice");
+            output.put(IConstant.DATA_NAME_STATUS, false);
+            output.put(IConstant.DATA_NAME_MESSAGE, "FAILED TO " + (isCreate ? "CREATED" : "UPDATED") + " BID DUE TO NotMeetInitPrice");
          }
          else if (outcome == 3) {
             con.rollback();
-            output.put(DATA_NAME_STATUS, false);
-            output.put(DATA_NAME_MESSAGE, "FAILED TO " + (isCreate ? "CREATED" : "UPDATED") + " BID DUE TO LessThanLastPlusDelta");
+            output.put(IConstant.DATA_NAME_STATUS, false);
+            output.put(IConstant.DATA_NAME_MESSAGE, "FAILED TO " + (isCreate ? "CREATED" : "UPDATED") + " BID DUE TO LessThanLastPlusDelta");
          }
          else {   // outcome == 4
             con.rollback();
-            output.put(DATA_NAME_STATUS, false);
-            output.put(DATA_NAME_MESSAGE, "FAILED TO " + (isCreate ? "CREATED" : "UPDATED") + " BID DUE TO Offer closed");
+            output.put(IConstant.DATA_NAME_STATUS, false);
+            output.put(IConstant.DATA_NAME_MESSAGE, "FAILED TO " + (isCreate ? "CREATED" : "UPDATED") + " BID DUE TO Offer closed");
          }
       }
       catch (SQLException e) {
@@ -546,8 +547,8 @@ public class Bid extends DBBase {
             }
          }
          //
-         output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+         output.put(IConstant.DATA_NAME_STATUS, false);
+         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
@@ -560,8 +561,8 @@ public class Bid extends DBBase {
             }
          }
          //
-         output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+         output.put(IConstant.DATA_NAME_STATUS, false);
+         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
          e.printStackTrace();
       }
       catch (Exception e) {
@@ -574,8 +575,8 @@ public class Bid extends DBBase {
             }
          }
          //
-         output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "Exception" + ", Message=" + e.getMessage());
+         output.put(IConstant.DATA_NAME_STATUS, false);
+         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: Code=" + "Exception" + ", Message=" + e.getMessage());
          e.printStackTrace();
       }
       finally {
@@ -642,7 +643,7 @@ public class Bid extends DBBase {
       try {
          con = getConnection();
          //
-         preparedStmt = con.prepareStatement(SQL_BID_DELETE);
+         preparedStmt = con.prepareStatement(ISQLConstant.SQL_BID_DELETE);
          //
          preparedStmt.setString(1, bidID);
          //
@@ -650,22 +651,22 @@ public class Bid extends DBBase {
          //
          int count = preparedStmt.getUpdateCount();
          if (count == 0) {
-            output.put(DATA_NAME_STATUS, false);
-            output.put(DATA_NAME_MESSAGE, "Could not delete bid.");
+            output.put(IConstant.DATA_NAME_STATUS, false);
+            output.put(IConstant.DATA_NAME_MESSAGE, "Could not delete bid.");
          }
          else {
-            output.put(DATA_NAME_STATUS, true);
-            output.put(DATA_NAME_MESSAGE, "Bid deleted");
+            output.put(IConstant.DATA_NAME_STATUS, true);
+            output.put(IConstant.DATA_NAME_MESSAGE, "Bid deleted");
          }
       }
       catch (SQLException e) {
-         output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
+         output.put(IConstant.DATA_NAME_STATUS, false);
+         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
-         output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
+         output.put(IConstant.DATA_NAME_STATUS, false);
+         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       finally {
@@ -717,7 +718,7 @@ public class Bid extends DBBase {
       try {
          con = getConnection();
          //
-         preparedStmtMaxPriceBid = con.prepareStatement(SQL_BID_SELECT_MAX_PRICE_EX);
+         preparedStmtMaxPriceBid = con.prepareStatement(ISQLConstant.SQL_BID_SELECT_MAX_PRICE_EX);
          preparedStmtMaxPriceBid.setString(1, offerID);
          preparedStmtMaxPriceBid.setString(2, bidID);
          preparedStmtMaxPriceBid.setString(3, bidID);
@@ -793,9 +794,9 @@ public class Bid extends DBBase {
       //
       Map map = doCreateOrModifyBid("user", parameters, true);
       //
-      System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
-      System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
-      System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
+      System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
+      System.out.println(IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
+      System.out.println(IConstant.DATA_NAME_USER_TYPE + "= " + map.get(IConstant.DATA_NAME_USER_TYPE));
    }
 
    public static void main8(String[] args) {
@@ -807,9 +808,9 @@ public class Bid extends DBBase {
       //
       Map map = doCreateOrModifyBid(null, parameters, false);
       //
-      System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
-      System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
-      System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
+      System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
+      System.out.println(IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
+      System.out.println(IConstant.DATA_NAME_USER_TYPE + "= " + map.get(IConstant.DATA_NAME_USER_TYPE));
    }
 
    public static void main6(String[] args) {
@@ -823,9 +824,9 @@ public class Bid extends DBBase {
       //
       Map map = searchBid(parameters, null, null);
       //
-      System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
-      System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
-      System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
+      System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
+      System.out.println(IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
+      System.out.println(IConstant.DATA_NAME_USER_TYPE + "= " + map.get(IConstant.DATA_NAME_USER_TYPE));
    }
 
    public static void main4(String[] args) {
@@ -833,13 +834,13 @@ public class Bid extends DBBase {
       //
       Map map = searchBid(null, "user", null);
       //
-      System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
-      System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
-      System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
+      System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
+      System.out.println(IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
+      System.out.println(IConstant.DATA_NAME_USER_TYPE + "= " + map.get(IConstant.DATA_NAME_USER_TYPE));
    }
 
    public static void main0(String[] args) {
-      System.out.println(SQL_TRADE_TOTAL);
+      System.out.println(ISQLConstant.SQL_TRADE_TOTAL);
       //
       Map<String, String[]> parameters = new HashMap<>();
       //
@@ -847,13 +848,13 @@ public class Bid extends DBBase {
       //
       Map map = searchBid(parameters, null, null);
       //
-      System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
-      System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
-      System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
+      System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
+      System.out.println(IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
+      System.out.println(IConstant.DATA_NAME_USER_TYPE + "= " + map.get(IConstant.DATA_NAME_USER_TYPE));
    }
 
    public static void main(String[] args) {
-      System.out.println(SQL_TRADE_TOTAL);
+      System.out.println(ISQLConstant.SQL_TRADE_TOTAL);
       //
       Map<String, String[]> parameters = new HashMap<>();
       //
@@ -914,17 +915,17 @@ SELECT t1.*, t2.currPrice FROM (SELECT b1.bidID, b1.buyer, b1.price, b1.autoRebi
 			output.put(DATA_NAME_DATA, lstRows);
 			output.put(DATA_NAME_DATA_ADD, lstHeader_bid1);
 			//
-			output.put(DATA_NAME_STATUS, true);
-			output.put(DATA_NAME_MESSAGE, "OK");
+			output.put(IConstant.DATA_NAME_STATUS, true);
+			output.put(IConstant.DATA_NAME_MESSAGE, "OK");
 		}
 		catch (SQLException e) {
-			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
+			output.put(IConstant.DATA_NAME_STATUS, false);
+			output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
-			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
+			output.put(IConstant.DATA_NAME_STATUS, false);
+			output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
 			e.printStackTrace();
 		}
 		finally {

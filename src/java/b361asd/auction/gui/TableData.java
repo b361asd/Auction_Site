@@ -1,4 +1,4 @@
-package b361asd.auction.gui;
+package java.b361asd.auction.gui;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
