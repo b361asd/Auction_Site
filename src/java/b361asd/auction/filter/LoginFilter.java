@@ -1,4 +1,4 @@
-package b361asd.auction.filter;
+package java.b361asd.auction.filter;
 
 import b361asd.auction.servlet.IConstant;
 
