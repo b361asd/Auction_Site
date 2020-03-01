@@ -1,7 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="static b361asd.auction.db.DBBase.*" %>
+<%@ page import="static java.b361asd.auction.db.DBBase.*" %>
+<%@ page import="java.b361asd.auction.db.CategoryAndField" %>
 
 <html>
 

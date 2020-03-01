@@ -6,14 +6,14 @@
 <head>
    <meta charset="utf-8">
    <title>BuyMe - Register</title>
-   <link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+   <link rel="stylesheet" href='${pageContext.request.contextPath}/webapp/style.css'/>
 </head>
 
 <body>
 
 <%@include file="header.jsp" %>
 
-<form action="${pageContext.request.contextPath}/home" method="post">
+<form action="${pageContext.request.contextPath}/webapp/home" method="post">
 
    <%@include file="registerCommon.jsp" %>
 

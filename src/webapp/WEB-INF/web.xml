@@ -7,7 +7,7 @@
 
     <servlet>
         <servlet-name>HomeServlet</servlet-name>
-        <servlet-class>b361asd.auction.servlet.HomeServlet</servlet-class>
+        <servlet-class>java.b361asd.auction.servlet.HomeServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
@@ -17,7 +17,7 @@
 
     <filter>
         <filter-name>LoginFilter</filter-name>
-        <filter-class>b361asd.auction.filter.LoginFilter</filter-class>
+        <filter-class>java.b361asd.auction.filter.LoginFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
@@ -31,7 +31,7 @@
 
     <error-page>
         <error-code>404</error-code>
-        <location>/home</location>
+        <location>/webapp/home</location>
     </error-page>
 
 </web-app>

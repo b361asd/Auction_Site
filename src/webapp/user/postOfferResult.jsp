@@ -1,15 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="b361asd.auction.db.Offer" %>
-<%@ page import="static b361asd.auction.servlet.IConstant.*" %>
+<%@ page import="java.b361asd.auction.db.Offer" %>
+<%@ page import="static java.b361asd.auction.servlet.IConstant.*" %>
 
 <html>
 
 <head>
    <meta charset="utf-8">
    <title>BuyMe - Post an Offer</title>
-   <link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+   <link rel="stylesheet" href='${pageContext.request.contextPath}/webapp/style.css'/>
 </head>
 
 <body>

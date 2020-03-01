@@ -1,6 +1,6 @@
 package java.b361asd.auction.servlet;
 
-import b361asd.auction.db.User;
+import java.b361asd.auction.db.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

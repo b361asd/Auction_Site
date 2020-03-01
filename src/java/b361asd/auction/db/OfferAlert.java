@@ -1,7 +1,7 @@
 package java.b361asd.auction.db;
 
 import java.b361asd.auction.gui.TableData;
-import java.b361asd.auction.servlet.IConstant;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,17 +45,17 @@ public class OfferAlert extends DBBase {
          //
          preparedStmt.execute();
          //
-         output.put(IConstant.DATA_NAME_STATUS, true);
-         output.put(IConstant.DATA_NAME_MESSAGE, "OK");
+         output.put(DATA_NAME_STATUS, true);
+         output.put(DATA_NAME_MESSAGE, "OK");
       }
       catch (SQLException e) {
-         output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState());
+         output.put(DATA_NAME_STATUS, false);
+         output.put(DATA_NAME_MESSAGE, "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState());
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
-         output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
+         output.put(DATA_NAME_STATUS, false);
+         output.put(DATA_NAME_MESSAGE, "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
          e.printStackTrace();
       }
       finally {
@@ -91,7 +91,7 @@ public class OfferAlert extends DBBase {
       Map       output    = new HashMap();
       List      lstRows   = new ArrayList();
       TableData tableData = new TableData(lstHeader_offeralert, lstRows, colSeq_offeralert);
-      output.put(IConstant.DATA_NAME_DATA, tableData);
+      output.put(DATA_NAME_DATA, tableData);
       //
       Connection        con          = null;
       PreparedStatement preparedStmt = null;
@@ -122,19 +122,19 @@ public class OfferAlert extends DBBase {
             currentRow.add(generateDate);
          }
          //
-         output.put(IConstant.DATA_NAME_DATA, tableData);
+         output.put(DATA_NAME_DATA, tableData);
          //
-         output.put(IConstant.DATA_NAME_STATUS, true);
-         output.put(IConstant.DATA_NAME_MESSAGE, "OK");
+         output.put(DATA_NAME_STATUS, true);
+         output.put(DATA_NAME_MESSAGE, "OK");
       }
       catch (SQLException e) {
-         output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
+         output.put(DATA_NAME_STATUS, false);
+         output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
-         output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
+         output.put(DATA_NAME_STATUS, false);
+         output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       finally {
@@ -182,22 +182,22 @@ public class OfferAlert extends DBBase {
          //
          int count = preparedStmt.getUpdateCount();
          if (count == 1) {
-            output.put(IConstant.DATA_NAME_STATUS, true);
-            output.put(IConstant.DATA_NAME_MESSAGE, "OK");
+            output.put(DATA_NAME_STATUS, true);
+            output.put(DATA_NAME_MESSAGE, "OK");
          }
          else {
-            output.put(IConstant.DATA_NAME_STATUS, false);
-            output.put(IConstant.DATA_NAME_MESSAGE, "Failed to delete criterionID");
+            output.put(DATA_NAME_STATUS, false);
+            output.put(DATA_NAME_MESSAGE, "Failed to delete criterionID");
          }
       }
       catch (SQLException e) {
-         output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+         output.put(DATA_NAME_STATUS, false);
+         output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
-         output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+         output.put(DATA_NAME_STATUS, false);
+         output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
          e.printStackTrace();
       }
       finally {

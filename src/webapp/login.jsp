@@ -13,10 +13,16 @@
 
 <%@include file="header.jsp" %>
 
-<form action="${pageContext.request.contextPath}/home" method="post">
+<form action="${pageContext.request.contextPath}/webapp/home" method="post">
 
-   Please enter your username<input type="text" name="username"/><br>
-   Please enter your password<input type="password" name="password"/>
+   <label>
+      Please enter your username
+      <input type="text" name="username"/>
+   </label><br>
+   <label>
+      Please enter your password
+      <input type="password" name="password"/>
+   </label>
 
    <input type="submit" value="Submit">
 

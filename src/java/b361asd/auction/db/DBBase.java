@@ -1,7 +1,7 @@
 package java.b361asd.auction.db;
 
-import b361asd.auction.gui.Helper;
-import b361asd.auction.servlet.IConstant;
+import java.b361asd.auction.gui.Helper;
+import java.b361asd.auction.servlet.IConstant;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 /**
  * Tools and utilities for handling database calls
  */
-public class DBBase extends b361asd.auction.db.Utils implements b361asd.auction.db.ISQLConstant, IConstant {
+public class DBBase extends Utils implements ISQLConstant, IConstant {
    private static final int                     MAX_CATEGORY_COUNT          = 16;
    //
    private static final HashMap<String, String> sqlTokens;

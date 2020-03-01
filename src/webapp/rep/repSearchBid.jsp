@@ -1,10 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="b361asd.auction.db.User" %>
-<%@ page import="static b361asd.auction.db.DBBase.*" %>
-<%@ page import="static b361asd.auction.gui.Helper.*" %>
-<%@ page import="b361asd.auction.gui.Helper" %>
+<%@ page import="java.b361asd.auction.db.User" %>
+<%@ page import="static java.b361asd.auction.db.DBBase.*" %>
+<%@ page import="java.b361asd.auction.gui.Helper" %>
 <%@ page import="java.util.List" %>
 
 <html>
@@ -12,7 +11,7 @@
 <head>
    <meta charset="utf-8">
    <title>BuyMe - Search Offers</title>
-   <link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+   <link rel="stylesheet" href='${pageContext.request.contextPath}/webapp/style.css'/>
 
    <script type="text/javascript">
        function onSelectChange() {
@@ -43,7 +42,7 @@
    <tr>
       <td>Browse</td>
       <td>
-         <form action="${pageContext.request.contextPath}/rep/listBid.jsp" method="post">
+         <form action="${pageContext.request.contextPath}/webapp/rep/listBid.jsp" method="post">
             <input type="hidden" name="action" value="repBrowseBid"/>
             <input type="submit" value="Browse"/>
          </form>
@@ -53,7 +52,7 @@
    <tr>
       <td>Search</td>
       <td>
-         <form id="form-repBidSearch" action="${pageContext.request.contextPath}/rep/listBid.jsp" method="post">
+         <form id="form-repBidSearch" action="${pageContext.request.contextPath}/webapp/rep/listBid.jsp" method="post">
             <%
                out.println("<input type='hidden' name='action' value='repSearchBid'/>");
                //

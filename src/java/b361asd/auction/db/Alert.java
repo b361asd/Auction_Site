@@ -1,7 +1,6 @@
 package java.b361asd.auction.db;
 
 import java.b361asd.auction.gui.TableData;
-import java.b361asd.auction.servlet.IConstant;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,7 +29,7 @@ public class Alert extends DBBase {
       try {
          con = getConnection();
          //
-         preparedStmt = con.prepareStatement(ISQLConstant.SQL_ALERT_SELECT);
+         preparedStmt = con.prepareStatement(SQL_ALERT_SELECT);
          //
          preparedStmt.setString(1, userID);
          //
@@ -56,19 +55,19 @@ public class Alert extends DBBase {
          }
          //
          TableData tableData = new TableData(lstHeader_alert, lstRows, colSeq_alert);
-         output.put(IConstant.DATA_NAME_DATA, tableData);
+         output.put(DATA_NAME_DATA, tableData);
          //
-         output.put(IConstant.DATA_NAME_STATUS, true);
-         output.put(IConstant.DATA_NAME_MESSAGE, "OK");
+         output.put(DATA_NAME_STATUS, true);
+         output.put(DATA_NAME_MESSAGE, "OK");
       }
       catch (SQLException e) {
-         output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
+         output.put(DATA_NAME_STATUS, false);
+         output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
-         output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
+         output.put(DATA_NAME_STATUS, false);
+         output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       finally {
@@ -109,29 +108,29 @@ public class Alert extends DBBase {
       try {
          con = getConnection();
          //
-         preparedStmt = con.prepareStatement(ISQLConstant.SQL_ALERT_DELETE);
+         preparedStmt = con.prepareStatement(SQL_ALERT_DELETE);
          preparedStmt.setString(1, alertID);
          //
          preparedStmt.execute();
          //
          int count = preparedStmt.getUpdateCount();
          if (count == 1) {
-            output.put(IConstant.DATA_NAME_STATUS, true);
-            output.put(IConstant.DATA_NAME_MESSAGE, "OK");
+            output.put(DATA_NAME_STATUS, true);
+            output.put(DATA_NAME_MESSAGE, "OK");
          }
          else {
-            output.put(IConstant.DATA_NAME_STATUS, false);
-            output.put(IConstant.DATA_NAME_MESSAGE, "Failed to delete alert");
+            output.put(DATA_NAME_STATUS, false);
+            output.put(DATA_NAME_MESSAGE, "Failed to delete alert");
          }
       }
       catch (SQLException e) {
-         output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+         output.put(DATA_NAME_STATUS, false);
+         output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
-         output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+         output.put(DATA_NAME_STATUS, false);
+         output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
          e.printStackTrace();
       }
       finally {
@@ -170,8 +169,8 @@ public class Alert extends DBBase {
       //
       Map map = selectAlert("user");
       //
-      System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
-      System.out.println(IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
-      System.out.println(IConstant.DATA_NAME_USER_TYPE + "= " + map.get(IConstant.DATA_NAME_USER_TYPE));
+      System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
+      System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
+      System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
    }
 }

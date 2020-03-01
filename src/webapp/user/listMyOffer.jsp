@@ -1,8 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<html>
+<%@ page import="java.b361asd.auction.gui.TableData" %>
+<%@ page import="static java.b361asd.auction.db.DBBase.getStringFromParamMap" %>
+<%@ page import="static java.b361asd.auction.servlet.IConstant.SESSION_ATTRIBUTE_USER" %>
+<%@ page import="static java.b361asd.auction.servlet.IConstant.SESSION_ATTRIBUTE_DATA_MAP" %>
+<%@ page import="static java.b361asd.auction.servlet.IConstant.*" %>
+<%@ page import="java.b361asd.auction.db.Offer" %>
 
+<html>
 <head>
    <meta charset="utf-8">
    <title>BuyMe - Search Offers</title>

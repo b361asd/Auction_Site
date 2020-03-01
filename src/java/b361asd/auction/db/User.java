@@ -1,7 +1,7 @@
-package b361asd.auction.db;
+package java.b361asd.auction.db;
 
-import b361asd.auction.gui.TableData;
-import b361asd.auction.servlet.IConstant;
+import java.b361asd.auction.gui.TableData;
+import java.b361asd.auction.servlet.IConstant;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -120,7 +120,7 @@ public class CategoryAndField extends DBBase {
          //
          stmt = con.createStatement();
          //
-         ResultSet rs = stmt.executeQuery(SQL_FIELD_SELECT);
+         ResultSet rs = stmt.executeQuery(ISQLConstant.SQL_FIELD_SELECT);
          //
          while (rs.next()) {
             Object fieldID   = rs.getObject(1);

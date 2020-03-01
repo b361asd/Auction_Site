@@ -6,7 +6,7 @@
 <head>
    <meta charset="utf-8">
    <title>BuyMe - Post a Question</title>
-   <link rel="stylesheet" href='${pageContext.request.contextPath}/style.css'/>
+   <link rel="stylesheet" href='${pageContext.request.contextPath}/webapp/style.css'/>
 </head>
 
 <body>
@@ -14,7 +14,7 @@
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<form action="${pageContext.request.contextPath}/user/postQuestionResult.jsp" method="post">
+<form action="${pageContext.request.contextPath}/webapp/user/postQuestionResult.jsp" method="post">
 
    <label for="question">Ask a Question:</label>
 

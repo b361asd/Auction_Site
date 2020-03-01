@@ -1,7 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="static b361asd.auction.db.DBBase.*" %>
+<%@ page import="static java.b361asd.auction.db.DBBase.*" %>
+<%@ page import="java.b361asd.auction.db.CategoryAndField" %>
 
 <html>
 
@@ -30,7 +31,7 @@
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<form id="form" action="${pageContext.request.contextPath}/user/postOfferResult.jsp" method="post">
+<form id="form" action="${pageContext.request.contextPath}/webapp/user/postOfferResult.jsp" method="post">
 
    <%@include file="../createOfferCommon.jsp" %>
 

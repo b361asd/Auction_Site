@@ -1,4 +1,4 @@
-package b361asd.auction.db;
+package java.b361asd.auction.db;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

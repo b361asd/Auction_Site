@@ -1,9 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="b361asd.auction.db.Bid" %>
-<%@ page import="static b361asd.auction.servlet.IConstant.*" %>
-<%@ page import="static b361asd.auction.db.DBBase.*" %>
+<%@ page import="java.b361asd.auction.db.Bid" %>
+<%@ page import="static java.b361asd.auction.servlet.IConstant.*" %>
+<%@ page import="static java.b361asd.auction.db.DBBase.*" %>
+<%@ page import="java.b361asd.auction.gui.TableData" %>
 <%@ page import="java.util.Objects" %>
 
 <html>

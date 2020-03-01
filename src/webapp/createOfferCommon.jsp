@@ -1,18 +1,16 @@
-<%@ page import="b361asd.auction.db.CategoryAndField" %>
-<%@ page import="b361asd.auction.gui.Helper" %>
-<%@ page import="b361asd.auction.gui.HelperDatetime" %>
-<%@ page import="b361asd.auction.gui.TableData" %>
-<!-- Needed Import -->
-<%@ page import="static b361asd.auction.gui.Helper.*" %>
+<%@ page import="java.b361asd.auction.db.CategoryAndField" %>
+<%@ page import="java.b361asd.auction.gui.Helper" %>
+<%@ page import="java.b361asd.auction.gui.HelperDatetime" %>
+<%@ page import="java.b361asd.auction.gui.TableData" %>
+<%@ page import="static java.b361asd.auction.gui.Helper.*" %>
 <%@ page import="java.util.List" %>
-<!-- Needed Import -->
 
 
 <%
-   //List lstCategory		= null;
-   //List lstField 			= null;
-   //TableData dataTable 	= null;						//IN  from Modify order
-   //String offeridcategorynameuser 		= null;						//IN  from Modify order
+   List lstCategory		= null;
+   List lstField 			= null;
+   TableData dataTable 	= null;						//IN  from Modify order
+   String offeridcategorynameuser 		= null;						//IN  from Modify order
    //
    StringBuilder lstFieldIDs = null;                  //OUT from Modify order
    //
