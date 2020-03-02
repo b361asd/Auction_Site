@@ -69,7 +69,9 @@
       out.println("<div>Price(min " + minPrice + ")<input type='number' name='price' min='" + minPrice + "' VALUE='" + minPrice + "'></div>");
    %>
 
-   <div>Auto Rebid Limit<input type="number" name="autoRebidLimit"></div>
+   <div>Auto Rebid Limit<label>
+      <input type="number" name="autoRebidLimit">
+   </label></div>
    <input type="submit" value="Submit">
 </form>
 

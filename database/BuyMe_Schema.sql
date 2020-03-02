@@ -282,6 +282,6 @@ CREATE TRIGGER AlertTriggerEmail
    ON Alert
    FOR EACH ROW
 BEGIN
-   INSERT Email (emailID, sender, receiver, sub, sendDate, content) SELECT REPLACE(UUID(), '-', ''), 'DoNotReply@BuyMe.com', email, (CASE WHEN NEW.bidID IS NULL THEN 'New Offer Alert' ELSE 'Outbid Alert' END), NOW(), NEW.content FROM User WHERE username = NEW.receiver;
+   INSERT Email (emailID, sender, receiver, sub, sendDate, content) SELECT REPLACE(UUID(), '-', ''), 'DoNotReply@BuyMe.com', email, (IF(NEW.bidID IS NULL, 'New Offer Alert', 'Outbid Alert')), NOW(), NEW.content FROM User WHERE username = NEW.receiver;
 END $$
 DELIMITER ;
