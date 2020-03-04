@@ -6,7 +6,7 @@
 <head>
    <meta charset="utf-8">
    <title>BuyMe - Register</title>
-   <link rel="stylesheet" href='${pageContext.request.contextPath}/main/webapp/style.css'/>
+   <link rel="stylesheet" href='style.css'/>
 </head>
 
 <body>
