@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="main.java.auction.db.User" %>
-<%@ page import="static main.java.auction.db.DBBase.*" %>
-<%@ page import="main.java.auction.gui.Helper" %>
+<%@ page import="auction.db.User" %>
+<%@ page import="static auction.db.DBBase.*" %>
+<%@ page import="auction.gui.Helper" %>
 <%@ page import="java.util.List" %>
 
 <html>
@@ -42,7 +42,7 @@
    <tr>
       <td>Browse</td>
       <td>
-         <form action="${pageContext.request.contextPath}/main/webapp/rep/listBid.jsp" method="post">
+         <form action="${pageContext.request.contextPath}/rep/listBid.jsp" method="post">
             <input type="hidden" name="action" value="repBrowseBid"/>
             <input type="submit" value="Browse"/>
          </form>
@@ -52,7 +52,7 @@
    <tr>
       <td>Search</td>
       <td>
-         <form id="form-repBidSearch" action="${pageContext.request.contextPath}/main/webapp/rep/listBid.jsp" method="post">
+         <form id="form-repBidSearch" action="${pageContext.request.contextPath}/rep/listBid.jsp" method="post">
             <%
                out.println("<input type='hidden' name='action' value='repSearchBid'/>");
                //

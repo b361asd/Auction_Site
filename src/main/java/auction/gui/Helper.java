@@ -1,7 +1,7 @@
-package main.java.auction.gui;
+package auction.gui;
 
-import main.java.auction.db.CategoryAndField;
-import main.java.auction.servlet.IConstant;
+import auction.db.CategoryAndField;
+import auction.servlet.IConstant;
 
 import java.util.List;
 import java.util.Map;

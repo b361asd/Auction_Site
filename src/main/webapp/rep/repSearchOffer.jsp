@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="main.java.auction.db.CategoryAndField" %>
-<%@ page import="main.java.auction.db.DBBase" %>
+<%@ page import="auction.db.CategoryAndField" %>
+<%@ page import="auction.db.DBBase" %>
 
 <html>
 
@@ -29,7 +29,7 @@
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<form action="${pageContext.request.contextPath}/main/webapp/rep/listOffer.jsp" method="post">
+<form action="${pageContext.request.contextPath}/rep/listOffer.jsp" method="post">
    <input type="hidden" name="action" value="browseOffer"/>
    <table>
       <tbody>
@@ -46,7 +46,7 @@
 <br/>
 <br/>
 
-<form id="form" action="${pageContext.request.contextPath}/main/webapp/rep/listOffer.jsp" method="post">
+<form id="form" action="${pageContext.request.contextPath}/rep/listOffer.jsp" method="post">
    <%@include file="../searchOfferCommon.jsp" %>
 
    <input type="hidden" name="action" value="searchOffer"/>

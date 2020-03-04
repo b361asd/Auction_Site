@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="main.java.auction.db.Question" %>
-<%@ page import="main.java.auction.gui.TableData" %>
-<%@ page import="static main.java.auction.servlet.IConstant.*" %>
-<%@ page import="static main.java.auction.db.DBBase.*" %>
-<%@ page import="static main.java.auction.gui.Helper.*" %>
+<%@ page import="auction.db.Question" %>
+<%@ page import="auction.gui.TableData" %>
+<%@ page import="static auction.servlet.IConstant.*" %>
+<%@ page import="static auction.db.DBBase.*" %>
+<%@ page import="static auction.gui.Helper.*" %>
 
 <html>
 

@@ -1,6 +1,6 @@
-package main.java.auction.filter;
+package auction.filter;
 
-import main.java.auction.servlet.IConstant;
+import auction.servlet.IConstant;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

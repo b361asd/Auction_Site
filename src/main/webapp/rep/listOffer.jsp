@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="main.java.auction.db.Offer" %>
-<%@ page import="main.java.auction.gui.TableData" %>
-<%@ page import="static main.java.auction.db.DBBase.getStringFromParamMap" %>
-<%@ page import="static main.java.auction.servlet.IConstant.SESSION_ATTRIBUTE_DATA_MAP" %>
-<%@ page import="static main.java.auction.servlet.IConstant.DATA_NAME_DATA" %>
+<%@ page import="auction.db.Offer" %>
+<%@ page import="auction.gui.TableData" %>
+<%@ page import="static auction.db.DBBase.getStringFromParamMap" %>
+<%@ page import="static auction.servlet.IConstant.SESSION_ATTRIBUTE_DATA_MAP" %>
+<%@ page import="static auction.servlet.IConstant.DATA_NAME_DATA" %>
 
 <html>
 

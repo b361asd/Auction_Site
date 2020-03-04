@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="static main.java.auction.db.DBBase.*" %>
-<%@ page import="main.java.auction.db.CategoryAndField" %>
+<%@ page import="static auction.db.DBBase.*" %>
+<%@ page import="auction.db.CategoryAndField" %>
 
 <html>
 
@@ -14,7 +14,7 @@
    <script type="text/javascript">
        function onCategoryChange() {
            const form = document.getElementById('form');
-           form.action = "${pageContext.request.contextPath}/main/webapp/user/webapp/searchOffer.jsp";
+           form.action = "${pageContext.request.contextPath}/user/webapp/searchOffer.jsp";
            form.submit();
        }
    </script>
@@ -29,7 +29,7 @@
 <%@include file="../header.jsp" %>
 <%@include file="nav.jsp" %>
 
-<form action="${pageContext.request.contextPath}/main/webapp/user/listOffer.jsp" method="post">
+<form action="${pageContext.request.contextPath}/user/listOffer.jsp" method="post">
    <input type="hidden" name="action" value="browseOffer"/>
    <input type="submit" value="Browse All Open Offer">
 </form>
@@ -38,7 +38,7 @@
 <br/>
 
 
-<form id="form" action="${pageContext.request.contextPath}/main/webapp/user/listOffer.jsp" method="post">
+<form id="form" action="${pageContext.request.contextPath}/user/listOffer.jsp" method="post">
    <%@include file="../searchOfferCommon.jsp" %>
    <input type="hidden" name="action" value="searchOffer"/>
    <input type="submit" value="Search">

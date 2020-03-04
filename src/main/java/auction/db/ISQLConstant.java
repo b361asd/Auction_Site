@@ -1,4 +1,4 @@
-package main.java.auction.db;
+package auction.db;
 
 /**
  * Constants and SQL statement patterns.

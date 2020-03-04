@@ -5,7 +5,7 @@
       <th><A href="repSearchBid.jsp">Manage Bids</A></th>
       <th><A href="answerQuestion.jsp">Answer Questions</A></th>
       <th><A href="listUser.jsp">Manage Users</A></th>
-      <th><A href="${pageContext.request.contextPath}/main/webapp/logout">Logout</A></th>
+      <th><A href="${pageContext.request.contextPath}/logout">Logout</A></th>
    </tr>
    </thead>
 </table>

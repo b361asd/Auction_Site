@@ -1,4 +1,4 @@
-package main.java.auction.gui;
+package auction.gui;
 
 import java.text.DateFormat;
 import java.text.ParseException;

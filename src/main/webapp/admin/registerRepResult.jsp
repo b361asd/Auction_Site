@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="main.java.auction.db.User" %>
-<%@ page import="static main.java.auction.db.DBBase.*" %>
+<%@ page import="auction.db.User" %>
+<%@ page import="static auction.db.DBBase.*" %>
 
 <html>
 

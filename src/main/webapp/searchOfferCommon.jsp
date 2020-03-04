@@ -1,6 +1,6 @@
-<%@ page import="main.java.auction.db.CategoryAndField" %>
+<%@ page import="auction.db.CategoryAndField" %>
 <%@ page import="java.util.List" %>
-<%@ page import="static main.java.auction.gui.Helper.*" %>
+<%@ page import="static auction.gui.Helper.*" %>
 
 <table>
    <tbody>
@@ -10,7 +10,7 @@
       //User Create Alert Criterion
       //Rep Search Offer
       //
-      //Map data = null;
+      Map data = null;
       //
       List lstCategory = (List) data.get(CategoryAndField.DATA_CATEGORY_LIST);
       //

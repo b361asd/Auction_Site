@@ -1,6 +1,6 @@
-package main.java.auction.servlet;
+package auction.servlet;
 
-import main.java.auction.db.User;
+import auction.db.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

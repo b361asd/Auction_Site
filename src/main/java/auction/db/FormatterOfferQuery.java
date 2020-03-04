@@ -1,4 +1,4 @@
-package main.java.auction.db;
+package auction.db;
 
 /**
  * Format SQL querying the Offer table

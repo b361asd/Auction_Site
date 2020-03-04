@@ -1,5 +1,5 @@
-<%@ page import="static main.java.auction.servlet.IConstant.*" %>
-<%@ page import="main.java.auction.db.DBBase" %>
+<%@ page import="static auction.servlet.IConstant.*" %>
+<%@ page import="auction.db.DBBase" %>
 <%@ page import="java.util.Map" %>
 
 <%@ page contentType="text/html;charset=UTF-8" %>

@@ -1,4 +1,4 @@
-package main.java.auction.servlet;
+package auction.servlet;
 
 /**
  * Constants for either Session or Map from DB to GUI.

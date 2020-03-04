@@ -13,7 +13,7 @@
 
 <%@include file="header.jsp" %>
 
-<form action="${pageContext.request.contextPath}/main/webapp/home" method="post">
+<form action="${pageContext.request.contextPath}/home" method="post">
 
    <label>
       Please enter your username

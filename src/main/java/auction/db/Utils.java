@@ -1,4 +1,4 @@
-package main.java.auction.db;
+package auction.db;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

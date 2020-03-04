@@ -1,15 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="static main.java.auction.servlet.IConstant.*" %>
-<%@ page import="main.java.auction.db.DBBase" %>
+<%@ page import="static auction.servlet.IConstant.*" %>
+<%@ page import="auction.db.DBBase" %>
 <%@ page import="java.util.Map" %>
-
-
-<script type="text/javascript">
-    function onClickHeader(value) {
-    }
-</script>
 
 <form id="form-sort" method="post">
    <input type="hidden" name="action" value="sort"/>

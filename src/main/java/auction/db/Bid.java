@@ -1,8 +1,8 @@
-package main.java.auction.db;
+package auction.db;
 
-import main.java.auction.gui.Helper;
-import main.java.auction.gui.TableData;
-import main.java.auction.servlet.IConstant;
+import auction.gui.Helper;
+import auction.gui.TableData;
+import auction.servlet.IConstant;
 
 import java.math.BigDecimal;
 import java.sql.*;

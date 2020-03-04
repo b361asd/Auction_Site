@@ -1,10 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="main.java.auction.db.User" %>
-<%@ page import="main.java.auction.gui.TableData" %>
-<%@ page import="static main.java.auction.servlet.IConstant.*" %>
-<%@ page import="static main.java.auction.db.DBBase.*" %>
+<%@ page import="auction.db.User" %>
+<%@ page import="auction.gui.TableData" %>
+<%@ page import="static auction.servlet.IConstant.*" %>
+<%@ page import="static auction.db.DBBase.*" %>
 <%@ page import="java.util.Objects" %>
 
 <html>

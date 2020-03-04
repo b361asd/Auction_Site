@@ -1,16 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="static main.java.auction.servlet.IConstant.*" %>
-<%@page import="main.java.auction.db.Question" %>
-<%@ page import="main.java.auction.db.DBBase" %>
+<%@ page import="static auction.servlet.IConstant.*" %>
+<%@page import="auction.db.Question" %>
+<%@ page import="auction.db.DBBase" %>
 
 <html>
 
 <head>
    <meta charset="utf-8">
    <title>BuyMe - Post a Question</title>
-   <link rel="stylesheet" href='${pageContext.request.contextPath}/main/webapp/style.css'/>
+   <link rel="stylesheet" href='../style.css'/>
 </head>
 
 <body>
