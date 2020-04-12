@@ -11,8 +11,8 @@ import java.util.*;
 
 public class User extends DBBase {
 
-   private static List  lstHeader_user = Arrays.asList("username", "password", "email", "firstname", "lastname", "address", "phone", "active");
-   private static int[] colSeq_user    = {0, 1, 2, 3, 4, 5, 6, 7};
+   private static final List  lstHeader_user = Arrays.asList("username", "password", "email", "firstname", "lastname", "address", "phone", "active");
+   private static final int[] colSeq_user    = {0, 1, 2, 3, 4, 5, 6, 7};
 
    /**
     * Select a list of Users
@@ -161,9 +161,8 @@ public class User extends DBBase {
     *
     * @param parameters Map of all parameters
     * @param isActivate True to activate, false to deactivate it
-    * @return Data for GUI rendering
     */
-   public static Map activateUser(Map<String, String[]> parameters, boolean isActivate) {
+   public static void activateUser(Map<String, String[]> parameters, boolean isActivate) {
       Map output = new HashMap();
       //
       String username = getStringFromParamMap("username", parameters);
@@ -217,7 +216,6 @@ public class User extends DBBase {
          }
       }
       //
-      return output;
    }
 
 

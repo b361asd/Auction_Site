@@ -14,14 +14,14 @@
 			* Put in a higher bid automatically for the user in case someone bids higher
 	* Define the winner of the auction
 		* When the closing time has come, check if the seller has set a reserve
-			* If yes: if the reserve is higher than the last bid none is the winner.
+			* If yes: if the reserve is higher than the last bid, no one is the winner.
 			* If no: whoever has the higher bid is the winner
 
 3. Browsing and advanced search functionality
 	* Let people browse on the items and see the status of the current bidding
 	* Sort by different criteria (by type, bidding price, etc.)
 	* Search the list of items by various criteria.
-	* An user should be able to:
+	* A user should be able to:
 		* View all the history of bids for any specific auction
 		* View the list of all auctions a specific buyer or seller has participated in
 		* View the list of "similar" items on auctions in the preceding month (and auction information about them)
@@ -36,7 +36,7 @@
 
 5. Customer representatives & admin functions
 	* Admin (create an admin account ahead of time)
-		* Creates accounts for customer representatives
+		* Create accounts for customer representatives
 		* Generates sales reports for:
 			* Total earnings
 			* Earnings per:
@@ -48,5 +48,5 @@
 	* Customer representative:
 		* Answers to questions of users
 		* Edits account information, bids and auctions
-		* Removes bids
+		* Remove bids
 		* Removes auctions

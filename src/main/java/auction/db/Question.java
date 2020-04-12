@@ -8,8 +8,8 @@ import java.util.*;
 
 public class Question extends DBBase {
 
-   private static List  lstHeader_question = Arrays.asList("questionID", "userID", "question", "answer", "repID", "questionDate", "answerDate");
-   private static int[] colSeq_question    = {1, 4, 2, 3, 5, 6};
+   private static final List  lstHeader_question = Arrays.asList("questionID", "userID", "question", "answer", "repID", "questionDate", "answerDate");
+   private static final int[] colSeq_question    = {1, 4, 2, 3, 5, 6};
 
    /**
     * Search Questions
@@ -200,9 +200,8 @@ public class Question extends DBBase {
     * @param questionID Question ID
     * @param answer     The answer
     * @param repID      Rep ID
-    * @return Data for GUI rendering
     */
-   public static Map answerQuestion(String questionID, String answer, String repID) {
+   public static void answerQuestion(String questionID, String answer, String repID) {
       Map output = new HashMap();
       //
       Connection        con          = null;
@@ -257,7 +256,6 @@ public class Question extends DBBase {
          }
       }
       //
-      return output;
    }
 
 

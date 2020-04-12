@@ -9,17 +9,16 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class OfferAlert extends DBBase {
-   private static List  lstHeader_offeralert = Arrays.asList("criterionID", "buyer", "criterionName", "triggerTxt", "description", "generateDate");
-   private static int[] colSeq_offeralert    = {1, 2, 4, 5};
+   private static final List  lstHeader_offeralert = Arrays.asList("criterionID", "buyer", "criterionName", "triggerTxt", "description", "generateDate");
+   private static final int[] colSeq_offeralert    = {1, 2, 4, 5};
 
    /**
     * Generate Offer Alert Criterion
     *
     * @param userID     User ID
     * @param parameters Map of all parameters
-    * @return Data for GUI rendering
     */
-   public static Map doGenerateNewOfferAlertCriterion(String userID, Map<String, String[]> parameters) {
+   public static void doGenerateNewOfferAlertCriterion(String userID, Map<String, String[]> parameters) {
       Map output = new HashMap();
       //
       String criterionName = getStringFromParamMap("criterionName", parameters);
@@ -77,7 +76,6 @@ public class OfferAlert extends DBBase {
          }
       }
       //
-      return output;
    }
 
    /**
@@ -163,9 +161,8 @@ public class OfferAlert extends DBBase {
     * Delete Offer Alert
     *
     * @param parameters Map of all parameters
-    * @return Data for GUI rendering
     */
-   public static Map deleteOfferAlert(Map<String, String[]> parameters) {
+   public static void deleteOfferAlert(Map<String, String[]> parameters) {
       Map output = new HashMap();
       //
       String criterionID = getStringFromParamMap("criterionID", parameters);
@@ -219,7 +216,6 @@ public class OfferAlert extends DBBase {
          }
       }
       //
-      return output;
    }
 
 

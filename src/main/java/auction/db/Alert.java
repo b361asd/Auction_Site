@@ -10,8 +10,8 @@ import java.util.*;
 
 public class Alert extends DBBase {
 
-   private static List  lstHeader_alert = Arrays.asList("alertID", "receiver", "offerID", "bidID", "content", "alertDate");
-   private static int[] colSeq_alert    = {4, 5};
+   private static final List  lstHeader_alert = Arrays.asList("alertID", "receiver", "offerID", "bidID", "content", "alertDate");
+   private static final int[] colSeq_alert    = {4, 5};
 
 
    /**
@@ -96,9 +96,8 @@ public class Alert extends DBBase {
     * Delete an alert
     *
     * @param parameters Map containing alertID to deletes
-    * @return Data for GUI rendering
     */
-   public static Map deleteAlert(Map<String, String[]> parameters) {
+   public static void deleteAlert(Map<String, String[]> parameters) {
       Map output = new HashMap();
       //
       String alertID = getStringFromParamMap("alertID", parameters);
@@ -152,7 +151,6 @@ public class Alert extends DBBase {
          }
       }
       //
-      return output;
    }
 
 

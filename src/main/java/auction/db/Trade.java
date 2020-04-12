@@ -10,16 +10,16 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class Trade extends DBBase {
-   private static List  lstHeader_tradetotal             = Arrays.asList("Period", "Total", "Average", "Count");
-   private static List  lstHeader_tradebycategoryname    = Arrays.asList("categoryName", "Total", "Average", "Count");
-   private static List  lstHeader_tradebysimilar         = Arrays.asList("Similar", "Total", "Average", "Count");
-   private static List  lstHeader_tradebybuyer           = Arrays.asList("Buyer", "Total", "Average", "Count");
-   private static List  lstHeader_tradebyseller          = Arrays.asList("Seller", "Total", "Average", "Count");
-   private static List  lstHeader_tradebyuser            = Arrays.asList("User", "Total", "Average", "Count");
-   private static int[] colSeq_tradeby                   = {0, 1, 2, 3};
+   private static final List  lstHeader_tradetotal             = Arrays.asList("Period", "Total", "Average", "Count");
+   private static final List  lstHeader_tradebycategoryname    = Arrays.asList("categoryName", "Total", "Average", "Count");
+   private static final List  lstHeader_tradebysimilar         = Arrays.asList("Similar", "Total", "Average", "Count");
+   private static final List  lstHeader_tradebybuyer           = Arrays.asList("Buyer", "Total", "Average", "Count");
+   private static final List  lstHeader_tradebyseller          = Arrays.asList("Seller", "Total", "Average", "Count");
+   private static final List  lstHeader_tradebyuser            = Arrays.asList("User", "Total", "Average", "Count");
+   private static final int[] colSeq_tradeby                   = {0, 1, 2, 3};
    //
-   private static List  lstHeader_tradebybestsellingitem = Arrays.asList("price", "categoryName", "conditionCode", "description", "seller", "buyer", "tradeDate");
-   private static int[] colSeq_tradebybestsellingitem    = {0, 1, 2, 3, 4, 5, 6};
+   private static final List  lstHeader_tradebybestsellingitem = Arrays.asList("price", "categoryName", "conditionCode", "description", "seller", "buyer", "tradeDate");
+   private static final int[] colSeq_tradebybestsellingitem    = {0, 1, 2, 3, 4, 5, 6};
 
    /**
     * Summary of Trade for Report

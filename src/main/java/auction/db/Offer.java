@@ -817,7 +817,7 @@ public class Offer extends DBBase {
 
 
    /**
-    * Delete an Offer. Bid & Alert will be cascading delete
+    * Delete an Offer. Bid &amp; Alert will be cascading delete
     *
     * @param parameters Map of all parameters
     * @return Data for GUI rendering

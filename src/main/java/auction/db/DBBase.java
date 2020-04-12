@@ -37,8 +37,8 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
    public static        String                  OP_INT_BETWEEN              = "between";
    //
    public static        String                  OP_BOOL_TRUE                = "yes";
-   public static        String                  OP_BOOL_FALSE               = "no";
-   private static       Pattern                 sqlTokenPattern;
+   public static        String  OP_BOOL_FALSE               = "no";
+   private static final Pattern sqlTokenPattern;
 
 	static {
 		// MySQL escape sequences: https://dev.mysql.com/doc/refman/8.0/en/string-literals.html
