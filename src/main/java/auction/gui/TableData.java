@@ -217,8 +217,8 @@ public class TableData {
       //
       boolean isStandOut = sign.equalsIgnoreCase(value);
       //
-      return isStandOut ?
-              "<tr style='color: red;'>" :
-              "<tr add='" + sign + "_" + value + "'>";               // "<tr name='standout' class='standout'>";
+      return isStandOut
+              ? "<tr style='color: red;'>"
+              : "<tr add='" + sign + "_" + value + "'>";               // "<tr name='standout' class='standout'>";
    }
 }

@@ -214,10 +214,9 @@ public class Bid extends DBBase {
                   oneOfferRow.add(null);
                }
                else {
-                  TableData tableDataBiD = new TableData(lstHeader_bid, lstBidRows,
-                                                         ((_listActivity || _viewAlertDetail || _listBidForOffer) ?
-                                                                 colSeq_bid :
-                                                                 colSeq_bid_add));
+                  TableData tableDataBiD = new TableData(lstHeader_bid, lstBidRows, ((_listActivity || _viewAlertDetail || _listBidForOffer)
+                          ? colSeq_bid
+                          : colSeq_bid_add));
                   //
                   if (bidIDStandout != null) {
                      tableDataBiD.setStandOut(bidIDStandout, 0);      //bidID
