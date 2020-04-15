@@ -24,16 +24,11 @@ public class LoginFilter implements Filter, IConstant {
    public void init(FilterConfig filterConfig) throws ServletException {
    }
 
-
    @Override
    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws ServletException, IOException {
       HttpServletRequest  request  = (HttpServletRequest) req;
       HttpServletResponse response = (HttpServletResponse) res;
-      //
-      //request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "filter!!!");
-      //
-      HttpSession session = request.getSession(true);
-      //session.setAttribute(SESSION_ATTRIBUTE_MESSAGE, null);
+      HttpSession         session  = request.getSession(true);
       //
       String loginURL    = request.getContextPath() + "/login.jsp";
       String homeURL     = request.getContextPath() + "/home";
@@ -45,7 +40,6 @@ public class LoginFilter implements Filter, IConstant {
       if (isLogoutRequest) {
          session.invalidate();
          //
-         //request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "redirect to login 0");
          response.sendRedirect(loginURL);
       }
       else if (isCSSRequest) {
@@ -77,7 +71,6 @@ public class LoginFilter implements Filter, IConstant {
                   chain.doFilter(request, response);
                }
                else {
-                  //request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "home 0. " + "HomeURL: " + homeURL + "-" + request.getRequestURI());
                   response.sendRedirect(homeURL);
                }
             }
@@ -92,13 +85,11 @@ public class LoginFilter implements Filter, IConstant {
                chain.doFilter(request, response);
             }
             else {
-               //request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "redirect to login 1");
                response.sendRedirect(loginURL);
             }
          }
       }
    }
-
 
    @Override
    public void destroy() {

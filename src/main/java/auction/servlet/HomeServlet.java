@@ -20,7 +20,6 @@ import java.util.Map;
  */
 public class HomeServlet extends HttpServlet implements IConstant {
 
-
    /**
     * Serial Version UID
     */
@@ -35,7 +34,6 @@ public class HomeServlet extends HttpServlet implements IConstant {
 
    @Override
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-      //request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "home!!!");
       Map map;
       //
       boolean isRegister = (request.getParameter("register")) != null && (request.getParameter("register")).equalsIgnoreCase("YES");
@@ -53,7 +51,8 @@ public class HomeServlet extends HttpServlet implements IConstant {
          //
          map = User.doAddUser(username, password, email, firstName, lastName, street, city, state, zipCode, phone, 3);
          //
-         if ((Boolean) map.get(DATA_NAME_STATUS)) {      // Register successful also means logged in.
+         // Register successful also means logged in.
+         if ((Boolean) map.get(DATA_NAME_STATUS)) {
             request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, username);
             request.getSession().setAttribute(SESSION_ATTRIBUTE_USERTYPE, "3");
             request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_FNAME, firstName);

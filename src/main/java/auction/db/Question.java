@@ -8,7 +8,8 @@ import java.util.*;
 
 public class Question extends DBBase {
 
-   private static final List  lstHeader_question = Arrays.asList("questionID", "userID", "question", "answer", "repID", "questionDate", "answerDate");
+   private static final List  lstHeader_question = Arrays.asList("questionID", "userID", "question", "answer", "repID", "questionDate",
+                                                                 "answerDate");
    private static final int[] colSeq_question    = {1, 4, 2, 3, 5, 6};
 
    /**
@@ -20,37 +21,29 @@ public class Question extends DBBase {
    public static Map searchClosedQuestion(Map<String, String[]> parameters) {
       StringBuilder sb = FormatterQuestionQuery.initQuerySearch();
       //
-      {
-         String useridOP  = getStringFromParamMap("useridOP", parameters);
-         String useridVal = getStringFromParamMap("useridVal", parameters);
-         addCondition(sb, "userID", useridOP, useridVal, null);
-      }
+      String useridOP  = getStringFromParamMap("useridOP", parameters);
+      String useridVal = getStringFromParamMap("useridVal", parameters);
+      addCondition(sb, "userID", useridOP, useridVal, null);
       //
-      {
-         String repidOP  = getStringFromParamMap("repidOP", parameters);
-         String repidVal = getStringFromParamMap("repidVal", parameters);
-         addCondition(sb, "repID", repidOP, repidVal, null);
-      }
+      String repidOP  = getStringFromParamMap("repidOP", parameters);
+      String repidVal = getStringFromParamMap("repidVal", parameters);
+      addCondition(sb, "repID", repidOP, repidVal, null);
       //
-      {
-         String tags = getStringFromParamMap("tags", parameters);
-         if (tags.length() > 0) {
-            String[] temps = tags.split(",");
-            for (String one : temps) {
-               if (one != null && one.length() > 0) {
-                  addContainTagsCondition2Cols(sb, "question", "answer", one);
-               }
+      String tags = getStringFromParamMap("tags", parameters);
+      if (tags.length() > 0) {
+         String[] temps = tags.split(",");
+         for (String one : temps) {
+            if (one != null && one.length() > 0) {
+               addContainTagsCondition2Cols(sb, "question", "answer", one);
             }
          }
       }
       //
-      {
-         int lookbackdays = getIntFromParamMap("lookbackdays", parameters);
-         if (lookbackdays < 1) {
-            lookbackdays = 30;
-         }
-         addDatetimeConditionLookback(sb, "questionDate", lookbackdays);
+      int lookbackdays = getIntFromParamMap("lookbackdays", parameters);
+      if (lookbackdays < 1) {
+         lookbackdays = 30;
       }
+      addDatetimeConditionLookback(sb, "questionDate", lookbackdays);
       //
       String sql = sb.toString();
       //
@@ -164,12 +157,14 @@ public class Question extends DBBase {
       }
       catch (SQLException e) {
          output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
+         output.put(DATA_NAME_MESSAGE,
+                    "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
          output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
+         output.put(DATA_NAME_MESSAGE,
+                    "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       finally {
@@ -229,12 +224,14 @@ public class Question extends DBBase {
       }
       catch (SQLException e) {
          output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
+         output.put(DATA_NAME_MESSAGE,
+                    "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
          output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
+         output.put(DATA_NAME_MESSAGE,
+                    "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       finally {
@@ -258,7 +255,6 @@ public class Question extends DBBase {
       //
    }
 
-
    /**
     * Retrieve List of open questions
     *
@@ -267,7 +263,7 @@ public class Question extends DBBase {
    public static Map retrieveOpenQuestion() {
       Map output = new HashMap();
       //
-      List   lstRows = new LinkedList();
+      List lstRows = new LinkedList();
       Helper.setData(output, lstRows);
       //
       Connection        con          = null;
@@ -299,12 +295,14 @@ public class Question extends DBBase {
       }
       catch (SQLException e) {
          output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
+         output.put(DATA_NAME_MESSAGE,
+                    "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
          output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
+         output.put(DATA_NAME_MESSAGE,
+                    "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       finally {

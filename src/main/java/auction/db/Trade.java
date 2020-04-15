@@ -10,16 +10,17 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class Trade extends DBBase {
-   private static final List  lstHeader_tradetotal             = Arrays.asList("Period", "Total", "Average", "Count");
-   private static final List  lstHeader_tradebycategoryname    = Arrays.asList("categoryName", "Total", "Average", "Count");
-   private static final List  lstHeader_tradebysimilar         = Arrays.asList("Similar", "Total", "Average", "Count");
-   private static final List  lstHeader_tradebybuyer           = Arrays.asList("Buyer", "Total", "Average", "Count");
-   private static final List  lstHeader_tradebyseller          = Arrays.asList("Seller", "Total", "Average", "Count");
-   private static final List  lstHeader_tradebyuser            = Arrays.asList("User", "Total", "Average", "Count");
-   private static final int[] colSeq_tradeby                   = {0, 1, 2, 3};
+   private static final List  lstHeader_tradeTotal             = Arrays.asList("Period", "Total", "Average", "Count");
+   private static final List  lstHeader_tradeByCategoryName    = Arrays.asList("categoryName", "Total", "Average", "Count");
+   private static final List  lstHeader_tradeBySimilar         = Arrays.asList("Similar", "Total", "Average", "Count");
+   private static final List  lstHeader_tradeByBuyer           = Arrays.asList("Buyer", "Total", "Average", "Count");
+   private static final List  lstHeader_tradeBySeller          = Arrays.asList("Seller", "Total", "Average", "Count");
+   private static final List  lstHeader_tradeByUser            = Arrays.asList("User", "Total", "Average", "Count");
+   private static final int[] colSeq_tradeBy                   = {0, 1, 2, 3};
    //
-   private static final List  lstHeader_tradebybestsellingitem = Arrays.asList("price", "categoryName", "conditionCode", "description", "seller", "buyer", "tradeDate");
-   private static final int[] colSeq_tradebybestsellingitem    = {0, 1, 2, 3, 4, 5, 6};
+   private static final List  lstHeader_tradeByBestSellingItem = Arrays.asList("price", "categoryName", "conditionCode", "description",
+                                                                               "seller", "buyer", "tradeDate");
+   private static final int[] colSeq_tradeByBestSellingItem    = {0, 1, 2, 3, 4, 5, 6};
 
    /**
     * Summary of Trade for Report
@@ -32,28 +33,29 @@ public class Trade extends DBBase {
     * @param isUser         If true, then run user report (buyer and seller)
     * @return Data for GUI rendering
     */
-   public static Map summaryBy(int lookbackdays, boolean isTotal, boolean isCategoryName, boolean isBuyer, boolean isSeller, boolean isUser) {
+   public static Map summaryBy(int lookbackdays, boolean isTotal, boolean isCategoryName, boolean isBuyer, boolean isSeller,
+                               boolean isUser) {
       Map  output  = new HashMap();
       List lstRows = new ArrayList();
       //
       List lstHeader = null;
       if (isTotal) {
-         lstHeader = lstHeader_tradetotal;
+         lstHeader = lstHeader_tradeTotal;
       }
       else if (isCategoryName) {
-         lstHeader = lstHeader_tradebycategoryname;
+         lstHeader = lstHeader_tradeByCategoryName;
       }
       else if (isBuyer) {
-         lstHeader = lstHeader_tradebybuyer;
+         lstHeader = lstHeader_tradeByBuyer;
       }
       else if (isSeller) {
-         lstHeader = lstHeader_tradebyseller;
+         lstHeader = lstHeader_tradeBySeller;
       }
       else if (isUser) {
-         lstHeader = lstHeader_tradebyuser;
+         lstHeader = lstHeader_tradeByUser;
       }
       //
-      TableData tableData = new TableData(lstHeader, lstRows, colSeq_tradeby);
+      TableData tableData = new TableData(lstHeader, lstRows, colSeq_tradeBy);
       output.put(DATA_NAME_DATA, tableData);
       //
       Connection        con          = null;
@@ -80,20 +82,20 @@ public class Trade extends DBBase {
          //
          preparedStmt = con.prepareStatement(sql);
          //
-         if (isTotal) {
-         }
-         else if (isCategoryName) {
-            preparedStmt.setInt(1, lookbackdays);
-         }
-         else if (isBuyer) {
-            preparedStmt.setInt(1, lookbackdays);
-         }
-         else if (isSeller) {
-            preparedStmt.setInt(1, lookbackdays);
-         }
-         else if (isUser) {
-            preparedStmt.setInt(1, lookbackdays);
-            preparedStmt.setInt(2, lookbackdays);
+         if (!isTotal) {
+            if (isCategoryName) {
+               preparedStmt.setInt(1, lookbackdays);
+            }
+            else if (isBuyer) {
+               preparedStmt.setInt(1, lookbackdays);
+            }
+            else if (isSeller) {
+               preparedStmt.setInt(1, lookbackdays);
+            }
+            else if (isUser) {
+               preparedStmt.setInt(1, lookbackdays);
+               preparedStmt.setInt(2, lookbackdays);
+            }
          }
          //
          ResultSet rs = preparedStmt.executeQuery();
@@ -176,7 +178,7 @@ public class Trade extends DBBase {
       Map  output  = new HashMap();
       List lstRows = new ArrayList();
       //
-      TableData tableData = new TableData(lstHeader_tradebysimilar, lstRows, colSeq_tradeby);
+      TableData tableData = new TableData(lstHeader_tradeBySimilar, lstRows, colSeq_tradeBy);
       output.put(DATA_NAME_DATA, tableData);
       //
       Connection        con          = null;
@@ -246,16 +248,16 @@ public class Trade extends DBBase {
    /**
     * Select best selling or most recent items
     *
-    * @param lookbackdays   Lookback days
-    * @param limit          Limit how many rows returned
-    * @param isBestSellings True for best selling, false for most recent
+    * @param lookbackdays  Lookback days
+    * @param limit         Limit how many rows returned
+    * @param isBestSelling True for best selling, false for most recent
     * @return Data for GUI rendering
     */
-   public static Map selectBestSellingMostRecentItems(int lookbackdays, int limit, boolean isBestSellings) {
+   public static Map selectBestSellingMostRecentItems(int lookbackdays, int limit, boolean isBestSelling) {
       Map  output  = new HashMap();
       List lstRows = new ArrayList();
       //
-      TableData tableData = new TableData(lstHeader_tradebybestsellingitem, lstRows, colSeq_tradebybestsellingitem);
+      TableData tableData = new TableData(lstHeader_tradeByBestSellingItem, lstRows, colSeq_tradeByBestSellingItem);
       output.put(DATA_NAME_DATA, tableData);
       //
       Connection        con          = null;
@@ -263,7 +265,7 @@ public class Trade extends DBBase {
       try {
          con = getConnection();
          //
-         preparedStmt = con.prepareStatement(isBestSellings ? SQL_TRADE_BEST_ITEM : SQL_TRADE_RECENT_ITEM);
+         preparedStmt = con.prepareStatement(isBestSelling ? SQL_TRADE_BEST_ITEM : SQL_TRADE_RECENT_ITEM);
          preparedStmt.setInt(1, lookbackdays);
          preparedStmt.setInt(2, limit);
          ResultSet rs = preparedStmt.executeQuery();
@@ -292,7 +294,7 @@ public class Trade extends DBBase {
          output.put(DATA_NAME_STATUS, true);
          output.put(DATA_NAME_MESSAGE, "OK");
          //
-         if (isBestSellings) {
+         if (isBestSelling) {
             tableData.setDescription("Top " + limit + " Best Selling Item(s) For The Last " + lookbackdays + " Days");
          }
          else {
@@ -346,7 +348,7 @@ public class Trade extends DBBase {
       Map  output  = new HashMap();
       List lstRows = new ArrayList();
       //
-      TableData tableData = new TableData(lstHeader_tradebybestsellingitem, lstRows, colSeq_tradebybestsellingitem);
+      TableData tableData = new TableData(lstHeader_tradeByBestSellingItem, lstRows, colSeq_tradeByBestSellingItem);
       output.put(DATA_NAME_DATA, tableData);
       //
       Connection        con          = null;

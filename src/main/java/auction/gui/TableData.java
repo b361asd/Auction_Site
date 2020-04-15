@@ -77,10 +77,6 @@ public class TableData {
       return lstRows;
    }
 
-   public String getSignStandOut() {
-      return signStandOut;
-   }
-
    public void setStandOut(String input, int idx) {
       signStandOut = input;
       idxStandOut = idx;
@@ -128,7 +124,8 @@ public class TableData {
          int index = mapHeaderToIndex.get(header);
          //
          if (index >= 0 && index < lstHeader.size()) {
-            Comparator<Object> comparatorNorm = Comparator.comparing(o -> ((List) o).get(index) == null ? "" : ((List) o).get(index).toString().trim());
+            Comparator<Object> comparatorNorm = Comparator.comparing(
+                    o -> ((List) o).get(index) == null ? "" : ((List) o).get(index).toString().trim());
             //
             boolean isTheSame = (indexSorted == index);
             if (isTheSame) {
@@ -167,22 +164,23 @@ public class TableData {
          for (int value : colSeq) {
             Object one     = lstHeader.get(value);
             String oneItem = (one == null) ? "" : one.toString();
-            out.append("<th><div onclick=onClickHeader('").append(subTable ? SUB_TABLE_HEADER_SIGN : "").append(oneItem).append("')>").append(oneItem).append("</div></th>");
+            out.append("<th><div onclick=onClickHeader('")
+               .append(subTable ? SUB_TABLE_HEADER_SIGN : "")
+               .append(oneItem)
+               .append("')>")
+               .append(oneItem)
+               .append("</div></th>");
          }
       }
       return out.toString();
    }
 
    public String printOneRowInTable(int index) {
-      return internalPrintOneRowInTable(index, null);
+      return internalPrintOneRowInTable(index);
    }
 
-   public String printOneRowInTableWithWidth(int index, String width) {
-      return internalPrintOneRowInTable(index, width);
-   }
-
-   //timezone="America/New_York"
-   private String internalPrintOneRowInTable(int index, String width) {
+   //   timezone="America/New_York"
+   private String internalPrintOneRowInTable(int index) {
       List          row = (List) lstRows.get(index);
       StringBuilder out = new StringBuilder();
       if (row != null && row.size() > 0 && colSeq != null && colSeq.length > 0) {
@@ -203,20 +201,14 @@ public class TableData {
                oneItem = ldt.format(formatter);
             }
             //
-            if (width == null) {
-               out.append("<td>").append(Helper.escapeHTML(oneItem)).append("</td>");
-            }
-            else {
-               out.append("<td width='").append(width).append("'>").append(Helper.escapeHTML(oneItem)).append("</td>");
-            }
+            out.append("<td>").append(Helper.escapeHTML(oneItem)).append("</td>");
          }
       }
       return out.toString();
    }
 
    public String printRowStart(int index) {
-      List   row = (List) lstRows.get(index);
-      String out;
+      List row = (List) lstRows.get(index);
       //
       String sign = (signStandOut == null) ? "_NULL" : signStandOut.trim();
       sign = (sign.equals("")) ? "_EMPTY" : sign;
@@ -225,13 +217,8 @@ public class TableData {
       //
       boolean isStandOut = sign.equalsIgnoreCase(value);
       //
-      if (isStandOut) {
-         out = "<tr style='color: red;'>";               //out = "<tr name='standout' class='standout'>";
-      }
-      else {
-         out = "<tr add='" + sign + "_" + value + "'>";
-      }
-      //
-      return out;
+      return isStandOut ?
+              "<tr style='color: red;'>" :
+              "<tr add='" + sign + "_" + value + "'>";               // "<tr name='standout' class='standout'>";
    }
 }

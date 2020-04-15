@@ -11,15 +11,33 @@ import java.util.Map;
  */
 public class Helper implements IConstant {
 
-   private final static String[] S_CONDITIONS = {"New", "Like New", "Manufacturer Refurbished", "Seller Refurbished", "Used", "For parts or Not Working"};
+   private final static String[] S_CONDITIONS = {"New", "Like New", "Manufacturer Refurbished", "Seller Refurbished", "Used",
+           "For parts " + "or Not " + "Working"};
 
-   private static final String SELECT_OP_SZ_TYPE = "<select name='?'><option value='any'>Any</option><option value='szequal'>Equal</option><option value='sznotequal'>Not Equal</option><option value='startwith'>Starts With</option><option value='contain'>Contains</option></select>";
+   private static final String SELECT_OP_SZ_TYPE = "<select name='?'><option value='any'>Any</option><option " +
+                                                   "value='szequal'>Equal</option><option value='sznotequal'>Not Equal</option><option " +
+                                                   "value='startwith'>Starts With</option><option " +
+                                                   "value='contain'>Contains</option></select>";
 
-   private static final String SELECT_OP_INT_TYPE = "<select name='?'><option value='any'>Any</option><option value='intequal'>Equal</option><option value='intnotequal'>Not Equal</option><option value='equalorover'>Greater Than or Equal To</option><option value='equalorunder'>Less Than or Equal To</option><option value='between'>Between</option></select>";
+   private static final String SELECT_OP_INT_TYPE = "<select name='?'><option value='any'>Any</option><option " +
+                                                    "value='intequal'>Equal</option><option value='intnotequal'>Not Equal</option><option" +
+                                                    " value='equalorover'>Greater Than or Equal To</option><option " +
+                                                    "value='equalorunder'>Less Than or Equal To</option><option " +
+                                                    "value='between'>Between</option></select>";
 
-   private static final String SELECT_OP_BOOL_TYPE = "<select name='?'><option value='any'>Any</option><option value='yes'>YES</option><option value='no'>NO</option></select>";
+   private static final String SELECT_OP_BOOL_TYPE =
+           "<select name='?'><option value='any'>Any</option><option " + "value='yes'>YES</option><option value='no'>NO</option></select>";
 
-   private static final String CONDITION_CODE_CHECKBOX = "<div><input type='checkbox' id='new' name='?_1' value='yes' checked><label for='new'>New</label><input type='checkbox' id='likenew' name='?_2' value='yes' checked><label for='likenew'>Like New</label><input type='checkbox' id='manfrefurb' name='?_3'  value='yes' checked><label for='manfrefurb'>Manufacturer Refurbished</label><input type='checkbox' id='sellerrefurb' name='?_4' value='yes' checked><label for='sellerrefurb'>Seller Refurbished</label><input type='checkbox' id='used' name='?_5' value='yes' checked><label for='used'>Used</label><input type='checkbox' id='notwork' name='?_6' value='yes' checked><label for='notwork'>For parts or Not Working</label></div>";
+   private static final String CONDITION_CODE_CHECKBOX = "<div><input type='checkbox' id='new' name='?_1' value='yes' checked><label " +
+                                                         "for='new'>New</label><input type='checkbox' id='likenew' name='?_2' value='yes'" +
+                                                         " checked><label for='likenew'>Like New</label><input type='checkbox' " +
+                                                         "id='manfrefurb' name='?_3'  value='yes' checked><label " +
+                                                         "for='manfrefurb'>Manufacturer Refurbished</label><input type='checkbox' " +
+                                                         "id='sellerrefurb' name='?_4' value='yes' checked><label " +
+                                                         "for='sellerrefurb'>Seller Refurbished</label><input type='checkbox' id='used' " +
+                                                         "name='?_5' value='yes' checked><label for='used'>Used</label><input " +
+                                                         "type='checkbox' id='notwork' name='?_6' value='yes' checked><label " +
+                                                         "for='notwork'>For parts or Not Working</label></div>";
 
    public static String getOPSZSelection(String name) {
       return SELECT_OP_SZ_TYPE.replaceAll("\\?", name);
@@ -65,7 +83,6 @@ public class Helper implements IConstant {
       return sb.toString();
    }
 
-
    public static String getConditionCodeSelection(String name, String selected) {
       StringBuilder sb = new StringBuilder();
       //
@@ -82,7 +99,6 @@ public class Helper implements IConstant {
       //
       return sb.toString();
    }
-
 
    public static String getSelection(String name, Object[] options, String selected) {
       StringBuilder sb = new StringBuilder();
@@ -102,7 +118,6 @@ public class Helper implements IConstant {
       return sb.toString();
    }
 
-
    public static String getYesNoSelection(String name, String selected) {
       StringBuilder sb = new StringBuilder();
       //
@@ -115,7 +130,6 @@ public class Helper implements IConstant {
       //
       return sb.toString();
    }
-
 
    public static String getConditionFromCode(String code) {
       switch (code) {
@@ -155,7 +169,6 @@ public class Helper implements IConstant {
       }
    }
 
-
    public static String getStatusFromCode(String status) {
       switch (status) {
          case "1":
@@ -171,11 +184,10 @@ public class Helper implements IConstant {
       }
    }
 
-
    public static String getButton(String formID, String inputID, String inputValue, String display) {
-      return "<button onclick=\"document.getElementById('" + inputID + "').value='" + inputValue + "'; document.getElementById('" + formID + "').submit();\" class=\"buttonclass\" type=\"button\">" + display + "</button>";
+      return "<button onclick=\"document.getElementById('" + inputID + "').value='" + inputValue + "'; document.getElementById('" + formID +
+             "').submit();\" class=\"buttonclass\" type=\"button\">" + display + "</button>";
    }
-
 
    public static String escapeHTML(String s) {
       StringBuilder out = new StringBuilder(Math.max(16, s.length()));
@@ -193,39 +205,27 @@ public class Helper implements IConstant {
       return out.toString();
    }
 
-
    public static void setStatus(Map data, boolean status) {
       data.put(DATA_NAME_STATUS, status);
-   }
-
-
-   public static void setMessage(Map data, String message) {
-      data.put(DATA_NAME_MESSAGE, message);
    }
 
    public static void appendMessage(Map data, String message) {
       data.put(DATA_NAME_MESSAGE, getMessage(data) + " " + message);
    }
 
-
    public static void setData(Map data, Object payload) {
       data.put(DATA_NAME_DATA, payload);
    }
-
 
    public static boolean getStatus(Map data) {
       return (Boolean) data.get(DATA_NAME_STATUS);
    }
 
-
    public static String getMessage(Map data) {
       return (String) data.get(DATA_NAME_MESSAGE);
    }
 
-
    public static Object getData(Map data) {
       return data.get(DATA_NAME_DATA);
    }
-
-
 }

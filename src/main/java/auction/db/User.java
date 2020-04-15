@@ -11,7 +11,8 @@ import java.util.*;
 
 public class User extends DBBase {
 
-   private static final List  lstHeader_user = Arrays.asList("username", "password", "email", "firstname", "lastname", "address", "phone", "active");
+   private static final List  lstHeader_user = Arrays.asList("username", "password", "email", "firstname", "lastname", "address", "phone",
+                                                             "active");
    private static final int[] colSeq_user    = {0, 1, 2, 3, 4, 5, 6, 7};
 
    /**
@@ -76,12 +77,14 @@ public class User extends DBBase {
       }
       catch (SQLException e) {
          output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
+         output.put(IConstant.DATA_NAME_MESSAGE,
+                    "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
          output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
+         output.put(IConstant.DATA_NAME_MESSAGE,
+                    "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       finally {
@@ -189,12 +192,15 @@ public class User extends DBBase {
       }
       catch (SQLException e) {
          output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+         output.put(IConstant.DATA_NAME_MESSAGE,
+                    "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " +
+                    dumpParamMap(parameters));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
          output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+         output.put(IConstant.DATA_NAME_MESSAGE,
+                    "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
          e.printStackTrace();
       }
       finally {
@@ -277,21 +283,15 @@ public class User extends DBBase {
          }
          //
          output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+         output.put(IConstant.DATA_NAME_MESSAGE,
+                    "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " +
+                    dumpParamMap(parameters));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
-         if (con != null) {
-            try {
-               con.rollback();
-            }
-            catch (Throwable t) {
-               t.printStackTrace();
-            }
-         }
-         //
          output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+         output.put(IConstant.DATA_NAME_MESSAGE,
+                    "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
          e.printStackTrace();
       }
       finally {
@@ -316,24 +316,24 @@ public class User extends DBBase {
       return output;
    }
 
-
    /**
     * Add an user
     *
-    * @param username Username
-    * @param password Password
-    * @param email Email
+    * @param username  Username
+    * @param password  Password
+    * @param email     Email
     * @param firstName First name
-    * @param lastName Last name
-    * @param street Street
-    * @param city City
-    * @param state State
-    * @param zipCode Zip code
-    * @param phone Phone number
-    * @param usertype User type
+    * @param lastName  Last name
+    * @param street    Street
+    * @param city      City
+    * @param state     State
+    * @param zipCode   Zip code
+    * @param phone     Phone number
+    * @param usertype  User type
     * @return Data for GUI rendering
     */
-   public static Map doAddUser(String username, String password, String email, String firstName, String lastName, String street, String city, String state, String zipCode, String phone, int usertype) {
+   public static Map doAddUser(String username, String password, String email, String firstName, String lastName, String street,
+                               String city, String state, String zipCode, String phone, int usertype) {
       Map output = new HashMap();
       //
       if (email == null) {
@@ -398,12 +398,14 @@ public class User extends DBBase {
          }
          catch (SQLException e) {
             output.put(IConstant.DATA_NAME_STATUS, false);
-            output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
+            output.put(IConstant.DATA_NAME_MESSAGE,
+                       "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
             e.printStackTrace();
          }
          catch (ClassNotFoundException e) {
             output.put(IConstant.DATA_NAME_STATUS, false);
-            output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
+            output.put(IConstant.DATA_NAME_MESSAGE,
+                       "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
             e.printStackTrace();
          }
          finally {
@@ -482,12 +484,14 @@ public class User extends DBBase {
       }
       catch (SQLException e) {
          output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
+         output.put(IConstant.DATA_NAME_MESSAGE,
+                    "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
          output.put(IConstant.DATA_NAME_STATUS, false);
-         output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
+         output.put(IConstant.DATA_NAME_MESSAGE,
+                    "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       finally {
