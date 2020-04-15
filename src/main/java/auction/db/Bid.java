@@ -220,7 +220,7 @@ public class Bid extends DBBase {
             }
          }
          else {
-            dataTableOffer = new TableData(Offer.lstHeader_offerdefault, new LinkedList(), Offer.colSeq_offerdefault);
+            dataTableOffer = new TableData(Offer.lstHeader_OfferDefault, new LinkedList(), Offer.colSeq_OfferDefault);
          }
          //
          if (_listActivity) {

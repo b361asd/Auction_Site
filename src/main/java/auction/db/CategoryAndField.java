@@ -125,7 +125,7 @@ public class CategoryAndField extends DBBase {
          while (rs.next()) {
             Object fieldID   = rs.getObject(1);
             Object fieldName = rs.getObject(2);
-            Object fieldType = rs.getObject(3);
+            rs.getObject(3);
             //
             output.put(fieldID.toString(), fieldName.toString());
          }

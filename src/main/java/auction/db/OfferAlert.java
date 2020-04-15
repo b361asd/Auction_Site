@@ -9,8 +9,9 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class OfferAlert extends DBBase {
-   private static final List  lstHeader_offeralert = Arrays.asList("criterionID", "buyer", "criterionName", "triggerTxt", "description", "generateDate");
-   private static final int[] colSeq_offeralert    = {1, 2, 4, 5};
+   private static final List  lstHeader_OfferAlert = Arrays.asList("criterionID", "buyer", "criterionName", "triggerTxt", "description",
+                                                                   "generateDate");
+   private static final int[] colSeq_OfferAlert    = {1, 2, 4, 5};
 
    /**
     * Generate Offer Alert Criterion
@@ -88,7 +89,7 @@ public class OfferAlert extends DBBase {
    public static Map selectOfferAlert(String userName, boolean isUser) {
       Map       output    = new HashMap();
       List      lstRows   = new ArrayList();
-      TableData tableData = new TableData(lstHeader_offeralert, lstRows, colSeq_offeralert);
+      TableData tableData = new TableData(lstHeader_OfferAlert, lstRows, colSeq_OfferAlert);
       output.put(DATA_NAME_DATA, tableData);
       //
       Connection        con          = null;
@@ -96,7 +97,8 @@ public class OfferAlert extends DBBase {
       try {
          con = getConnection();
          //
-         preparedStmt = con.prepareStatement(isUser ? ISQLConstant.SQL_OFFERALERTCRITERION_SELECT_USER : ISQLConstant.SQL_OFFERALERTCRITERION_SELECT_EX_USER);
+         preparedStmt = con.prepareStatement(
+                 isUser ? ISQLConstant.SQL_OFFERALERTCRITERION_SELECT_USER : ISQLConstant.SQL_OFFERALERTCRITERION_SELECT_EX_USER);
          preparedStmt.setString(1, userName);
          //
          ResultSet rs = preparedStmt.executeQuery();
@@ -127,12 +129,14 @@ public class OfferAlert extends DBBase {
       }
       catch (SQLException e) {
          output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
+         output.put(DATA_NAME_MESSAGE,
+                    "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
          output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
+         output.put(DATA_NAME_MESSAGE,
+                    "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " + exceptionToString(e));
          e.printStackTrace();
       }
       finally {
@@ -189,12 +193,15 @@ public class OfferAlert extends DBBase {
       }
       catch (SQLException e) {
          output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+         output.put(DATA_NAME_MESSAGE,
+                    "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " +
+                    dumpParamMap(parameters));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
          output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+         output.put(DATA_NAME_MESSAGE,
+                    "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
          e.printStackTrace();
       }
       finally {
@@ -217,6 +224,4 @@ public class OfferAlert extends DBBase {
       }
       //
    }
-
-
 }

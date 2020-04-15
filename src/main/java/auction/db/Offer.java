@@ -11,9 +11,10 @@ public class Offer extends DBBase {
 
    private static final int FIELD_START_INDEX = 12;
 
-   public static List  lstHeader_offerdefault = Arrays.asList("offerId", "Seller", "Category", "Condition", "Desc", "initPrice", "increment", "minPrice", "Start", "End", "status", "CurrBid");
+   public static List  lstHeader_OfferDefault = Arrays.asList("offerId", "Seller", "Category", "Condition", "Desc", "initPrice",
+                                                              "increment", "minPrice", "Start", "End", "status", "CurrBid");
    //
-   public static int[] colSeq_offerdefault    = {2, 3, 4, 1, 5, 6, 11, 8, 9, 10};
+   public static int[] colSeq_OfferDefault    = {2, 3, 4, 1, 5, 6, 11, 8, 9, 10};
 
    /**
     * Get Offers records for a set of offerIDs
@@ -205,12 +206,10 @@ public class Offer extends DBBase {
          addCondition(sb, "o.seller", sellerOP, sellerVal, null);
       }
       //
-      {
-         String categoryNames = getListOfStringsFromParamMap("categoryName", 1, parameters, "'");
-         //
-         String categoryNameOP  = OP_SZ_EQUAL_MULTI_NO_ESCAPE;
-         addCondition(sb, "o.categoryName", categoryNameOP, categoryNames, null);
-      }
+      String categoryNames = getListOfStringsFromParamMap("categoryName", 1, parameters, "'");
+      //
+      String categoryNameOP = OP_SZ_EQUAL_MULTI_NO_ESCAPE;
+      addCondition(sb, "o.categoryName", categoryNameOP, categoryNames, null);
       //
       {
          StringBuilder lstConditionCode = new StringBuilder();
@@ -227,17 +226,13 @@ public class Offer extends DBBase {
          }
          addCondition(sb, "o.conditionCode", OP_INT_EQUAL_MULTI, lstConditionCode.toString(), null);
       }
-      {
-         String descriptionOP  = getStringFromParamMap("descriptionOP", parameters);
-         String descriptionVal = getStringFromParamMap("descriptionVal", parameters);
-         addCondition(sb, "o.description", descriptionOP, descriptionVal, null);
-      }
+      String descriptionOP  = getStringFromParamMap("descriptionOP", parameters);
+      String descriptionVal = getStringFromParamMap("descriptionVal", parameters);
+      addCondition(sb, "o.description", descriptionOP, descriptionVal, null);
       //
-      {
-         String statusOP  = OP_INT_EQUAL;
-         String statusVal = "1";    // Active
-         addCondition(sb, "o.status", statusOP, statusVal, null);
-      }
+      String statusOP  = OP_INT_EQUAL;
+      String statusVal = "1";    // Active
+      addCondition(sb, "o.status", statusOP, statusVal, null);
       //
       FormatterOfferQuery.initFieldCondition(sb);
       String   lstFieldIDs = getStringFromParamMap("lstFieldIDs", parameters);
@@ -272,39 +267,31 @@ public class Offer extends DBBase {
    public static StringBuilder formatAlertDescription(Map<String, String[]> parameters, String userID) {
       StringBuilder sb = new StringBuilder();
       //
-      {
-         String sellerOP  = getStringFromParamMap("sellerOP", parameters);
-         String sellerVal = getStringFromParamMap("sellerVal", parameters);
-         oneConditionDesc(sb, "seller", sellerOP, sellerVal, null);
-      }
+      String sellerOP  = getStringFromParamMap("sellerOP", parameters);
+      String sellerVal = getStringFromParamMap("sellerVal", parameters);
+      oneConditionDesc(sb, "seller", sellerOP, sellerVal, null);
       //
-      {
-         String categoryNameOP = OP_SZ_EQUAL_MULTI_NO_ESCAPE;
-         String categoryNames  = getListOfStringsFromParamMap("categoryName", 1, parameters, "");
-         //
-         oneConditionDesc(sb, "categoryName", categoryNameOP, categoryNames, null);
-      }
+      String categoryNameOP = OP_SZ_EQUAL_MULTI_NO_ESCAPE;
+      String categoryNames  = getListOfStringsFromParamMap("categoryName", 1, parameters, "");
       //
-      {
-         StringBuilder lstCondition = new StringBuilder();
-         for (int i = 1; i <= 6; i++) {
-            String temp = getStringFromParamMap("conditionCode_" + i, parameters);
-            if (temp.length() > 0) {
-               if (lstCondition.toString().equals("")) {
-                  lstCondition = new StringBuilder(Helper.getConditionFromCode("" + i));
-               }
-               else {
-                  lstCondition.append(",").append(Helper.getConditionFromCode("" + i));
-               }
+      oneConditionDesc(sb, "categoryName", categoryNameOP, categoryNames, null);
+      //
+      StringBuilder lstCondition = new StringBuilder();
+      for (int i = 1; i <= 6; i++) {
+         String temp = getStringFromParamMap("conditionCode_" + i, parameters);
+         if (temp.length() > 0) {
+            if (lstCondition.toString().equals("")) {
+               lstCondition = new StringBuilder(Helper.getConditionFromCode("" + i));
+            }
+            else {
+               lstCondition.append(",").append(Helper.getConditionFromCode("" + i));
             }
          }
-         oneConditionDesc(sb, "conditionCode", OP_SZ_EQUAL_MULTI_NO_ESCAPE, lstCondition.toString(), null);
       }
-      {
-         String descriptionOP  = getStringFromParamMap("descriptionOP", parameters);
-         String descriptionVal = getStringFromParamMap("descriptionVal", parameters);
-         oneConditionDesc(sb, "description", descriptionOP, descriptionVal, null);
-      }
+      oneConditionDesc(sb, "conditionCode", OP_SZ_EQUAL_MULTI_NO_ESCAPE, lstCondition.toString(), null);
+      String descriptionOP  = getStringFromParamMap("descriptionOP", parameters);
+      String descriptionVal = getStringFromParamMap("descriptionVal", parameters);
+      oneConditionDesc(sb, "description", descriptionOP, descriptionVal, null);
       //
       Map<String, String> mapFieldIDTotext = CategoryAndField.getMapFieldIDToText();
       //
@@ -449,8 +436,8 @@ public class Offer extends DBBase {
          //
          int[] colSeq;
          if (lstHeader.size() == 0) {
-            lstHeader = lstHeader_offerdefault;
-            colSeq = colSeq_offerdefault;
+            lstHeader = lstHeader_OfferDefault;
+            colSeq = colSeq_OfferDefault;
          }
          else {
             if (showAll) {
@@ -549,7 +536,7 @@ public class Offer extends DBBase {
       Map output = new HashMap();
       //
       String   offerid;
-      String[] temps   = null;
+      String[] temps = null;
       if (isCreate) {
          offerid = getUUID();
       }
@@ -648,7 +635,9 @@ public class Offer extends DBBase {
             }
          }
          output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+         output.put(DATA_NAME_MESSAGE,
+                    "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " +
+                    dumpParamMap(parameters));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
@@ -662,7 +651,8 @@ public class Offer extends DBBase {
          }
          //
          output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+         output.put(DATA_NAME_MESSAGE,
+                    "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
          e.printStackTrace();
       }
       catch (Exception e) {
@@ -849,12 +839,15 @@ public class Offer extends DBBase {
       }
       catch (SQLException e) {
          output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+         output.put(DATA_NAME_MESSAGE,
+                    "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " +
+                    dumpParamMap(parameters));
          e.printStackTrace();
       }
       catch (ClassNotFoundException e) {
          output.put(DATA_NAME_STATUS, false);
-         output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+         output.put(DATA_NAME_MESSAGE,
+                    "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
          e.printStackTrace();
       }
       finally {
@@ -950,15 +943,21 @@ public class Offer extends DBBase {
 }
 
 
-//categoryName=car,initPrice=2000,increment=100,minPrice=,conditionCode=1,description=go,fieldID_1=,fieldID_2=,fieldID_3=,fieldID_4=,fieldID_5=,fieldID_6=yes,fieldID_7=,endDate=2019-04-20T13:10:48
+//categoryName=car,initPrice=2000,increment=100,minPrice=,conditionCode=1,description=go,fieldID_1=,fieldID_2=,fieldID_3=,fieldID_4=,
+// fieldID_5=,fieldID_6=yes,fieldID_7=,endDate=2019-04-20T13:10:48
 
 
 //Search
-//,,,,fieldval1_2=wefrwefr,fieldval2_3=2222,fieldval1_4=sdfsdfs,fieldval2_5=34234,fieldop_6=no,fieldval1_7=234234,action=modifyOffer,offeridcategoryname=6bc17ded8d0e4300ae8ce80a5fa85b8d,car,lstFieldIDs=1,2,3,4,5,6,7
-//minPrice=3500.00,conditionCode=1,description=good,fieldval1_1=fwef,fieldval1_2=wefrwefr,fieldval2_3=2222,fieldval1_4=sdfsdfs,fieldval2_5=34234,fieldop_6=no,fieldval1_7=234234,action=modifyOffer,offeridcategoryname=6bc17ded8d0e4300ae8ce80a5fa85b8d,car,lstFieldIDs=1,2,3,4,5,6,7
+//,,,,fieldval1_2=wefrwefr,fieldval2_3=2222,fieldval1_4=sdfsdfs,fieldval2_5=34234,fieldop_6=no,fieldval1_7=234234,action=modifyOffer,
+// offeridcategoryname=6bc17ded8d0e4300ae8ce80a5fa85b8d,car,lstFieldIDs=1,2,3,4,5,6,7
+//minPrice=3500.00,conditionCode=1,description=good,fieldval1_1=fwef,fieldval1_2=wefrwefr,fieldval2_3=2222,fieldval1_4=sdfsdfs,
+// fieldval2_5=34234,fieldop_6=no,fieldval1_7=234234,action=modifyOffer,offeridcategoryname=6bc17ded8d0e4300ae8ce80a5fa85b8d,car,
+// lstFieldIDs=1,2,3,4,5,6,7
 
 
-//minPrice=4000.00,conditionCode=1,description=good,fieldval1_1=red hot,fieldval1_2=sss ttt,fieldval2_3=333,fieldval1_4=swed ws,fieldval2_5=2019,fieldop_6=yes,fieldval1_7=GOOD,action=modifyOffer,offeridcategoryname=6bc17ded8d0e4300ae8ce80a5fa85b8d,car,lstFieldIDs=1,2,3,4,5,6,7
+//minPrice=4000.00,conditionCode=1,description=good,fieldval1_1=red hot,fieldval1_2=sss ttt,fieldval2_3=333,fieldval1_4=swed ws,
+// fieldval2_5=2019,fieldop_6=yes,fieldval1_7=GOOD,action=modifyOffer,offeridcategoryname=6bc17ded8d0e4300ae8ce80a5fa85b8d,car,
+// lstFieldIDs=1,2,3,4,5,6,7
 
 /*
 	public static Map doModifyOffer(Map<String, String[]> parameters) {
@@ -1025,7 +1024,8 @@ public class Offer extends DBBase {
 			}
 			//
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e
+			.getMessage() + ", " + dumpParamMap(parameters));
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
@@ -1039,7 +1039,8 @@ public class Offer extends DBBase {
 			}
 			//
 			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap(parameters));
+			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap
+			(parameters));
 			e.printStackTrace();
 		}
 		finally {
