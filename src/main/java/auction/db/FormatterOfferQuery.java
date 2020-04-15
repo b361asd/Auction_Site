@@ -4,13 +4,24 @@ package auction.db;
  * Format SQL querying the Offer table
  */
 public class FormatterOfferQuery extends DBBase {
-   private static final String BASE_SQL_REAL            = "select o2.offerID, o2.seller, o2.categoryName, o2.conditionCode, o2.description, o2.initPrice, o2.increment, o2.minPrice, o2.startDate, o2.endDate, o2.status, o2.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o2 LEFT OUTER join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o2.offerID = of1.offerID order by o2.offerID";
-   //
-   private static final String SQL_BROWSE_ACTIVE        = "select o2.offerID, o2.seller, o2.categoryName, o2.conditionCode, o2.description, o2.initPrice, o2.increment, o2.minPrice, o2.startDate, o2.endDate, o2.status, o2.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM (SELECT * FROM Offer WHERE status = 1) o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o2 LEFT OUTER join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o2.offerID = of1.offerID order by o2.offerID";
-   private static final String PLACEHOLDER              = "$";
-   private static final String BASE_SQL_PLACEHOLDER     = "select o2.offerID, o2.seller, o2.categoryName, o2.conditionCode, o2.description, o2.initPrice, o2.increment, o2.minPrice, o2.startDate, o2.endDate, o2.status, o2.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM ($) o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o2 LEFT OUTER join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o2.offerID = of1.offerID order by o2.offerID";
-   private static final String BASE_SQL_PLACEHOLDER_1ST = "select o2.offerID, o2.seller, o2.categoryName, o2.conditionCode, o2.description, o2.initPrice, o2.increment, o2.minPrice, o2.startDate, o2.endDate, o2.status, o2.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM (";
-   private static final String BASE_SQL_PLACEHOLDER_2ND = ") o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o2 LEFT OUTER join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o2.offerID = of1.offerID order by o2.offerID";
+   private static final String SQL_BROWSE_ACTIVE        = "select o2.offerID, o2.seller, o2.categoryName, o2.conditionCode, o2" +
+                                                          ".description, o2.initPrice, o2.increment, o2.minPrice, o2.startDate, o2" +
+                                                          ".endDate, o2.status, o2.price, of1.fieldID, of1.fieldText, of1.fieldName, of1" +
+                                                          ".fieldType from (SELECT o1.*, b.price FROM (SELECT * FROM Offer WHERE status =" +
+                                                          " 1) o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price" +
+                                                          " = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1" +
+                                                          ".offerID = b.offerID) o2 LEFT OUTER join (SELECT of.*, f1.fieldName, f1" +
+                                                          ".fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on " +
+                                                          "o2.offerID = of1.offerID order by o2.offerID";
+   private static final String BASE_SQL_PLACEHOLDER_1ST = "select o2.offerID, o2.seller, o2.categoryName, o2.conditionCode, o2" +
+                                                          ".description, o2.initPrice, o2.increment, o2.minPrice, o2.startDate, o2" +
+                                                          ".endDate, o2.status, o2.price, of1.fieldID, of1.fieldText, of1.fieldName, of1" +
+                                                          ".fieldType from (SELECT o1.*, b.price FROM (";
+   private static final String BASE_SQL_PLACEHOLDER_2ND = ") o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price =" +
+                                                          " (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID " +
+                                                          "= b.offerID) o2 LEFT OUTER join (SELECT of.*, f1.fieldName, f1.fieldType FROM " +
+                                                          "OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o2.offerID = of1" +
+                                                          ".offerID order by o2.offerID";
 
 
    public static StringBuilder initQuerySearch() {
@@ -28,7 +39,8 @@ public class FormatterOfferQuery extends DBBase {
 
    public static StringBuilder initQueryAlert() {
       StringBuilder sb = new StringBuilder();
-      sb.append("Insert Alert (alertID, receiver, offerID, bidID, content, alertDate) select REPLACE(UUID(),'-',''), ?, ?, NULL, ?, NOW() from Offer o WHERE (o.offerID = ?)");
+      sb.append("Insert Alert (alertID, receiver, offerID, bidID, content, alertDate) select REPLACE(UUID(),'-',''), ?, ?, NULL, ?, NOW() ")
+        .append("from Offer o WHERE (o.offerID = ?)");
       //
       return sb;
    }
@@ -136,9 +148,9 @@ public class FormatterOfferQuery extends DBBase {
       }
       //
       //
-      if (true) {
-         System.out.println(buildSQLSimilarOffer("car", "1"));
-      }
+      //      if (true) {
+      //         System.out.println(buildSQLSimilarOffer("car", "1"));
+      //      }
    }
 
    public static void main(String[] args) {
@@ -148,15 +160,27 @@ public class FormatterOfferQuery extends DBBase {
 
 
 /* For Browse
-select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o LEFT OUTER join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID and (o.status = 1) order by o.offerID
+select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate,
+ o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN
+ (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID =
+  b.offerID) o LEFT OUTER join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1
+  on o.offerID = of1.offerID and (o.status = 1) order by o.offerID
 */
 
 /* For Similar
-select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o LEFT OUTER join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID and (o.categoryName = ?) and (o.conditionCode = ?) and (o.status = 1) order by o.offerID
+select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate,
+ o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN
+ (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID =
+  b.offerID) o LEFT OUTER join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1
+  on o.offerID = of1.offerID and (o.categoryName = ?) and (o.conditionCode = ?) and (o.status = 1) order by o.offerID
 */
 
 /* General Search
-select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate, o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID = b.offerID) o LEFT OUTER join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1 on o.offerID = of1.offerID
+select o.offerID, o.seller, o.categoryName, o.conditionCode, o.description, o.initPrice, o.increment, o.minPrice, o.startDate, o.endDate,
+ o.status, o.price, of1.fieldID, of1.fieldText, of1.fieldName, of1.fieldType from (SELECT o1.*, b.price FROM Offer o1 LEFT OUTER JOIN
+ (SELECT b1.price, b1.offerID FROM Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) b ON o1.offerID =
+  b.offerID) o LEFT OUTER join (SELECT of.*, f1.fieldName, f1.fieldType FROM OfferField of, Field f1 WHERE of.fieldID = f1.fieldID) of1
+  on o.offerID = of1.offerID
 and (o.offerID='aaa')
 and (o.seller='user')
 and (o.categoryName='car')
@@ -178,7 +202,8 @@ or (of2.fieldID = 4 and (not (of2.fieldText = 'yes')))
 */
 
 /* For Alert
-Insert Alert (alertID, receiver, offerID, bidID, content, alertDate) select REPLACE(UUID(),'-',''), ?, ?, NULL, ?, NOW() from Offer o WHERE (o.offerID = ?)
+Insert Alert (alertID, receiver, offerID, bidID, content, alertDate) select REPLACE(UUID(),'-',''), ?, ?, NULL, ?, NOW() from Offer o
+WHERE (o.offerID = ?)
 and (o.seller='user')
 and (o.conditionCode in (1,2))
 and (o.description='Scratcges')

@@ -37,8 +37,8 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
    public static        String                  OP_INT_BETWEEN              = "between";
    //
    public static        String                  OP_BOOL_TRUE                = "yes";
-   public static        String  OP_BOOL_FALSE               = "no";
-   private static final Pattern sqlTokenPattern;
+   public static        String                  OP_BOOL_FALSE               = "no";
+   private static final Pattern                 sqlTokenPattern;
 
 	static {
 		// MySQL escape sequences: https://dev.mysql.com/doc/refman/8.0/en/string-literals.html
@@ -101,7 +101,8 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
       String output = "";
       //
       // String
-      if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE) || op.equals(OP_SZ_NOT_EQUAL) || op.equals(OP_SZ_START_WITH) || op.equals(OP_SZ_CONTAIN)) {
+      if (op.equals(OP_SZ_EQUAL) || op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE) || op.equals(OP_SZ_NOT_EQUAL) || op.equals(OP_SZ_START_WITH) ||
+          op.equals(OP_SZ_CONTAIN)) {
          if (op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
             value = toUpperCaseTrimNoNull(value);
          }
@@ -133,7 +134,8 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
          }
       }
       // Integer
-      else if (op.equals(OP_INT_EQUAL) || op.equals(OP_INT_EQUAL_MULTI) || op.equals(OP_INT_NOT_EQUAL) || op.equals(OP_INT_EQUAL_OR_OVER) || op.equals(OP_INT_EQUAL_OR_UNDER) || op.equals(OP_INT_BETWEEN)) {
+      else if (op.equals(OP_INT_EQUAL) || op.equals(OP_INT_EQUAL_MULTI) || op.equals(OP_INT_NOT_EQUAL) || op.equals(OP_INT_EQUAL_OR_OVER) ||
+               op.equals(OP_INT_EQUAL_OR_UNDER) || op.equals(OP_INT_BETWEEN)) {
          value = escapeToUpperCaseTrimNoNull(value);
          //
          if (value.equals("")) {
@@ -201,7 +203,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
       sb.append(" >= DATE_SUB(NOW(), INTERVAL ");
       sb.append(lookbackDay);
       sb.append(" DAY))");
-      //
    }
 
    public static void addContainTagsCondition2Cols(StringBuilder sb, String columnName1, String columnName2, String value) {
@@ -359,13 +360,8 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
          if (temps != null && temps.length > 0) {
             return temps[0].trim();
          }
-         else {
-            return "";
-         }
       }
-      else {
-         return "";
-      }
+      return "";
    }
 
    public static int getIntFromParamMap(String name, Map<String, String[]> parameters) {
@@ -391,18 +387,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
          return -3;
       }
    }
-
-   public static boolean getBooleanFromParamMap(String name, Map<String, String[]> parameters) {
-      String[] temps = parameters.get(name);
-      //
-      if (temps != null && temps.length > 0) {
-         String szTemp = temps[0].trim();
-         //
-         return szTemp.equalsIgnoreCase("checked") || szTemp.equalsIgnoreCase("yes") || szTemp.equalsIgnoreCase("true");
-      }
-      return false;
-   }
-
 
    public static String getListOfStringsFromSet(Set<String> set, String delimiter) {
       StringBuilder out = new StringBuilder();
@@ -471,9 +455,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
    // For debug
    public static String dumpParamMap(Map<String, String[]> parameters) {
       StringBuilder sb = new StringBuilder("Params:");
-      for (Map.Entry<String, String[]> s : parameters.entrySet()) {
-         String   key    = s.getKey();
-         String[] values = s.getValue();
+      parameters.forEach((key, values) -> {
          //
          for (int i = 0; i < values.length; i++) {
             if (i == 0) {
@@ -483,7 +465,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
                sb.append(key).append("(").append(i).append(")=").append(values[i]).append(",");
             }
          }
-      }
+      });
       //
       String output = sb.toString();
       //
