@@ -304,7 +304,7 @@ public class Offer extends DBBase {
       String descriptionVal = getStringFromParamMap("descriptionVal", parameters);
       oneConditionDesc(sb, "description", descriptionOP, descriptionVal, null);
       //
-      Map<String, String> mapFieldIDTotext = CategoryAndField.getMapFieldIDToText();
+      Map<String, String> mapFieldIDToText = CategoryAndField.getMapFieldIDToText();
       //
       String   lstFieldIDs = getStringFromParamMap("lstFieldIDs", parameters);
       String[] fieldIDs    = lstFieldIDs.split(",");
@@ -313,7 +313,7 @@ public class Offer extends DBBase {
          String fieldOP   = getStringFromParamMap("fieldop_" + fieldID, parameters);
          String fieldVal1 = getStringFromParamMap("fieldval1_" + fieldID, parameters);
          String fieldVal2 = getStringFromParamMap("fieldval2_" + fieldID, parameters);
-         oneConditionDesc(sb, mapFieldIDTotext.get(fieldID), fieldOP, fieldVal1, fieldVal2);
+         oneConditionDesc(sb, mapFieldIDToText.get(fieldID), fieldOP, fieldVal1, fieldVal2);
       }
       //
       return sb;
@@ -717,10 +717,10 @@ public class Offer extends DBBase {
       //
       if ((Boolean) output.get(DATA_NAME_STATUS)) {
          if (isCreate) {
-            doCreateAllerts(userID, offerid);
+            doCreateAlerts(userID, offerid);
          }
          else {
-            doCreateAllerts(temps[2], offerid);
+            doCreateAlerts(temps[2], offerid);
          }
       }
       //
@@ -733,7 +733,7 @@ public class Offer extends DBBase {
     * @param userName User name
     * @param offerID  Offer ID
     */
-   public static void doCreateAllerts(String userName, String offerID) {
+   public static void doCreateAlerts(String userName, String offerID) {
       Connection        con                       = null;
       PreparedStatement pStmtSelectAlertCriterion = null;
       PreparedStatement pStmtInsertAlert          = null;
@@ -917,7 +917,7 @@ public class Offer extends DBBase {
    public static void main3(String[] args) {
       System.out.println("Start");
       //
-      doCreateAllerts("user1", "99936702ff2a428ba913dd02e5592fc4");
+      doCreateAlerts("user1", "99936702ff2a428ba913dd02e5592fc4");
    }
 
    public static void main9(String[] args) {

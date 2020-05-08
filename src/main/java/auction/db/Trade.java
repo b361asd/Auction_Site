@@ -214,7 +214,7 @@ public class Trade extends DBBase {
          output.put(DATA_NAME_STATUS, true);
          output.put(DATA_NAME_MESSAGE, "OK");
          //
-         tableData.setDescription("Sales Grouped by Similars For The Last " + lookbackdays + " Days");
+         tableData.setDescription("Sales Grouped by Similar For The Last " + lookbackdays + " Days");
       }
       catch (SQLException e) {
          output.put(DATA_NAME_STATUS, false);
