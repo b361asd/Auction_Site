@@ -12,7 +12,6 @@ The project goals are listed in the file [Project_Goals.md](Project_Goals.md).
 * MySQL Workbench
 * MySQL Server
 * [Apache Tomcat](https://tomcat.apache.org/)
-* For IDEs, either [IntelliJ IDEA Ultimate](https://www.jetbrains.com/idea/) or [Eclipse IDE for Enterprise Java Developers](https://www.eclipse.org/downloads/packages/release/2019-12/r/eclipse-ide-enterprise-java-developers) are preferred. 
 
 ## How to run
 
