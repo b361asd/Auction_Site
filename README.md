@@ -7,11 +7,12 @@ It is implemented using Java, [JSP](https://en.wikipedia.org/wiki/JavaServer_Pag
 The project goals are listed in the file [Project_Goals.md](Project_Goals.md).
 
 ## Prerequisites
-* Java 8+
-* [Apache Maven](https://maven.apache.org/)
-* MySQL Workbench
-* MySQL Server
-* [Apache Tomcat](https://tomcat.apache.org/)
+
+-  Java 8+
+-  [Apache Maven](https://maven.apache.org/)
+-  MySQL Workbench
+-  MySQL Server
+-  [Apache Tomcat](https://tomcat.apache.org/)
 
 ## How to run
 
@@ -22,4 +23,5 @@ mvn install
 ```
 
 # License
+
 [MIT](LICENSE)
