@@ -1,10 +1,11 @@
 # BuyMe Auction Site
 
 [![Java CI with Maven](https://github.com/b361asd/Auction_Site/workflows/Java%20CI%20with%20Maven/badge.svg?branch=master)](https://github.com/b361asd/Auction_Site/actions)
+[![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/b361asd/Auction_Site.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/b361asd/Auction_Site/context:java)
 
 BuyMe is an implementation of a web auction site, similar to the likes of Ebay.
 It is implemented using Java, [JSP](https://en.wikipedia.org/wiki/JavaServer_Pages) and MySQL.
-The project goals are listed in the file [Project_Goals.md](Project_Goals.md).
+The project goals are listed in [Project_Goals.md](Project_Goals.md).
 
 ## Prerequisites
 
