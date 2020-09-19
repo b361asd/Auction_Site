@@ -5,6 +5,7 @@
 
 BuyMe is an implementation of a web auction site, similar to the likes of Ebay.
 It is implemented using Java, [JSP](https://en.wikipedia.org/wiki/JavaServer_Pages) and MySQL.
+
 The project goals are listed in [Project_Goals.md](Project_Goals.md).
 
 ## Prerequisites
@@ -23,6 +24,6 @@ This is a Maven project. To generate the `.war` file run:
 mvn install
 ```
 
-# License
+## License
 
 [MIT](LICENSE)
