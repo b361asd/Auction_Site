@@ -3,8 +3,8 @@ package auction.db;
 import auction.gui.Helper;
 import auction.servlet.IConstant;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -63,9 +63,9 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
    public static Connection getConnection() throws ClassNotFoundException, SQLException {
       Connection connection = null;
       Properties properties;
-      try (FileInputStream fileInputStream = new FileInputStream("mysql.properties")) {
+      try (InputStream inputStream = DBBase.class.getClassLoader().getResourceAsStream("mysql.properties")) {
          properties = new Properties();
-         properties.load(fileInputStream);
+         properties.load(inputStream);
 
          String MySQL_JDBC_Driver = properties.getProperty("jdbc.driver");
          String MySQL_URL         = properties.getProperty("jdbc.url");
