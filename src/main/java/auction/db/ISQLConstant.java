@@ -4,10 +4,6 @@ package auction.db;
  * Constants and SQL statement patterns.
  */
 public interface ISQLConstant {
-   String MySQL_URL      = "jdbc:mysql://localhost:3306/BuyMe";
-   String MySQL_USER_ID  = "user1";
-   String MySQL_PASSWORD = "user_password";
-
 
    // User
    String SQL_USER_INSERT        = "INSERT INTO User (username, password, email, firstname, lastname, address, phone, active, userType) " +

@@ -3,12 +3,15 @@ package auction.db;
 import auction.gui.Helper;
 import auction.servlet.IConstant;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -65,10 +68,25 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 	}
 
    public static Connection getConnection() throws ClassNotFoundException, SQLException {
-      // JDBC driver for MySQL. Latest: https://dev.mysql.com/downloads/connector/j/
-      Class.forName("com.mysql.cj.jdbc.Driver");
-      //
-      return DriverManager.getConnection(MySQL_URL, MySQL_USER_ID, MySQL_PASSWORD);
+      Connection connection = null;
+      Properties properties;
+      try (FileInputStream fileInputStream = new FileInputStream("mysql.properties")) {
+         properties = new Properties();
+         properties.load(fileInputStream);
+
+         String MySQL_JDBC_Driver = properties.getProperty("jdbc.driver");
+         String MySQL_URL         = properties.getProperty("jdbc.url");
+         String MySQL_USERNAME    = properties.getProperty("jdbc.username");
+         String MySQL_PASSWORD    = properties.getProperty("jdbc.password");
+
+         // JDBC driver for MySQL. Latest: https://dev.mysql.com/downloads/connector/j/
+         Class.forName(MySQL_JDBC_Driver);
+         connection = DriverManager.getConnection(MySQL_URL, MySQL_USERNAME, MySQL_PASSWORD);
+      }
+      catch (IOException e) {
+         e.printStackTrace();
+      }
+      return connection;
    }
 
    public static String getUUID() {
