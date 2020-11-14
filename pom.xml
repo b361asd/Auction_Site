@@ -6,7 +6,7 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>com.auctionsite</groupId>
    <artifactId>AuctionSite</artifactId>
-   <version>1.0-SNAPSHOT</version>
+   <version>1.0.0-SNAPSHOT</version>
    <packaging>war</packaging>
    <name>Auction Site</name>
    <url>https://github.com/b361asd/Auction_Site</url>
@@ -40,7 +40,6 @@
       </dependency>
    </dependencies>
    <build>
-      <finalName>AuctionSite</finalName>
       <pluginManagement>
          <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
          <plugins>
