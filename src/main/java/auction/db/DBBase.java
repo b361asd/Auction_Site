@@ -45,11 +45,18 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 
    static {
       // MySQL escape sequences: https://dev.mysql.com/doc/refman/8.0/en/string-literals.html
-      String[][] search_regex_replacement = new String[][]{   //   Search string       Search regex        SQL replacement regex
-                                                              {"\u0000", "\\x00", "\\\\0"}, {"'", "'", "\\\\'"}, {"\"", "\"", "\\\\\""},
-                                                              {"\b", "\\x08", "\\\\b"}, {"\n", "\\n", "\\\\n"}, {"\r", "\\r", "\\\\r"},
-                                                              {"\t", "\\t", "\\\\t"}, {"\u001A", "\\x1A", "\\\\Z"},
-                                                              {"\\", "\\\\", "\\\\\\\\"}};
+      String[][] search_regex_replacement = new String[][]
+              {	//   Search string       Search regex        SQL replacement regex
+                  {   "\u0000"    ,       "\\x00"     ,       "\\\\0"     },
+                  {   "'"         ,       "'"         ,       "\\\\'"     },
+                  {   "\""        ,       "\""        ,       "\\\\\""    },
+                  {   "\b"        ,       "\\x08"     ,       "\\\\b"     },
+                  {   "\n"        ,       "\\n"       ,       "\\\\n"     },
+                  {   "\r"        ,       "\\r"       ,       "\\\\r"     },
+                  {   "\t"        ,       "\\t"       ,       "\\\\t"     },
+                  {   "\u001A"    ,       "\\x1A"     ,       "\\\\Z"     },
+                  {   "\\"        ,       "\\\\"      ,       "\\\\\\\\"  }
+              };
       //
       sqlTokens = new HashMap<>();
       StringBuilder patternStr = new StringBuilder();
