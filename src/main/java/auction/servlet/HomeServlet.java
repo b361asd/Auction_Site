@@ -84,8 +84,6 @@ public class HomeServlet extends HttpServlet implements IConstant {
          }
       }
       //
-      //
-      //
       request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, map);
       //
       if ((Boolean) map.get(DATA_NAME_STATUS)) {

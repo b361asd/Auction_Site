@@ -16,9 +16,9 @@ import java.util.Map;
 
 public class User extends DBBase {
 
-   private static final List  lstHeader_user = Arrays.asList("username", "password", "email", "firstname", "lastname", "address", "phone",
-                                                             "active");
-   private static final int[] colSeq_user    = {0, 1, 2, 3, 4, 5, 6, 7};
+   private static final List<String> lstHeader_user = Arrays.asList("username", "password", "email", "firstname", "lastname", "address",
+                                                                    "phone", "active");
+   private static final int[]        colSeq_user    = {0, 1, 2, 3, 4, 5, 6, 7};
 
    /**
     * Select a list of Users

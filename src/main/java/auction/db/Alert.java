@@ -15,8 +15,8 @@ import java.util.Map;
 
 public class Alert extends DBBase {
 
-   private static final List  lstHeader_alert = Arrays.asList("alertID", "receiver", "offerID", "bidID", "content", "alertDate");
-   private static final int[] colSeq_alert    = {4, 5};
+   private static final List<String> lstHeader_alert = Arrays.asList("alertID", "receiver", "offerID", "bidID", "content", "alertDate");
+   private static final int[]        colSeq_alert    = {4, 5};
 
 
    /**

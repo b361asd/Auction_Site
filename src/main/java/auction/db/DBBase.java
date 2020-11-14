@@ -43,29 +43,22 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
    public static        String                  OP_BOOL_FALSE               = "no";
    private static final Pattern                 sqlTokenPattern;
 
-	static {
-		// MySQL escape sequences: https://dev.mysql.com/doc/refman/8.0/en/string-literals.html
-		String[][] search_regex_replacement = new String[][]
-				  {	//   Search string       Search regex        SQL replacement regex
-							 {   "\u0000"    ,       "\\x00"     ,       "\\\\0"     },
-							 {   "'"         ,       "'"         ,       "\\\\'"     },
-							 {   "\""        ,       "\""        ,       "\\\\\""    },
-							 {   "\b"        ,       "\\x08"     ,       "\\\\b"     },
-							 {   "\n"        ,       "\\n"       ,       "\\\\n"     },
-							 {   "\r"        ,       "\\r"       ,       "\\\\r"     },
-							 {   "\t"        ,       "\\t"       ,       "\\\\t"     },
-							 {   "\u001A"    ,       "\\x1A"     ,       "\\\\Z"     },
-							 {   "\\"        ,       "\\\\"      ,       "\\\\\\\\"  }
-				  };
-		//
-		sqlTokens = new HashMap<>();
-		StringBuilder patternStr = new StringBuilder();
-		for (String[] srr : search_regex_replacement) {
-			sqlTokens.put(srr[0], srr[2]);
-			patternStr.append((patternStr.length() == 0) ? "" : "|").append(srr[1]);
-		}
-		sqlTokenPattern = Pattern.compile('(' + patternStr.toString() + ')');
-	}
+   static {
+      // MySQL escape sequences: https://dev.mysql.com/doc/refman/8.0/en/string-literals.html
+      String[][] search_regex_replacement = new String[][]{   //   Search string       Search regex        SQL replacement regex
+                                                              {"\u0000", "\\x00", "\\\\0"}, {"'", "'", "\\\\'"}, {"\"", "\"", "\\\\\""},
+                                                              {"\b", "\\x08", "\\\\b"}, {"\n", "\\n", "\\\\n"}, {"\r", "\\r", "\\\\r"},
+                                                              {"\t", "\\t", "\\\\t"}, {"\u001A", "\\x1A", "\\\\Z"},
+                                                              {"\\", "\\\\", "\\\\\\\\"}};
+      //
+      sqlTokens = new HashMap<>();
+      StringBuilder patternStr = new StringBuilder();
+      for (String[] srr : search_regex_replacement) {
+         sqlTokens.put(srr[0], srr[2]);
+         patternStr.append((patternStr.length() == 0) ? "" : "|").append(srr[1]);
+      }
+      sqlTokenPattern = Pattern.compile('(' + patternStr.toString() + ')');
+   }
 
    public static Connection getConnection() throws ClassNotFoundException, SQLException {
       Connection connection = null;
@@ -104,7 +97,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
       return sb.toString();
    }
 
-
    public static String escapeToUpperCaseTrimNoNull(String input) {
       return escape((input == null ? "" : input.trim())).toUpperCase();
    }
@@ -113,7 +105,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
    public static String toUpperCaseTrimNoNull(String input) {
       return (input == null ? "" : input.trim()).toUpperCase();
    }
-
 
    private static String oneCondition(String columnName, String op, String value, String valueAdd, boolean isCasting) {
       String output = "";
@@ -214,7 +205,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
       return output;
    }
 
-
    public static void addDatetimeConditionLookback(StringBuilder sb, String columnName, int lookbackDay) {
       sb.append(" AND (");
       sb.append(columnName);
@@ -233,7 +223,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
          sb.append(oneCondition(columnName2, OP_SZ_CONTAIN, value, "", false));
          sb.append(")");
       }
-      //
    }
 
    public static void addCondition(StringBuilder sb, String columnName, String op, String value, String valueAdd) {
@@ -253,7 +242,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
          }
       }
    }
-
 
    public static void oneConditionDesc(StringBuilder sb, String columnName, String op, String value, String valueAdd) {
       if (columnName == null) {
@@ -354,7 +342,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
       }
    }
 
-
    public static BigDecimal getBigDecimalFromParamMap(String name, Map<String, String[]> parameters) {
       if (parameters != null && name != null) {
          String[] temps = parameters.get(name);
@@ -423,7 +410,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
       return out.toString();
    }
 
-
    public static String getListOfStringsFromParamMap(String name, int startIndex, Map<String, String[]> parameters, String delimiter) {
       StringBuilder out = new StringBuilder();
       if (parameters != null) {
@@ -468,7 +454,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 		return out;
 	}
 	*/
-
 
    // For debug
    public static String dumpParamMap(Map<String, String[]> parameters) {

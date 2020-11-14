@@ -1,7 +1,7 @@
 package auction.db;
 
 /**
- * Format SQL querying the Question table
+ * Format SQL querying the {@link Question} table
  */
 public class FormatterQuestionQuery extends DBBase {
 

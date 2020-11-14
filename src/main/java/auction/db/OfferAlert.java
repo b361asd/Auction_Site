@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 public class OfferAlert extends DBBase {
-   private static final List  lstHeader_OfferAlert = Arrays.asList("criterionID", "buyer", "criterionName", "triggerTxt", "description",
-                                                                   "generateDate");
-   private static final int[] colSeq_OfferAlert    = {1, 2, 4, 5};
+   private static final List<String> lstHeader_OfferAlert = Arrays.asList("criterionID", "buyer", "criterionName", "triggerTxt",
+                                                                          "description", "generateDate");
+   private static final int[]        colSeq_OfferAlert    = {1, 2, 4, 5};
 
    /**
     * Generate Offer Alert Criterion

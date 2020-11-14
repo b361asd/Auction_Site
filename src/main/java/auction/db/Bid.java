@@ -21,9 +21,9 @@ import java.util.Set;
 
 public class Bid extends DBBase {
 
-   private static final List  lstHeader_bid  = Arrays.asList("bidID", "offerID", "buyer", "price", "autoRebidLimit", "bidDate");
-   private static final int[] colSeq_bid     = {2, 3, 5};
-   private static final int[] colSeq_bid_add = {2, 3, 4, 5};
+   private static final List<String> lstHeader_bid  = Arrays.asList("bidID", "offerID", "buyer", "price", "autoRebidLimit", "bidDate");
+   private static final int[]        colSeq_bid     = {2, 3, 5};
+   private static final int[]        colSeq_bid_add = {2, 3, 4, 5};
 
    /**
     * Search bid and their relevant offers

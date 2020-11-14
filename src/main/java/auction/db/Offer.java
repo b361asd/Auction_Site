@@ -22,10 +22,10 @@ public class Offer extends DBBase {
 
    private static final int FIELD_START_INDEX = 12;
 
-   public static List  lstHeader_OfferDefault = Arrays.asList("offerId", "Seller", "Category", "Condition", "Desc", "initPrice",
-                                                              "increment", "minPrice", "Start", "End", "status", "CurrBid");
+   public static List<String> lstHeader_OfferDefault = Arrays.asList("offerId", "Seller", "Category", "Condition", "Desc", "initPrice",
+                                                                     "increment", "minPrice", "Start", "End", "status", "CurrBid");
    //
-   public static int[] colSeq_OfferDefault    = {2, 3, 4, 1, 5, 6, 11, 8, 9, 10};
+   public static int[]        colSeq_OfferDefault    = {2, 3, 4, 1, 5, 6, 11, 8, 9, 10};
 
    /**
     * Get Offers records for a set of offerIDs
@@ -201,7 +201,7 @@ public class Offer extends DBBase {
     * @param isSearch   If true, will search. Otherwise, alert criteria for user interests
     * @return Formatted SQL
     */
-   public static StringBuilder formatSQLWithParametersForSearchOrAlert(Map<String, String[]> parameters, String userID, boolean isSearch) {      //Search or Alert
+   public static StringBuilder formatSQLWithParametersForSearchOrAlert(Map<String, String[]> parameters, String userID, boolean isSearch) {
       StringBuilder sb;
       //
       if (isSearch) {

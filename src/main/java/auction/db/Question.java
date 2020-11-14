@@ -17,9 +17,9 @@ import java.util.Map;
 
 public class Question extends DBBase {
 
-   private static final List  lstHeader_question = Arrays.asList("questionID", "userID", "question", "answer", "repID", "questionDate",
-                                                                 "answerDate");
-   private static final int[] colSeq_question    = {1, 4, 2, 3, 5, 6};
+   private static final List<String> lstHeader_question = Arrays.asList("questionID", "userID", "question", "answer", "repID",
+                                                                        "questionDate", "answerDate");
+   private static final int[]        colSeq_question    = {1, 4, 2, 3, 5, 6};
 
    /**
     * Search Questions

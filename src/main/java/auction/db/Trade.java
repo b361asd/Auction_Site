@@ -15,17 +15,17 @@ import java.util.List;
 import java.util.Map;
 
 public class Trade extends DBBase {
-   private static final List  lstHeader_tradeTotal             = Arrays.asList("Period", "Total", "Average", "Count");
-   private static final List  lstHeader_tradeByCategoryName    = Arrays.asList("categoryName", "Total", "Average", "Count");
-   private static final List  lstHeader_tradeBySimilar         = Arrays.asList("Similar", "Total", "Average", "Count");
-   private static final List  lstHeader_tradeByBuyer           = Arrays.asList("Buyer", "Total", "Average", "Count");
-   private static final List  lstHeader_tradeBySeller          = Arrays.asList("Seller", "Total", "Average", "Count");
-   private static final List  lstHeader_tradeByUser            = Arrays.asList("User", "Total", "Average", "Count");
-   private static final int[] colSeq_tradeBy                   = {0, 1, 2, 3};
+   private static final List<String> lstHeader_tradeTotal             = Arrays.asList("Period", "Total", "Average", "Count");
+   private static final List<String> lstHeader_tradeByCategoryName    = Arrays.asList("categoryName", "Total", "Average", "Count");
+   private static final List<String> lstHeader_tradeBySimilar         = Arrays.asList("Similar", "Total", "Average", "Count");
+   private static final List<String> lstHeader_tradeByBuyer           = Arrays.asList("Buyer", "Total", "Average", "Count");
+   private static final List<String> lstHeader_tradeBySeller          = Arrays.asList("Seller", "Total", "Average", "Count");
+   private static final List<String> lstHeader_tradeByUser            = Arrays.asList("User", "Total", "Average", "Count");
+   private static final int[]        colSeq_tradeBy                   = {0, 1, 2, 3};
    //
-   private static final List  lstHeader_tradeByBestSellingItem = Arrays.asList("price", "categoryName", "conditionCode", "description",
-                                                                               "seller", "buyer", "tradeDate");
-   private static final int[] colSeq_tradeByBestSellingItem    = {0, 1, 2, 3, 4, 5, 6};
+   private static final List<String> lstHeader_tradeByBestSellingItem = Arrays.asList("price", "categoryName", "conditionCode",
+                                                                                      "description", "seller", "buyer", "tradeDate");
+   private static final int[]        colSeq_tradeByBestSellingItem    = {0, 1, 2, 3, 4, 5, 6};
 
    /**
     * Summary of Trade for Report
