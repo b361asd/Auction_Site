@@ -9,6 +9,7 @@
 target/
 
 # Ignore
+.vscode
 .idea/**
 lib
 out
