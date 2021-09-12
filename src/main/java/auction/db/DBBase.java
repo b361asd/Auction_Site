@@ -94,7 +94,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 
     public static String escape(String s) {
         Matcher matcher = sqlTokenPattern.matcher(s);
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         while (matcher.find()) {
             matcher.appendReplacement(sb, sqlTokens.get(matcher.group(1)));
         }

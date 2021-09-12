@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class Offer extends DBBase {
@@ -449,11 +450,7 @@ public class Offer extends DBBase {
                     String fieldId = mapIndexToFieldID.get(j);
                     String key = "" + i + "-" + fieldId;
                     String item = mapFields.get(key);
-                    if (item == null) {
-                        rowList.add("");
-                    } else {
-                        rowList.add(item);
-                    }
+                    rowList.add(Objects.requireNonNullElse(item, ""));
                 }
             }
             //
