@@ -21,7 +21,7 @@ public class FormatterQuestionQuery extends DBBase {
         // addCondition(sb, "o.categoryName", OP_SZ_EQUAL_MULTI_NO_ESCAPE, "'car','motorbike'",
         // null);
         //
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 }
 

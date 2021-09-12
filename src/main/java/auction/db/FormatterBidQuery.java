@@ -27,7 +27,7 @@ public class FormatterBidQuery extends DBBase {
     public static void main(String[] args) {
         StringBuilder sb = buildQueryUserActivity("user");
         //
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 }
 
