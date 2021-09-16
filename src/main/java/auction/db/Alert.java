@@ -28,7 +28,6 @@ public class Alert extends DBBase {
     public static Map selectAlert(String userID) {
         Map output = new HashMap();
         List lstRows = new ArrayList();
-        //
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt = con.prepareStatement(SQL_ALERT_SELECT);
                 ResultSet rs = preparedStmt.executeQuery()) {
@@ -39,10 +38,8 @@ public class Alert extends DBBase {
                 Object bidID = rs.getObject(4);
                 Object content = rs.getObject(5);
                 Object alertDate = rs.getObject(6);
-                //
                 List currentRow = new LinkedList();
                 lstRows.add(currentRow);
-                //
                 currentRow.add(alertID);
                 currentRow.add(receiver);
                 currentRow.add(offerID);
@@ -50,10 +47,8 @@ public class Alert extends DBBase {
                 currentRow.add(content);
                 currentRow.add(alertDate);
             }
-            //
             TableData tableData = new TableData(lstHeader_alert, lstRows, colSeq_alert);
             output.put(DATA_NAME_DATA, tableData);
-            //
             output.put(DATA_NAME_STATUS, true);
             output.put(DATA_NAME_MESSAGE, "OK");
         } catch (SQLException e) {
@@ -95,9 +90,7 @@ public class Alert extends DBBase {
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt = con.prepareStatement(SQL_ALERT_DELETE)) {
             preparedStmt.setString(1, alertID);
-            //
             preparedStmt.execute();
-            //
             int count = preparedStmt.getUpdateCount();
             if (count == 1) {
                 output.put(DATA_NAME_STATUS, true);
@@ -135,7 +128,6 @@ public class Alert extends DBBase {
 
     public static void main(String[] args) {
         Map<String, String[]> parameters = new HashMap<>();
-        //
         parameters.put("username", new String[] {"user"});
         parameters.put("password", new String[] {"user_pwd"});
         parameters.put("email", new String[] {"user@buyme.com"});
@@ -143,9 +135,8 @@ public class Alert extends DBBase {
         parameters.put("lastname", new String[] {"Lnuser"});
         parameters.put("address", new String[] {"123 Main St., Nowhere Town, NJ 56789"});
         parameters.put("phone", new String[] {"2365678909"});
-        //
+
         Map map = selectAlert("user");
-        //
         System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
         System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
         System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
