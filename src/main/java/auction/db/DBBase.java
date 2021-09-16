@@ -19,23 +19,23 @@ import java.util.regex.Pattern;
 /** Tools and utilities for handling database calls */
 public class DBBase extends Utils implements ISQLConstant, IConstant {
     private static final int MAX_CATEGORY_COUNT = 16;
-    //
+
     private static final HashMap<String, String> sqlTokens;
     public static String OP_ANY = "any";
-    //
+
     public static String OP_SZ_EQUAL = "szequal";
     public static String OP_SZ_EQUAL_MULTI_NO_ESCAPE = "szequalmultine";
     public static String OP_SZ_NOT_EQUAL = "sznotequal";
     public static String OP_SZ_START_WITH = "startwith";
     public static String OP_SZ_CONTAIN = "contain";
-    //
+
     public static String OP_INT_EQUAL = "intequal";
     public static String OP_INT_EQUAL_MULTI = "intequalmulti";
     public static String OP_INT_NOT_EQUAL = "intnotequal";
     public static String OP_INT_EQUAL_OR_OVER = "equalorover";
     public static String OP_INT_EQUAL_OR_UNDER = "equalorunder";
     public static String OP_INT_BETWEEN = "between";
-    //
+
     public static String OP_BOOL_TRUE = "yes";
     public static String OP_BOOL_FALSE = "no";
     private static final Pattern sqlTokenPattern;
@@ -55,7 +55,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
                     {"\u001A", "\\x1A", "\\\\Z"},
                     {"\\", "\\\\", "\\\\\\\\"}
                 };
-        //
         sqlTokens = new HashMap<>();
         StringBuilder patternStr = new StringBuilder();
         for (String[] srr : search_regex_replacement) {
@@ -67,19 +66,17 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
         Connection connection = null;
-        Properties properties;
         try (InputStream inputStream =
                 DBBase.class.getClassLoader().getResourceAsStream("mysql.properties")) {
-            properties = new Properties();
+            Properties properties = new Properties();
             properties.load(inputStream);
 
-            String MySQL_JDBC_Driver = properties.getProperty("jdbc.driver");
+            String MySQL_JDBC_DRIVER = properties.getProperty("jdbc.driver");
             String MySQL_URL = properties.getProperty("jdbc.url");
             String MySQL_USERNAME = properties.getProperty("jdbc.username");
             String MySQL_PASSWORD = properties.getProperty("jdbc.password");
 
-            // JDBC driver for MySQL. Latest: https://dev.mysql.com/downloads/connector/j/
-            Class.forName(MySQL_JDBC_Driver);
+            Class.forName(MySQL_JDBC_DRIVER);
             connection = DriverManager.getConnection(MySQL_URL, MySQL_USERNAME, MySQL_PASSWORD);
         } catch (IOException e) {
             e.printStackTrace();
@@ -113,7 +110,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
     private static String oneCondition(
             String columnName, String op, String value, String valueAdd, boolean isCasting) {
         String output = "";
-        //
         // String
         if (op.equals(OP_SZ_EQUAL)
                 || op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)
@@ -125,7 +121,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
             } else {
                 value = escapeToUpperCaseTrimNoNull(value);
             }
-            //
             if (value.equals("")) {
                 output = "";
             } else {
@@ -153,14 +148,12 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
                 || op.equals(OP_INT_EQUAL_OR_UNDER)
                 || op.equals(OP_INT_BETWEEN)) {
             value = escapeToUpperCaseTrimNoNull(value);
-            //
             if (value.equals("")) {
                 output = "";
             } else {
                 if (isCasting) {
                     columnName = "CAST(" + columnName + " AS SIGNED)";
                 }
-                //
                 if (op.equals(OP_INT_EQUAL)) {
                     output = "(" + columnName + " = " + value + ")";
                 } else if (op.equals(OP_INT_EQUAL_MULTI)) {
@@ -173,7 +166,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
                     output = "(" + columnName + " <= " + value + ")";
                 } else if (op.equals(OP_INT_BETWEEN)) {
                     valueAdd = escapeToUpperCaseTrimNoNull(valueAdd);
-                    //
                     if (valueAdd.equals("")) {
                         output = "";
                     } else {
@@ -199,29 +191,27 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
                 }
             }
         }
-        //
         return output;
     }
 
     public static void addDatetimeConditionLookback(
             StringBuilder sb, String columnName, int lookbackDay) {
-        sb.append(" AND (");
-        sb.append(columnName);
-        sb.append(" >= DATE_SUB(NOW(), INTERVAL ");
-        sb.append(lookbackDay);
-        sb.append(" DAY))");
+        sb.append(" AND (")
+                .append(columnName)
+                .append(" >= DATE_SUB(NOW(), INTERVAL ")
+                .append(lookbackDay)
+                .append(" DAY))");
     }
 
     public static void addContainTagsCondition2Cols(
             StringBuilder sb, String columnName1, String columnName2, String value) {
         value = escapeToUpperCaseTrimNoNull(value);
-        //
         if (value.length() > 0) {
-            sb.append(" and (");
-            sb.append(oneCondition(columnName1, OP_SZ_CONTAIN, value, "", false));
-            sb.append(" OR ");
-            sb.append(oneCondition(columnName2, OP_SZ_CONTAIN, value, "", false));
-            sb.append(")");
+            sb.append(" and (")
+                    .append(oneCondition(columnName1, OP_SZ_CONTAIN, value, "", false))
+                    .append(" OR ")
+                    .append(oneCondition(columnName2, OP_SZ_CONTAIN, value, "", false))
+                    .append(")");
         }
     }
 
@@ -254,83 +244,47 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
         if (columnName == null) {
             columnName = "Unknown_Field";
         }
-        //
         if (op.equalsIgnoreCase(OP_BOOL_TRUE)) {
-            sb.append(columnName);
-            sb.append("; ");
+            sb.append(columnName).append("; ");
         } else if (op.equalsIgnoreCase(OP_BOOL_FALSE)) {
-            sb.append("not ");
-            sb.append(columnName);
-            sb.append("; ");
+            sb.append("not ").append(columnName).append("; ");
         } else if (value != null && value.trim().length() != 0) {
             if (op.equalsIgnoreCase(OP_ANY)) {
-                sb.append("any ");
-                sb.append(columnName);
-                sb.append("; ");
+                sb.append("any ").append(columnName).append("; ");
             } else if (op.equalsIgnoreCase(OP_SZ_EQUAL)) {
-                sb.append(columnName);
-                sb.append(" is ");
-                sb.append(value);
-                sb.append("; ");
+                sb.append(columnName).append(" is ").append(value).append("; ");
             } else if (op.equalsIgnoreCase(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
-                sb.append(columnName);
-                sb.append(" is among (");
-                sb.append(value);
-                sb.append("); ");
+                sb.append(columnName).append(" is among (").append(value).append("); ");
             } else if (op.equalsIgnoreCase(OP_SZ_NOT_EQUAL)) {
-                sb.append(columnName);
-                sb.append(" is not ");
-                sb.append(value);
-                sb.append("; ");
+                sb.append(columnName).append(" is not ").append(value).append("; ");
             } else if (op.equalsIgnoreCase(OP_SZ_START_WITH)) {
-                sb.append(columnName);
-                sb.append(" starts with ");
-                sb.append(value);
-                sb.append("; ");
+                sb.append(columnName).append(" starts with ").append(value).append("; ");
             } else if (op.equalsIgnoreCase(OP_SZ_CONTAIN)) {
-                sb.append(columnName);
-                sb.append(" contains ");
-                sb.append(value);
-                sb.append("; ");
+                sb.append(columnName).append(" contains ").append(value).append("; ");
             } else if (op.equalsIgnoreCase(OP_INT_EQUAL)) {
-                sb.append(columnName);
-                sb.append(" is ");
-                sb.append(value);
-                sb.append("; ");
+                sb.append(columnName).append(" is ").append(value).append("; ");
             } else if (op.equalsIgnoreCase(OP_INT_EQUAL_MULTI)) {
-                sb.append(columnName);
-                sb.append(" is among (");
-                sb.append(value);
-                sb.append("); ");
+                sb.append(columnName).append(" is among (").append(value).append("); ");
             } else if (op.equalsIgnoreCase(OP_INT_NOT_EQUAL)) {
-                sb.append(columnName);
-                sb.append(" is not ");
-                sb.append(value);
-                sb.append("; ");
+                sb.append(columnName).append(" is not ").append(value).append("; ");
             } else if (op.equalsIgnoreCase(OP_INT_EQUAL_OR_OVER)) {
-                sb.append(columnName);
-                sb.append(" is equal or over ");
-                sb.append(value);
-                sb.append("; ");
+                sb.append(columnName).append(" is equal or over ").append(value).append("; ");
             } else if (op.equalsIgnoreCase(OP_INT_EQUAL_OR_UNDER)) {
-                sb.append(columnName);
-                sb.append(" is equal or under ");
-                sb.append(value);
-                sb.append("; ");
+                sb.append(columnName).append(" is equal or under ").append(value).append("; ");
             } else if (op.equalsIgnoreCase(OP_INT_BETWEEN)) {
                 if (valueAdd != null && valueAdd.trim().length() != 0) {
-                    sb.append(columnName);
-                    sb.append(" is between ");
-                    sb.append(value);
-                    sb.append(" and ");
-                    sb.append(valueAdd);
-                    sb.append("; ");
+                    sb.append(columnName)
+                            .append(" is between ")
+                            .append(value)
+                            .append(" and ")
+                            .append(valueAdd)
+                            .append("; ");
                 }
             } else {
-                sb.append(columnName);
-                sb.append(" is in unknown relation to ");
-                sb.append(value);
-                sb.append("; ");
+                sb.append(columnName)
+                        .append(" is in unknown relation to ")
+                        .append(value)
+                        .append("; ");
             }
         }
     }
@@ -339,7 +293,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
             String name, Map<String, String[]> parameters) {
         if (parameters != null && name != null) {
             String[] temps = parameters.get(name);
-            //
             if (temps != null && temps.length > 0 && temps[0].length() > 0) {
                 return new BigDecimal(temps[0].trim());
             } else {
@@ -353,7 +306,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
     public static String getStringFromParamMap(String name, Map<String, String[]> parameters) {
         if (parameters != null && name != null) {
             String[] temps = parameters.get(name);
-            //
             if (temps != null && temps.length > 0) {
                 return temps[0].trim();
             }
@@ -364,7 +316,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
     public static int getIntFromParamMap(String name, Map<String, String[]> parameters) {
         if (parameters != null && name != null) {
             String[] temps = parameters.get(name);
-            //
             if (temps != null && temps.length > 0 && temps[0].length() > 0) {
                 int iTemp = -1;
                 try {
@@ -372,7 +323,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
-                //
                 return iTemp;
             } else {
                 return -2;
@@ -405,7 +355,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
             String[] temps;
             for (int i = startIndex; i < MAX_CATEGORY_COUNT; i++) {
                 temps = parameters.get(name + i);
-                //
                 if (temps != null) {
                     String one = temps[0];
                     if (one != null && one.length() > 0) {
@@ -418,7 +367,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
                 }
             }
         }
-        //
         return out.toString();
     }
 
@@ -448,7 +396,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
         StringBuilder sb = new StringBuilder("Params:");
         parameters.forEach(
                 (key, values) -> {
-                    //
                     for (int i = 0; i < values.length; i++) {
                         if (i == 0) {
                             sb.append(key).append("=").append(values[i]).append(",");
@@ -462,13 +409,10 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
                         }
                     }
                 });
-        //
         String output = sb.toString();
-        //
         if (output.endsWith(",")) {
             output = output.substring(0, output.length() - 1);
         }
-        //
         return Helper.escapeHTML(output);
     }
 }
