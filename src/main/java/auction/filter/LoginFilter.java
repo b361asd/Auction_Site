@@ -32,27 +32,25 @@ public class LoginFilter implements Filter, IConstant {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
         HttpSession session = request.getSession(true);
-        //
+
         String loginURL = request.getContextPath() + "/login.jsp";
         String homeURL = request.getContextPath() + "/home";
         String registerURI = request.getContextPath() + "/register.jsp";
         String logoutURL = request.getContextPath() + "/logout";
-        //
+
         boolean isLogoutRequest = request.getRequestURI().equals(logoutURL);
         boolean isCSSRequest = request.getRequestURI().toLowerCase().contains("style");
         if (isLogoutRequest) {
             session.invalidate();
-            //
             response.sendRedirect(loginURL);
         } else if (isCSSRequest) {
             chain.doFilter(request, response);
         } else {
             boolean isLoggedIn = session.getAttribute(SESSION_ATTRIBUTE_USER) != null;
-            // Already Login
+            // Already log in
             if (isLoggedIn) {
                 String szUserType = (String) session.getAttribute(SESSION_ATTRIBUTE_USERTYPE);
                 szUserType = szUserType == null ? "" : szUserType;
-                //
                 boolean isAdminURL =
                         request.getRequestURI()
                                 .startsWith(request.getContextPath() + "/" + ADMIN_PATH);
@@ -62,7 +60,6 @@ public class LoginFilter implements Filter, IConstant {
                 boolean isUserURL =
                         request.getRequestURI()
                                 .startsWith(request.getContextPath() + "/" + USER_PATH);
-                //
                 if (szUserType.equalsIgnoreCase("1") && isAdminURL) {
                     chain.doFilter(request, response);
                 } else if (szUserType.equalsIgnoreCase("2") && isRepURL) {
@@ -82,8 +79,7 @@ public class LoginFilter implements Filter, IConstant {
                 boolean isLoginRequest = request.getRequestURI().equals(loginURL);
                 boolean isHomeRequest = request.getRequestURI().equals(homeURL);
                 boolean isRegisterRequest = request.getRequestURI().equals(registerURI);
-                //
-                // Want to login, want to register
+                // Want to log in, want to register
                 if (isLoginRequest || isHomeRequest || isRegisterRequest) {
                     chain.doFilter(request, response);
                 } else {
