@@ -93,7 +93,7 @@ public class Alert extends DBBase {
         String alertID = getStringFromParamMap("alertID", parameters);
         //
         try (Connection con = getConnection();
-                PreparedStatement preparedStmt = con.prepareStatement(SQL_ALERT_DELETE); ) {
+                PreparedStatement preparedStmt = con.prepareStatement(SQL_ALERT_DELETE)) {
             preparedStmt.setString(1, alertID);
             //
             preparedStmt.execute();
