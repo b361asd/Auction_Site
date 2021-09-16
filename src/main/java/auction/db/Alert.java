@@ -16,6 +16,7 @@ public class Alert extends DBBase {
 
     private static final List<String> lstHeader_alert =
             Arrays.asList("alertID", "receiver", "offerID", "bidID", "content", "alertDate");
+
     private static final int[] colSeq_alert = {4, 5};
 
     /**
@@ -28,17 +29,9 @@ public class Alert extends DBBase {
         Map output = new HashMap();
         List lstRows = new ArrayList();
         //
-        Connection con = null;
-        PreparedStatement preparedStmt = null;
-        try {
-            con = getConnection();
-            //
-            preparedStmt = con.prepareStatement(SQL_ALERT_SELECT);
-            //
-            preparedStmt.setString(1, userID);
-            //
-            ResultSet rs = preparedStmt.executeQuery();
-            //
+        try (Connection con = getConnection();
+                PreparedStatement preparedStmt = con.prepareStatement(SQL_ALERT_SELECT);
+                ResultSet rs = preparedStmt.executeQuery()) {
             while (rs.next()) {
                 Object alertID = rs.getObject(1);
                 Object receiver = rs.getObject(2);
@@ -85,23 +78,7 @@ public class Alert extends DBBase {
                             + ", DETAILS: "
                             + exceptionToString(e));
             e.printStackTrace();
-        } finally {
-            if (preparedStmt != null) {
-                try {
-                    preparedStmt.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        //
         return output;
     }
 
@@ -115,12 +92,8 @@ public class Alert extends DBBase {
         //
         String alertID = getStringFromParamMap("alertID", parameters);
         //
-        Connection con = null;
-        PreparedStatement preparedStmt = null;
-        try {
-            con = getConnection();
-            //
-            preparedStmt = con.prepareStatement(SQL_ALERT_DELETE);
+        try (Connection con = getConnection();
+                PreparedStatement preparedStmt = con.prepareStatement(SQL_ALERT_DELETE); ) {
             preparedStmt.setString(1, alertID);
             //
             preparedStmt.execute();
@@ -157,23 +130,7 @@ public class Alert extends DBBase {
                             + ", "
                             + dumpParamMap(parameters));
             e.printStackTrace();
-        } finally {
-            if (preparedStmt != null) {
-                try {
-                    preparedStmt.close();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
         }
-        //
     }
 
     public static void main(String[] args) {
