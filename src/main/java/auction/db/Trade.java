@@ -26,8 +26,9 @@ public class Trade extends DBBase {
             Arrays.asList("Seller", "Total", "Average", "Count");
     private static final List<String> lstHeader_tradeByUser =
             Arrays.asList("User", "Total", "Average", "Count");
+
     private static final int[] colSeq_tradeBy = {0, 1, 2, 3};
-    //
+
     private static final List<String> lstHeader_tradeByBestSellingItem =
             Arrays.asList(
                     "price",
@@ -37,6 +38,7 @@ public class Trade extends DBBase {
                     "seller",
                     "buyer",
                     "tradeDate");
+
     private static final int[] colSeq_tradeByBestSellingItem = {0, 1, 2, 3, 4, 5, 6};
 
     /**
@@ -59,7 +61,6 @@ public class Trade extends DBBase {
             boolean isUser) {
         Map output = new HashMap();
         List lstRows = new ArrayList();
-        //
         List lstHeader = null;
         if (isTotal) {
             lstHeader = lstHeader_tradeTotal;
@@ -72,15 +73,9 @@ public class Trade extends DBBase {
         } else if (isUser) {
             lstHeader = lstHeader_tradeByUser;
         }
-        //
         TableData tableData = new TableData(lstHeader, lstRows, colSeq_tradeBy);
         output.put(DATA_NAME_DATA, tableData);
-        //
-        Connection con = null;
-        PreparedStatement preparedStmt = null;
-        try {
-            con = getConnection();
-            //
+        try (Connection con = getConnection()) {
             String sql = null;
             if (isTotal) {
                 sql = SQL_TRADE_TOTAL;
@@ -93,42 +88,36 @@ public class Trade extends DBBase {
             } else if (isUser) {
                 sql = SQL_TRADE_TOTAL_BY_USER;
             }
-            //
-            preparedStmt = con.prepareStatement(sql);
-            //
-            if (!isTotal) {
-                if (isCategoryName) {
-                    preparedStmt.setInt(1, lookbackdays);
-                } else if (isBuyer) {
-                    preparedStmt.setInt(1, lookbackdays);
-                } else if (isSeller) {
-                    preparedStmt.setInt(1, lookbackdays);
-                } else if (isUser) {
-                    preparedStmt.setInt(1, lookbackdays);
-                    preparedStmt.setInt(2, lookbackdays);
+            try (PreparedStatement preparedStmt = con.prepareStatement(sql)) {
+                if (!isTotal) {
+                    if (isCategoryName) {
+                        preparedStmt.setInt(1, lookbackdays);
+                    } else if (isBuyer) {
+                        preparedStmt.setInt(1, lookbackdays);
+                    } else if (isSeller) {
+                        preparedStmt.setInt(1, lookbackdays);
+                    } else if (isUser) {
+                        preparedStmt.setInt(1, lookbackdays);
+                        preparedStmt.setInt(2, lookbackdays);
+                    }
+                }
+                try (ResultSet rs = preparedStmt.executeQuery()) {
+                    while (rs.next()) {
+                        Object person = rs.getObject(1);
+                        Object Total = rs.getObject(2);
+                        Object Average = rs.getObject(3);
+                        Object Count = rs.getObject(4);
+                        List currentRow = new LinkedList();
+                        lstRows.add(currentRow);
+                        currentRow.add(person);
+                        currentRow.add(Total);
+                        currentRow.add(Average);
+                        currentRow.add(Count);
+                    }
+                    output.put(DATA_NAME_STATUS, true);
+                    output.put(DATA_NAME_MESSAGE, "OK");
                 }
             }
-            //
-            ResultSet rs = preparedStmt.executeQuery();
-            //
-            while (rs.next()) {
-                Object person = rs.getObject(1);
-                Object Total = rs.getObject(2);
-                Object Average = rs.getObject(3);
-                Object Count = rs.getObject(4);
-                //
-                List currentRow = new LinkedList();
-                lstRows.add(currentRow);
-                //
-                currentRow.add(person);
-                currentRow.add(Total);
-                currentRow.add(Average);
-                currentRow.add(Count);
-            }
-            //
-            output.put(DATA_NAME_STATUS, true);
-            output.put(DATA_NAME_MESSAGE, "OK");
-            //
             if (isTotal) {
                 tableData.setDescription("Total Sales For Various Periods");
             } else if (isCategoryName) {
@@ -158,23 +147,7 @@ public class Trade extends DBBase {
                     "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
             tableData.setDescription((String) output.get(DATA_NAME_MESSAGE));
             e.printStackTrace();
-        } finally {
-            if (preparedStmt != null) {
-                try {
-                    preparedStmt.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        //
         return output;
     }
 
@@ -187,29 +160,21 @@ public class Trade extends DBBase {
     public static Map selectGroupSimilar(int lookbackdays) {
         Map output = new HashMap();
         List lstRows = new ArrayList();
-        //
         TableData tableData = new TableData(lstHeader_tradeBySimilar, lstRows, colSeq_tradeBy);
         output.put(DATA_NAME_DATA, tableData);
-        //
-        Connection con = null;
-        PreparedStatement preparedStmt = null;
-        try {
-            con = getConnection();
-            //
-            preparedStmt = con.prepareStatement(SQL_TRADE_TOTAL_BY_SIMILARGROUP);
+        try (Connection con = getConnection();
+                PreparedStatement preparedStmt =
+                        con.prepareStatement(SQL_TRADE_TOTAL_BY_SIMILARGROUP)) {
             preparedStmt.setInt(1, lookbackdays);
             ResultSet rs = preparedStmt.executeQuery();
-            //
             while (rs.next()) {
                 Object categoryName = rs.getObject(1);
                 Object conditionCode = rs.getObject(2);
                 Object Total = rs.getObject(3);
                 Object Average = rs.getObject(4);
                 Object Count = rs.getObject(5);
-                //
                 List currentRow = new LinkedList();
                 lstRows.add(currentRow);
-                //
                 currentRow.add(
                         categoryName
                                 + ", "
@@ -218,10 +183,8 @@ public class Trade extends DBBase {
                 currentRow.add(Average);
                 currentRow.add(Count);
             }
-            //
             output.put(DATA_NAME_STATUS, true);
             output.put(DATA_NAME_MESSAGE, "OK");
-            //
             tableData.setDescription(
                     "Sales Grouped by Similar For The Last " + lookbackdays + " Days");
         } catch (SQLException e) {
@@ -238,23 +201,7 @@ public class Trade extends DBBase {
                     "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
             tableData.setDescription((String) output.get(DATA_NAME_MESSAGE));
             e.printStackTrace();
-        } finally {
-            if (preparedStmt != null) {
-                try {
-                    preparedStmt.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        //
         return output;
     }
 
@@ -270,48 +217,38 @@ public class Trade extends DBBase {
             int lookbackdays, int limit, boolean isBestSelling) {
         Map output = new HashMap();
         List lstRows = new ArrayList();
-        //
         TableData tableData =
                 new TableData(
                         lstHeader_tradeByBestSellingItem, lstRows, colSeq_tradeByBestSellingItem);
         output.put(DATA_NAME_DATA, tableData);
-        //
-        Connection con = null;
-        PreparedStatement preparedStmt = null;
-        try {
-            con = getConnection();
-            //
-            preparedStmt =
-                    con.prepareStatement(
-                            isBestSelling ? SQL_TRADE_BEST_ITEM : SQL_TRADE_RECENT_ITEM);
+        try (Connection con = getConnection();
+                PreparedStatement preparedStmt =
+                        con.prepareStatement(
+                                isBestSelling ? SQL_TRADE_BEST_ITEM : SQL_TRADE_RECENT_ITEM)) {
             preparedStmt.setInt(1, lookbackdays);
             preparedStmt.setInt(2, limit);
-            ResultSet rs = preparedStmt.executeQuery();
-            //
-            while (rs.next()) {
-                Object price = rs.getObject(1);
-                Object categoryName = rs.getObject(2);
-                Object conditionCode = rs.getObject(3);
-                Object description = rs.getObject(4);
-                Object seller = rs.getObject(5);
-                Object buyer = rs.getObject(6);
-                Object tradeDate = rs.getObject(7);
-                //
-                List currentRow = new LinkedList();
-                lstRows.add(currentRow);
-                //
-                currentRow.add(price);
-                currentRow.add(categoryName);
-                currentRow.add(Helper.getConditionFromCode(conditionCode.toString()));
-                currentRow.add(description);
-                currentRow.add(seller);
-                currentRow.add(buyer);
-                currentRow.add(tradeDate);
+            try (ResultSet rs = preparedStmt.executeQuery()) {
+                while (rs.next()) {
+                    Object price = rs.getObject(1);
+                    Object categoryName = rs.getObject(2);
+                    Object conditionCode = rs.getObject(3);
+                    Object description = rs.getObject(4);
+                    Object seller = rs.getObject(5);
+                    Object buyer = rs.getObject(6);
+                    Object tradeDate = rs.getObject(7);
+                    List currentRow = new LinkedList();
+                    lstRows.add(currentRow);
+                    currentRow.add(price);
+                    currentRow.add(categoryName);
+                    currentRow.add(Helper.getConditionFromCode(conditionCode.toString()));
+                    currentRow.add(description);
+                    currentRow.add(seller);
+                    currentRow.add(buyer);
+                    currentRow.add(tradeDate);
+                }
             }
-            //
             output.put(DATA_NAME_STATUS, true);
             output.put(DATA_NAME_MESSAGE, "OK");
-            //
             if (isBestSelling) {
                 tableData.setDescription(
                         "Top "
@@ -341,23 +278,7 @@ public class Trade extends DBBase {
                     "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
             tableData.setDescription((String) output.get(DATA_NAME_MESSAGE));
             e.printStackTrace();
-        } finally {
-            if (preparedStmt != null) {
-                try {
-                    preparedStmt.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        //
         return output;
     }
 
@@ -372,48 +293,38 @@ public class Trade extends DBBase {
     public static Map selectMyTrade(String userName, int lookbackdays, int limit) {
         Map output = new HashMap();
         List lstRows = new ArrayList();
-        //
         TableData tableData =
                 new TableData(
                         lstHeader_tradeByBestSellingItem, lstRows, colSeq_tradeByBestSellingItem);
         output.put(DATA_NAME_DATA, tableData);
-        //
-        Connection con = null;
-        PreparedStatement preparedStmt = null;
-        try {
-            con = getConnection();
-            //
-            preparedStmt = con.prepareStatement(SQL_TRADE_MY_TRADE);
+        try (Connection con = getConnection();
+                PreparedStatement preparedStmt = con.prepareStatement(SQL_TRADE_MY_TRADE)) {
             preparedStmt.setInt(1, lookbackdays);
             preparedStmt.setString(2, userName);
             preparedStmt.setString(3, userName);
             preparedStmt.setInt(4, limit);
-            ResultSet rs = preparedStmt.executeQuery();
-            //
-            while (rs.next()) {
-                Object price = rs.getObject(1);
-                Object categoryName = rs.getObject(2);
-                Object conditionCode = rs.getObject(3);
-                Object description = rs.getObject(4);
-                Object seller = rs.getObject(5);
-                Object buyer = rs.getObject(6);
-                Object tradeDate = rs.getObject(7);
-                //
-                List currentRow = new LinkedList();
-                lstRows.add(currentRow);
-                //
-                currentRow.add(price);
-                currentRow.add(categoryName);
-                currentRow.add(Helper.getConditionFromCode(conditionCode.toString()));
-                currentRow.add(description);
-                currentRow.add(seller);
-                currentRow.add(buyer);
-                currentRow.add(tradeDate);
+            try (ResultSet rs = preparedStmt.executeQuery()) {
+                while (rs.next()) {
+                    Object price = rs.getObject(1);
+                    Object categoryName = rs.getObject(2);
+                    Object conditionCode = rs.getObject(3);
+                    Object description = rs.getObject(4);
+                    Object seller = rs.getObject(5);
+                    Object buyer = rs.getObject(6);
+                    Object tradeDate = rs.getObject(7);
+                    List currentRow = new LinkedList();
+                    lstRows.add(currentRow);
+                    currentRow.add(price);
+                    currentRow.add(categoryName);
+                    currentRow.add(Helper.getConditionFromCode(conditionCode.toString()));
+                    currentRow.add(description);
+                    currentRow.add(seller);
+                    currentRow.add(buyer);
+                    currentRow.add(tradeDate);
+                }
             }
-            //
             output.put(DATA_NAME_STATUS, true);
             output.put(DATA_NAME_MESSAGE, "OK");
-            //
             tableData.setDescription(
                     "My Most Recent "
                             + limit
@@ -434,34 +345,15 @@ public class Trade extends DBBase {
                     "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
             tableData.setDescription((String) output.get(DATA_NAME_MESSAGE));
             e.printStackTrace();
-        } finally {
-            if (preparedStmt != null) {
-                try {
-                    preparedStmt.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        //
         return output;
     }
 
     public static void main(String[] args) {
         Map<String, String[]> parameters = new HashMap<>();
-        //
         parameters.put("bidID", new String[] {"11fe20aabc7a4025928e9522544be2e3"});
-        //
         // Map map = summaryByBuyerSellerUser(30, false, false, true);
         Map map = selectBestSellingMostRecentItems(30, 10, true);
-        //
         System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
         System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
         System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
