@@ -25,6 +25,7 @@ public class User extends DBBase {
                     "address",
                     "phone",
                     "active");
+
     private static final int[] colSeq_user = {0, 1, 2, 3, 4, 5, 6, 7};
 
     /**
@@ -37,55 +38,45 @@ public class User extends DBBase {
     public static Map selectUser(Map<String, String[]> parameters, int userType) {
         Map output = new HashMap();
         List lstRows = new ArrayList();
-        //
         String in_username =
                 parameters == null ? "" : getStringFromParamMap("username", parameters);
-        //
-        Connection con = null;
-        PreparedStatement preparedStmt = null;
-        try {
-            con = getConnection();
-            //
-            preparedStmt =
-                    con.prepareStatement(
-                            in_username.length() != 0 ? SQL_USER_SELECT_ONE : SQL_USER_SELECT);
-            //
+        try (Connection con = getConnection();
+                PreparedStatement preparedStmt =
+                        con.prepareStatement(
+                                in_username.length() != 0
+                                        ? SQL_USER_SELECT_ONE
+                                        : SQL_USER_SELECT); ) {
             if (in_username.length() != 0) {
                 preparedStmt.setString(1, in_username);
                 preparedStmt.setInt(2, userType);
             } else {
                 preparedStmt.setInt(1, userType);
             }
-            //
-            ResultSet rs = preparedStmt.executeQuery();
-            //
-            while (rs.next()) {
-                Object username = rs.getObject(1);
-                Object password = rs.getObject(2);
-                Object email = rs.getObject(3);
-                Object firstname = rs.getObject(4);
-                Object lastname = rs.getObject(5);
-                Object address = rs.getObject(6);
-                Object phone = rs.getObject(7);
-                Object active = rs.getObject(8);
-                //
-                List currentRow = new LinkedList();
-                lstRows.add(currentRow);
-                //
-                currentRow.add(username);
-                currentRow.add(password);
-                currentRow.add(email);
-                currentRow.add(firstname);
-                currentRow.add(lastname);
-                currentRow.add(address);
-                currentRow.add(phone);
-                currentRow.add(active);
+            try (ResultSet rs = preparedStmt.executeQuery()) {
+                while (rs.next()) {
+                    Object username = rs.getObject(1);
+                    Object password = rs.getObject(2);
+                    Object email = rs.getObject(3);
+                    Object firstname = rs.getObject(4);
+                    Object lastname = rs.getObject(5);
+                    Object address = rs.getObject(6);
+                    Object phone = rs.getObject(7);
+                    Object active = rs.getObject(8);
+
+                    List currentRow = new LinkedList();
+                    lstRows.add(currentRow);
+                    currentRow.add(username);
+                    currentRow.add(password);
+                    currentRow.add(email);
+                    currentRow.add(firstname);
+                    currentRow.add(lastname);
+                    currentRow.add(address);
+                    currentRow.add(phone);
+                    currentRow.add(active);
+                }
             }
-            //
             TableData tableData = new TableData(lstHeader_user, lstRows, colSeq_user);
-            //
             output.put(IConstant.DATA_NAME_DATA, tableData);
-            //
             output.put(IConstant.DATA_NAME_STATUS, true);
             output.put(IConstant.DATA_NAME_MESSAGE, "OK");
         } catch (SQLException e) {
@@ -110,23 +101,7 @@ public class User extends DBBase {
                             + ", DETAILS: "
                             + exceptionToString(e));
             e.printStackTrace();
-        } finally {
-            if (preparedStmt != null) {
-                try {
-                    preparedStmt.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        //
         return output;
     }
 
@@ -137,40 +112,16 @@ public class User extends DBBase {
      */
     public static List getUserList() {
         List lst = new ArrayList();
-        //
-        Connection con = null;
-        PreparedStatement preparedStmt = null;
-        try {
-            con = getConnection();
-            //
-            preparedStmt = con.prepareStatement(SQL_USER_SELECT_USERID);
-            //
-            ResultSet rs = preparedStmt.executeQuery();
-            //
+        try (Connection con = getConnection();
+                PreparedStatement preparedStmt = con.prepareStatement(SQL_USER_SELECT_USERID);
+                ResultSet rs = preparedStmt.executeQuery()) {
             while (rs.next()) {
                 Object username = rs.getObject(1);
-                //
                 lst.add(username);
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-        } finally {
-            if (preparedStmt != null) {
-                try {
-                    preparedStmt.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        //
         return lst;
     }
 
@@ -182,19 +133,12 @@ public class User extends DBBase {
      */
     public static void activateUser(Map<String, String[]> parameters, boolean isActivate) {
         Map output = new HashMap();
-        //
         String username = getStringFromParamMap("username", parameters);
-        //
-        Connection con = null;
-        PreparedStatement preparedStmt = null;
-        try {
-            con = getConnection();
-            //
-            preparedStmt = con.prepareStatement(isActivate ? SQL_USER_ACTIVE : SQL_USER_INACTIVE);
+        try (Connection con = getConnection();
+                PreparedStatement preparedStmt =
+                        con.prepareStatement(isActivate ? SQL_USER_ACTIVE : SQL_USER_INACTIVE)) {
             preparedStmt.setString(1, username);
-            //
             preparedStmt.execute();
-            //
             int count = preparedStmt.getUpdateCount();
             if (count == 1) {
                 output.put(IConstant.DATA_NAME_STATUS, true);
@@ -229,23 +173,7 @@ public class User extends DBBase {
                             + ", "
                             + dumpParamMap(parameters));
             e.printStackTrace();
-        } finally {
-            if (preparedStmt != null) {
-                try {
-                    preparedStmt.close();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
         }
-        //
     }
 
     /**
@@ -257,10 +185,7 @@ public class User extends DBBase {
      */
     public static Map modifyUser(Map<String, String[]> parameters, int userType) {
         Map output = new HashMap();
-        //
-        Connection con = null;
-        PreparedStatement preparedStmt = null;
-        //
+
         String username = getStringFromParamMap("username", parameters);
         String password = getStringFromParamMap("password", parameters);
         String email = getStringFromParamMap("email", parameters);
@@ -268,24 +193,25 @@ public class User extends DBBase {
         String lastname = getStringFromParamMap("lastname", parameters);
         String address = getStringFromParamMap("address", parameters);
         String phone = getStringFromParamMap("phone", parameters);
-        //
-        try {
-            con = getConnection();
-            //
-            preparedStmt = con.prepareStatement(SQL_USER_UPDATE);
-            //
-            preparedStmt.setString(1, password);
-            preparedStmt.setString(2, email);
-            preparedStmt.setString(3, firstname);
-            preparedStmt.setString(4, lastname);
-            preparedStmt.setString(5, address);
-            preparedStmt.setString(6, phone);
-            preparedStmt.setString(7, username);
-            preparedStmt.setInt(8, userType);
-            //
-            preparedStmt.execute();
-            //
-            int count = preparedStmt.getUpdateCount();
+
+        try (Connection con = getConnection()) {
+            int count = 0;
+            // https://stackoverflow.com/a/9260565
+            try (PreparedStatement preparedStmt = con.prepareStatement(SQL_USER_UPDATE)) {
+                preparedStmt.setString(1, password);
+                preparedStmt.setString(2, email);
+                preparedStmt.setString(3, firstname);
+                preparedStmt.setString(4, lastname);
+                preparedStmt.setString(5, address);
+                preparedStmt.setString(6, phone);
+                preparedStmt.setString(7, username);
+                preparedStmt.setInt(8, userType);
+
+                preparedStmt.execute();
+                count = preparedStmt.getUpdateCount();
+            } catch (SQLException e) {
+                con.rollback();
+            }
             if (count == 1) {
                 output.put(IConstant.DATA_NAME_STATUS, true);
                 output.put(IConstant.DATA_NAME_MESSAGE, "OK");
@@ -294,14 +220,6 @@ public class User extends DBBase {
                 output.put(IConstant.DATA_NAME_MESSAGE, "Could not update user");
             }
         } catch (SQLException e) {
-            if (con != null) {
-                try {
-                    con.rollback();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
-            //
             output.put(IConstant.DATA_NAME_STATUS, false);
             output.put(
                     IConstant.DATA_NAME_MESSAGE,
@@ -325,28 +243,12 @@ public class User extends DBBase {
                             + ", "
                             + dumpParamMap(parameters));
             e.printStackTrace();
-        } finally {
-            if (preparedStmt != null) {
-                try {
-                    preparedStmt.close();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
         }
-        //
         return output;
     }
 
     /**
-     * Add an user
+     * Add a user
      *
      * @param username Username
      * @param password Password
@@ -374,7 +276,6 @@ public class User extends DBBase {
             String phone,
             int usertype) {
         Map output = new HashMap();
-        //
         if (email == null) {
             email = " ";
         }
@@ -396,7 +297,6 @@ public class User extends DBBase {
         if (phone == null) {
             phone = " ";
         }
-        //
         if (username == null || username.trim().length() == 0) {
             output.put(IConstant.DATA_NAME_STATUS, false);
             output.put(IConstant.DATA_NAME_MESSAGE, "username is mandatory.");
@@ -404,28 +304,22 @@ public class User extends DBBase {
             output.put(IConstant.DATA_NAME_STATUS, false);
             output.put(IConstant.DATA_NAME_MESSAGE, "password is mandatory.");
         } else {
-            Connection con = null;
-            PreparedStatement preparedStmt = null;
-            try {
-                con = getConnection();
-                //
-                preparedStmt = con.prepareStatement(SQL_USER_INSERT);
-                //
+            try (Connection con = getConnection();
+                    PreparedStatement preparedStmt = con.prepareStatement(SQL_USER_INSERT)) {
                 preparedStmt.setString(1, username);
                 preparedStmt.setString(2, password);
                 preparedStmt.setString(3, email);
                 preparedStmt.setString(4, firstName);
                 preparedStmt.setString(5, lastName);
-                preparedStmt.setString(
-                        6,
-                        street + " " + city + " " + state + " "
-                                + zipCode); // Address = street + city + state + zipCode
+
+                // Address = street + city + state + zipCode
+                preparedStmt.setString(6, street + " " + city + " " + state + " " + zipCode);
+
                 preparedStmt.setString(7, phone);
                 preparedStmt.setInt(8, usertype);
                 preparedStmt.setString(9, username);
-                //
+
                 preparedStmt.execute();
-                //
                 int count = preparedStmt.getUpdateCount();
                 if (count == 0) {
                     output.put(IConstant.DATA_NAME_STATUS, false);
@@ -456,29 +350,13 @@ public class User extends DBBase {
                                 + ", DETAILS: "
                                 + exceptionToString(e));
                 e.printStackTrace();
-            } finally {
-                if (preparedStmt != null) {
-                    try {
-                        preparedStmt.close();
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (con != null) {
-                    try {
-                        con.close();
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         }
-        //
         return output;
     }
 
     /**
-     * Authenticate and authorize an user
+     * Authenticate and authorize a user
      *
      * @param userID User ID
      * @param pwd Password
@@ -486,48 +364,45 @@ public class User extends DBBase {
      */
     public static Map doVerifyLogin(String userID, String pwd) {
         Map output = new HashMap();
-        //
-        Connection con = null;
-        PreparedStatement preparedStmt = null;
-        try {
-            con = getConnection();
-            //
-            preparedStmt = con.prepareStatement(SQL_USER_AUTH);
-            //
+        try (Connection con = getConnection();
+                PreparedStatement preparedStmt = con.prepareStatement(SQL_USER_AUTH)) {
             preparedStmt.setString(1, userID);
-            //
-            ResultSet rs = preparedStmt.executeQuery();
-            //
-            if (rs.next()) { // Only 1 row
-                Object password = rs.getObject(1);
-                Object firstname = rs.getObject(2);
-                Object lastname = rs.getObject(3);
-                Object active = rs.getObject(4);
-                Object usertype = rs.getObject(5);
-                //
-                if (!pwd.equals(password)) {
-                    output.put(IConstant.DATA_NAME_STATUS, false);
-                    output.put(IConstant.DATA_NAME_MESSAGE, "Wrong Password. Please try again.");
-                } else if (!(Boolean) active) {
-                    output.put(IConstant.DATA_NAME_STATUS, false);
-                    output.put(
-                            IConstant.DATA_NAME_MESSAGE,
-                            "User not active. Contact a customer representative.");
+            try (ResultSet rs = preparedStmt.executeQuery()) {
+                if (rs.next()) {
+                    // Only 1 row
+                    Object password = rs.getObject(1);
+                    Object firstname = rs.getObject(2);
+                    Object lastname = rs.getObject(3);
+                    Object active = rs.getObject(4);
+                    Object usertype = rs.getObject(5);
+                    if (!pwd.equals(password)) {
+                        output.put(IConstant.DATA_NAME_STATUS, false);
+                        output.put(
+                                IConstant.DATA_NAME_MESSAGE, "Wrong Password. Please try again.");
+                    } else if (!(Boolean) active) {
+                        output.put(IConstant.DATA_NAME_STATUS, false);
+                        output.put(
+                                IConstant.DATA_NAME_MESSAGE,
+                                "User not active. Contact a customer representative.");
+                    } else {
+                        output.put(IConstant.DATA_NAME_STATUS, true);
+                        output.put(
+                                IConstant.DATA_NAME_MESSAGE,
+                                "Welcome, "
+                                        + firstname.toString()
+                                        + " "
+                                        + lastname.toString()
+                                        + "!");
+                        output.put(IConstant.DATA_NAME_USER_TYPE, usertype);
+                        output.put(IConstant.DATA_NAME_FIRST_NAME, firstname);
+                        output.put(IConstant.DATA_NAME_LAST_NAME, lastname);
+                    }
                 } else {
-                    output.put(IConstant.DATA_NAME_STATUS, true);
+                    output.put(IConstant.DATA_NAME_STATUS, false);
                     output.put(
                             IConstant.DATA_NAME_MESSAGE,
-                            "Welcome, " + firstname.toString() + " " + lastname.toString() + "!");
-                    //
-                    output.put(IConstant.DATA_NAME_USER_TYPE, usertype);
-                    output.put(IConstant.DATA_NAME_FIRST_NAME, firstname);
-                    output.put(IConstant.DATA_NAME_LAST_NAME, lastname);
+                            "User does not exist. Try another user or register");
                 }
-            } else {
-                output.put(IConstant.DATA_NAME_STATUS, false);
-                output.put(
-                        IConstant.DATA_NAME_MESSAGE,
-                        "User does not exist. Try another user or register");
             }
         } catch (SQLException e) {
             output.put(IConstant.DATA_NAME_STATUS, false);
@@ -551,29 +426,12 @@ public class User extends DBBase {
                             + ", DETAILS: "
                             + exceptionToString(e));
             e.printStackTrace();
-        } finally {
-            if (preparedStmt != null) {
-                try {
-                    preparedStmt.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        //
         return output;
     }
 
     public static void main(String[] args) {
         Map<String, String[]> parameters = new HashMap<>();
-        //
         parameters.put("username", new String[] {"user"});
         parameters.put("password", new String[] {"user_pwd"});
         parameters.put("email", new String[] {"user@buyme.com"});
@@ -581,9 +439,7 @@ public class User extends DBBase {
         parameters.put("lastname", new String[] {"Lnuser"});
         parameters.put("address", new String[] {"123 Main St., Nowhere Town, NJ 56789"});
         parameters.put("phone", new String[] {"2365678909"});
-        //
         Map map = modifyUser(parameters, 3);
-        //
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
@@ -605,7 +461,6 @@ public class User extends DBBase {
                         "01010",
                         "39239033",
                         3);
-        //
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
@@ -615,7 +470,6 @@ public class User extends DBBase {
 
     public static void main1(String[] args) {
         Map map = doVerifyLogin("user", "user_pwd");
-        //
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
