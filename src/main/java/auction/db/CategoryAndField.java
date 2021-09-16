@@ -31,15 +31,9 @@ public class CategoryAndField extends DBBase {
         output.put(DATA_CATEGORY_LIST, lstCategory);
         output.put(DATA_FIELD_LIST, lstField);
         //
-        Connection con = null;
-        Statement stmt = null;
-        try {
-            con = getConnection();
-            //
-            stmt = con.createStatement();
-            //
-            ResultSet rs = stmt.executeQuery(SQL_CATEGORYFIELD_SELECT);
-            //
+        try (Connection con = getConnection();
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(SQL_CATEGORYFIELD_SELECT)) {
             Set<String> fieldIDSet = new HashSet<>();
             Set<String> categoryNameSet = new HashSet<>();
             //
@@ -89,23 +83,7 @@ public class CategoryAndField extends DBBase {
                     DATA_NAME_MESSAGE,
                     "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        //
         return output;
     }
 
@@ -117,15 +95,9 @@ public class CategoryAndField extends DBBase {
     public static Map<String, String> getMapFieldIDToText() {
         Map<String, String> output = new HashMap<>();
         //
-        Connection con = null;
-        Statement stmt = null;
-        try {
-            con = getConnection();
-            //
-            stmt = con.createStatement();
-            //
-            ResultSet rs = stmt.executeQuery(ISQLConstant.SQL_FIELD_SELECT);
-            //
+        try (Connection con = getConnection();
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(ISQLConstant.SQL_FIELD_SELECT)) {
             while (rs.next()) {
                 Object fieldID = rs.getObject(1);
                 Object fieldName = rs.getObject(2);
@@ -135,23 +107,7 @@ public class CategoryAndField extends DBBase {
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-        } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        //
         return output;
     }
 
@@ -171,13 +127,11 @@ public class CategoryAndField extends DBBase {
         String categoryName;
         boolean isCurr;
 
-        //
         public Category(String categoryName, boolean isCurr) {
             this.categoryName = categoryName;
             this.isCurr = isCurr;
         }
 
-        //
         public String getCategoryName() {
             return categoryName;
         }
@@ -192,14 +146,12 @@ public class CategoryAndField extends DBBase {
         String fieldName;
         int fieldType;
 
-        //
         public Field(int fieldID, String fieldName, int fieldType) {
             this.fieldID = fieldID;
             this.fieldName = fieldName;
             this.fieldType = fieldType;
         }
 
-        //
         public int getFieldID() {
             return fieldID;
         }

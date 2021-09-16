@@ -3,7 +3,6 @@ package auction.db;
 import auction.gui.Helper;
 import auction.gui.TableData;
 import auction.servlet.IConstant;
-
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
