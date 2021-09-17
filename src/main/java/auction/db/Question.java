@@ -57,7 +57,7 @@ public class Question extends DBBase {
         if (lookbackdays < 1) {
             lookbackdays = 30;
         }
-        addDatetimeConditionLookback(sb, "questionDate", lookbackdays);
+        addDatetimeConditionLookBack(sb, "questionDate", lookbackdays);
         String sql = sb.toString();
         Map output = new HashMap();
         List lstRows = new ArrayList();

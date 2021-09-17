@@ -103,11 +103,11 @@ public class Offer extends DBBase {
     /**
      * Get similar Offer records for a user (active only)
      *
-     * @param offeridcategorynameconditioncode Offer ID + Category Name + Condition Code
+     * @param offerIDCategoryNameConditionCode Offer ID + Category Name + Condition Code
      * @return Data for GUI rendering
      */
-    public static Map doSearchSimilar(String offeridcategorynameconditioncode) {
-        String[] temp = offeridcategorynameconditioncode.split(",");
+    public static Map doSearchSimilar(String offerIDCategoryNameConditionCode) {
+        String[] temp = offerIDCategoryNameConditionCode.split(",");
         String categoryName = temp[1];
         String conditionCode = Helper.getCodeFromCondition(temp[2]);
         String sql = FormatterOfferQuery.buildSQLSimilarOffer(categoryName, conditionCode);
@@ -123,13 +123,13 @@ public class Offer extends DBBase {
     /**
      * Get Offer by Offer ID. Used in postBid (user) and modifyOffer (rep)
      *
-     * @param offerid Offer ID
+     * @param offerID Offer ID
      * @param showAll True will show minPrice
      * @return Data for GUI rendering
      */
-    public static Map doSearchOfferByID(String offerid, boolean showAll) {
+    public static Map doSearchOfferByID(String offerID, boolean showAll) {
         StringBuilder sb = FormatterOfferQuery.initQuerySearch();
-        addCondition(sb, "o.offerID", OP_SZ_EQUAL, offerid, null);
+        addCondition(sb, "o.offerID", OP_SZ_EQUAL, offerID, null);
         addCondition(sb, "o.status", OP_INT_EQUAL, "1", null);
         FormatterOfferQuery.doneQuerySearch(sb);
         String sql = sb.toString();
@@ -299,7 +299,7 @@ public class Offer extends DBBase {
         try (Connection con = getConnection();
                 Statement statement = con.createStatement();
                 ResultSet rs = statement.executeQuery(sql)) {
-            String currentofferID = "";
+            String currentOfferID = "";
             int rowIndex = -1;
             while (rs.next()) {
                 Object offerID = rs.getObject(1);
@@ -318,7 +318,7 @@ public class Offer extends DBBase {
                 Object fieldText = rs.getObject(14);
                 Object fieldName = rs.getObject(15);
                 Object fieldType = rs.getObject(16);
-                if (currentofferID.equals(offerID.toString())) {
+                if (currentOfferID.equals(offerID.toString())) {
                     // Continue with current row
                     if (fieldID != null) {
                         mapFields.put(
@@ -330,7 +330,7 @@ public class Offer extends DBBase {
                     List currentRow = new LinkedList();
                     lstRows.add(currentRow);
                     rowIndex++;
-                    currentofferID = offerID.toString();
+                    currentOfferID = offerID.toString();
                     currentRow.add(offerID);
                     currentRow.add(seller);
                     currentRow.add(categoryName);
@@ -464,15 +464,15 @@ public class Offer extends DBBase {
     public static Map doCreateOrModifyOffer(
             String userID, Map<String, String[]> parameters, boolean isCreate) {
         Map output = new HashMap();
-        String offerid;
+        String offerID;
         String[] temps = null;
         if (isCreate) {
-            offerid = getUUID();
+            offerID = getUUID();
         } else {
-            String offeridcategorynameuser =
+            String offerIDCategoryNameUser =
                     getStringFromParamMap("offeridcategorynameuser", parameters);
-            temps = offeridcategorynameuser.split(",");
-            offerid = temps[0];
+            temps = offerIDCategoryNameUser.split(",");
+            offerID = temps[0];
         }
         Connection con = null;
         PreparedStatement pStmtInsertOfferOrModify = null;
@@ -495,7 +495,7 @@ public class Offer extends DBBase {
                             "minPrice is invalid: " + minPrice + " less than " + initPrice);
                 }
                 pStmtInsertOfferOrModify = con.prepareStatement(SQL_OFFER_INSERT);
-                pStmtInsertOfferOrModify.setString(1, offerid);
+                pStmtInsertOfferOrModify.setString(1, offerID);
                 pStmtInsertOfferOrModify.setString(
                         2, getStringFromParamMap("categoryName", parameters));
                 pStmtInsertOfferOrModify.setString(3, userID);
@@ -513,7 +513,7 @@ public class Offer extends DBBase {
                 pStmtInsertOfferOrModify.setInt(2, getIntFromParamMap("conditionCode", parameters));
                 pStmtInsertOfferOrModify.setString(
                         3, getStringFromParamMap("description", parameters));
-                pStmtInsertOfferOrModify.setString(4, offerid);
+                pStmtInsertOfferOrModify.setString(4, offerID);
             }
             pStmtInsertOfferOrModify.execute();
             int count = pStmtInsertOfferOrModify.getUpdateCount();
@@ -521,7 +521,7 @@ public class Offer extends DBBase {
                 if (!isCreate) {
                     try (PreparedStatement pStmtDeleteField =
                             con.prepareStatement(SQL_OFFERFIELD_DELETE)) {
-                        pStmtDeleteField.setString(1, offerid);
+                        pStmtDeleteField.setString(1, offerID);
                         pStmtDeleteField.execute();
                     }
                 }
@@ -532,7 +532,7 @@ public class Offer extends DBBase {
                             int fieldID = Integer.parseInt(s.substring("fieldID_".length()));
                             String value = parameters.get(s)[0];
                             if (value.trim().length() > 0) {
-                                pStmtInsertOfferField.setString(1, offerid);
+                                pStmtInsertOfferField.setString(1, offerID);
                                 pStmtInsertOfferField.setInt(2, fieldID);
                                 pStmtInsertOfferField.setString(3, value);
                                 pStmtInsertOfferField.execute();
@@ -617,9 +617,9 @@ public class Offer extends DBBase {
         }
         if ((Boolean) output.get(DATA_NAME_STATUS)) {
             if (isCreate) {
-                doCreateAlerts(userID, offerid);
+                doCreateAlerts(userID, offerID);
             } else {
-                doCreateAlerts(temps[2], offerid);
+                doCreateAlerts(temps[2], offerID);
             }
         }
         return output;
@@ -680,11 +680,11 @@ public class Offer extends DBBase {
      * @return Data for GUI rendering
      */
     public static Map doCancelOffer(Map<String, String[]> parameters) {
-        String offerid = getStringFromParamMap("offerid", parameters);
+        String offerID = getStringFromParamMap("offerid", parameters);
         Map output = new HashMap();
         try (Connection con = getConnection();
                 PreparedStatement pStmtCancelOffer = con.prepareStatement(SQL_OFFER_CANCEL)) {
-            pStmtCancelOffer.setString(1, offerid);
+            pStmtCancelOffer.setString(1, offerID);
             pStmtCancelOffer.execute();
             int count = pStmtCancelOffer.getUpdateCount();
             if (count == 1) {

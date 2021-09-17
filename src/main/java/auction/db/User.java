@@ -126,7 +126,7 @@ public class User extends DBBase {
     }
 
     /**
-     * Enable or disable either an user or rep.
+     * Enable or disable either a user or rep.
      *
      * @param parameters Map of all parameters
      * @param isActivate True to activate, false to deactivate it

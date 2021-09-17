@@ -67,7 +67,7 @@ public class OfferAlert extends DBBase {
     }
 
     /**
-     * Select an Offer Alert for an user
+     * Select an Offer Alert for a user
      *
      * @param userName User name
      * @param isUser True if User

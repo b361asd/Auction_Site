@@ -35,13 +35,13 @@ public class Bid extends DBBase {
      */
     public static Map searchBid(
             Map<String, String[]> parameters, String userActivity, String userMyBid) {
-        String _offeridcategoryname = getStringFromParamMap("offeridcategoryname", parameters);
+        String offerIDCategoryName = getStringFromParamMap("offeridcategoryname", parameters);
 
         // viewAlertDetail
-        String _offerIDbidID = getStringFromParamMap("offerIDbidID", parameters);
+        String offerIDBidID = getStringFromParamMap("offerIDbidID", parameters);
 
         String _action = getStringFromParamMap("action", parameters);
-        String _bidIDofferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
+        String bidIDOfferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
 
         boolean _listActivity = false;
         boolean _listMyBid = false;
@@ -55,15 +55,15 @@ public class Bid extends DBBase {
             _listActivity = true;
         } else if (userMyBid != null && userMyBid.length() > 0) {
             _listMyBid = true;
-        } else if (_offeridcategoryname.length() > 0) {
+        } else if (offerIDCategoryName.length() > 0) {
             _listBidForOffer = true;
-        } else if (_offerIDbidID.length() > 0) {
+        } else if (offerIDBidID.length() > 0) {
             _viewAlertDetail = true;
         } else if (_action.equals("repSearchBid")) {
             _listBid_Search = true;
         } else if (_action.equals("repBrowseBid")) {
             _listBid_Browse = true;
-        } else if (!_bidIDofferIDBuyer.equals("")) {
+        } else if (!bidIDOfferIDBuyer.equals("")) {
             _modifyBid = true;
         }
         String sql;
@@ -84,7 +84,7 @@ public class Bid extends DBBase {
             userStandout = userMyBid;
         } else if (_listBidForOffer) {
             StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
-            String[] temps = _offeridcategoryname.split(",");
+            String[] temps = offerIDCategoryName.split(",");
             FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, temps[0], null);
             sql = sb.toString();
             offerIDSet.add(temps[0]);
@@ -106,7 +106,7 @@ public class Bid extends DBBase {
             // user: listAlert.jsp(offerIDbidID) ->
             // viewAlertDetail.jsp
             StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
-            String[] temps = _offerIDbidID.split(",");
+            String[] temps = offerIDBidID.split(",");
             FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, temps[0], null);
             offerIDSet.add(temps[0]);
             if (temps.length >= 2) {
@@ -118,14 +118,13 @@ public class Bid extends DBBase {
             // Rep: ListBid.jsp(bidIDofferIDBuyer) ->
             // modifyBid.jsp
             StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
-            String[] temps = _bidIDofferIDBuyer.split(",");
+            String[] temps = bidIDOfferIDBuyer.split(",");
             FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, temps[1], null);
             bidIDStandout = temps[0];
             sql = sb.toString();
             offerIDSet.add(temps[1]);
         } else {
             StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
-            bidIDStandout = null;
             String bidID = getStringFromParamMap("bidID", parameters);
             FormatterOfferQuery.addCondition(sb, "bidID", OP_SZ_EQUAL, bidID, null);
             String offerID = getStringFromParamMap("offerID", parameters);
@@ -215,7 +214,7 @@ public class Bid extends DBBase {
             } else if (_listBid_Browse) {
                 dataTableOffer.setDescription("Browse Bids");
             } else if (_modifyBid) {
-                dataTableOffer.setDescription("Bid To Be Midify");
+                dataTableOffer.setDescription("Bid To Be Modify");
             } else {
                 dataTableOffer.setDescription("List of Bids");
             }

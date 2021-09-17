@@ -44,7 +44,7 @@ public class Trade extends DBBase {
     /**
      * Summary of Trade for Report
      *
-     * @param lookbackdays Days to look back
+     * @param lookBackDays Days to look back
      * @param isTotal If true, then run total sales report.
      * @param isCategoryName If true, then run category name report.
      * @param isBuyer If true, then run buyer report.
@@ -53,7 +53,7 @@ public class Trade extends DBBase {
      * @return Data for GUI rendering
      */
     public static Map summaryBy(
-            int lookbackdays,
+            int lookBackDays,
             boolean isTotal,
             boolean isCategoryName,
             boolean isBuyer,
@@ -91,14 +91,14 @@ public class Trade extends DBBase {
             try (PreparedStatement preparedStmt = con.prepareStatement(sql)) {
                 if (!isTotal) {
                     if (isCategoryName) {
-                        preparedStmt.setInt(1, lookbackdays);
+                        preparedStmt.setInt(1, lookBackDays);
                     } else if (isBuyer) {
-                        preparedStmt.setInt(1, lookbackdays);
+                        preparedStmt.setInt(1, lookBackDays);
                     } else if (isSeller) {
-                        preparedStmt.setInt(1, lookbackdays);
+                        preparedStmt.setInt(1, lookBackDays);
                     } else if (isUser) {
-                        preparedStmt.setInt(1, lookbackdays);
-                        preparedStmt.setInt(2, lookbackdays);
+                        preparedStmt.setInt(1, lookBackDays);
+                        preparedStmt.setInt(2, lookBackDays);
                     }
                 }
                 try (ResultSet rs = preparedStmt.executeQuery()) {
@@ -122,15 +122,15 @@ public class Trade extends DBBase {
                 tableData.setDescription("Total Sales For Various Periods");
             } else if (isCategoryName) {
                 tableData.setDescription(
-                        "Sales by CategoryNames For The Last " + lookbackdays + " Days");
+                        "Sales by CategoryNames For The Last " + lookBackDays + " Days");
             } else if (isBuyer) {
-                tableData.setDescription("Sales by Buyers For The Last " + lookbackdays + " Days");
+                tableData.setDescription("Sales by Buyers For The Last " + lookBackDays + " Days");
             } else if (isSeller) {
-                tableData.setDescription("Sales by Sellers For The Last " + lookbackdays + " Days");
+                tableData.setDescription("Sales by Sellers For The Last " + lookBackDays + " Days");
             } else if (isUser) {
                 tableData.setDescription(
                         "Sales by Users (as Either Buyer or Seller) For The Last "
-                                + lookbackdays
+                                + lookBackDays
                                 + " Days");
             }
         } catch (SQLException e) {
@@ -154,10 +154,10 @@ public class Trade extends DBBase {
     /**
      * Select similar (same category and condition) group reports
      *
-     * @param lookbackdays Lookback days
+     * @param lookBackDays Look back days
      * @return Data for GUI rendering
      */
-    public static Map selectGroupSimilar(int lookbackdays) {
+    public static Map selectGroupSimilar(int lookBackDays) {
         Map output = new HashMap();
         List lstRows = new ArrayList();
         TableData tableData = new TableData(lstHeader_tradeBySimilar, lstRows, colSeq_tradeBy);
@@ -165,28 +165,29 @@ public class Trade extends DBBase {
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt =
                         con.prepareStatement(SQL_TRADE_TOTAL_BY_SIMILARGROUP)) {
-            preparedStmt.setInt(1, lookbackdays);
-            ResultSet rs = preparedStmt.executeQuery();
-            while (rs.next()) {
-                Object categoryName = rs.getObject(1);
-                Object conditionCode = rs.getObject(2);
-                Object Total = rs.getObject(3);
-                Object Average = rs.getObject(4);
-                Object Count = rs.getObject(5);
-                List currentRow = new LinkedList();
-                lstRows.add(currentRow);
-                currentRow.add(
-                        categoryName
-                                + ", "
-                                + Helper.getConditionFromCode(conditionCode.toString()));
-                currentRow.add(Total);
-                currentRow.add(Average);
-                currentRow.add(Count);
+            preparedStmt.setInt(1, lookBackDays);
+            try (ResultSet rs = preparedStmt.executeQuery()) {
+                while (rs.next()) {
+                    Object categoryName = rs.getObject(1);
+                    Object conditionCode = rs.getObject(2);
+                    Object Total = rs.getObject(3);
+                    Object Average = rs.getObject(4);
+                    Object Count = rs.getObject(5);
+                    List currentRow = new LinkedList();
+                    lstRows.add(currentRow);
+                    currentRow.add(
+                            categoryName
+                                    + ", "
+                                    + Helper.getConditionFromCode(conditionCode.toString()));
+                    currentRow.add(Total);
+                    currentRow.add(Average);
+                    currentRow.add(Count);
+                }
             }
             output.put(DATA_NAME_STATUS, true);
             output.put(DATA_NAME_MESSAGE, "OK");
             tableData.setDescription(
-                    "Sales Grouped by Similar For The Last " + lookbackdays + " Days");
+                    "Sales Grouped by Similar For The Last " + lookBackDays + " Days");
         } catch (SQLException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
@@ -206,15 +207,15 @@ public class Trade extends DBBase {
     }
 
     /**
-     * Select best selling or most recent items
+     * Select best-selling or most recent items
      *
-     * @param lookbackdays Lookback days
+     * @param lookBackDays Look back days
      * @param limit Limit how many rows returned
-     * @param isBestSelling True for best selling, false for most recent
+     * @param isBestSelling True for best-selling, false for most recent
      * @return Data for GUI rendering
      */
     public static Map selectBestSellingMostRecentItems(
-            int lookbackdays, int limit, boolean isBestSelling) {
+            int lookBackDays, int limit, boolean isBestSelling) {
         Map output = new HashMap();
         List lstRows = new ArrayList();
         TableData tableData =
@@ -225,7 +226,7 @@ public class Trade extends DBBase {
                 PreparedStatement preparedStmt =
                         con.prepareStatement(
                                 isBestSelling ? SQL_TRADE_BEST_ITEM : SQL_TRADE_RECENT_ITEM)) {
-            preparedStmt.setInt(1, lookbackdays);
+            preparedStmt.setInt(1, lookBackDays);
             preparedStmt.setInt(2, limit);
             try (ResultSet rs = preparedStmt.executeQuery()) {
                 while (rs.next()) {
@@ -254,14 +255,14 @@ public class Trade extends DBBase {
                         "Top "
                                 + limit
                                 + " Best Selling Item(s) For The Last "
-                                + lookbackdays
+                                + lookBackDays
                                 + " Days");
             } else {
                 tableData.setDescription(
                         "Most Recent "
                                 + limit
                                 + " Trades, Limited For The Last "
-                                + lookbackdays
+                                + lookBackDays
                                 + " Days");
             }
         } catch (SQLException e) {
@@ -286,11 +287,11 @@ public class Trade extends DBBase {
      * Trade report for User (seller or buyer)
      *
      * @param userName User name
-     * @param lookbackdays Lookback days
+     * @param lookBackDays  Look back days
      * @param limit Limit how many rows returned
      * @return Data for GUI rendering
      */
-    public static Map selectMyTrade(String userName, int lookbackdays, int limit) {
+    public static Map selectMyTrade(String userName, int lookBackDays , int limit) {
         Map output = new HashMap();
         List lstRows = new ArrayList();
         TableData tableData =
@@ -299,7 +300,7 @@ public class Trade extends DBBase {
         output.put(DATA_NAME_DATA, tableData);
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt = con.prepareStatement(SQL_TRADE_MY_TRADE)) {
-            preparedStmt.setInt(1, lookbackdays);
+            preparedStmt.setInt(1, lookBackDays );
             preparedStmt.setString(2, userName);
             preparedStmt.setString(3, userName);
             preparedStmt.setInt(4, limit);
@@ -329,7 +330,7 @@ public class Trade extends DBBase {
                     "My Most Recent "
                             + limit
                             + " Trades, Limited For The Last "
-                            + lookbackdays
+                            + lookBackDays
                             + " Days");
         } catch (SQLException e) {
             output.put(DATA_NAME_STATUS, false);

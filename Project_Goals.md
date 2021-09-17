@@ -49,7 +49,7 @@
          -  Best-selling items
          -  Best buyers
    -  Customer representative:
-      -  Answers to questions of users
+      -  Answers questions of users
       -  Edits account information, bids and auctions
       -  Remove bids
       -  Removes auctions

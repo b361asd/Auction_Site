@@ -194,12 +194,12 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
         return output;
     }
 
-    public static void addDatetimeConditionLookback(
-            StringBuilder sb, String columnName, int lookbackDay) {
+    public static void addDatetimeConditionLookBack(
+            StringBuilder sb, String columnName, int lookBackDay) {
         sb.append(" AND (")
                 .append(columnName)
                 .append(" >= DATE_SUB(NOW(), INTERVAL ")
-                .append(lookbackDay)
+                .append(lookBackDay)
                 .append(" DAY))");
     }
 
