@@ -474,89 +474,88 @@ public class Offer extends DBBase {
             temps = offerIDCategoryNameUser.split(",");
             offerID = temps[0];
         }
-        Connection con = null;
-        PreparedStatement pStmtInsertOfferOrModify = null;
-        try {
-            con = getConnection();
-            con.setAutoCommit(false);
-            if (isCreate) {
-                BigDecimal initPrice = getBigDecimalFromParamMap("initPrice", parameters);
-                BigDecimal increment = getBigDecimalFromParamMap("increment", parameters);
-                BigDecimal minPrice = getBigDecimalFromParamMap("minPrice", parameters);
-                if (initPrice.compareTo(new BigDecimal(0)) <= 0) {
-                    throw new Exception("initPrice is invalid: " + initPrice);
-                }
-                if (increment.compareTo(new BigDecimal(0)) <= 0) {
-                    throw new Exception("increment is invalid: " + increment);
-                }
-                if (minPrice.compareTo(new BigDecimal(0)) > 0
-                        && minPrice.compareTo(initPrice) < 0) {
-                    throw new Exception(
-                            "minPrice is invalid: " + minPrice + " less than " + initPrice);
-                }
-                pStmtInsertOfferOrModify = con.prepareStatement(SQL_OFFER_INSERT);
-                pStmtInsertOfferOrModify.setString(1, offerID);
-                pStmtInsertOfferOrModify.setString(
-                        2, getStringFromParamMap("categoryName", parameters));
-                pStmtInsertOfferOrModify.setString(3, userID);
-                pStmtInsertOfferOrModify.setBigDecimal(4, initPrice);
-                pStmtInsertOfferOrModify.setBigDecimal(5, increment);
-                pStmtInsertOfferOrModify.setBigDecimal(6, minPrice);
-                pStmtInsertOfferOrModify.setInt(7, getIntFromParamMap("conditionCode", parameters));
-                pStmtInsertOfferOrModify.setString(
-                        8, getStringFromParamMap("description", parameters));
-                pStmtInsertOfferOrModify.setString(9, getStringFromParamMap("endDate", parameters));
-            } else {
-                pStmtInsertOfferOrModify = con.prepareStatement(SQL_OFFER_MODIFY);
-                pStmtInsertOfferOrModify.setBigDecimal(
-                        1, getBigDecimalFromParamMap("minPrice", parameters));
-                pStmtInsertOfferOrModify.setInt(2, getIntFromParamMap("conditionCode", parameters));
-                pStmtInsertOfferOrModify.setString(
-                        3, getStringFromParamMap("description", parameters));
-                pStmtInsertOfferOrModify.setString(4, offerID);
-            }
-            pStmtInsertOfferOrModify.execute();
-            int count = pStmtInsertOfferOrModify.getUpdateCount();
-            if (count == 1) {
-                if (!isCreate) {
-                    try (PreparedStatement pStmtDeleteField =
-                            con.prepareStatement(SQL_OFFERFIELD_DELETE)) {
-                        pStmtDeleteField.setString(1, offerID);
-                        pStmtDeleteField.execute();
+        try (Connection con = getConnection()) {
+            int count;
+            try (PreparedStatement pStmtInsertOfferOrModify =
+                    con.prepareStatement(isCreate ? SQL_OFFER_INSERT : SQL_OFFER_MODIFY)) {
+                con.setAutoCommit(false);
+                if (isCreate) {
+                    BigDecimal initPrice = getBigDecimalFromParamMap("initPrice", parameters);
+                    BigDecimal increment = getBigDecimalFromParamMap("increment", parameters);
+                    BigDecimal minPrice = getBigDecimalFromParamMap("minPrice", parameters);
+                    if (initPrice.compareTo(new BigDecimal(0)) <= 0) {
+                        throw new Exception("initPrice is invalid: " + initPrice);
                     }
+                    if (increment.compareTo(new BigDecimal(0)) <= 0) {
+                        throw new Exception("increment is invalid: " + increment);
+                    }
+                    if (minPrice.compareTo(new BigDecimal(0)) > 0
+                            && minPrice.compareTo(initPrice) < 0) {
+                        throw new Exception(
+                                "minPrice is invalid: " + minPrice + " less than " + initPrice);
+                    }
+                    pStmtInsertOfferOrModify.setString(1, offerID);
+                    pStmtInsertOfferOrModify.setString(
+                            2, getStringFromParamMap("categoryName", parameters));
+                    pStmtInsertOfferOrModify.setString(3, userID);
+                    pStmtInsertOfferOrModify.setBigDecimal(4, initPrice);
+                    pStmtInsertOfferOrModify.setBigDecimal(5, increment);
+                    pStmtInsertOfferOrModify.setBigDecimal(6, minPrice);
+                    pStmtInsertOfferOrModify.setInt(
+                            7, getIntFromParamMap("conditionCode", parameters));
+                    pStmtInsertOfferOrModify.setString(
+                            8, getStringFromParamMap("description", parameters));
+                    pStmtInsertOfferOrModify.setString(
+                            9, getStringFromParamMap("endDate", parameters));
+                } else {
+                    pStmtInsertOfferOrModify.setBigDecimal(
+                            1, getBigDecimalFromParamMap("minPrice", parameters));
+                    pStmtInsertOfferOrModify.setInt(
+                            2, getIntFromParamMap("conditionCode", parameters));
+                    pStmtInsertOfferOrModify.setString(
+                            3, getStringFromParamMap("description", parameters));
+                    pStmtInsertOfferOrModify.setString(4, offerID);
                 }
-                try (PreparedStatement pStmtInsertOfferField =
-                        con.prepareStatement(SQL_OFFERFIELD_INSERT)) {
-                    for (String s : parameters.keySet()) {
-                        if (s.startsWith("fieldID_")) {
-                            int fieldID = Integer.parseInt(s.substring("fieldID_".length()));
-                            String value = parameters.get(s)[0];
-                            if (value.trim().length() > 0) {
-                                pStmtInsertOfferField.setString(1, offerID);
-                                pStmtInsertOfferField.setInt(2, fieldID);
-                                pStmtInsertOfferField.setString(3, value);
-                                pStmtInsertOfferField.execute();
+                pStmtInsertOfferOrModify.execute();
+                count = pStmtInsertOfferOrModify.getUpdateCount();
+                if (count == 1) {
+                    if (!isCreate) {
+                        try (PreparedStatement pStmtDeleteField =
+                                con.prepareStatement(SQL_OFFERFIELD_DELETE)) {
+                            pStmtDeleteField.setString(1, offerID);
+                            pStmtDeleteField.execute();
+                        }
+                    }
+                    try (PreparedStatement pStmtInsertOfferField =
+                            con.prepareStatement(SQL_OFFERFIELD_INSERT)) {
+                        for (String s : parameters.keySet()) {
+                            if (s.startsWith("fieldID_")) {
+                                int fieldID = Integer.parseInt(s.substring("fieldID_".length()));
+                                String value = parameters.get(s)[0];
+                                if (value.trim().length() > 0) {
+                                    pStmtInsertOfferField.setString(1, offerID);
+                                    pStmtInsertOfferField.setInt(2, fieldID);
+                                    pStmtInsertOfferField.setString(3, value);
+                                    pStmtInsertOfferField.execute();
+                                }
                             }
                         }
                     }
+                    output.put(DATA_NAME_STATUS, true);
+                    output.put(DATA_NAME_MESSAGE, "OK");
+                    con.commit();
+                } else {
+                    output.put(DATA_NAME_STATUS, false);
+                    output.put(
+                            DATA_NAME_MESSAGE,
+                            "Could not modify Offer. " + dumpParamMap(parameters));
+                    con.rollback();
                 }
-                output.put(DATA_NAME_STATUS, true);
-                output.put(DATA_NAME_MESSAGE, "OK");
-                con.commit();
-            } else {
-                output.put(DATA_NAME_STATUS, false);
-                output.put(
-                        DATA_NAME_MESSAGE, "Could not modify Offer. " + dumpParamMap(parameters));
+            } catch (SQLException e) {
                 con.rollback();
+                con.setAutoCommit(true);
             }
         } catch (SQLException e) {
-            if (con != null) {
-                try {
-                    con.rollback();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
@@ -570,13 +569,6 @@ public class Offer extends DBBase {
                             + dumpParamMap(parameters));
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            if (con != null) {
-                try {
-                    con.rollback();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
@@ -588,34 +580,11 @@ public class Offer extends DBBase {
                             + dumpParamMap(parameters));
             e.printStackTrace();
         } catch (Exception e) {
-            if (con != null) {
-                try {
-                    con.rollback();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
             output.put(DATA_NAME_STATUS, false);
             output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getMessage());
             e.printStackTrace();
-        } finally {
-            if (pStmtInsertOfferOrModify != null) {
-                try {
-                    pStmtInsertOfferOrModify.close();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
-            if (con != null) {
-                try {
-                    con.setAutoCommit(true);
-                    con.close();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
         }
-        if ((Boolean) output.get(DATA_NAME_STATUS)) {
+        if ((boolean) output.get(DATA_NAME_STATUS)) {
             if (isCreate) {
                 doCreateAlerts(userID, offerID);
             } else {
@@ -787,113 +756,3 @@ public class Offer extends DBBase {
         System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
     }
 }
-
-// categoryName=car,initPrice=2000,increment=100,minPrice=,conditionCode=1,description=go,fieldID_1=,fieldID_2=,fieldID_3=,fieldID_4=,
-// fieldID_5=,fieldID_6=yes,fieldID_7=,endDate=2019-04-20T13:10:48
-
-// Search
-// ,,,,fieldval1_2=wefrwefr,fieldval2_3=2222,fieldval1_4=sdfsdfs,fieldval2_5=34234,fieldop_6=no,fieldval1_7=234234,action=modifyOffer,
-// offeridcategoryname=6bc17ded8d0e4300ae8ce80a5fa85b8d,car,lstFieldIDs=1,2,3,4,5,6,7
-// minPrice=3500.00,conditionCode=1,description=good,fieldval1_1=fwef,fieldval1_2=wefrwefr,fieldval2_3=2222,fieldval1_4=sdfsdfs,
-// fieldval2_5=34234,fieldop_6=no,fieldval1_7=234234,action=modifyOffer,offeridcategoryname=6bc17ded8d0e4300ae8ce80a5fa85b8d,car,
-// lstFieldIDs=1,2,3,4,5,6,7
-
-// minPrice=4000.00,conditionCode=1,description=good,fieldval1_1=red hot,fieldval1_2=sss
-// ttt,fieldval2_3=333,fieldval1_4=swed ws,
-// fieldval2_5=2019,fieldop_6=yes,fieldval1_7=GOOD,action=modifyOffer,offeridcategoryname=6bc17ded8d0e4300ae8ce80a5fa85b8d,car,
-// lstFieldIDs=1,2,3,4,5,6,7
-
-/*
-	public static Map doModifyOffer(Map<String, String[]> parameters) {
-		Map output = new HashMap();
-		//
-		Connection        con                   = null;
-		PreparedStatement pStmtModify           = null;
-		PreparedStatement pStmtDeleteField      = null;
-		PreparedStatement pStmtInsertOfferField = null;
-		//
-		String offerid = getStringFromParamMap("offerid", parameters);
-		//
-		try {
-			con = getConnection();
-			con.setAutoCommit(false);
-			//
-			pStmtModify = con.prepareStatement(SQL_OFFER_MODIFY);
-			pStmtModify.setBigDecimal(1, getBigDecimalFromParamMap("minPrice", parameters));
-			pStmtModify.setInt(2, getPrefixIntFromParamMap("conditionCode", parameters, '_'));
-			pStmtModify.setString(3, getStringFromParamMap("description", parameters));
-			pStmtModify.setString(4, offerid);
-			//
-			pStmtModify.execute();
-			//
-			int count = pStmtModify.getUpdateCount();
-			if (count == 1) {
-				pStmtDeleteField = con.prepareStatement(SQL_OFFERFIELD_DELETE);
-				pStmtDeleteField.setString(1, offerid);
-				//
-				pStmtDeleteField.execute();
-				//
-				pStmtInsertOfferField = con.prepareStatement(SQL_OFFERFIELD_INSERT);
-				//
-				for (String s : parameters.keySet()) {
-					if (s.startsWith("fieldID_")) {
-						int    fieldID = Integer.parseInt(s.substring("fieldID_".length()));
-						String value   = parameters.get(s)[0];
-						//
-						pStmtInsertOfferField.setString(1, offerid);
-						pStmtInsertOfferField.setInt(2, fieldID);
-						pStmtInsertOfferField.setString(3, value);
-						pStmtInsertOfferField.execute();
-					}
-				}
-				//
-				output.put(DATA_NAME_STATUS, true);
-				output.put(DATA_NAME_MESSAGE, "OK");
-			}
-			else {
-				output.put(DATA_NAME_STATUS, false);
-				output.put(DATA_NAME_MESSAGE, "Could not modify Offer. " + dumpParamMap(parameters));
-			}
-			//
-			con.commit();
-		}
-		catch (SQLException e) {
-			if (con != null) {
-				try {
-					con.rollback();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-			//
-			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState() + ", Message=" + e
-			.getMessage() + ", " + dumpParamMap(parameters));
-			e.printStackTrace();
-		}
-		catch (ClassNotFoundException e) {
-			if (con != null) {
-				try {
-					con.rollback();
-				}
-				catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-			//
-			output.put(DATA_NAME_STATUS, false);
-			output.put(DATA_NAME_MESSAGE, "ERROR: Code=" + "ClassNotFoundException" + ", Message=" + e.getMessage() + ", " + dumpParamMap
-			(parameters));
-			e.printStackTrace();
-		}
-		finally {
-			if (pStmtModify != null) {try {pStmtModify.close();} catch (Throwable t) {t.printStackTrace();}}
-			if (pStmtDeleteField != null) {try {pStmtDeleteField.close();} catch (Throwable t) {t.printStackTrace();}}
-			if (pStmtInsertOfferField != null) {try { pStmtInsertOfferField.close();} catch (Throwable t) {t.printStackTrace();}}
-			if (con != null) {try {con.setAutoCommit(true);con.close();} catch (Throwable t) {t.printStackTrace();}}
-		}
-		//
-		return output;
-	}
-*/
