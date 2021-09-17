@@ -476,8 +476,6 @@ public class Offer extends DBBase {
         }
         Connection con = null;
         PreparedStatement pStmtInsertOfferOrModify = null;
-        PreparedStatement pStmtDeleteField = null;
-        PreparedStatement pStmtInsertOfferField = null;
         try {
             con = getConnection();
             con.setAutoCommit(false);
@@ -521,20 +519,24 @@ public class Offer extends DBBase {
             int count = pStmtInsertOfferOrModify.getUpdateCount();
             if (count == 1) {
                 if (!isCreate) {
-                    pStmtDeleteField = con.prepareStatement(SQL_OFFERFIELD_DELETE);
-                    pStmtDeleteField.setString(1, offerid);
-                    pStmtDeleteField.execute();
+                    try (PreparedStatement pStmtDeleteField =
+                            con.prepareStatement(SQL_OFFERFIELD_DELETE)) {
+                        pStmtDeleteField.setString(1, offerid);
+                        pStmtDeleteField.execute();
+                    }
                 }
-                pStmtInsertOfferField = con.prepareStatement(SQL_OFFERFIELD_INSERT);
-                for (String s : parameters.keySet()) {
-                    if (s.startsWith("fieldID_")) {
-                        int fieldID = Integer.parseInt(s.substring("fieldID_".length()));
-                        String value = parameters.get(s)[0];
-                        if (value.trim().length() > 0) {
-                            pStmtInsertOfferField.setString(1, offerid);
-                            pStmtInsertOfferField.setInt(2, fieldID);
-                            pStmtInsertOfferField.setString(3, value);
-                            pStmtInsertOfferField.execute();
+                try (PreparedStatement pStmtInsertOfferField =
+                        con.prepareStatement(SQL_OFFERFIELD_INSERT)) {
+                    for (String s : parameters.keySet()) {
+                        if (s.startsWith("fieldID_")) {
+                            int fieldID = Integer.parseInt(s.substring("fieldID_".length()));
+                            String value = parameters.get(s)[0];
+                            if (value.trim().length() > 0) {
+                                pStmtInsertOfferField.setString(1, offerid);
+                                pStmtInsertOfferField.setInt(2, fieldID);
+                                pStmtInsertOfferField.setString(3, value);
+                                pStmtInsertOfferField.execute();
+                            }
                         }
                     }
                 }
@@ -604,20 +606,6 @@ public class Offer extends DBBase {
                     t.printStackTrace();
                 }
             }
-            if (pStmtDeleteField != null) {
-                try {
-                    pStmtDeleteField.close();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
-            if (pStmtInsertOfferField != null) {
-                try {
-                    pStmtInsertOfferField.close();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
             if (con != null) {
                 try {
                     con.setAutoCommit(true);
@@ -627,7 +615,6 @@ public class Offer extends DBBase {
                 }
             }
         }
-        //
         if ((Boolean) output.get(DATA_NAME_STATUS)) {
             if (isCreate) {
                 doCreateAlerts(userID, offerid);
