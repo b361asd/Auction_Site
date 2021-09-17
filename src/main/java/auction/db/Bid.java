@@ -294,10 +294,8 @@ public class Bid extends DBBase {
             newBid[2] = price;
             newBid[3] = autoRebidLimit;
         }
-        Connection con = null;
         Object[] lastMaxBid = new Object[4];
-        try {
-            con = getConnection();
+        try (Connection con = getConnection()) {
             con.setAutoCommit(false);
             BigDecimal price = (BigDecimal) newBid[2];
             BigDecimal autoRebidLimit = (BigDecimal) newBid[3];
@@ -352,6 +350,9 @@ public class Bid extends DBBase {
                         }
                     }
                 }
+            } catch (SQLException e) {
+                con.rollback();
+                con.setAutoCommit(true);
             }
             Object[] current = newBid;
             Object[] last = lastMaxBid;
@@ -501,27 +502,11 @@ public class Bid extends DBBase {
                             + dumpParamMap(parameters));
             e.printStackTrace();
         } catch (Exception e) {
-            if (con != null) {
-                try {
-                    con.rollback();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
             output.put(IConstant.DATA_NAME_STATUS, false);
             output.put(
                     IConstant.DATA_NAME_MESSAGE,
                     "ERROR: Code=" + "Exception" + ", Message=" + e.getMessage());
             e.printStackTrace();
-        } finally {
-            if (con != null) {
-                try {
-                    con.setAutoCommit(true);
-                    con.close();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
         }
         return output;
     }
@@ -540,9 +525,7 @@ public class Bid extends DBBase {
                 PreparedStatement preparedStmt =
                         con.prepareStatement(ISQLConstant.SQL_BID_DELETE)) {
             preparedStmt.setString(1, bidID);
-            //
             preparedStmt.execute();
-            //
             int count = preparedStmt.getUpdateCount();
             if (count == 0) {
                 output.put(IConstant.DATA_NAME_STATUS, false);
@@ -585,17 +568,13 @@ public class Bid extends DBBase {
      */
     public static BigDecimal getMinForModifyBid(Map<String, String[]> parameters) {
         BigDecimal output = null;
-        //
-        String _bidIDofferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
-        //
-        String[] temps = _bidIDofferIDBuyer.split(",");
+        String bidIDOfferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
+        String[] temps = bidIDOfferIDBuyer.split(",");
         String bidID = temps[0];
         String offerID = temps[1];
-        //
         BigDecimal initPrice = null;
         BigDecimal increment = null;
         BigDecimal price = null;
-        //
         try (Connection con = getConnection();
                 PreparedStatement preparedStmtMaxPriceBid =
                         con.prepareStatement(ISQLConstant.SQL_BID_SELECT_MAX_PRICE_EX)) {
@@ -610,7 +589,6 @@ public class Bid extends DBBase {
                     Object _price = rs.getObject(14);
                     initPrice = (BigDecimal) _initPrice;
                     increment = (BigDecimal) _increment;
-                    //
                     if (_bidID != null && _bidID.toString().length() != 0) {
                         price = (BigDecimal) _price;
                     }
@@ -631,13 +609,10 @@ public class Bid extends DBBase {
 
     public static void main3(String[] args) {
         Map<String, String[]> parameters = new HashMap<>();
-        //
         parameters.put("offerId", new String[] {"d6ac071c449c46b4812dd96b9bc8f197"});
         parameters.put("price", new String[] {"550"});
         parameters.put("autoRebidLimit", new String[] {"1200"});
-        //
         Map map = doCreateOrModifyBid("user", parameters, true);
-        //
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
@@ -647,7 +622,6 @@ public class Bid extends DBBase {
 
     public static void main8(String[] args) {
         Map<String, String[]> parameters = new HashMap<>();
-        //
         parameters.put(
                 "bidIDofferIDBuyer",
                 new String[] {
@@ -655,9 +629,7 @@ public class Bid extends DBBase {
                 });
         parameters.put("price", new String[] {"1000"});
         parameters.put("autoRebidLimit", new String[] {"10"});
-        //
         Map map = doCreateOrModifyBid(null, parameters, false);
-        //
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
@@ -667,15 +639,10 @@ public class Bid extends DBBase {
 
     public static void main6(String[] args) {
         Map<String, String[]> parameters = new HashMap<>();
-        //
         parameters.put("action", new String[] {"repSearchBid"});
         parameters.put("buyerOP", new String[] {"any"});
         parameters.put("buyerVal", new String[] {""});
-        //
-        // parameters.put("bidID", new String[]{"11fe20aabc7a4025928e9522544be2e3"});
-        //
         Map map = searchBid(parameters, null, null);
-        //
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
@@ -685,9 +652,7 @@ public class Bid extends DBBase {
 
     public static void main4(String[] args) {
         System.out.println("Start");
-        //
         Map map = searchBid(null, "user", null);
-        //
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
@@ -697,14 +662,10 @@ public class Bid extends DBBase {
 
     public static void main0(String[] args) {
         System.out.println(ISQLConstant.SQL_TRADE_TOTAL);
-        //
         Map<String, String[]> parameters = new HashMap<>();
-        //
         parameters.put(
                 "offeridcategoryname", new String[] {"9dee3107cdf444a7b4f0cd79524cfe53,car"});
-        //
         Map map = searchBid(parameters, null, null);
-        //
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
@@ -714,93 +675,13 @@ public class Bid extends DBBase {
 
     public static void main(String[] args) {
         System.out.println(ISQLConstant.SQL_TRADE_TOTAL);
-        //
         Map<String, String[]> parameters = new HashMap<>();
-        //
         parameters.put(
                 "bidIDofferIDBuyer",
                 new String[] {
                     "b2d4ba68a1d84841aebc0434988d7261,1ccf77b4a6cc46a5b9a471db65ae4618,test1"
                 });
-        //
         BigDecimal output = getMinForModifyBid(parameters);
-        //
         System.out.println(output);
     }
 }
-
-// action=viewAlertDetail,offerIDbidID=6bc17ded8d0e4300ae8ce80a5fa85b8d,
-
-/* All
-SELECT t1.*, t2.currPrice FROM (SELECT b1.bidID, b1.buyer, b1.price, b1.autoRebidLimit, b1.bidDate, o1.offerID, o1.seller, o1
-.categoryName, o1.conditionCode, o1.description, o1.initPrice, o1.increment, o1.minPrice, o1.startDate, o1.endDate, o1.status FROM Bid b1
- INNER JOIN Offer o1 ON b1.offerID = o1.offerID) t1 LEFT OUTER JOIN (SELECT b1.price as currPrice, b1.offerID FROM Bid b1 WHERE b1.price
- = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) t2 ON t1.offerID = t2.offerID order by bidDate
-*/
-
-/* By Buyer
-SELECT t1.*, t2.currPrice FROM (SELECT b1.bidID, b1.buyer, b1.price, b1.autoRebidLimit, b1.bidDate, o1.offerID, o1.seller, o1
-.categoryName, o1.conditionCode, o1.description, o1.initPrice, o1.increment, o1.minPrice, o1.startDate, o1.endDate, o1.status FROM Bid b1
- INNER JOIN Offer o1 ON b1.offerID = o1.offerID AND b1.buyer = 'user') t1 LEFT OUTER JOIN (SELECT b1.price as currPrice, b1.offerID FROM
- Bid b1 WHERE b1.price = (SELECT MAX(price) FROM Bid b where b.offerID = b1.offerID)) t2 ON t1.offerID = t2.offerID order by bidDate
-*/
-
-/*
-//From list Offer: Get info for one OfferID
-public static Map getBidsForOffer(String offerID) {
-	Map output = new HashMap();
-	//
-	List lstRows = new ArrayList();
-	//
-	Connection        con          = null;
-	PreparedStatement preparedStmt = null;
-	try {
-		con = getConnection();
-		//
-		preparedStmt = con.prepareStatement(SQL_BID_SELECT_BY_OFFERID);
-		//
-		preparedStmt.setString(1, offerID);
-		//
-		ResultSet rs = preparedStmt.executeQuery();
-		//
-		while (rs.next()) {
-			Object bidID   = rs.getObject(1);
-			Object buyer   = rs.getObject(2);
-			Object price   = rs.getObject(3);
-			Object bidDate = rs.getObject(4);
-			//
-			List currentRow = new LinkedList();
-			lstRows.add(currentRow);
-			//
-			currentRow.add(bidID);
-			currentRow.add(buyer);
-			currentRow.add(price);
-			currentRow.add(bidDate);
-		}
-		//
-		output.put(DATA_NAME_DATA, lstRows);
-		output.put(DATA_NAME_DATA_ADD, lstHeader_bid1);
-		//
-		output.put(IConstant.DATA_NAME_STATUS, true);
-		output.put(IConstant.DATA_NAME_MESSAGE, "OK");
-	}
-	catch (SQLException e) {
-		output.put(IConstant.DATA_NAME_STATUS, false);
-		output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState() + ", DETAILS: " +
-		exceptionToString(e));
-		e.printStackTrace();
-	}
-	catch (ClassNotFoundException e) {
-		output.put(IConstant.DATA_NAME_STATUS, false);
-		output.put(IConstant.DATA_NAME_MESSAGE, "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage() + ", DETAILS: " +
-		 exceptionToString(e));
-		e.printStackTrace();
-	}
-	finally {
-		if (preparedStmt != null) {try {preparedStmt.close();} catch (Throwable e) {e.printStackTrace();}}
-		if (con != null) {try {con.close();} catch (Throwable e) {e.printStackTrace();}}
-	}
-	//
-	return output;
-}
-*/
