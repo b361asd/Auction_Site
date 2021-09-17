@@ -7,7 +7,6 @@ public class FormatterBidQuery extends DBBase {
         StringBuilder sb = new StringBuilder();
         sb.append(
                 "SELECT bidID, b.offerID, buyer, price, autoRebidLimit, bidDate FROM Bid b INNER JOIN Offer o ON b.offerID = o.offerID");
-        //
         return sb;
     }
 
@@ -20,13 +19,11 @@ public class FormatterBidQuery extends DBBase {
         sb.append(") OR EXISTS (SELECT * from Bid b1 where b1.offerID = o1.offerID");
         addCondition(sb, "b1.buyer", OP_SZ_EQUAL, userID, null);
         sb.append(")))");
-        //
         return sb;
     }
 
     public static void main(String[] args) {
         StringBuilder sb = buildQueryUserActivity("user");
-        //
         System.out.println(sb);
     }
 }

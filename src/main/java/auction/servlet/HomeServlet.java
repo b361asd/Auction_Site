@@ -33,7 +33,6 @@ public class HomeServlet extends HttpServlet implements IConstant {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         Map map;
-        //
         boolean isRegister =
                 (request.getParameter("register")) != null
                         && (request.getParameter("register")).equalsIgnoreCase("YES");
@@ -48,12 +47,10 @@ public class HomeServlet extends HttpServlet implements IConstant {
             String state = request.getParameter("state");
             String zipCode = request.getParameter("zipCode");
             String phone = request.getParameter("phoneNumber");
-            //
             map =
                     User.doAddUser(
                             username, password, email, firstName, lastName, street, city, state,
                             zipCode, phone, 3);
-            //
             // Register successful also means logged in.
             if ((Boolean) map.get(DATA_NAME_STATUS)) {
                 request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, username);
@@ -84,48 +81,36 @@ public class HomeServlet extends HttpServlet implements IConstant {
                             .setAttribute(
                                     SESSION_ATTRIBUTE_USER_LNAME,
                                     map.get(DATA_NAME_LAST_NAME).toString());
-                    //
-                    // request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "no not OK");
                 }
             } else {
                 map = new HashMap();
                 map.put(DATA_NAME_STATUS, true);
                 map.put(DATA_NAME_MESSAGE, "Already logon.");
-                //
                 // Session attributes already set
             }
         }
-        //
         request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, map);
-        //
         if ((Boolean) map.get(DATA_NAME_STATUS)) {
             String szUserType =
                     request.getSession() == null
                             ? "3"
                             : (String)
                                     request.getSession().getAttribute(SESSION_ATTRIBUTE_USERTYPE);
-            //
             if (szUserType.equals("1")) {
                 map.put(DATA_NAME_MESSAGE, map.get(DATA_NAME_MESSAGE) + " Admin Login!");
-                //
                 request.getRequestDispatcher("/admin/homeAdmin.jsp").forward(request, response);
             } else if (szUserType.equals("2")) {
                 map.put(DATA_NAME_MESSAGE, map.get(DATA_NAME_MESSAGE) + " Rep Login!");
-                //
                 request.getRequestDispatcher("/rep/homeRep.jsp").forward(request, response);
             } else {
                 map.put(DATA_NAME_MESSAGE, map.get(DATA_NAME_MESSAGE) + " User Login!");
-                //
                 request.getRequestDispatcher("/user/home.jsp").forward(request, response);
             }
         } else {
-            // request.getSession().setAttribute(SESSION_ATTRIBUTE_MESSAGE, "not OK");
-            //
             map.put(
                     DATA_NAME_MESSAGE,
                     map.get(DATA_NAME_MESSAGE)
                             + " Login or register failed. Redirect back to login");
-            //
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
     }

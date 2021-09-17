@@ -64,7 +64,6 @@ public class Helper implements IConstant {
 
     public static String getCategoryNameCheckBox(String name, List lstCategoryName) {
         StringBuilder sb = new StringBuilder();
-        //
         sb.append("<div>");
         for (int i = 0; i < lstCategoryName.size(); i++) {
             CategoryAndField.Category one = (CategoryAndField.Category) (lstCategoryName.get(i));
@@ -85,13 +84,11 @@ public class Helper implements IConstant {
             sb.append("</label>");
         }
         sb.append("</div>");
-        //
         return sb.toString();
     }
 
     public static String getConditionCodeSelection(String name, String selected) {
         StringBuilder sb = new StringBuilder();
-        //
         sb.append("<select name='").append(name).append("'>");
         for (int i = 0; i < S_CONDITIONS.length; i++) {
             if (S_CONDITIONS[i].equalsIgnoreCase(selected)) {
@@ -109,15 +106,12 @@ public class Helper implements IConstant {
             }
         }
         sb.append("</select>");
-        //
         return sb.toString();
     }
 
     public static String getSelection(String name, Object[] options, String selected) {
         StringBuilder sb = new StringBuilder();
-        //
         sb.append("<select name='").append(name).append("' onchange='onSelectChange();'>");
-        //
         for (Object option : options) {
             if (option.toString().equalsIgnoreCase(selected)) {
                 sb.append("<option value='")
@@ -134,15 +128,12 @@ public class Helper implements IConstant {
             }
         }
         sb.append("</select>");
-        //
         return sb.toString();
     }
 
     public static String getYesNoSelection(String name, String selected) {
         StringBuilder sb = new StringBuilder();
-        //
         boolean isYes = selected.equalsIgnoreCase("yes"); // IN DB: 'no' 'yes'
-        //
         sb.append("<select name='").append(name).append("'>");
         sb.append("<option value='yes'").append(isYes ? " selected" : "").append(">YES</option>");
         sb.append("<option value='no'").append(isYes ? "" : " selected").append(">NO</option>");

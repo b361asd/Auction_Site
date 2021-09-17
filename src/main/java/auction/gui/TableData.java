@@ -18,15 +18,12 @@ public class TableData {
     public static final String SUB_TABLE_HEADER_SIGN = "-";
 
     Map<String, Integer> mapHeaderToIndex;
-    //
     List lstHeader;
     List lstRows;
     int[] colSeq;
     String description = "";
-    //
     int indexSorted = -1;
     boolean normalSorted = true;
-    //
     String signStandOut = null;
     int idxStandOut = -1;
 
@@ -41,17 +38,6 @@ public class TableData {
                 String temp = lstHeader.get(i) == null ? "" : lstHeader.get(i).toString();
                 mapHeaderToIndex.put(temp, i);
             }
-        }
-    }
-
-    public static void main(String[] args) {
-        // Object one = new BigDecimal(100.0);
-        Object one = null;
-        //
-        if (one instanceof BigDecimal) {
-            System.out.println("YES");
-        } else {
-            System.out.println("NO");
         }
     }
 
@@ -198,12 +184,10 @@ public class TableData {
                     Timestamp ts = (Timestamp) one;
                     LocalDateTime ldt =
                             LocalDateTime.ofInstant(ts.toInstant(), ZoneId.of("America/New_York"));
-                    //
                     DateTimeFormatter formatter =
                             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     oneItem = ldt.format(formatter);
                 }
-                //
                 out.append("<td>").append(Helper.escapeHTML(oneItem)).append("</td>");
             }
         }
@@ -212,20 +196,11 @@ public class TableData {
 
     public String printRowStart(int index) {
         List row = (List) lstRows.get(index);
-        //
         String sign = (signStandOut == null) ? "_NULL" : signStandOut.trim();
         sign = (sign.equals("")) ? "_EMPTY" : sign;
-        //
         String value = (idxStandOut < 0) ? "_NONE" : (row.get(idxStandOut).toString());
-        //
         boolean isStandOut = sign.equalsIgnoreCase(value);
-        //
-        return isStandOut
-                ? "<tr style='color: red;'>"
-                : "<tr add='"
-                        + sign
-                        + "_"
-                        + value
-                        + "'>"; // "<tr name='standout' class='standout'>";
+        // "<tr name='standout' class='standout'>";
+        return isStandOut ? "<tr style='color: red;'>" : "<tr add='" + sign + "_" + value + "'>";
     }
 }

@@ -352,7 +352,6 @@ public class Trade extends DBBase {
     public static void main(String[] args) {
         Map<String, String[]> parameters = new HashMap<>();
         parameters.put("bidID", new String[] {"11fe20aabc7a4025928e9522544be2e3"});
-        // Map map = summaryByBuyerSellerUser(30, false, false, true);
         Map map = selectBestSellingMostRecentItems(30, 10, true);
         System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
         System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));

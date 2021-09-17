@@ -36,39 +36,32 @@ public class CategoryAndField extends DBBase {
                 ResultSet rs = stmt.executeQuery(SQL_CATEGORYFIELD_SELECT)) {
             Set<String> fieldIDSet = new HashSet<>();
             Set<String> categoryNameSet = new HashSet<>();
-            //
             while (rs.next()) {
                 Object categoryName = rs.getObject(1);
                 Object fieldID = rs.getObject(2);
                 Object fieldName = rs.getObject(3);
                 Object fieldType = rs.getObject(4);
-                //
                 String sz_categoryName = categoryName.toString();
                 int i_fieldID = (Integer) fieldID;
                 String sz_fieldName = fieldName.toString();
                 int i_fieldType = (Integer) fieldType;
-                //
                 // Default the first one
                 if (categoryNamesFromParam.equals("")) {
                     categoryNamesFromParam = sz_categoryName;
                 }
-                //
                 boolean isSelected =
                         ("," + categoryNamesFromParam + ",").contains("," + sz_categoryName + ",");
-                //
                 if (isSelected) {
                     if (!fieldIDSet.contains("" + i_fieldID)) {
                         lstField.add(new Field(i_fieldID, sz_fieldName, i_fieldType));
                         fieldIDSet.add("" + i_fieldID);
                     }
                 }
-                //
                 if (!categoryNameSet.contains(sz_categoryName)) {
                     lstCategory.add(new Category(sz_categoryName, isSelected));
                     categoryNameSet.add(sz_categoryName);
                 }
             }
-            //
             output.put(DATA_NAME_STATUS, true);
             output.put(DATA_NAME_MESSAGE, "OK");
         } catch (SQLException e) {
@@ -94,7 +87,6 @@ public class CategoryAndField extends DBBase {
      */
     public static Map<String, String> getMapFieldIDToText() {
         Map<String, String> output = new HashMap<>();
-        //
         try (Connection con = getConnection();
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(ISQLConstant.SQL_FIELD_SELECT)) {
@@ -102,7 +94,6 @@ public class CategoryAndField extends DBBase {
                 Object fieldID = rs.getObject(1);
                 Object fieldName = rs.getObject(2);
                 rs.getObject(3);
-                //
                 output.put(fieldID.toString(), fieldName.toString());
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -113,11 +104,8 @@ public class CategoryAndField extends DBBase {
 
     public static void main(String[] args) {
         System.out.println("Start");
-        //
         Map map1 = getMapFieldIDToText();
-        //
         Map map = getCategoryField(null);
-        //
         System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
         System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
         System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));

@@ -89,7 +89,6 @@ public interface ISQLConstant {
             "(SELECT t.tradeID, o.offerID, b.bidID, tradeDate, seller, categoryName, conditionCode, "
                     + "description, status, buyer, price from Trade t, Offer o, Bid b WHERE t.offerID = o.offerID "
                     + "and t.bidID = b.bidID AND tradeDate > DATE_SUB(NOW(), INTERVAL ? DAY)) tob";
-    //
     String SQL_TRADE_TOTAL =
             "(SELECT 'For Last 24 Hours' as Period, IFNULL(SUM(price),0) AS Total, IFNULL(AVG(price),0) as Average, COUNT(*) AS Count FROM"
                     + " "
@@ -138,7 +137,6 @@ public interface ISQLConstant {
                     + SQL_TRADE_VIEW
                     + " Group By seller))"
                     + " TWO GROUP By person order by Total DESC";
-    //
     String SQL_TRADE_BEST_ITEM =
             "SELECT price, categoryName, conditionCode, description, seller, buyer, tradeDate FROM "
                     + SQL_TRADE_VIEW

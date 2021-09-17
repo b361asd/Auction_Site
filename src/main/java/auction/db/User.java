@@ -45,7 +45,7 @@ public class User extends DBBase {
                         con.prepareStatement(
                                 in_username.length() != 0
                                         ? SQL_USER_SELECT_ONE
-                                        : SQL_USER_SELECT); ) {
+                                        : SQL_USER_SELECT)) {
             if (in_username.length() != 0) {
                 preparedStmt.setString(1, in_username);
                 preparedStmt.setInt(2, userType);

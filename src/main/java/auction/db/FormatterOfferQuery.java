@@ -26,9 +26,7 @@ public class FormatterOfferQuery extends DBBase {
 
     public static StringBuilder initQuerySearch() {
         StringBuilder sb = new StringBuilder();
-        sb.append(BASE_SQL_PLACEHOLDER_1ST);
-        sb.append("select * from Offer o WHERE TRUE");
-        //
+        sb.append(BASE_SQL_PLACEHOLDER_1ST).append("select * from Offer o WHERE TRUE");
         return sb;
     }
 
@@ -41,7 +39,6 @@ public class FormatterOfferQuery extends DBBase {
         sb.append(
                         "Insert Alert (alertID, receiver, offerID, bidID, content, alertDate) select REPLACE(UUID(),'-',''), ?, ?, NULL, ?, NOW() ")
                 .append("from Offer o WHERE (o.offerID = ?)");
-        //
         return sb;
     }
 
@@ -58,13 +55,10 @@ public class FormatterOfferQuery extends DBBase {
 
     public static String buildSQLSimilarOffer(String categoryName, String conditionCode) {
         StringBuilder sb = initQuerySearch();
-        //
         addCondition(sb, "o.categoryName", OP_SZ_EQUAL, categoryName, null);
         addCondition(sb, "o.conditionCode", OP_INT_EQUAL, conditionCode, null);
         addCondition(sb, "o.status", OP_INT_EQUAL, "1", null);
-        //
         doneQuerySearch(sb);
-        //
         return sb.toString();
     }
 
@@ -74,15 +68,12 @@ public class FormatterOfferQuery extends DBBase {
 
     public static String buildSQLUserActivityOffer(String userID) {
         StringBuilder sb = initQuerySearch();
-        //
         sb.append(" and ((TRUE");
         addCondition(sb, "o.seller", OP_SZ_EQUAL, userID, null);
         sb.append(") OR EXISTS (SELECT * from Bid b2 where b2.offerID = o.offerID");
         addCondition(sb, "b2.buyer", OP_SZ_EQUAL, userID, null);
         sb.append("))");
-        //
         doneQuerySearch(sb);
-        //
         return sb.toString();
     }
 
@@ -114,8 +105,6 @@ public class FormatterOfferQuery extends DBBase {
             //
             System.out.println(sb.toString());
         }
-        //
-        //
         if (false) {
             StringBuilder sb = initQueryAlert();
             // addCondition(sb, "o.offerID", OP_SZ_START_WITH, "Scratcges", null);
@@ -142,11 +131,6 @@ public class FormatterOfferQuery extends DBBase {
             //
             System.out.println(sb.toString());
         }
-        //
-        //
-        //      if (true) {
-        //         System.out.println(buildSQLSimilarOffer("car", "1"));
-        //      }
     }
 
     public static void main(String[] args) {

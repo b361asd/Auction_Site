@@ -83,7 +83,7 @@ public class OfferAlert extends DBBase {
                         con.prepareStatement(
                                 isUser
                                         ? ISQLConstant.SQL_OFFERALERTCRITERION_SELECT_USER
-                                        : ISQLConstant.SQL_OFFERALERTCRITERION_SELECT_EX_USER); ) {
+                                        : ISQLConstant.SQL_OFFERALERTCRITERION_SELECT_EX_USER)) {
             preparedStmt.setString(1, userName);
             try (ResultSet rs = preparedStmt.executeQuery()) {
                 while (rs.next()) {

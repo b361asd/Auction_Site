@@ -15,7 +15,6 @@ public class HelperDatetime {
         ZoneId zoneId = ZoneId.of("America/New_York");
         ZonedDateTime zdt = ZonedDateTime.ofInstant(instant, zoneId);
         ZonedDateTime zdtDaysLater = zdt.plus(delta, ChronoUnit.DAYS);
-        //
         return zdtDaysLater.format(formatterZoned);
     }
 
