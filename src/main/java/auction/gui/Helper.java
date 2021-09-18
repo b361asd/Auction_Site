@@ -2,7 +2,6 @@ package auction.gui;
 
 import auction.db.CategoryAndField;
 import auction.servlet.IConstant;
-
 import java.util.List;
 import java.util.Map;
 
