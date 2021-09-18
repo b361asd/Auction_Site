@@ -475,10 +475,9 @@ public class Offer extends DBBase {
             offerID = temps[0];
         }
         try (Connection con = getConnection()) {
-            int count;
+            con.setAutoCommit(false);
             try (PreparedStatement pStmtInsertOfferOrModify =
                     con.prepareStatement(isCreate ? SQL_OFFER_INSERT : SQL_OFFER_MODIFY)) {
-                con.setAutoCommit(false);
                 if (isCreate) {
                     BigDecimal initPrice = getBigDecimalFromParamMap("initPrice", parameters);
                     BigDecimal increment = getBigDecimalFromParamMap("increment", parameters);
@@ -517,7 +516,7 @@ public class Offer extends DBBase {
                     pStmtInsertOfferOrModify.setString(4, offerID);
                 }
                 pStmtInsertOfferOrModify.execute();
-                count = pStmtInsertOfferOrModify.getUpdateCount();
+                int count = pStmtInsertOfferOrModify.getUpdateCount();
                 if (count == 1) {
                     if (!isCreate) {
                         try (PreparedStatement pStmtDeleteField =
@@ -729,7 +728,6 @@ public class Offer extends DBBase {
 
     public static void main9(String[] args) {
         System.out.println("Start");
-        // doSearchOfferByID("5948e21eeae14dcaa8d58ada0d79a773");
         doSearchUserActivity("user");
     }
 

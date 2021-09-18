@@ -31,7 +31,6 @@ public class TableData {
         lstHeader = _lstHeader;
         lstRows = _lstRows;
         colSeq = _colSeq;
-        //
         mapHeaderToIndex = new HashMap<>();
         if (lstHeader != null) {
             for (int i = 0; i < lstHeader.size(); i++) {
@@ -74,14 +73,12 @@ public class TableData {
         Integer objIndex = mapHeaderToIndex.get(header);
         if (objIndex == null) {
             return "";
-        } else {
-            int index = objIndex;
-            if (index >= 0) {
-                return ((List) lstRows.get(i)).get(index);
-            } else {
-                return "";
-            }
         }
+        int index = objIndex;
+        if (index >= 0) {
+            return ((List) lstRows.get(i)).get(index);
+        }
+        return "";
     }
 
     public Object getLastCellInRow(int i) {
@@ -104,7 +101,6 @@ public class TableData {
             }
         } else if (header != null) {
             int index = mapHeaderToIndex.get(header);
-            //
             if (index >= 0 && index < lstHeader.size()) {
                 Comparator<Object> comparatorNorm =
                         Comparator.comparing(
@@ -112,7 +108,6 @@ public class TableData {
                                         ((List) o).get(index) == null
                                                 ? ""
                                                 : ((List) o).get(index).toString().trim());
-                //
                 boolean isTheSame = (indexSorted == index);
                 if (isTheSame) {
                     if (normalSorted) {
@@ -174,7 +169,6 @@ public class TableData {
         if (row != null && row.size() > 0 && colSeq != null && colSeq.length > 0) {
             for (int value : colSeq) {
                 Object one = row.get(value);
-                //
                 String oneItem = (one == null) ? "" : one.toString();
                 if (one instanceof BigDecimal) {
                     if (((BigDecimal) one).compareTo(new BigDecimal(-1)) == 0) {

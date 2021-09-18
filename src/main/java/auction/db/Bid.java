@@ -145,7 +145,7 @@ public class Bid extends DBBase {
                 Object price = rs.getObject(4);
                 Object autoRebidLimit = rs.getObject(5);
                 Object bidDate = rs.getObject(6);
-                //
+
                 List lstRows = tempMap.computeIfAbsent(offerID.toString(), k -> new ArrayList());
                 List currentRow = new LinkedList();
                 lstRows.add(currentRow);
@@ -520,7 +520,6 @@ public class Bid extends DBBase {
     public static Map cancelBid(Map<String, String[]> parameters) {
         Map output = new HashMap();
         String bidID = getStringFromParamMap("bidID", parameters);
-        //
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt =
                         con.prepareStatement(ISQLConstant.SQL_BID_DELETE)) {

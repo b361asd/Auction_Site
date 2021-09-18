@@ -183,7 +183,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
                     output = "(" + columnName + ")";
                 }
             } else {
-                // op.equals(OP_BOOL_FALSE)
                 if (isCasting) {
                     output = "(NOT UPPER(" + columnName + ") = 'YES')"; // UPPER('no')
                 } else {
@@ -369,27 +368,6 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
         }
         return out.toString();
     }
-
-    /*
-    public static int getPrefixIntFromParamMap(
-            String name, Map<String, String[]> parameters, char delimiter) {
-        int out = -1;
-        //
-        String temp = getStringFromParamMap(name, parameters);
-        int index = temp.indexOf(delimiter);
-        if (index >= 0) {
-            temp = temp.substring(index + 1);
-            //
-            try {
-                out = Integer.parseInt(temp);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
-        //
-        return out;
-    }
-    */
 
     // For debug
     public static String dumpParamMap(Map<String, String[]> parameters) {

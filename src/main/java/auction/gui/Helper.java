@@ -2,6 +2,7 @@ package auction.gui;
 
 import auction.db.CategoryAndField;
 import auction.servlet.IConstant;
+
 import java.util.List;
 import java.util.Map;
 
@@ -67,21 +68,22 @@ public class Helper implements IConstant {
         sb.append("<div>");
         for (int i = 0; i < lstCategoryName.size(); i++) {
             CategoryAndField.Category one = (CategoryAndField.Category) (lstCategoryName.get(i));
-            sb.append("<input onchange='onCategoryChange();' type='checkbox' id='");
-            sb.append(one.getCategoryName());
-            sb.append("' name='");
-            sb.append(name).append(i + 1);
-            sb.append("' value='");
-            sb.append(one.getCategoryName());
+            sb.append("<input onchange='onCategoryChange();' type='checkbox' id='")
+                    .append(one.getCategoryName())
+                    .append("' name='")
+                    .append(name)
+                    .append(i + 1)
+                    .append("' value='")
+                    .append(one.getCategoryName());
             if (one.isCurr()) {
                 sb.append("' checked><label for='");
             } else {
                 sb.append("'><label for='");
             }
-            sb.append(one.getCategoryName());
-            sb.append("'>");
-            sb.append(one.getCategoryName());
-            sb.append("</label>");
+            sb.append(one.getCategoryName())
+                    .append("'>")
+                    .append(one.getCategoryName())
+                    .append("</label>");
         }
         sb.append("</div>");
         return sb.toString();
@@ -132,14 +134,17 @@ public class Helper implements IConstant {
     }
 
     public static String getYesNoSelection(String name, String selected) {
-        StringBuilder sb = new StringBuilder();
         boolean isYes = selected.equalsIgnoreCase("yes"); // IN DB: 'no' 'yes'
-        sb.append("<select name='").append(name).append("'>");
-        sb.append("<option value='yes'").append(isYes ? " selected" : "").append(">YES</option>");
-        sb.append("<option value='no'").append(isYes ? "" : " selected").append(">NO</option>");
-        sb.append("</select>");
-        //
-        return sb.toString();
+        return "<select name='"
+                + name
+                + "'>"
+                + "<option value='yes'"
+                + (isYes ? " selected" : "")
+                + ">YES</option>"
+                + "<option value='no'"
+                + (isYes ? "" : " selected")
+                + ">NO</option>"
+                + "</select>";
     }
 
     public static String getConditionFromCode(String code) {
@@ -213,9 +218,7 @@ public class Helper implements IConstant {
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             if (c > 127 || c == '"' || c == '<' || c == '>' || c == '&') {
-                out.append("&#");
-                out.append((int) c);
-                out.append(';');
+                out.append("&#").append((int) c).append(';');
             } else {
                 out.append(c);
             }

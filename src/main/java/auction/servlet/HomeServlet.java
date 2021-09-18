@@ -66,7 +66,6 @@ public class HomeServlet extends HttpServlet implements IConstant {
                 String username = request.getParameter("username");
                 String password = request.getParameter("password");
                 map = User.doVerifyLogin(username, password);
-                //
                 if ((Boolean) map.get(DATA_NAME_STATUS)) {
                     request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, username);
                     request.getSession()
@@ -83,10 +82,10 @@ public class HomeServlet extends HttpServlet implements IConstant {
                                     map.get(DATA_NAME_LAST_NAME).toString());
                 }
             } else {
+                // Session attributes already set
                 map = new HashMap();
                 map.put(DATA_NAME_STATUS, true);
-                map.put(DATA_NAME_MESSAGE, "Already logon.");
-                // Session attributes already set
+                map.put(DATA_NAME_MESSAGE, "Already login.");
             }
         }
         request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, map);

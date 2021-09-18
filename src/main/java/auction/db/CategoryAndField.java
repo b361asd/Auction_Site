@@ -24,13 +24,10 @@ public class CategoryAndField extends DBBase {
      */
     public static Map getCategoryField(String categoryNamesFromParam) {
         Map output = new HashMap();
-        //
         List<Field> lstField = new ArrayList<>();
         List<Category> lstCategory = new ArrayList<>();
-        //
         output.put(DATA_CATEGORY_LIST, lstCategory);
         output.put(DATA_FIELD_LIST, lstField);
-        //
         try (Connection con = getConnection();
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(SQL_CATEGORYFIELD_SELECT)) {

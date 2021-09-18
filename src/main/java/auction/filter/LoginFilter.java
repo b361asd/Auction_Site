@@ -47,7 +47,6 @@ public class LoginFilter implements Filter, IConstant {
             chain.doFilter(request, response);
         } else {
             boolean isLoggedIn = session.getAttribute(SESSION_ATTRIBUTE_USER) != null;
-            // Already log in
             if (isLoggedIn) {
                 String szUserType = (String) session.getAttribute(SESSION_ATTRIBUTE_USERTYPE);
                 szUserType = szUserType == null ? "" : szUserType;

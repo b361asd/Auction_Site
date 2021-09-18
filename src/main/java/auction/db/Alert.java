@@ -84,9 +84,7 @@ public class Alert extends DBBase {
      */
     public static void deleteAlert(Map<String, String[]> parameters) {
         Map output = new HashMap();
-        //
         String alertID = getStringFromParamMap("alertID", parameters);
-        //
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt = con.prepareStatement(SQL_ALERT_DELETE)) {
             preparedStmt.setString(1, alertID);
