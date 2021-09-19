@@ -164,7 +164,7 @@ public class Offer extends DBBase {
      * @return Data for GUI rendering
      */
     public static Map doSearchOffer(Map<String, String[]> parameters, boolean showAll) {
-        StringBuilder sb = formatSQLWithParametersForSearchOrAlert(parameters, null, true);
+        StringBuilder sb = formatSQLWithParametersForSearchOrAlert(parameters, true);
         String sql = sb.toString();
         Map output = doSearchOfferInternal(sql, showAll);
         TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
@@ -178,12 +178,11 @@ public class Offer extends DBBase {
      * Format SQL for searching offers
      *
      * @param parameters Map of all parameters
-     * @param userID User ID
      * @param isSearch If true, will search. Otherwise, alert criteria for user interests
      * @return Formatted SQL
      */
     public static StringBuilder formatSQLWithParametersForSearchOrAlert(
-            Map<String, String[]> parameters, String userID, boolean isSearch) {
+            Map<String, String[]> parameters, boolean isSearch) {
         StringBuilder sb;
         if (isSearch) {
             sb = FormatterOfferQuery.initQuerySearch();
@@ -239,11 +238,9 @@ public class Offer extends DBBase {
      * Format description for user interests
      *
      * @param parameters Map of all parameters
-     * @param userID User ID
      * @return Formatted description
      */
-    public static StringBuilder formatAlertDescription(
-            Map<String, String[]> parameters, String userID) {
+    public static StringBuilder formatAlertDescription(Map<String, String[]> parameters) {
         StringBuilder sb = new StringBuilder();
         String sellerOP = getStringFromParamMap("sellerOP", parameters);
         String sellerVal = getStringFromParamMap("sellerVal", parameters);

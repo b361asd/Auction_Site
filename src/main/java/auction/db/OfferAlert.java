@@ -38,8 +38,8 @@ public class OfferAlert extends DBBase {
             criterionName = "Unnamed";
         }
         StringBuilder sbTrigger =
-                Offer.formatSQLWithParametersForSearchOrAlert(parameters, userID, false);
-        StringBuilder sbDesc = Offer.formatAlertDescription(parameters, userID);
+                Offer.formatSQLWithParametersForSearchOrAlert(parameters, false);
+        StringBuilder sbDesc = Offer.formatAlertDescription(parameters);
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt =
                         con.prepareStatement(ISQLConstant.SQL_OFFERALERTCRITERION_INSERT)) {

@@ -29,23 +29,25 @@ public class Alert extends DBBase {
         Map output = new HashMap();
         List lstRows = new ArrayList();
         try (Connection con = getConnection();
-                PreparedStatement preparedStmt = con.prepareStatement(SQL_ALERT_SELECT);
-                ResultSet rs = preparedStmt.executeQuery()) {
-            while (rs.next()) {
-                Object alertID = rs.getObject(1);
-                Object receiver = rs.getObject(2);
-                Object offerID = rs.getObject(3);
-                Object bidID = rs.getObject(4);
-                Object content = rs.getObject(5);
-                Object alertDate = rs.getObject(6);
-                List currentRow = new LinkedList();
-                lstRows.add(currentRow);
-                currentRow.add(alertID);
-                currentRow.add(receiver);
-                currentRow.add(offerID);
-                currentRow.add(bidID);
-                currentRow.add(content);
-                currentRow.add(alertDate);
+                PreparedStatement preparedStmt = con.prepareStatement(SQL_ALERT_SELECT); ) {
+            preparedStmt.setString(1, userID);
+            try (ResultSet rs = preparedStmt.executeQuery()) {
+                while (rs.next()) {
+                    Object alertID = rs.getObject(1);
+                    Object receiver = rs.getObject(2);
+                    Object offerID = rs.getObject(3);
+                    Object bidID = rs.getObject(4);
+                    Object content = rs.getObject(5);
+                    Object alertDate = rs.getObject(6);
+                    List currentRow = new LinkedList();
+                    lstRows.add(currentRow);
+                    currentRow.add(alertID);
+                    currentRow.add(receiver);
+                    currentRow.add(offerID);
+                    currentRow.add(bidID);
+                    currentRow.add(content);
+                    currentRow.add(alertDate);
+                }
             }
             TableData tableData = new TableData(lstHeader_alert, lstRows, colSeq_alert);
             output.put(DATA_NAME_DATA, tableData);
