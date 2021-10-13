@@ -1,25 +1,25 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 
 <html>
 
 <head>
-   <meta charset="utf-8">
-   <title>BuyMe - Register a Representative</title>
-   <link rel="stylesheet" href='../style.css'/>
+<meta charset="utf-8">
+<title>BuyMe - Register a Representative</title>
+<link rel="stylesheet" href='../style.css' />
 
 </head>
 
 <body>
 
-<%@include file="../header.jsp" %>
-<%@include file="nav.jsp" %>
+    <%@include file="../header.jsp"%>
+    <%@include file="nav.jsp"%>
 
-<form action="registerRepResult.jsp" method="post">
+    <form action="registerRepResult.jsp" method="post">
 
-   <%@include file="../registerCommon.jsp" %>
+        <%@include file="../registerCommon.jsp"%>
 
-</form>
+    </form>
 
 </body>
 
