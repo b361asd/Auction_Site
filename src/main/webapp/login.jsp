@@ -1,34 +1,31 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 
 <html>
 
 <head>
-   <meta charset="utf-8">
-   <title>BuyMe - Login</title>
-   <link rel="stylesheet" href='style.css'/>
+<meta charset="utf-8">
+<title>BuyMe - Login</title>
+<link rel="stylesheet" href='style.css' />
 </head>
 
 <body>
 
-<%@include file="header.jsp" %>
+    <%@include file="header.jsp"%>
 
-<form action="${pageContext.request.contextPath}/home" method="post">
+    <form action="${pageContext.request.contextPath}/home" method="post">
 
-   <label>
-      Please enter your username
-      <input type="text" name="username"/>
-   </label><br>
-   <label>
-      Please enter your password
-      <input type="password" name="password"/>
-   </label>
+        <label> Please enter your username <input type="text"
+            name="username" />
+        </label><br> <label> Please enter your password <input
+            type="password" name="password" />
+        </label> <input type="submit" value="Submit">
 
-   <input type="submit" value="Submit">
+    </form>
 
-</form>
-
-<h2><A href="register.jsp">Register</A></h2>
+    <h2>
+        <A href="register.jsp">Register</A>
+    </h2>
 
 
 </body>

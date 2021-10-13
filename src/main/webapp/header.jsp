@@ -1,8 +1,8 @@
-<%@ page import="static com.b361asd.auction.servlet.IConstant.*" %>
-<%@ page import="com.b361asd.auction.db.DBBase" %>
-<%@ page import="java.util.Map" %>
+<%@ page import="static com.b361asd.auction.servlet.IConstant.*"%>
+<%@ page import="com.b361asd.auction.db.DBBase"%>
+<%@ page import="java.util.Map"%>
 
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 
 <script type="text/javascript">
@@ -13,8 +13,8 @@
 </script>
 
 <form id="form-sort" method="post">
-   <input type="hidden" name="action" value="sort"/>
-   <input id="input-sort" type="hidden" name="sort" value="_"/>
+	<input type="hidden" name="action" value="sort" /> <input
+		id="input-sort" type="hidden" name="sort" value="_" />
 </form>
 
 <%
