@@ -1,4 +1,4 @@
-package auction.gui;
+package com.b361asd.auction.gui;
 
 import java.time.Instant;
 import java.time.ZoneId;

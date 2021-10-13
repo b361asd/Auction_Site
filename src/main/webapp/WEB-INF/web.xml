@@ -4,35 +4,27 @@
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
          version="5.0">
     <display-name>Auction Site</display-name>
-
-
     <servlet>
         <servlet-name>HomeServlet</servlet-name>
-        <servlet-class>auction.servlet.HomeServlet</servlet-class>
+        <servlet-class>com.b361asd.auction.servlet.HomeServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
-
-
     <filter>
         <filter-name>LoginFilter</filter-name>
-        <filter-class>auction.filter.LoginFilter</filter-class>
+        <filter-class>com.b361asd.auction.filter.LoginFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
-
     <welcome-file-list>
         <welcome-file>/login.jsp</welcome-file>
     </welcome-file-list>
-
     <error-page>
         <error-code>404</error-code>
         <location>/home</location>
     </error-page>
-
 </web-app>

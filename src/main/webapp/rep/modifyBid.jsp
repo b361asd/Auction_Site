@@ -1,12 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="auction.db.Bid" %>
-<%@ page import="static auction.servlet.IConstant.*" %>
-<%@ page import="static auction.db.DBBase.*" %>
-<%@ page import="auction.gui.TableData" %>
+<%@ page import="com.b361asd.auction.db.Bid" %>
+<%@ page import="static com.b361asd.auction.servlet.IConstant.*" %>
+<%@ page import="static com.b361asd.auction.db.DBBase.*" %>
+<%@ page import="com.b361asd.auction.gui.TableData" %>
 <%@ page import="java.math.BigDecimal" %>
-<%@ page import="auction.db.DBBase" %>
+<%@ page import="com.b361asd.auction.db.DBBase" %>
 
 <html>
 

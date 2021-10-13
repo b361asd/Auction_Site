@@ -1,6 +1,6 @@
-package auction.servlet;
+package com.b361asd.auction.servlet;
 
-import auction.db.User;
+import com.b361asd.auction.db.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

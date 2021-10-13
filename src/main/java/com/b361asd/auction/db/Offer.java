@@ -1,7 +1,7 @@
-package auction.db;
+package com.b361asd.auction.db;
 
-import auction.gui.Helper;
-import auction.gui.TableData;
+import com.b361asd.auction.gui.Helper;
+import com.b361asd.auction.gui.TableData;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

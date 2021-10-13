@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="auction.db.CategoryAndField" %>
-<%@ page import="auction.db.DBBase" %>
+<%@ page import="com.b361asd.auction.db.CategoryAndField" %>
+<%@ page import="com.b361asd.auction.db.DBBase" %>
 
 <html>
 

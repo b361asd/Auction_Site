@@ -1,7 +1,7 @@
-package auction.db;
+package com.b361asd.auction.db;
 
-import auction.gui.Helper;
-import auction.servlet.IConstant;
+import com.b361asd.auction.gui.Helper;
+import com.b361asd.auction.servlet.IConstant;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;

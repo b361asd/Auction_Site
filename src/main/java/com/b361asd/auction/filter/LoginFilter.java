@@ -1,6 +1,6 @@
-package auction.filter;
+package com.b361asd.auction.filter;
 
-import auction.servlet.IConstant;
+import com.b361asd.auction.servlet.IConstant;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;

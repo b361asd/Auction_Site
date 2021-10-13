@@ -1,4 +1,4 @@
-package auction.db;
+package com.b361asd.auction.db;
 
 /** Constants and SQL statement patterns. */
 public interface ISQLConstant {

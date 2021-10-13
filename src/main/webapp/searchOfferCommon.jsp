@@ -1,6 +1,7 @@
-<%@ page import="auction.db.CategoryAndField" %>
+<%@ page import="com.b361asd.auction.db.CategoryAndField" %>
 <%@ page import="java.util.List" %>
-<%@ page import="static auction.gui.Helper.*" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="static com.b361asd.auction.gui.Helper.*" %>
 
 <table>
    <tbody>

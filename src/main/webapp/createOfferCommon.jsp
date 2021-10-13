@@ -1,8 +1,8 @@
-<%@ page import="auction.db.CategoryAndField" %>
-<%@ page import="auction.gui.Helper" %>
-<%@ page import="auction.gui.HelperDatetime" %>
-<%@ page import="auction.gui.TableData" %>
-<%@ page import="static auction.gui.Helper.*" %>
+<%@ page import="com.b361asd.auction.db.CategoryAndField" %>
+<%@ page import="com.b361asd.auction.gui.Helper" %>
+<%@ page import="com.b361asd.auction.gui.HelperDatetime" %>
+<%@ page import="com.b361asd.auction.gui.TableData" %>
+<%@ page import="static com.b361asd.auction.gui.Helper.*" %>
 <%@ page import="java.util.List" %>
 
 

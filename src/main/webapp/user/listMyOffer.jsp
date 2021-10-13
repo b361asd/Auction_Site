@@ -1,12 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="auction.gui.TableData" %>
-<%@ page import="static auction.db.DBBase.getStringFromParamMap" %>
-<%@ page import="static auction.servlet.IConstant.SESSION_ATTRIBUTE_USER" %>
-<%@ page import="static auction.servlet.IConstant.SESSION_ATTRIBUTE_DATA_MAP" %>
-<%@ page import="static auction.servlet.IConstant.*" %>
-<%@ page import="auction.db.Offer" %>
+<%@ page import="com.b361asd.auction.gui.TableData" %>
+<%@ page import="static com.b361asd.auction.db.DBBase.getStringFromParamMap" %>
+<%@ page import="static com.b361asd.auction.servlet.IConstant.SESSION_ATTRIBUTE_USER" %>
+<%@ page import="static com.b361asd.auction.servlet.IConstant.SESSION_ATTRIBUTE_DATA_MAP" %>
+<%@ page import="static com.b361asd.auction.servlet.IConstant.*" %>
+<%@ page import="com.b361asd.auction.db.Offer" %>
 
 <html>
 <head>

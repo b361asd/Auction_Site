@@ -1,4 +1,4 @@
-package auction.db;
+package com.b361asd.auction.db;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -1,4 +1,4 @@
-package auction.db;
+package com.b361asd.auction.db;
 
 /** Format SQL querying the {@link Question} table */
 public class FormatterQuestionQuery extends DBBase {

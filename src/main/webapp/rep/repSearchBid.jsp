@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="auction.db.User" %>
-<%@ page import="static auction.db.DBBase.*" %>
-<%@ page import="auction.gui.Helper" %>
+<%@ page import="com.b361asd.auction.db.User" %>
+<%@ page import="static com.b361asd.auction.db.DBBase.*" %>
+<%@ page import="com.b361asd.auction.gui.Helper" %>
 <%@ page import="java.util.List" %>
 
 <html>

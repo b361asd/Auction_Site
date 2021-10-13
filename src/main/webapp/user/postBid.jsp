@@ -1,10 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@page import="auction.db.Offer" %>
-<%@ page import="auction.gui.TableData" %>
+<%@page import="com.b361asd.auction.db.Offer" %>
+<%@ page import="com.b361asd.auction.gui.TableData" %>
 <%@ page import="java.math.BigDecimal" %>
-<%@ page import="static auction.db.DBBase.*" %>
+<%@ page import="static com.b361asd.auction.db.DBBase.*" %>
 
 <html>
 

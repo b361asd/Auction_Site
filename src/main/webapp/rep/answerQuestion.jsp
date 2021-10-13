@@ -1,10 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="auction.db.DBBase" %>
-<%@page import="auction.db.Question" %>
-<%@page import="auction.gui.Helper" %>
-<%@ page import="static auction.servlet.IConstant.SESSION_ATTRIBUTE_USER" %>
+<%@ page import="com.b361asd.auction.db.DBBase" %>
+<%@page import="com.b361asd.auction.db.Question" %>
+<%@page import="com.b361asd.auction.gui.Helper" %>
+<%@ page import="static com.b361asd.auction.servlet.IConstant.SESSION_ATTRIBUTE_USER" %>
 <%@page import="java.util.List" %>
 
 <html>

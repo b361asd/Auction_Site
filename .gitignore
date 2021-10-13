@@ -18,6 +18,7 @@ out
 .classpath
 .project
 .settings/
+bin/
 
 # User-specific stuff
 .idea/**/workspace.xml

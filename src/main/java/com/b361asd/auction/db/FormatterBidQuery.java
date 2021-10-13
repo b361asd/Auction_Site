@@ -1,4 +1,4 @@
-package auction.db;
+package com.b361asd.auction.db;
 
 /** Format SQL querying the {@link Bid} table */
 public class FormatterBidQuery extends DBBase {

@@ -1,7 +1,7 @@
-<%@ page import="auction.gui.Helper" %>
-<%@ page import="static auction.servlet.IConstant.*" %>
-<%@ page import="auction.gui.TableData" %>
-<%@ page import="static auction.db.DBBase.*" %>
+<%@ page import="com.b361asd.auction.gui.Helper" %>
+<%@ page import="static com.b361asd.auction.servlet.IConstant.*" %>
+<%@ page import="com.b361asd.auction.gui.TableData" %>
+<%@ page import="static com.b361asd.auction.db.DBBase.*" %>
 
 <%
    String __userID = (String) session.getAttribute(SESSION_ATTRIBUTE_USER);

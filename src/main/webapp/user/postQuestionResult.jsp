@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 
-<%@ page import="static auction.servlet.IConstant.*" %>
-<%@page import="auction.db.Question" %>
-<%@ page import="auction.db.DBBase" %>
+<%@ page import="static com.b361asd.auction.servlet.IConstant.*" %>
+<%@page import="com.b361asd.auction.db.Question" %>
+<%@ page import="com.b361asd.auction.db.DBBase" %>
 
 <html>
 
