@@ -287,11 +287,11 @@ public class Trade extends DBBase {
      * Trade report for User (seller or buyer)
      *
      * @param userName User name
-     * @param lookBackDays  Look back days
+     * @param lookBackDays Look back days
      * @param limit Limit how many rows returned
      * @return Data for GUI rendering
      */
-    public static Map selectMyTrade(String userName, int lookBackDays , int limit) {
+    public static Map selectMyTrade(String userName, int lookBackDays, int limit) {
         Map output = new HashMap();
         List lstRows = new ArrayList();
         TableData tableData =
@@ -300,7 +300,7 @@ public class Trade extends DBBase {
         output.put(DATA_NAME_DATA, tableData);
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt = con.prepareStatement(SQL_TRADE_MY_TRADE)) {
-            preparedStmt.setInt(1, lookBackDays );
+            preparedStmt.setInt(1, lookBackDays);
             preparedStmt.setString(2, userName);
             preparedStmt.setString(3, userName);
             preparedStmt.setInt(4, limit);

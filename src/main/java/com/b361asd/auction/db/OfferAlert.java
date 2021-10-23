@@ -37,8 +37,7 @@ public class OfferAlert extends DBBase {
         if (criterionName.length() == 0) {
             criterionName = "Unnamed";
         }
-        StringBuilder sbTrigger =
-                Offer.formatSQLWithParametersForSearchOrAlert(parameters, false);
+        StringBuilder sbTrigger = Offer.formatSQLWithParametersForSearchOrAlert(parameters, false);
         StringBuilder sbDesc = Offer.formatAlertDescription(parameters);
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt =
