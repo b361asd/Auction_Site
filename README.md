@@ -20,13 +20,13 @@ It is implemented using Java, [JSP](https://en.wikipedia.org/wiki/JavaServer_Pag
 Run
 
 ```console
-$ docker build -t auction_site .
+$ docker build -t b361asd/auctionsite .
 ```
 
 to build the image. To start it, run
 
 ```console
-$ docker run -p 8888:8080 auction_site
+$ docker run -p 8888:8080 b361asd/auctionsite
 ```
 
 Navigate to
