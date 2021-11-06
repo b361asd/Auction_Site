@@ -5,5 +5,5 @@ RUN mvn -f /app/pom.xml package
 
 FROM tomcat:10.0.12-jdk11-openjdk-bullseye
 COPY --from=maven_build ./app/target/*.war $CATALINA_HOME/webapps/auctionsite.war
-CMD [ "catalina.sh", "run" ] 
 EXPOSE 8888
+CMD [ "catalina.sh", "run" ] 
