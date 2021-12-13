@@ -2,21 +2,32 @@ version: "3.9"
 services:
   web:
     build: .
+    container_name: web
     ports:
       - 8888:8080
+    networks:
+      - buyme-net
+    depends_on:
+      - db
+    environment:
+      MYSQL_HOST: db
   db:
     image: mysql:8.0.27
+    container_name: db
     restart: always
     environment:
-      MYSQL_DATABASE: "buyme"
-      MYSQL_USER: "user1"
-      MYSQL_PASSWORD: "user_password"
-      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_DATABASE: buyme
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - buyme-net
     ports:
       - "3306:3306"
     expose:
       - 3306
     volumes:
+      - ./src/main/sql:/docker-entrypoint-initdb.d
       - my-db:/var/lib/mysql
+networks:
+  buyme-net:
 volumes:
   my-db:
