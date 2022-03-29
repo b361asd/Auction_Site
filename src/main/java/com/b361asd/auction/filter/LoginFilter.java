@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Used for authorization of an account.
@@ -46,10 +48,11 @@ public class LoginFilter implements Filter, IConstant {
         } else if (isCSSRequest) {
             chain.doFilter(request, response);
         } else {
-            boolean isLoggedIn = session.getAttribute(SESSION_ATTRIBUTE_USER) != null;
-            if (isLoggedIn) {
+            Optional<Object> isLoggedIn =
+                    Optional.ofNullable(session.getAttribute(SESSION_ATTRIBUTE_USER));
+            if (isLoggedIn.isPresent()) {
                 String szUserType = (String) session.getAttribute(SESSION_ATTRIBUTE_USERTYPE);
-                szUserType = szUserType == null ? "" : szUserType;
+                szUserType = Objects.requireNonNullElse(szUserType, "");
                 boolean isAdminURL =
                         request.getRequestURI()
                                 .startsWith(request.getContextPath() + "/" + ADMIN_PATH);
@@ -59,11 +62,9 @@ public class LoginFilter implements Filter, IConstant {
                 boolean isUserURL =
                         request.getRequestURI()
                                 .startsWith(request.getContextPath() + "/" + USER_PATH);
-                if (szUserType.equalsIgnoreCase("1") && isAdminURL) {
-                    chain.doFilter(request, response);
-                } else if (szUserType.equalsIgnoreCase("2") && isRepURL) {
-                    chain.doFilter(request, response);
-                } else if (szUserType.equalsIgnoreCase("3") && isUserURL) {
+                if (szUserType.equalsIgnoreCase("1") && isAdminURL
+                        || szUserType.equalsIgnoreCase("2") && isRepURL
+                        || szUserType.equalsIgnoreCase("3") && isUserURL) {
                     chain.doFilter(request, response);
                 } else {
                     // Including login.jsp
