@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class AlertTest {
 
     @Test
-    void insertAlert() {
+    void testInsertAlert() {
         Map<String, String[]> parameters = new HashMap<>();
         parameters.put("username", new String[] {"user"});
         parameters.put("password", new String[] {"user_pwd"});
