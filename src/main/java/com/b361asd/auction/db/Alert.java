@@ -125,20 +125,4 @@ public class Alert extends DBBase {
             e.printStackTrace();
         }
     }
-
-    public static void main(String[] args) {
-        Map<String, String[]> parameters = new HashMap<>();
-        parameters.put("username", new String[] {"user"});
-        parameters.put("password", new String[] {"user_pwd"});
-        parameters.put("email", new String[] {"user@buyme.com"});
-        parameters.put("firstname", new String[] {"Real"});
-        parameters.put("lastname", new String[] {"Lnuser"});
-        parameters.put("address", new String[] {"123 Main St., Nowhere Town, NJ 56789"});
-        parameters.put("phone", new String[] {"2365678909"});
-
-        Map map = selectAlert("user");
-        System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
-        System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
-        System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
-    }
 }
