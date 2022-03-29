@@ -99,15 +99,6 @@ public class CategoryAndField extends DBBase {
         return output;
     }
 
-    public static void main(String[] args) {
-        System.out.println("Start");
-        Map map1 = getMapFieldIDToText();
-        Map map = getCategoryField(null);
-        System.out.println(DATA_NAME_STATUS + "= " + map.get(DATA_NAME_STATUS));
-        System.out.println(DATA_NAME_MESSAGE + "= " + map.get(DATA_NAME_MESSAGE));
-        System.out.println(DATA_NAME_USER_TYPE + "= " + map.get(DATA_NAME_USER_TYPE));
-    }
-
     public static class Category {
         String categoryName;
         boolean isCurr;
