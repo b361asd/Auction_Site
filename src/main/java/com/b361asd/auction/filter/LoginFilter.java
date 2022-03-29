@@ -51,8 +51,9 @@ public class LoginFilter implements Filter, IConstant {
             Optional<Object> isLoggedIn =
                     Optional.ofNullable(session.getAttribute(SESSION_ATTRIBUTE_USER));
             if (isLoggedIn.isPresent()) {
-                String szUserType = (String) session.getAttribute(SESSION_ATTRIBUTE_USERTYPE);
-                szUserType = Objects.requireNonNullElse(szUserType, "");
+                String szUserType =
+                        Objects.requireNonNullElse(
+                                (String) session.getAttribute(SESSION_ATTRIBUTE_USERTYPE), "");
                 boolean isAdminURL =
                         request.getRequestURI()
                                 .startsWith(request.getContextPath() + "/" + ADMIN_PATH);
