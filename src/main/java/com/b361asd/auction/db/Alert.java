@@ -29,7 +29,7 @@ public class Alert extends DBBase {
         Map output = new HashMap();
         List lstRows = new ArrayList();
         try (Connection con = getConnection();
-                PreparedStatement preparedStmt = con.prepareStatement(SQL_ALERT_SELECT); ) {
+                PreparedStatement preparedStmt = con.prepareStatement(SQL_ALERT_SELECT)) {
             preparedStmt.setString(1, userID);
             try (ResultSet rs = preparedStmt.executeQuery()) {
                 while (rs.next()) {
