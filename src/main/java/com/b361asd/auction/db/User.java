@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class User extends DBBase {
 
@@ -38,16 +39,16 @@ public class User extends DBBase {
     public static Map selectUser(Map<String, String[]> parameters, int userType) {
         Map output = new HashMap();
         List lstRows = new ArrayList();
-        String in_username =
-                parameters == null ? "" : getStringFromParamMap("username", parameters);
+        String inUsername =
+                Optional.ofNullable(parameters)
+                        .map(stringMap -> getStringFromParamMap("username", stringMap))
+                        .orElse("");
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt =
                         con.prepareStatement(
-                                in_username.length() != 0
-                                        ? SQL_USER_SELECT_ONE
-                                        : SQL_USER_SELECT)) {
-            if (in_username.length() != 0) {
-                preparedStmt.setString(1, in_username);
+                                inUsername.length() != 0 ? SQL_USER_SELECT_ONE : SQL_USER_SELECT)) {
+            if (inUsername.length() != 0) {
+                preparedStmt.setString(1, inUsername);
                 preparedStmt.setInt(2, userType);
             } else {
                 preparedStmt.setInt(1, userType);
