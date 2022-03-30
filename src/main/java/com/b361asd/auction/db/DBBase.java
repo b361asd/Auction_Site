@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
@@ -100,11 +101,11 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
     }
 
     public static String escapeToUpperCaseTrimNoNull(String input) {
-        return escape((input == null ? "" : input.trim())).toUpperCase();
+        return escape(Optional.ofNullable(input).map(String::trim).orElse("")).toUpperCase();
     }
 
     public static String toUpperCaseTrimNoNull(String input) {
-        return (input == null ? "" : input.trim()).toUpperCase();
+        return Optional.ofNullable(input).map(String::trim).orElse("").toUpperCase();
     }
 
     private static String oneCondition(
@@ -139,14 +140,13 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
                     output = "(" + columnName + " LIKE '%" + value + "%')";
                 }
             }
-        }
-        // Integer
-        else if (op.equals(OP_INT_EQUAL)
+        } else if (op.equals(OP_INT_EQUAL)
                 || op.equals(OP_INT_EQUAL_MULTI)
                 || op.equals(OP_INT_NOT_EQUAL)
                 || op.equals(OP_INT_EQUAL_OR_OVER)
                 || op.equals(OP_INT_EQUAL_OR_UNDER)
                 || op.equals(OP_INT_BETWEEN)) {
+            // Integer
             value = escapeToUpperCaseTrimNoNull(value);
             if (value.equals("")) {
                 output = "";
@@ -173,9 +173,8 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
                     }
                 }
             }
-        }
-        // Boolean
-        else if (op.equals(OP_BOOL_TRUE) || op.equals(OP_BOOL_FALSE)) {
+        } else if (op.equals(OP_BOOL_TRUE) || op.equals(OP_BOOL_FALSE)) {
+            // Boolean
             if (op.equals(OP_BOOL_TRUE)) {
                 if (isCasting) {
                     output = "(UPPER(" + columnName + ") = 'YES')"; // UPPER('yes')
