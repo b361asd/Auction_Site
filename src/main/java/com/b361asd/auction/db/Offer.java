@@ -320,7 +320,7 @@ public class Offer extends DBBase {
                     if (fieldID != null) {
                         mapFields.put(
                                 "" + rowIndex + "-" + fieldID,
-                                (fieldText == null) ? "" : fieldText.toString());
+                                fieldText == null ? "" : fieldText.toString());
                     }
                 } else {
                     // New Row
@@ -369,10 +369,9 @@ public class Offer extends DBBase {
                     lstHeader.add(fieldName.toString());
                 }
             }
-            for (Map.Entry<String, Integer> entry : mapFieldIDToIndex.entrySet()) {
-                // Reverse
-                mapIndexToFieldID.put(entry.getValue(), entry.getKey());
-            }
+            // Reverse
+            mapFieldIDToIndex.forEach((key, value) -> mapIndexToFieldID.put(value, key));
+
             for (int i = 0; i < lstRows.size(); i++) {
                 List rowList = (List) lstRows.get(i);
                 for (int j = FIELD_START_INDEX; j < lstHeader.size(); j++) {
