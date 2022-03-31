@@ -1,18 +1,16 @@
 package com.b361asd.auction.gui;
 
 public enum UserType {
-    ADMIN("1", 1, "admin"),
-    REP("2", 2, "rep"),
-    USER("3", 3, "user");
+    ADMIN("1", 1),
+    REP("2", 2),
+    USER("3", 3);
 
     private final String sessionUserType;
     private final int databaseUserType;
-    private final String userTypePath;
 
-    UserType(String sessionUserType, int databaseUserType, String userTypePath) {
+    UserType(String sessionUserType, int databaseUserType) {
         this.sessionUserType = sessionUserType;
         this.databaseUserType = databaseUserType;
-        this.userTypePath = userTypePath;
     }
 
     public String getSessionUserType() {
@@ -21,9 +19,5 @@ public enum UserType {
 
     public int getDatabaseUserType() {
         return databaseUserType;
-    }
-
-    public String getUserTypePath() {
-        return userTypePath;
     }
 }

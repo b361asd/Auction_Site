@@ -56,19 +56,19 @@ public class LoginFilter implements Filter, IConstant {
                                 .startsWith(
                                         request.getContextPath()
                                                 + "/"
-                                                + UserType.ADMIN.getUserTypePath());
+                                                + UserType.ADMIN.toString().toLowerCase());
                 boolean isRepURL =
                         request.getRequestURI()
                                 .startsWith(
                                         request.getContextPath()
                                                 + "/"
-                                                + UserType.REP.getUserTypePath());
+                                                + UserType.REP.toString().toLowerCase());
                 boolean isUserURL =
                         request.getRequestURI()
                                 .startsWith(
                                         request.getContextPath()
                                                 + "/"
-                                                + UserType.USER.getUserTypePath());
+                                                + UserType.USER.toString().toLowerCase());
                 if (szUserType.equalsIgnoreCase(UserType.ADMIN.getSessionUserType()) && isAdminURL
                         || szUserType.equalsIgnoreCase(UserType.REP.getSessionUserType())
                                 && isRepURL
