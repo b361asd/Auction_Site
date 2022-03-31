@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 
 <%@ page import="com.b361asd.auction.db.Bid"%>
+<%@ page import="com.b361asd.auction.db.DBBase"%>
 <%@ page import="com.b361asd.auction.gui.TableData"%>
 <%@ page import="java.util.Objects"%>
 
@@ -25,7 +26,7 @@
         Map data;
         TableData dataTable = null;
         //
-        String action = getStringFromParamMap("action", request.getParameterMap());
+        String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
         if (action.equals("repSearchBid")) {
             data = Bid.searchBid(request.getParameterMap(), null, null);
             request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
@@ -40,7 +41,7 @@
             //
             if (dataTable == null) {
             } else {
-                String sort = getStringFromParamMap("sort", request.getParameterMap());
+                String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
                 dataTable.sortRowPerHeader(sort);
             }
         }

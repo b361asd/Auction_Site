@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 
 <%@ page import="com.b361asd.auction.db.Bid"%>
+<%@ page import="com.b361asd.auction.db.DBBase"%>
 <%@ page import="com.b361asd.auction.gui.TableData"%>
 
 <html>
@@ -27,14 +28,14 @@
     Map data = null;
     TableData dataTable;
     //
-    String action = getStringFromParamMap("action", request.getParameterMap());
+    String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equals("sort")) {
         data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
         if (data != null) {
             dataTable = (TableData) (data.get(DATA_NAME_DATA));
             //
             if (dataTable != null) {
-                String sort = getStringFromParamMap("sort", request.getParameterMap());
+                String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
                 dataTable.sortRowPerHeader(sort);
             } else {
                 data = null;

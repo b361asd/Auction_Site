@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 
+<%@ page import="com.b361asd.auction.db.DBBase"%>
 <%@ page import="com.b361asd.auction.db.Offer"%>
 <%@ page import="com.b361asd.auction.gui.TableData"%>
 
@@ -18,14 +19,14 @@
     Map data;
     TableData dataTable = null;
     //
-    String action = getStringFromParamMap("action", request.getParameterMap());
+    String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equalsIgnoreCase("cancelOffer")) {
         Offer.doCancelOffer(request.getParameterMap());
         //
         data = Offer.doBrowseOffer();
         request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
     } else if (action.equalsIgnoreCase("listSimilar")) {
-        String offeridcategorynameconditioncode = getStringFromParamMap("offeridcategorynameconditioncode",
+        String offeridcategorynameconditioncode = DBBase.getStringFromParamMap("offeridcategorynameconditioncode",
         request.getParameterMap());
         data = Offer.doSearchSimilar(offeridcategorynameconditioncode);
         request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
@@ -43,7 +44,7 @@
         //
         if (dataTable == null) {
         } else {
-            String sort = getStringFromParamMap("sort", request.getParameterMap());
+            String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
             dataTable.sortRowPerHeader(sort);
         }
     }

@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 
 <%@ page import="com.b361asd.auction.db.Bid"%>
-<%@ page import="com.b361asd.auction.gui.TableData"%>
 <%@ page import="com.b361asd.auction.db.DBBase"%>
+<%@ page import="com.b361asd.auction.gui.TableData"%>
 <%@ page import="java.math.BigDecimal"%>
 
 <html>
@@ -21,7 +21,7 @@
     TableData dataTable;
     //
     String message = "";
-    String action = getStringFromParamMap("action", request.getParameterMap());
+    String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     //if (action.equals("sort")) {
     //	data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
     //	if (data != null) {
