@@ -27,7 +27,7 @@ public class Alert extends DBBase {
      */
     public static Map selectAlert(String userID) {
         Map output = new HashMap();
-        List lstRows = new ArrayList();
+        List<Object> lstRows = new ArrayList<>();
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt = con.prepareStatement(SQL_ALERT_SELECT)) {
             preparedStmt.setString(1, userID);
@@ -39,7 +39,7 @@ public class Alert extends DBBase {
                     Object bidID = rs.getObject(4);
                     Object content = rs.getObject(5);
                     Object alertDate = rs.getObject(6);
-                    List currentRow = new LinkedList();
+                    List<Object> currentRow = new LinkedList<>();
                     lstRows.add(currentRow);
                     currentRow.add(alertID);
                     currentRow.add(receiver);

@@ -74,7 +74,7 @@ public class OfferAlert extends DBBase {
      */
     public static Map selectOfferAlert(String userName, boolean isUser) {
         Map output = new HashMap();
-        List lstRows = new ArrayList();
+        List<Object> lstRows = new ArrayList<>();
         TableData tableData = new TableData(lstHeader_OfferAlert, lstRows, colSeq_OfferAlert);
         output.put(DATA_NAME_DATA, tableData);
         try (Connection con = getConnection();
@@ -92,7 +92,7 @@ public class OfferAlert extends DBBase {
                     Object triggerTxt = rs.getObject(4);
                     Object description = rs.getObject(5);
                     Object generateDate = rs.getObject(6);
-                    List currentRow = new LinkedList();
+                    List<Object> currentRow = new LinkedList<>();
                     lstRows.add(currentRow);
                     currentRow.add(criterionID);
                     currentRow.add(buyer);

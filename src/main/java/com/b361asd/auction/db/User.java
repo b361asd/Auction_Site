@@ -37,7 +37,7 @@ public class User extends DBBase {
      */
     public static Map selectUser(Map<String, String[]> parameters, int userType) {
         Map output = new HashMap();
-        List lstRows = new ArrayList();
+        List<Object> lstRows = new ArrayList<>();
         String in_username =
                 parameters == null ? "" : getStringFromParamMap("username", parameters);
         try (Connection con = getConnection();
@@ -63,7 +63,7 @@ public class User extends DBBase {
                     Object phone = rs.getObject(7);
                     Object active = rs.getObject(8);
 
-                    List currentRow = new LinkedList();
+                    List<Object> currentRow = new LinkedList<>();
                     lstRows.add(currentRow);
                     currentRow.add(username);
                     currentRow.add(password);
@@ -111,7 +111,7 @@ public class User extends DBBase {
      * @return List of active users
      */
     public static List getUserList() {
-        List lst = new ArrayList();
+        List<Object> lst = new ArrayList<>();
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt = con.prepareStatement(SQL_USER_SELECT_USERID);
                 ResultSet rs = preparedStmt.executeQuery()) {

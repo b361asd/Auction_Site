@@ -285,8 +285,8 @@ public class Offer extends DBBase {
      */
     private static Map doSearchOfferInternal(String sql, boolean showAll) {
         Map output = new HashMap();
-        List lstHeader = new LinkedList();
-        List lstRows = new LinkedList();
+        List<String> lstHeader = new LinkedList<>();
+        List<Object> lstRows = new LinkedList<>();
 
         // RowID-fieldID : fieldText
         Map<String, String> mapFields = new HashMap<>();
@@ -324,7 +324,7 @@ public class Offer extends DBBase {
                     }
                 } else {
                     // New Row
-                    List currentRow = new LinkedList();
+                    List<Object> currentRow = new LinkedList<>();
                     lstRows.add(currentRow);
                     rowIndex++;
                     currentOfferID = offerID.toString();
@@ -596,7 +596,7 @@ public class Offer extends DBBase {
      * @param offerID Offer ID
      */
     public static void doCreateAlerts(String userName, String offerID) {
-        List lstRows = new ArrayList();
+        List<Object> lstRows = new ArrayList<>();
         try (Connection con = getConnection();
                 PreparedStatement pStmtSelectAlertCriterion =
                         con.prepareStatement(SQL_OFFERALERTCRITERION_SELECT_EX_USER)) {

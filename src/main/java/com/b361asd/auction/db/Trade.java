@@ -60,8 +60,8 @@ public class Trade extends DBBase {
             boolean isSeller,
             boolean isUser) {
         Map output = new HashMap();
-        List lstRows = new ArrayList();
-        List lstHeader = null;
+        List<Object> lstRows = new ArrayList<>();
+        List<String> lstHeader = null;
         if (isTotal) {
             lstHeader = lstHeader_tradeTotal;
         } else if (isCategoryName) {
@@ -107,7 +107,7 @@ public class Trade extends DBBase {
                         Object Total = rs.getObject(2);
                         Object Average = rs.getObject(3);
                         Object Count = rs.getObject(4);
-                        List currentRow = new LinkedList();
+                        List<Object> currentRow = new LinkedList<>();
                         lstRows.add(currentRow);
                         currentRow.add(person);
                         currentRow.add(Total);
@@ -159,7 +159,7 @@ public class Trade extends DBBase {
      */
     public static Map selectGroupSimilar(int lookBackDays) {
         Map output = new HashMap();
-        List lstRows = new ArrayList();
+        List<Object> lstRows = new ArrayList<>();
         TableData tableData = new TableData(lstHeader_tradeBySimilar, lstRows, colSeq_tradeBy);
         output.put(DATA_NAME_DATA, tableData);
         try (Connection con = getConnection();
@@ -173,7 +173,7 @@ public class Trade extends DBBase {
                     Object Total = rs.getObject(3);
                     Object Average = rs.getObject(4);
                     Object Count = rs.getObject(5);
-                    List currentRow = new LinkedList();
+                    List<Object> currentRow = new LinkedList<>();
                     lstRows.add(currentRow);
                     currentRow.add(
                             categoryName
@@ -217,7 +217,7 @@ public class Trade extends DBBase {
     public static Map selectBestSellingMostRecentItems(
             int lookBackDays, int limit, boolean isBestSelling) {
         Map output = new HashMap();
-        List lstRows = new ArrayList();
+        List<Object> lstRows = new ArrayList<>();
         TableData tableData =
                 new TableData(
                         lstHeader_tradeByBestSellingItem, lstRows, colSeq_tradeByBestSellingItem);
@@ -237,7 +237,7 @@ public class Trade extends DBBase {
                     Object seller = rs.getObject(5);
                     Object buyer = rs.getObject(6);
                     Object tradeDate = rs.getObject(7);
-                    List currentRow = new LinkedList();
+                    List<Object> currentRow = new LinkedList<>();
                     lstRows.add(currentRow);
                     currentRow.add(price);
                     currentRow.add(categoryName);
@@ -293,7 +293,7 @@ public class Trade extends DBBase {
      */
     public static Map selectMyTrade(String userName, int lookBackDays, int limit) {
         Map output = new HashMap();
-        List lstRows = new ArrayList();
+        List<Object> lstRows = new ArrayList<>();
         TableData tableData =
                 new TableData(
                         lstHeader_tradeByBestSellingItem, lstRows, colSeq_tradeByBestSellingItem);
@@ -313,7 +313,7 @@ public class Trade extends DBBase {
                     Object seller = rs.getObject(5);
                     Object buyer = rs.getObject(6);
                     Object tradeDate = rs.getObject(7);
-                    List currentRow = new LinkedList();
+                    List<Object> currentRow = new LinkedList<>();
                     lstRows.add(currentRow);
                     currentRow.add(price);
                     currentRow.add(categoryName);

@@ -147,7 +147,7 @@ public class Bid extends DBBase {
                 Object bidDate = rs.getObject(6);
 
                 List lstRows = tempMap.computeIfAbsent(offerID.toString(), k -> new ArrayList());
-                List currentRow = new LinkedList();
+                List<Object> currentRow = new LinkedList<>();
                 lstRows.add(currentRow);
                 currentRow.add(bidID);
                 currentRow.add(offerID);
