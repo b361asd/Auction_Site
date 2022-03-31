@@ -365,8 +365,8 @@ public class Bid extends DBBase {
             } else {
                 boolean isModifyAndDoIt = !isCreate;
                 while (true) {
-                    BigDecimal last_price = (last == null) ? null : ((BigDecimal) last[2]);
-                    BigDecimal last_autoRebidLimit = (last == null) ? null : ((BigDecimal) last[3]);
+                    BigDecimal last_price = last == null ? null : (BigDecimal) last[2];
+                    BigDecimal last_autoRebidLimit = last == null ? null : (BigDecimal) last[3];
                     BigDecimal current_price = (BigDecimal) current[2];
                     // Check price meet offer
                     if (last == null) {
