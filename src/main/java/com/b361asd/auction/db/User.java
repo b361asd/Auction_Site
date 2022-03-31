@@ -33,7 +33,7 @@ public class User extends DBBase {
      * Select a list of Users
      *
      * @param parameters Map of all parameters
-     * @param userType 2 for rep, 3 for user
+     * @param userType See {@link com.b361asd.auction.gui.UserType}
      * @return Data for GUI rendering
      */
     public static Map selectUser(Map<String, String[]> parameters, int userType) {

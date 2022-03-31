@@ -1,5 +1,6 @@
 package com.b361asd.auction.filter;
 
+import com.b361asd.auction.gui.UserType;
 import com.b361asd.auction.servlet.IConstant;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -20,10 +21,6 @@ import java.util.Optional;
  * <p>Ex: User cannot access admin page. Rep cannot access user page.
  */
 public class LoginFilter implements Filter, IConstant {
-
-    public static final String USER_PATH = "user";
-    public static final String ADMIN_PATH = "admin";
-    public static final String REP_PATH = "rep";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {}
@@ -56,16 +53,27 @@ public class LoginFilter implements Filter, IConstant {
                                 (String) session.getAttribute(SESSION_ATTRIBUTE_USERTYPE), "");
                 boolean isAdminURL =
                         request.getRequestURI()
-                                .startsWith(request.getContextPath() + "/" + ADMIN_PATH);
+                                .startsWith(
+                                        request.getContextPath()
+                                                + "/"
+                                                + UserType.ADMIN.getUserTypePath());
                 boolean isRepURL =
                         request.getRequestURI()
-                                .startsWith(request.getContextPath() + "/" + REP_PATH);
+                                .startsWith(
+                                        request.getContextPath()
+                                                + "/"
+                                                + UserType.REP.getUserTypePath());
                 boolean isUserURL =
                         request.getRequestURI()
-                                .startsWith(request.getContextPath() + "/" + USER_PATH);
-                if (szUserType.equalsIgnoreCase("1") && isAdminURL
-                        || szUserType.equalsIgnoreCase("2") && isRepURL
-                        || szUserType.equalsIgnoreCase("3") && isUserURL) {
+                                .startsWith(
+                                        request.getContextPath()
+                                                + "/"
+                                                + UserType.USER.getUserTypePath());
+                if (szUserType.equalsIgnoreCase(UserType.ADMIN.getSessionUserType()) && isAdminURL
+                        || szUserType.equalsIgnoreCase(UserType.REP.getSessionUserType())
+                                && isRepURL
+                        || szUserType.equalsIgnoreCase(UserType.USER.getSessionUserType())
+                                && isUserURL) {
                     chain.doFilter(request, response);
                 } else {
                     // Including login.jsp

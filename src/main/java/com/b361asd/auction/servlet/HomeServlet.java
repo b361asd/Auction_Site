@@ -1,6 +1,7 @@
 package com.b361asd.auction.servlet;
 
 import com.b361asd.auction.db.User;
+import com.b361asd.auction.gui.UserType;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,15 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Dispatch Servlet based on userType:
- *
- * <ol>
- *   <li>admin
- *   <li>rep
- *   <li>user
- * </ol>
- */
+/** Dispatch Servlet based on {@link UserType}. */
 public class HomeServlet extends HttpServlet implements IConstant {
 
     /** Serial Version UID */
@@ -34,8 +27,8 @@ public class HomeServlet extends HttpServlet implements IConstant {
             throws IOException, ServletException {
         Map map;
         boolean isRegister =
-                (request.getParameter("register")) != null
-                        && (request.getParameter("register")).equalsIgnoreCase("YES");
+                request.getParameter("register") != null
+                        && request.getParameter("register").equalsIgnoreCase("YES");
         if (isRegister) {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
@@ -49,12 +42,23 @@ public class HomeServlet extends HttpServlet implements IConstant {
             String phone = request.getParameter("phoneNumber");
             map =
                     User.doAddUser(
-                            username, password, email, firstName, lastName, street, city, state,
-                            zipCode, phone, 3);
+                            username,
+                            password,
+                            email,
+                            firstName,
+                            lastName,
+                            street,
+                            city,
+                            state,
+                            zipCode,
+                            phone,
+                            UserType.USER.getDatabaseUserType());
             // Register successful also means logged in.
             if ((Boolean) map.get(DATA_NAME_STATUS)) {
                 request.getSession().setAttribute(SESSION_ATTRIBUTE_USER, username);
-                request.getSession().setAttribute(SESSION_ATTRIBUTE_USERTYPE, "3");
+                request.getSession()
+                        .setAttribute(
+                                SESSION_ATTRIBUTE_USERTYPE, UserType.USER.getSessionUserType());
                 request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_FNAME, firstName);
                 request.getSession().setAttribute(SESSION_ATTRIBUTE_USER_LNAME, lastName);
             }
@@ -92,13 +96,13 @@ public class HomeServlet extends HttpServlet implements IConstant {
         if ((Boolean) map.get(DATA_NAME_STATUS)) {
             String szUserType =
                     request.getSession() == null
-                            ? "3"
+                            ? UserType.USER.getSessionUserType()
                             : (String)
                                     request.getSession().getAttribute(SESSION_ATTRIBUTE_USERTYPE);
-            if (szUserType.equals("1")) {
+            if (szUserType.equals(UserType.ADMIN.getSessionUserType())) {
                 map.put(DATA_NAME_MESSAGE, map.get(DATA_NAME_MESSAGE) + " Admin Login!");
                 request.getRequestDispatcher("/admin/homeAdmin.jsp").forward(request, response);
-            } else if (szUserType.equals("2")) {
+            } else if (szUserType.equals(UserType.REP.getSessionUserType())) {
                 map.put(DATA_NAME_MESSAGE, map.get(DATA_NAME_MESSAGE) + " Rep Login!");
                 request.getRequestDispatcher("/rep/homeRep.jsp").forward(request, response);
             } else {

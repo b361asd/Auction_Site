@@ -1,4 +1,5 @@
 import com.b361asd.auction.db.User;
+import com.b361asd.auction.gui.UserType;
 import com.b361asd.auction.servlet.IConstant;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class UserTest {
                         "NJ",
                         "01010",
                         "39239033",
-                        3);
+                        UserType.USER.getDatabaseUserType());
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
@@ -48,7 +49,7 @@ public class UserTest {
         parameters.put("lastname", new String[] {"Lnuser"});
         parameters.put("address", new String[] {"123 Main St., Nowhere Town, NJ 56789"});
         parameters.put("phone", new String[] {"2365678909"});
-        Map map = User.modifyUser(parameters, 3);
+        Map map = User.modifyUser(parameters, UserType.USER.getDatabaseUserType());
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
