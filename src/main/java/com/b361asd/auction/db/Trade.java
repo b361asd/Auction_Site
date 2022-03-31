@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -137,14 +138,16 @@ public class Trade extends DBBase {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState());
+                    MessageFormat.format(
+                            "ERROR={0}, SQL_STATE={1}", e.getErrorCode(), e.getSQLState()));
             tableData.setDescription((String) output.get(DATA_NAME_MESSAGE));
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
+                    MessageFormat.format(
+                            "ERROR=ClassNotFoundException, SQL_STATE={0}", e.getMessage()));
             tableData.setDescription((String) output.get(DATA_NAME_MESSAGE));
             e.printStackTrace();
         }
@@ -192,14 +195,16 @@ public class Trade extends DBBase {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState());
+                    MessageFormat.format(
+                            "ERROR={0}, SQL_STATE={1}", e.getErrorCode(), e.getSQLState()));
             tableData.setDescription((String) output.get(DATA_NAME_MESSAGE));
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
+                    MessageFormat.format(
+                            "ERROR=ClassNotFoundException, SQL_STATE={0}", e.getMessage()));
             tableData.setDescription((String) output.get(DATA_NAME_MESSAGE));
             e.printStackTrace();
         }
@@ -252,31 +257,29 @@ public class Trade extends DBBase {
             output.put(DATA_NAME_MESSAGE, "OK");
             if (isBestSelling) {
                 tableData.setDescription(
-                        "Top "
-                                + limit
-                                + " Best Selling Item(s) For The Last "
-                                + lookBackDays
-                                + " Days");
+                        MessageFormat.format(
+                                "Top {0} Best Selling Item(s) For The Last {1} Days",
+                                limit, lookBackDays));
             } else {
                 tableData.setDescription(
-                        "Most Recent "
-                                + limit
-                                + " Trades, Limited For The Last "
-                                + lookBackDays
-                                + " Days");
+                        MessageFormat.format(
+                                "Most Recent {0} Trades, Limited For The Last {1} Days",
+                                limit, lookBackDays));
             }
         } catch (SQLException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState());
+                    MessageFormat.format(
+                            "ERROR={0}, SQL_STATE={1}", e.getErrorCode(), e.getSQLState()));
             tableData.setDescription((String) output.get(DATA_NAME_MESSAGE));
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
+                    MessageFormat.format(
+                            "ERROR=ClassNotFoundException, SQL_STATE={0}", e.getMessage()));
             tableData.setDescription((String) output.get(DATA_NAME_MESSAGE));
             e.printStackTrace();
         }
@@ -327,23 +330,23 @@ public class Trade extends DBBase {
             output.put(DATA_NAME_STATUS, true);
             output.put(DATA_NAME_MESSAGE, "OK");
             tableData.setDescription(
-                    "My Most Recent "
-                            + limit
-                            + " Trades, Limited For The Last "
-                            + lookBackDays
-                            + " Days");
+                    MessageFormat.format(
+                            "My Most Recent {0} Trades, Limited For The Last {1} Days",
+                            limit, lookBackDays));
         } catch (SQLException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState());
+                    MessageFormat.format(
+                            "ERROR={0}, SQL_STATE={1}", e.getErrorCode(), e.getSQLState()));
             tableData.setDescription((String) output.get(DATA_NAME_MESSAGE));
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
+                    MessageFormat.format(
+                            "ERROR=ClassNotFoundException, SQL_STATE={0}", e.getMessage()));
             tableData.setDescription((String) output.get(DATA_NAME_MESSAGE));
             e.printStackTrace();
         }

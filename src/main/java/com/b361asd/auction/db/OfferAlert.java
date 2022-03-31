@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -54,13 +55,15 @@ public class OfferAlert extends DBBase {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR=" + e.getErrorCode() + ", SQL_STATE=" + e.getSQLState());
+                    MessageFormat.format(
+                            "ERROR={0}, SQL_STATE={1}", e.getErrorCode(), e.getSQLState()));
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
+                    MessageFormat.format(
+                            "ERROR=ClassNotFoundException, SQL_STATE={0}", e.getMessage()));
             e.printStackTrace();
         }
     }
@@ -109,23 +112,17 @@ public class OfferAlert extends DBBase {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR: "
-                            + e.getErrorCode()
-                            + ", SQL_STATE: "
-                            + e.getSQLState()
-                            + ", DETAILS: "
-                            + exceptionToString(e));
+                    MessageFormat.format(
+                            "ERROR: {0}, SQL_STATE: {1}, DETAILS: {2}",
+                            e.getErrorCode(), e.getSQLState(), exceptionToString(e)));
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR: "
-                            + "ClassNotFoundException"
-                            + ", SQL_STATE: "
-                            + e.getMessage()
-                            + ", DETAILS: "
-                            + exceptionToString(e));
+                    MessageFormat.format(
+                            "ERROR: ClassNotFoundException, SQL_STATE: {0}, DETAILS: {1}",
+                            e.getMessage(), exceptionToString(e)));
             e.printStackTrace();
         }
         return output;
@@ -156,25 +153,20 @@ public class OfferAlert extends DBBase {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR: ErrorCode="
-                            + e.getErrorCode()
-                            + ", SQL_STATE="
-                            + e.getSQLState()
-                            + ", Message="
-                            + e.getMessage()
-                            + ", "
-                            + dumpParamMap(parameters));
+                    MessageFormat.format(
+                            "ERROR: ErrorCode={0}, SQL_STATE={1}, Message={2}, {3}",
+                            e.getErrorCode(),
+                            e.getSQLState(),
+                            e.getMessage(),
+                            dumpParamMap(parameters)));
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR: Code="
-                            + "ClassNotFoundException"
-                            + ", Message="
-                            + e.getMessage()
-                            + ", "
-                            + dumpParamMap(parameters));
+                    MessageFormat.format(
+                            "ERROR: Code=ClassNotFoundException, Message={0}, {1}",
+                            e.getMessage(), dumpParamMap(parameters)));
             e.printStackTrace();
         }
     }

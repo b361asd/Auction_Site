@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -65,13 +66,15 @@ public class CategoryAndField extends DBBase {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR: " + e.getErrorCode() + ", SQL_STATE: " + e.getSQLState());
+                    MessageFormat.format(
+                            "ERROR: {0}, SQL_STATE: {1}", e.getErrorCode(), e.getSQLState()));
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR: " + "ClassNotFoundException" + ", SQL_STATE: " + e.getMessage());
+                    MessageFormat.format(
+                            "ERROR: ClassNotFoundException, SQL_STATE: {0}", e.getMessage()));
             e.printStackTrace();
         }
         return output;

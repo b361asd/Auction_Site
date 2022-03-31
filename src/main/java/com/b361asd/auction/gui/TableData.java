@@ -2,6 +2,7 @@ package com.b361asd.auction.gui;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -91,7 +92,6 @@ public class TableData {
             if (lstRows != null) {
                 for (Object one : lstRows) {
                     List lst = (List) one;
-                    //
                     TableData tableData = (TableData) lst.get(lst.size() - 1);
                     if (tableData != null) {
                         tableData.sortRowPerHeader(
@@ -108,7 +108,7 @@ public class TableData {
                                         ((List) o).get(index) == null
                                                 ? ""
                                                 : ((List) o).get(index).toString().trim());
-                boolean isTheSame = (indexSorted == index);
+                boolean isTheSame = indexSorted == index;
                 if (isTheSame) {
                     if (normalSorted) {
                         lstRows.sort(comparatorNorm.reversed());
@@ -126,11 +126,9 @@ public class TableData {
     }
 
     public String printDescriptionForTable(boolean addOne) {
-        return "<th colspan='"
-                + (colCount() + (addOne ? 1 : 0))
-                + "'>"
-                + Helper.escapeHTML(description)
-                + "</th>";
+        return MessageFormat.format(
+                "<th colspan=''{0}''>{1}</th>",
+                colCount() + (addOne ? 1 : 0), Helper.escapeHTML(description));
     }
 
     public String printHeaderForTable() {

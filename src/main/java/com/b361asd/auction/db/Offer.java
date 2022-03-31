@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -432,18 +433,16 @@ public class Offer extends DBBase {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR="
-                            + e.getErrorCode()
-                            + ", SQL_STATE="
-                            + e.getSQLState()
-                            + ", SQL="
-                            + (sql));
+                    MessageFormat.format(
+                            "ERROR={0}, SQL_STATE={1}, SQL={2}",
+                            e.getErrorCode(), e.getSQLState(), sql));
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR=" + "ClassNotFoundException" + ", SQL_STATE=" + e.getMessage());
+                    MessageFormat.format(
+                            "ERROR=ClassNotFoundException, SQL_STATE={0}", e.getMessage()));
             e.printStackTrace();
         }
         return output;
@@ -487,7 +486,9 @@ public class Offer extends DBBase {
                     if (minPrice.compareTo(new BigDecimal(0)) > 0
                             && minPrice.compareTo(initPrice) < 0) {
                         throw new Exception(
-                                "minPrice is invalid: " + minPrice + " less than " + initPrice);
+                                MessageFormat.format(
+                                        "minPrice is invalid: {0} less than {1}",
+                                        minPrice, initPrice));
                     }
                     pStmtInsertOfferOrModify.setString(1, offerID);
                     pStmtInsertOfferOrModify.setString(
@@ -554,25 +555,20 @@ public class Offer extends DBBase {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR: ErrorCode="
-                            + e.getErrorCode()
-                            + ", SQL_STATE="
-                            + e.getSQLState()
-                            + ", Message="
-                            + e.getMessage()
-                            + ", "
-                            + dumpParamMap(parameters));
+                    MessageFormat.format(
+                            "ERROR: ErrorCode={0}, SQL_STATE={1}, Message={2}, {3}",
+                            e.getErrorCode(),
+                            e.getSQLState(),
+                            e.getMessage(),
+                            dumpParamMap(parameters)));
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR: Code="
-                            + "ClassNotFoundException"
-                            + ", Message="
-                            + e.getMessage()
-                            + ", "
-                            + dumpParamMap(parameters));
+                    MessageFormat.format(
+                            "ERROR: Code=ClassNotFoundException, Message={0}, {1}",
+                            e.getMessage(), dumpParamMap(parameters)));
             e.printStackTrace();
         } catch (Exception e) {
             output.put(DATA_NAME_STATUS, false);
@@ -662,25 +658,20 @@ public class Offer extends DBBase {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR: ErrorCode="
-                            + e.getErrorCode()
-                            + ", SQL_STATE="
-                            + e.getSQLState()
-                            + ", Message="
-                            + e.getMessage()
-                            + ", "
-                            + dumpParamMap(parameters));
+                    MessageFormat.format(
+                            "ERROR: ErrorCode={0}, SQL_STATE={1}, Message={2}, {3}",
+                            e.getErrorCode(),
+                            e.getSQLState(),
+                            e.getMessage(),
+                            dumpParamMap(parameters)));
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
-                    "ERROR: Code="
-                            + "ClassNotFoundException"
-                            + ", Message="
-                            + e.getMessage()
-                            + ", "
-                            + dumpParamMap(parameters));
+                    MessageFormat.format(
+                            "ERROR: Code=ClassNotFoundException, Message={0}, {1}",
+                            e.getMessage(), dumpParamMap(parameters)));
             e.printStackTrace();
         }
         return output;
