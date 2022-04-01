@@ -40,10 +40,10 @@
     if (action.equals("modifyBid")) {
         Map dataModify = Bid.doCreateOrModifyBid(null, request.getParameterMap(), false);
         //
-        if ((Boolean) dataModify.get(DATA_NAME_STATUS)) {
+        if ((Boolean) dataModify.get(IConstant.DATA_NAME_STATUS)) {
             message = "Bid Posted.";
         } else {
-            message = "Error in Posting Bid: " + dataModify.get(DATA_NAME_MESSAGE);
+            message = "Error in Posting Bid: " + dataModify.get(IConstant.DATA_NAME_MESSAGE);
         }
     }
     //
@@ -53,7 +53,7 @@
     //
     BigDecimal min = Bid.getMinForModifyBid(request.getParameterMap());
     //
-    dataTable = (TableData) (data.get(DATA_NAME_DATA));
+    dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
     //
     request.setAttribute("dataTable", dataTable);
     %>

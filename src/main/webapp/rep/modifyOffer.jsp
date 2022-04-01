@@ -37,9 +37,9 @@
     //
     data = Offer.doSearchOfferByID(temps[0], true);
     //
-    request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+    request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     //
-    tableData = (TableData) (data.get(DATA_NAME_DATA));
+    tableData = (TableData) (data.get(IConstant.DATA_NAME_DATA));
     //
     if (dataModify != null) {
         boolean _status = Helper.getStatus(dataModify);

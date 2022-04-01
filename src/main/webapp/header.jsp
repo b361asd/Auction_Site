@@ -1,11 +1,11 @@
+<%@ page contentType="text/html;charset=UTF-8"%>
+<!DOCTYPE html>
+
 <%@ page import="com.b361asd.auction.db.DBBase"%>
 <%@ page import="com.b361asd.auction.gui.UserType"%>
 <%@ page import="com.b361asd.auction.servlet.IConstant"%>
 <%@ page import="java.text.MessageFormat"%>
 <%@ page import="java.util.Map"%>
-
-<%@ page contentType="text/html;charset=UTF-8"%>
-<!DOCTYPE html>
 
 <script type="text/javascript">
     function onClickHeader(value) {
