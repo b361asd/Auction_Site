@@ -37,7 +37,7 @@ public class User extends DBBase {
      * @return Data for GUI rendering
      */
     public static Map selectUser(Map<String, String[]> parameters, int userType) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
         String in_username =
                 parameters == null ? "" : getStringFromParamMap("username", parameters);
@@ -127,7 +127,7 @@ public class User extends DBBase {
      * @param isActivate True to activate, false to deactivate it
      */
     public static void activateUser(Map<String, String[]> parameters, boolean isActivate) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         String username = getStringFromParamMap("username", parameters);
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt =
@@ -175,7 +175,7 @@ public class User extends DBBase {
      * @return Data for GUI rendering
      */
     public static Map modifyUser(Map<String, String[]> parameters, int userType) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
 
         String username = getStringFromParamMap("username", parameters);
         String password = getStringFromParamMap("password", parameters);
@@ -261,7 +261,7 @@ public class User extends DBBase {
             String zipCode,
             String phone,
             int usertype) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         if (email == null) {
             email = " ";
         }
@@ -343,7 +343,7 @@ public class User extends DBBase {
      * @return Data for GUI rendering
      */
     public static Map doVerifyLogin(String userID, String pwd) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt = con.prepareStatement(SQL_USER_AUTH)) {
             preparedStmt.setString(1, userID);

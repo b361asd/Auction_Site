@@ -132,7 +132,7 @@ public class Bid extends DBBase {
             FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, offerID, null);
             sql = sb.toString();
         }
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
 
         // offerID -> Bids(in List)
         Map<String, List> tempMap = new HashMap<>();
@@ -199,7 +199,7 @@ public class Bid extends DBBase {
                 dataTableOffer =
                         new TableData(
                                 Offer.lstHeader_OfferDefault,
-                                new LinkedList(),
+                                new LinkedList<>(),
                                 Offer.colSeq_OfferDefault);
             }
             if (_listActivity) {
@@ -259,7 +259,7 @@ public class Bid extends DBBase {
      */
     public static Map doCreateOrModifyBid(
             String userID, Map<String, String[]> parameters, boolean isCreate) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
 
         String offerId;
         String bidID;
@@ -510,7 +510,7 @@ public class Bid extends DBBase {
      * @return Data for GUI rendering
      */
     public static Map cancelBid(Map<String, String[]> parameters) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         String bidID = getStringFromParamMap("bidID", parameters);
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt =

@@ -60,7 +60,7 @@ public class Trade extends DBBase {
             boolean isBuyer,
             boolean isSeller,
             boolean isUser) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
         List<String> lstHeader = null;
         if (isTotal) {
@@ -161,7 +161,7 @@ public class Trade extends DBBase {
      * @return Data for GUI rendering
      */
     public static Map selectGroupSimilar(int lookBackDays) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
         TableData tableData = new TableData(lstHeader_tradeBySimilar, lstRows, colSeq_tradeBy);
         output.put(DATA_NAME_DATA, tableData);
@@ -221,7 +221,7 @@ public class Trade extends DBBase {
      */
     public static Map selectBestSellingMostRecentItems(
             int lookBackDays, int limit, boolean isBestSelling) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
         TableData tableData =
                 new TableData(
@@ -295,7 +295,7 @@ public class Trade extends DBBase {
      * @return Data for GUI rendering
      */
     public static Map selectMyTrade(String userName, int lookBackDays, int limit) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
         TableData tableData =
                 new TableData(

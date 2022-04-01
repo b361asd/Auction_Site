@@ -285,7 +285,7 @@ public class Offer extends DBBase {
      * @return Data for GUI rendering
      */
     private static Map doSearchOfferInternal(String sql, boolean showAll) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         List<String> lstHeader = new LinkedList<>();
         List<Object> lstRows = new LinkedList<>();
 
@@ -458,7 +458,7 @@ public class Offer extends DBBase {
      */
     public static Map doCreateOrModifyOffer(
             String userID, Map<String, String[]> parameters, boolean isCreate) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         String offerID;
         String[] temps = null;
         if (isCreate) {
@@ -641,7 +641,7 @@ public class Offer extends DBBase {
      */
     public static Map doCancelOffer(Map<String, String[]> parameters) {
         String offerID = getStringFromParamMap("offerid", parameters);
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         try (Connection con = getConnection();
                 PreparedStatement pStmtCancelOffer = con.prepareStatement(SQL_OFFER_CANCEL)) {
             pStmtCancelOffer.setString(1, offerID);

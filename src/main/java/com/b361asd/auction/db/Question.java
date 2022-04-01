@@ -60,7 +60,7 @@ public class Question extends DBBase {
         }
         addDatetimeConditionLookBack(sb, "questionDate", lookbackdays);
         String sql = sb.toString();
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
         TableData tableData = new TableData(lstHeader_question, lstRows, colSeq_question);
         output.put(DATA_NAME_DATA, tableData);
@@ -117,7 +117,7 @@ public class Question extends DBBase {
      * @return Data for GUI rendering
      */
     public static Map insertQuestion(String userID, String question) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt = con.prepareStatement(SQL_QUESTION_INSERT)) {
             preparedStmt.setString(1, getUUID());
@@ -160,7 +160,7 @@ public class Question extends DBBase {
      * @param repID Rep ID
      */
     public static void answerQuestion(String questionID, String answer, String repID) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt =
                         con.prepareStatement(SQL_QUESTION_UPDATE_WITH_ANSWER)) {
@@ -201,7 +201,7 @@ public class Question extends DBBase {
      * @return Data for GUI rendering
      */
     public static Map retrieveOpenQuestion() {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new LinkedList<>();
         Helper.setData(output, lstRows);
         try (Connection con = getConnection();

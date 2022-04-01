@@ -27,7 +27,7 @@ public class Alert extends DBBase {
      * @return Data for GUI rendering
      */
     public static Map selectAlert(String userID) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt = con.prepareStatement(SQL_ALERT_SELECT)) {
@@ -80,7 +80,7 @@ public class Alert extends DBBase {
      * @param parameters Map containing alertID to deletes
      */
     public static void deleteAlert(Map<String, String[]> parameters) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         String alertID = getStringFromParamMap("alertID", parameters);
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt = con.prepareStatement(SQL_ALERT_DELETE)) {

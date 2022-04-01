@@ -33,7 +33,7 @@ public class OfferAlert extends DBBase {
      */
     public static void doGenerateNewOfferAlertCriterion(
             String userID, Map<String, String[]> parameters) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         String criterionName = getStringFromParamMap("criterionName", parameters);
         if (criterionName.length() == 0) {
             criterionName = "Unnamed";
@@ -76,7 +76,7 @@ public class OfferAlert extends DBBase {
      * @return Data for GUI rendering
      */
     public static Map selectOfferAlert(String userName, boolean isUser) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
         TableData tableData = new TableData(lstHeader_OfferAlert, lstRows, colSeq_OfferAlert);
         output.put(DATA_NAME_DATA, tableData);
@@ -134,7 +134,7 @@ public class OfferAlert extends DBBase {
      * @param parameters Map of all parameters
      */
     public static void deleteOfferAlert(Map<String, String[]> parameters) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         String criterionID = getStringFromParamMap("criterionID", parameters);
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt =

@@ -24,7 +24,7 @@ public class CategoryAndField extends DBBase {
      * @return Data for GUI rendering
      */
     public static Map getCategoryField(String categoryNamesFromParam) {
-        Map output = new HashMap();
+        Map<String, Object> output = new HashMap<>();
         List<Field> lstField = new ArrayList<>();
         List<Category> lstCategory = new ArrayList<>();
         output.put(DATA_CATEGORY_LIST, lstCategory);
