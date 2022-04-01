@@ -18,19 +18,16 @@
     <%
     Map data = null;
     TableData dataTable;
-    //
     String _userType = (String) session.getAttribute(IConstant.SESSION_ATTRIBUTE_USERTYPE);
-    int targetUsrType = 3;
-    if (_userType.equalsIgnoreCase("1")) {
-        targetUsrType = 2;
+    int targetUsrType = UserType.USER.getDatabaseUserType();
+    if (_userType.equalsIgnoreCase(UserType.ADMIN.getSessionUserType())) {
+        targetUsrType = UserType.REP.getDatabaseUserType();
     }
-    //
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equals("updateUser")) {
         data = User.selectUser(request.getParameterMap(), targetUsrType);
         request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     }
-    //
     dataTable = (TableData) (Objects.requireNonNull(data).get(IConstant.DATA_NAME_DATA));
     %>
 
