@@ -40,7 +40,7 @@
     Map data = null;
     TableData dataTable;
     //
-    String _userType = (String) session.getAttribute(SESSION_ATTRIBUTE_USERTYPE);
+    String _userType = (String) session.getAttribute(IConstant.SESSION_ATTRIBUTE_USERTYPE);
     int targetUsrType = 3;
     if (_userType.equalsIgnoreCase("1")) {
         targetUsrType = 2;
@@ -48,9 +48,9 @@
     //
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equals("sort")) {
-        data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
+        data = (Map) request.getSession().getAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP);
         if (data != null) {
-            dataTable = (TableData) (data.get(DATA_NAME_DATA));
+            dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
             //
             if (dataTable != null) {
         String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
@@ -72,10 +72,10 @@
     //
     if (data == null) {
         data = User.selectUser(null, targetUsrType);
-        request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+        request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     }
     //
-    dataTable = (TableData) (data.get(DATA_NAME_DATA));
+    dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
     %>
 
     <table>

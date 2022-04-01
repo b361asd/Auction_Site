@@ -19,10 +19,10 @@
     //
     //
     String message;
-    if ((Boolean) data.get(DATA_NAME_STATUS)) {
+    if ((Boolean) data.get(IConstant.DATA_NAME_STATUS)) {
         message = "Question Posted.";
     } else {
-        message = "Error in Posting Question: " + data.get(DATA_NAME_MESSAGE);
+        message = "Error in Posting Question: " + data.get(IConstant.DATA_NAME_MESSAGE);
     }
     %>
 

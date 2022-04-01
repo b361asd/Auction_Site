@@ -20,9 +20,9 @@
     //
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equals("sort")) {
-        data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
+        data = (Map) request.getSession().getAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP);
         //
-        dataTable = (TableData) (data.get(DATA_NAME_DATA));
+        dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
         //
         String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
         dataTable.sortRowPerHeader(sort);
@@ -40,9 +40,9 @@
     //
     if (data == null) {
         data = Trade.selectBestSellingMostRecentItems(lookbackdays, limit, false);
-        request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+        request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
         //
-        dataTable = (TableData) (data.get(DATA_NAME_DATA));
+        dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
     }
     %>
 

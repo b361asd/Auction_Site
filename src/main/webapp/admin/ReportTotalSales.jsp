@@ -20,10 +20,10 @@
     //
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equals("sort")) {
-        data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
+        data = (Map) request.getSession().getAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP);
         //
         if (data != null) {
-            dataTable = (TableData) (data.get(DATA_NAME_DATA));
+            dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
             if (dataTable != null) {
                 String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
                 dataTable.sortRowPerHeader(sort);
@@ -35,10 +35,10 @@
     //
     if (data == null) {
         data = Trade.summaryBy(-1, true, false, false, false, false);
-        request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+        request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     }
     //
-    dataTable = (TableData) (data.get(DATA_NAME_DATA));
+    dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
     %>
 
     <%@include file="../header.jsp"%>

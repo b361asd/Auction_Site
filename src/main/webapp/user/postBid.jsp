@@ -20,9 +20,9 @@
     //
     Map data = Offer.doSearchOfferByID(offerid, false);
     //
-    request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+    request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     //
-    TableData dataTable = (TableData) (data.get(DATA_NAME_DATA));
+    TableData dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
     %>
 
 

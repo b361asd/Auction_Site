@@ -18,10 +18,10 @@
     Map data = Offer.doCreateOrModifyOffer(userID, request.getParameterMap(), true);
     //
     String message;
-    if ((Boolean) data.get(DATA_NAME_STATUS)) {
+    if ((Boolean) data.get(IConstant.DATA_NAME_STATUS)) {
         message = "Offer Posted.";
     } else {
-        message = "Error in Posting Offer: " + data.get(DATA_NAME_MESSAGE);
+        message = "Error in Posting Offer: " + data.get(IConstant.DATA_NAME_MESSAGE);
     }
     %>
 

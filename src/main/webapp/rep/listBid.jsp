@@ -29,14 +29,14 @@
         String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
         if (action.equals("repSearchBid")) {
             data = Bid.searchBid(request.getParameterMap(), null, null);
-            request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+            request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
         } else if (action.equals("repBrowseBid")) {
             data = Bid.searchBid(request.getParameterMap(), null, null);
-            request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+            request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
         } else {
-            data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
+            data = (Map) request.getSession().getAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP);
             if (data != null) {
-                dataTable = (TableData) (data.get(DATA_NAME_DATA));
+                dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
             }
             //
             if (dataTable == null) {
@@ -47,7 +47,7 @@
         }
         //
         //
-        dataTable = (TableData) (Objects.requireNonNull(data).get(DATA_NAME_DATA));
+        dataTable = (TableData) (Objects.requireNonNull(data).get(IConstant.DATA_NAME_DATA));
         //
         request.setAttribute("dataTable", dataTable);
         %>

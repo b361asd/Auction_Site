@@ -16,13 +16,13 @@
     <%
     Map data = Bid.cancelBid(request.getParameterMap());
     //
-    request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+    request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     //
     String message;
-    if ((Boolean) data.get(DATA_NAME_STATUS)) {
+    if ((Boolean) data.get(IConstant.DATA_NAME_STATUS)) {
         message = "Bid Cancelled.";
     } else {
-        message = "Error in Cancelling Bid: " + data.get(DATA_NAME_MESSAGE);
+        message = "Error in Cancelling Bid: " + data.get(IConstant.DATA_NAME_MESSAGE);
     }
     %>
 

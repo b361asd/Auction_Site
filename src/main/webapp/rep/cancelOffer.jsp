@@ -16,13 +16,13 @@
     <%
     Map data = Offer.doCancelOffer(request.getParameterMap());
     //
-    request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+    request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     //
     String message;
-    if ((Boolean) data.get(DATA_NAME_STATUS)) {
+    if ((Boolean) data.get(IConstant.DATA_NAME_STATUS)) {
         message = "Offer Cancelled.";
     } else {
-        message = "Error in Cancelling Offer: " + data.get(DATA_NAME_MESSAGE);
+        message = "Error in Cancelling Offer: " + data.get(IConstant.DATA_NAME_MESSAGE);
     }
     %>
 

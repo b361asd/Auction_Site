@@ -27,13 +27,13 @@
     //
     Map data = User.doAddUser(username, password, email, firstName, lastName, street, city, state, zipCode, phone, 2);
     //
-    session.setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
+    session.setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     //
     String message;
-    if ((Boolean) data.get(DATA_NAME_STATUS)) {
+    if ((Boolean) data.get(IConstant.DATA_NAME_STATUS)) {
         message = "Rep registered.";
     } else {
-        message = "Error in register rep: " + data.get(DATA_NAME_MESSAGE);
+        message = "Error in register rep: " + data.get(IConstant.DATA_NAME_MESSAGE);
     }
     ;
     %>
