@@ -5,16 +5,12 @@
 
 <table>
     <tbody>
-
         <%
-        //User Search Offer
-        //User Create Alert Criterion
-        //Rep Search Offer
-        //
+        // User Search Offer
+        // User Create Alert Criterion
+        // Rep Search Offer
         Map data = null;
-        //
         List lstCategory = (List) data.get(CategoryAndField.DATA_CATEGORY_LIST);
-        //
         String currUrl = request.getRequestURL().toString();
         if (currUrl.toUpperCase().contains("createOfferAlertCriterion".toUpperCase())) {
             out.println("<tr>");
@@ -26,7 +22,6 @@
             out.println("</td>");
             out.println("</tr>");
         }
-        //
         out.println("<tr>");
         out.println("<td align='left'>");
         out.println("categoryName");
@@ -64,14 +59,12 @@
         out.println("<input type='text' name='descriptionVal'/>");
         out.println("</td>");
         out.println("</tr>");
-        //
         List lstField = (List) data.get(CategoryAndField.DATA_FIELD_LIST);
         StringBuilder lstFieldIDs = null;
         for (Object o : lstField) {
             String fieldName = ((CategoryAndField.Field) o).getFieldName();
             int fieldID = ((CategoryAndField.Field) o).getFieldID();
             int fieldType = ((CategoryAndField.Field) o).getFieldType();
-            //
             if (lstFieldIDs == null) {
                 lstFieldIDs = new StringBuilder("" + fieldID);
             } else {
@@ -88,9 +81,8 @@
                 out.println("<input type='text' name='fieldval1_" + fieldID + "'/>");
                 out.println("</td>");
                 out.println("</tr>");
-            }
-            // Integer
-            else if (fieldType == 2) {
+            } else if (fieldType == 2) {
+                // Integer
                 out.println("<tr>");
                 out.println("<td align='left'>");
                 out.println(fieldName);
@@ -101,9 +93,8 @@
                 out.println("<input type='number' name = 'fieldval2_" + fieldID + "' / >");
                 out.println("</td>");
                 out.println("</tr>");
-            }
-            // Boolean
-            else {
+            } else {
+                // Boolean
                 out.println("<tr>");
                 out.println("<td align='left'>");
                 out.println(fieldName);
@@ -114,9 +105,7 @@
                 out.println("</tr>");
             }
         }
-        //
         %>
-
     </tbody>
 </table>
 
