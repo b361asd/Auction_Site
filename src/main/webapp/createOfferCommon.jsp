@@ -2,33 +2,36 @@
 <%@ page import="com.b361asd.auction.gui.Helper"%>
 <%@ page import="com.b361asd.auction.gui.HelperDatetime"%>
 <%@ page import="com.b361asd.auction.gui.TableData"%>
+<%@ page import="com.b361asd.auction.gui.UserType"%>
+<%@ page import="java.text.MessageFormat"%>
 <%@ page import="java.util.List"%>
 
 <%
-List lstCategory = null;
-List lstField = null;
-TableData dataTable = null; //IN  from Modify order
-String offeridcategorynameuser = null; //IN  from Modify order
-//
-StringBuilder lstFieldIDs = null; //OUT from Modify order
-//
+List<CategoryAndField.Category> lstCategory = null;
+List<CategoryAndField.Field> lstField = null;
+TableData dataTable = null; // IN  from Modify order
+String offeridcategorynameuser = null; // IN  from Modify order
+StringBuilder lstFieldIDs = null; // OUT from Modify order
 String userType = (String) request.getSession().getAttribute("userType");
 %>
 
 <%
 out.println("<table>");
 out.println("<tbody>");
-//
-if (userType.equalsIgnoreCase("3")) {
+if (userType.equalsIgnoreCase(UserType.USER.getSessionUserType())) {
     out.println("<tr>");
     out.println("<td align='left'>categoryName");
     out.println("</td>");
     out.println("<td align='left'>");
-    out.println("<select name='categoryName' onchange='onCategoryChange(this.parentElement);'>");
-    for (Object o : lstCategory) {
-        CategoryAndField.Category temp = (CategoryAndField.Category) o;
-        out.println("<option " + (temp.isCurr() ? "selected " : "") + "value=\"" + temp.getCategoryName() + "\">"
-        + temp.getCategoryName() + "</option>");
+    out.println(
+            "<select name='categoryName' onchange='onCategoryChange(this.parentElement);'>");
+    for (CategoryAndField.Category category : lstCategory) {
+        out.println(
+                MessageFormat.format(
+                        "<option {0}value=\"{1}\">{2}</option>",
+                        category.isCurr() ? "selected " : "",
+                        category.getCategoryName(),
+                        category.getCategoryName()));
     }
     out.println("</select>");
     out.println("</td>");
@@ -73,12 +76,10 @@ if (userType.equalsIgnoreCase("3")) {
     out.println("<input type='text' name='description'>");
     out.println("</td>");
     out.println("</tr>");
-    //
-    for (Object o : lstField) {
-        String fieldName = ((CategoryAndField.Field) o).getFieldName();
-        int fieldID = ((CategoryAndField.Field) o).getFieldID();
-        int fieldType = ((CategoryAndField.Field) o).getFieldType();
-        //
+    for (CategoryAndField.Field field : lstField) {
+        String fieldName = field.getFieldName();
+        int fieldID = field.getFieldID();
+        int fieldType = field.getFieldType();
         // String
         if (fieldType == 1) {
             out.println("<tr>");
@@ -88,9 +89,8 @@ if (userType.equalsIgnoreCase("3")) {
             out.println("<input type='text' name='fieldID_" + fieldID + "' />");
             out.println("</td>");
             out.println("</tr>");
-        }
-        // Integer
-        else if (fieldType == 2) {
+        } else if (fieldType == 2) {
+            // Integer
             out.println("<tr>");
             out.println("<td align='left'>" + fieldName);
             out.println("</td>");
@@ -98,9 +98,8 @@ if (userType.equalsIgnoreCase("3")) {
             out.println("<input type='number' name = 'fieldID_" + fieldID + "' />");
             out.println("</td>");
             out.println("</tr>");
-        }
-        // Boolean
-        else {
+        } else {
+            // Boolean
             out.println("<tr>");
             out.println("<td align='left'>" + fieldName);
             out.println("</td>");
@@ -110,12 +109,14 @@ if (userType.equalsIgnoreCase("3")) {
             out.println("</tr>");
         }
     }
-    //
     out.println("<tr>");
     out.println("<td align='left'>End date");
     out.println("</td>");
     out.println("<td align='left'>");
-    out.println("<input type='datetime-local' name='endDate' value='" + HelperDatetime.getDatetimeSZ(7) + "' />");
+    out.println(
+            MessageFormat.format(
+                    "<input type=''datetime-local'' name=''endDate'' value=''{0}'' />",
+                    HelperDatetime.getDatetimeSZ(7)));
     out.println("</td>");
     out.println("</tr>");
 } else {
@@ -124,12 +125,10 @@ if (userType.equalsIgnoreCase("3")) {
     out.println("</td>");
     out.println("<td align='left'>");
     String minPrice;
-    
     minPrice = Helper.escapeHTML(dataTable.getOneCell(0, "minPrice").toString());
     if (minPrice.startsWith("-1")) {
         minPrice = "";
     }
-    
     out.println("<input type='Number' name='minPrice' value='" + minPrice + "' />");
     out.println("</td>");
     out.println("</tr>");
@@ -138,7 +137,9 @@ if (userType.equalsIgnoreCase("3")) {
     out.println("<td align='left'>conditionCode");
     out.println("</td>");
     out.println("<td align='left'>");
-    out.println(Helper.getConditionCodeSelection("conditionCode", dataTable.getOneCell(0, "Condition").toString()));
+    out.println(
+            Helper.getConditionCodeSelection(
+                    "conditionCode", dataTable.getOneCell(0, "Condition").toString()));
     out.println("</td>");
     out.println("</tr>");
     //
@@ -146,16 +147,16 @@ if (userType.equalsIgnoreCase("3")) {
     out.println("<td align='left'>Description");
     out.println("</td>");
     out.println("<td align='left'>");
-    out.println("<input type='text' name='description' value='"
-    + Helper.escapeHTML(dataTable.getOneCell(0, "Desc").toString()) + "' />");
+        out.println(
+                MessageFormat.format(
+                        "<input type=''text'' name=''description'' value=''{0}'' />",
+                        Helper.escapeHTML(dataTable.getOneCell(0, "Desc").toString())));
     out.println("</td>");
     out.println("</tr>");
-    //
-    for (Object o : lstField) {
-        String fieldName = ((CategoryAndField.Field) o).getFieldName();
-        int fieldID = ((CategoryAndField.Field) o).getFieldID();
-        int fieldType = ((CategoryAndField.Field) o).getFieldType();
-        //
+    for (CategoryAndField.Field field : lstField) {
+        String fieldName = field.getFieldName();
+        int fieldID = field.getFieldID();
+        int fieldType = field.getFieldType();
         if (lstFieldIDs == null) {
             lstFieldIDs = new StringBuilder("" + fieldID);
         } else {
@@ -167,42 +168,49 @@ if (userType.equalsIgnoreCase("3")) {
             out.println("<td align='left'>" + fieldName);
             out.println("</td>");
             out.println("<td align='left'>");
-            out.println("<input type='text' name='fieldID_" + fieldID + "' value='"
-                    + Helper.escapeHTML(dataTable.getOneCell(0, fieldName).toString()) + "' />");
+                    out.println(
+                            MessageFormat.format(
+                                    "<input type=''text'' name=''fieldID_{0}'' value=''{1}'' />",
+                                    fieldID,
+                                    Helper.escapeHTML(
+                                            dataTable.getOneCell(0, fieldName).toString())));
             out.println("</td>");
             out.println("</tr>");
-        }
+        } else if (fieldType == 2) {
             // Integer
-            else if (fieldType == 2) {
             out.println("<tr>");
             out.println("<td align='left'>" + fieldName);
             out.println("</td>");
             out.println("<td align='left'>");
-            out.println("<input type='number' name = 'fieldID_" + fieldID + "' value='"
-                    + dataTable.getOneCell(0, fieldName) + "' />");
+            out.println(
+                    MessageFormat.format(
+                            "<input type=''number'' name = ''fieldID_{0}'' value=''{1}'' />",
+                            fieldID, dataTable.getOneCell(0, fieldName)));
             out.println("</td>");
             out.println("</tr>");
-        }
-        // Boolean
-        else {
+        } else {
+            // Boolean
             out.println("<tr>");
             out.println("<td align='left'>" + fieldName);
             out.println("</td>");
             out.println("<td align='left'>");
-            out.println(Helper.getYesNoSelection("fieldID_" + fieldID, dataTable.getOneCell(0, fieldName).toString()));
+            out.println(
+                    Helper.getYesNoSelection(
+                            "fieldID_" + fieldID,
+                            dataTable.getOneCell(0, fieldName).toString()));
             out.println("</td>");
             out.println("</tr>");
         }
     }
 }
-//
 out.println("</tbody>");
 out.println("</table>");
-//
-if (!userType.equalsIgnoreCase("3")) {
+if (!userType.equalsIgnoreCase(UserType.USER.getSessionUserType())) {
     out.println("<input type='hidden' name='action' value='modifyOffer'/>");
-    out.println("<input type='hidden' name='offeridcategorynameuser' value='" + offeridcategorynameuser + "'/>");
-    //
+    out.println(
+            MessageFormat.format(
+                    "<input type=''hidden'' name=''offeridcategorynameuser'' value=''{0}''/>",
+                    offeridcategorynameuser));
     out.println("<input name='lstFieldIDs' type='hidden' value='" + lstFieldIDs + "'/>");
 }
 %>
