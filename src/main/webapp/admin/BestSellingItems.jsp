@@ -9,40 +9,32 @@
 
 <head>
 <meta charset="utf-8">
-<title>BuyMe - Search Offers</title>
+<title>BuyMe - Best Selling Items</title>
 <link rel="stylesheet" href="../style.css">
 
 </head>
-
 <body>
     <%
     Map data = null;
     TableData dataTable = null;
-    //
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equals("sort")) {
         data = (Map) request.getSession().getAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP);
-        //
         dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
-        //
         String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
         dataTable.sortRowPerHeader(sort);
     }
-    //
     int lookbackdays = DBBase.getIntFromParamMap("lookbackdays", request.getParameterMap());
     if (lookbackdays < 1) {
         lookbackdays = 30;
     }
-    //
     int limit = DBBase.getIntFromParamMap("limit", request.getParameterMap());
     if (limit < 1) {
         limit = 10;
     }
-    //
     if (data == null) {
         data = Trade.selectBestSellingMostRecentItems(lookbackdays, limit, true);
         request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
-        //
         dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
     }
     %>
@@ -99,7 +91,5 @@
             %>
         </tbody>
     </table>
-
 </body>
-
 </html>
