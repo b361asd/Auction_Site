@@ -18,16 +18,15 @@
     <%
     Map data;
     TableData dataTable = null;
-    //
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equalsIgnoreCase("cancelOffer")) {
         Offer.doCancelOffer(request.getParameterMap());
-        //
         data = Offer.doBrowseOffer();
         request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     } else if (action.equalsIgnoreCase("listSimilar")) {
-        String offeridcategorynameconditioncode = DBBase.getStringFromParamMap("offeridcategorynameconditioncode",
-        request.getParameterMap());
+        String offeridcategorynameconditioncode =
+                DBBase.getStringFromParamMap(
+                        "offeridcategorynameconditioncode", request.getParameterMap());
         data = Offer.doSearchSimilar(offeridcategorynameconditioncode);
         request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     } else if (action.equalsIgnoreCase("searchOffer")) {
@@ -41,18 +40,14 @@
         if (data != null) {
             dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
         }
-        //
-        if (dataTable == null) {
-        } else {
+        if (dataTable != null) {
             String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
             dataTable.sortRowPerHeader(sort);
         }
     }
-    //
     if (data != null) {
         dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
     }
-    //
     request.setAttribute("dataTable", dataTable);
     %>
 
