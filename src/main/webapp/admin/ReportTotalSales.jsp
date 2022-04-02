@@ -17,11 +17,9 @@
     <%
     Map data = null;
     TableData dataTable;
-    //
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equals("sort")) {
         data = (Map) request.getSession().getAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP);
-        //
         if (data != null) {
             dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
             if (dataTable != null) {
@@ -32,13 +30,12 @@
             }
         }
     }
-    //
     if (data == null) {
         data = Trade.summaryBy(-1, true, false, false, false, false);
         request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     }
-    //
     dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
+    out.println("<input type='hidden' name='action' value='buyerSummary'/>");
     %>
 
     <%@include file="../header.jsp"%>
