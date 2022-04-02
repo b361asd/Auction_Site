@@ -7,7 +7,7 @@
 
 <head>
 <meta charset="utf-8">
-<title>BuyMe - Search Offers</title>
+<title>BuyMe - Cancel Bid</title>
 <link rel="stylesheet" href="../style.css">
 </head>
 
@@ -15,9 +15,7 @@
 
     <%
     Map data = Bid.cancelBid(request.getParameterMap());
-    //
     request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
-    //
     String message;
     if ((Boolean) data.get(IConstant.DATA_NAME_STATUS)) {
         message = "Bid Cancelled.";
