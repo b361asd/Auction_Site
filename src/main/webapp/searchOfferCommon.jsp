@@ -1,5 +1,5 @@
 <%@ page import="com.b361asd.auction.db.CategoryAndField"%>
-<%@page import="com.b361asd.auction.gui.Helper"%>
+<%@ page import="com.b361asd.auction.gui.Helper"%>
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.Map"%>
 

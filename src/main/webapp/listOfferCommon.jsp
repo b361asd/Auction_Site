@@ -1,8 +1,8 @@
-<%@page import="com.b361asd.auction.db.DBBase"%>
+<%@ page import="com.b361asd.auction.db.DBBase"%>
 <%@ page import="com.b361asd.auction.gui.Helper"%>
 <%@ page import="com.b361asd.auction.gui.TableData"%>
 <%@ page import="com.b361asd.auction.gui.UserType"%>
-<%@page import="com.b361asd.auction.servlet.IConstant"%>
+<%@ page import="com.b361asd.auction.servlet.IConstant"%>
 <%@ page import="java.text.MessageFormat"%>
 
 <%

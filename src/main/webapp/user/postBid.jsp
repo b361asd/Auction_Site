@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 
-<%@page import="com.b361asd.auction.db.Offer"%>
+<%@ page import="com.b361asd.auction.db.Offer"%>
 <%@ page import="com.b361asd.auction.gui.TableData"%>
 <%@ page import="java.math.BigDecimal"%>
 

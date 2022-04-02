@@ -3,7 +3,7 @@
 
 <%@ page import="com.b361asd.auction.gui.TableData"%>
 <%@ page import="com.b361asd.auction.db.Offer"%>
-<%@page import="com.b361asd.auction.db.DBBase"%>
+<%@ page import="com.b361asd.auction.db.DBBase"%>
 
 <html>
 <head>

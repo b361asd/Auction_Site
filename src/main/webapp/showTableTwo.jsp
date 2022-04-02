@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%@page import="com.b361asd.auction.servlet.IConstant"%>
+<%@ page import="com.b361asd.auction.servlet.IConstant"%>
 <%@ page import="com.b361asd.auction.gui.Helper"%>
 <%@ page import="com.b361asd.auction.gui.TableData"%>
 <%@ page import="java.text.MessageFormat"%>
