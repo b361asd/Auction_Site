@@ -25,7 +25,6 @@
         <%
         Map data;
         TableData dataTable = null;
-        //
         String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
         if (action.equals("repSearchBid")) {
             data = Bid.searchBid(request.getParameterMap(), null, null);
@@ -38,17 +37,12 @@
             if (data != null) {
                 dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
             }
-            //
-            if (dataTable == null) {
-            } else {
+            if (dataTable != null) {
                 String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
                 dataTable.sortRowPerHeader(sort);
             }
         }
-        //
-        //
         dataTable = (TableData) (Objects.requireNonNull(data).get(IConstant.DATA_NAME_DATA));
-        //
         request.setAttribute("dataTable", dataTable);
         %>
 
