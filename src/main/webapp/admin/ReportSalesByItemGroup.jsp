@@ -17,26 +17,20 @@
     <%
     Map data = null;
     TableData dataTable = null;
-    //
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equals("sort")) {
         data = (Map) request.getSession().getAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP);
-        //
         dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
-        //
         String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
         dataTable.sortRowPerHeader(sort);
     }
-    //
     int lookbackdays = DBBase.getIntFromParamMap("lookbackdays", request.getParameterMap());
     if (lookbackdays < 1) {
         lookbackdays = 30;
     }
-    //
     if (data == null) {
         data = Trade.selectGroupSimilar(lookbackdays);
         request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
-        //
         dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
     }
     %>
@@ -52,7 +46,8 @@
         out.println("<tr>");
         out.println("<td>");
         out.println("<div align='left' class='allField'>Lookback Days");
-        out.println("<input type='NUMBER' name='lookbackdays'value='" + lookbackdays + "' /></div>");
+        out.println(
+                "<input type='NUMBER' name='lookbackdays'value='" + lookbackdays + "' /></div>");
         out.println("</td>");
         //
         out.println("<td>");
