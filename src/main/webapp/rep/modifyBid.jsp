@@ -19,42 +19,21 @@
     <%
     Map data;
     TableData dataTable;
-    //
     String message = "";
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
-    //if (action.equals("sort")) {
-    //	data = (Map) request.getSession().getAttribute(SESSION_ATTRIBUTE_DATA_MAP);
-    //	if (data != null) {
-    //		dataTable = (TableData) (data.get(DATA_NAME_DATA));
-    //		//
-    //		if (dataTable != null) {
-    //			String sort = getStringFromParamMap("sort", request.getParameterMap());
-    //			dataTable.sortRowPerHeader(sort);
-    //		}
-    //		else {
-    //			data = null;
-    //		}
-    //	}
-    //}
-    /*else*/
     if (action.equals("modifyBid")) {
         Map dataModify = Bid.doCreateOrModifyBid(null, request.getParameterMap(), false);
-        //
         if ((Boolean) dataModify.get(IConstant.DATA_NAME_STATUS)) {
             message = "Bid Posted.";
         } else {
             message = "Error in Posting Bid: " + dataModify.get(IConstant.DATA_NAME_MESSAGE);
         }
     }
-    //
     data = Bid.searchBid(request.getParameterMap(), null, null);
-    //
-    String bidIDofferIDBuyer = DBBase.getStringFromParamMap("bidIDofferIDBuyer", request.getParameterMap());
-    //
+    String bidIDofferIDBuyer =
+            DBBase.getStringFromParamMap("bidIDofferIDBuyer", request.getParameterMap());
     BigDecimal min = Bid.getMinForModifyBid(request.getParameterMap());
-    //
     dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
-    //
     request.setAttribute("dataTable", dataTable);
     %>
 
