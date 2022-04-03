@@ -16,13 +16,11 @@
 <body>
 
     <%
-    List lstUser = User.getUserList();
-    //
-    String userRepBidSearch = DBBase.getStringFromParamMap("userRepBidSearch", request.getParameterMap());
-    if (userRepBidSearch.length() == 0) {
-        if (lstUser.size() > 0) {
-            userRepBidSearch = lstUser.get(0).toString();
-        }
+    List<Object> lstUser = User.getUserList();
+    String userRepBidSearch =
+            DBBase.getStringFromParamMap("userRepBidSearch", request.getParameterMap());
+    if (userRepBidSearch.length() == 0 && lstUser.size() > 0) {
+        userRepBidSearch = lstUser.get(0).toString();
     }
     %>
 
@@ -51,9 +49,7 @@
                     method="post">
                     <%
                     out.println("<input type='hidden' name='action' value='repSearchBid'/>");
-                    //
                     out.println("<table>");
-                    //
                     out.println("<tr>");
                     out.println("<td>");
                     out.println("Select A User:");
@@ -65,7 +61,6 @@
                     out.println("<input type='submit' value='Search' />");
                     out.println("</td>");
                     out.println("</tr");
-                    //
                     out.println("</table>");
                     %>
                 </form>

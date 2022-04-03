@@ -105,7 +105,7 @@ public class User extends DBBase {
      *
      * @return List of active users
      */
-    public static List getUserList() {
+    public static List<Object> getUserList() {
         List<Object> lst = new ArrayList<>();
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt = con.prepareStatement(SQL_USER_SELECT_USERID);
