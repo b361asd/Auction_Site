@@ -12,7 +12,7 @@
 <title>BuyMe - Search Offers</title>
 <link rel="stylesheet" href='../style.css' />
 
-<script type="text/javascript">
+<script>
 	function onSelectChange() {
 		const form = document.getElementById('form-getActivity');
 		form.submit();

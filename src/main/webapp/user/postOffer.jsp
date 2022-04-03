@@ -9,7 +9,7 @@
 <meta charset="utf-8">
 <title>BuyMe - Post an Offer</title>
 <link rel="stylesheet" href="../style.css">
-<script type="text/javascript">
+<script>
 	function onCategoryChange() {
 		let form = document.getElementById('form');
 		form.action = "${pageContext.request.contextPath}/user/postOffer.jsp";

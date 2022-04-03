@@ -7,7 +7,7 @@
 <%@ page import="java.text.MessageFormat"%>
 <%@ page import="java.util.Map"%>
 
-<script type="text/javascript">
+<script>
     function onClickHeader(value) {
         document.getElementById('input-sort').value = value;
         document.getElementById('form-sort').submit();

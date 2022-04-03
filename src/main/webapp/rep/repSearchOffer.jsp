@@ -11,7 +11,7 @@
 <title>BuyMe - Search Offers</title>
 <link rel="stylesheet" href='../style.css' />
 
-<script type="text/javascript">
+<script>
 	function onCategoryChange() {
 		const form = document.getElementById('form');
 		form.action = "${pageContext.request.contextPath}/main/rep/repSearchOffer.jsp";
