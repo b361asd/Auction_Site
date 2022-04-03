@@ -18,19 +18,16 @@
     <%
     Map data = null;
     TableData dataTable;
-    //
     String _userType = (String) session.getAttribute(IConstant.SESSION_ATTRIBUTE_USERTYPE);
-    int targetUsrType = 3;
-    if (_userType.equalsIgnoreCase("1")) {
-        targetUsrType = 2;
+    int targetUsrType = UserType.USER.getDatabaseUserType();
+    if (_userType.equalsIgnoreCase(UserType.ADMIN.getSessionUserType())) {
+        targetUsrType = UserType.REP.getDatabaseUserType();
     }
-    //
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equals("updateUser")) {
         data = User.selectUser(request.getParameterMap(), targetUsrType);
         request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     }
-    //
     dataTable = (TableData) (Objects.requireNonNull(data).get(IConstant.DATA_NAME_DATA));
     %>
 
@@ -51,9 +48,7 @@
             if (dataTable.rowCount() > 0) {
                 for (int i = 0; i < dataTable.rowCount(); i++) {
                     out.println(dataTable.printRowStart(i));
-                    //
                     out.println(dataTable.printOneRowInTable(i));
-                    //
                     out.println("</tr>");
                 }
             }
@@ -67,43 +62,53 @@
     <form action="listUser.jsp" method="post">
         <%
         out.println("<input type='hidden' name='action' value='updateUser'/>");
-        out.println("<div><input type='hidden' name='username' value='" + dataTable.getOneCell(0, 0) + "'></div>");
-        //
+        out.println(
+                MessageFormat.format(
+                        "<div><input type=''hidden'' name=''username'' value=''{0}''></div>",
+                        dataTable.getOneCell(0, 0)));
         out.println("<table>");
         out.println("<tr>");
         out.println("<td style='text-align:left'>Password</td>");
         out.println("<td style='text-align:left'>");
-        out.println("<input type='text' name='password' value='" + dataTable.getOneCell(0, 1) + "' />");
+        out.println(
+                "<input type='text' name='password' value='" + dataTable.getOneCell(0, 1) + "' />");
         out.println("</td>");
         out.println("</tr>");
         out.println("<tr>");
         out.println("<td style='text-align:left'>Email Address</td>");
         out.println("<td style='text-align:left'>");
-        out.println("<input type='text' name='email' value='" + dataTable.getOneCell(0, 2) + "' />");
+        out.println(
+                "<input type='text' name='email' value='" + dataTable.getOneCell(0, 2) + "' />");
         out.println("</td>");
         out.println("</tr>");
         out.println("<tr>");
         out.println("<td style='text-align:left'>First Name</td>");
         out.println("<td style='text-align:left'>");
-        out.println("<input type='text' name='firstname' value='" + dataTable.getOneCell(0, 3) + "' />");
+        out.println(
+                MessageFormat.format(
+                        "<input type=''text'' name=''firstname'' value=''{0}'' />",
+                        dataTable.getOneCell(0, 3)));
         out.println("</td>");
         out.println("</tr>");
         out.println("<tr>");
         out.println("<td style='text-align:left'>Last Name</td>");
         out.println("<td style='text-align:left'>");
-        out.println("<input type='text' name='lastname' value='" + dataTable.getOneCell(0, 4) + "' />");
+        out.println(
+                "<input type='text' name='lastname' value='" + dataTable.getOneCell(0, 4) + "' />");
         out.println("</td>");
         out.println("</tr>");
         out.println("<tr>");
         out.println("<td style='text-align:left'>Address</td>");
         out.println("<td style='text-align:left'>");
-        out.println("<input type='text' name='address' value='" + dataTable.getOneCell(0, 5) + "' />");
+        out.println(
+                "<input type='text' name='address' value='" + dataTable.getOneCell(0, 5) + "' />");
         out.println("</td>");
         out.println("</tr>");
         out.println("<tr>");
         out.println("<td style='text-align:left'>Phone Number</td>");
         out.println("<td style='text-align:left'>");
-        out.println("<input type='text' name='phone' value='" + dataTable.getOneCell(0, 6) + "' />");
+        out.println(
+                "<input type='text' name='phone' value='" + dataTable.getOneCell(0, 6) + "' />");
         out.println("</td>");
         out.println("</tr>");
         out.println("<tr>");
