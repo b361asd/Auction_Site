@@ -12,7 +12,7 @@
 
 <head>
 <meta charset="utf-8">
-<title>BuyMe - Search Offers</title>
+<title>BuyMe - List Activities</title>
 <link rel="stylesheet" href='../style.css' />
 
 <script>
