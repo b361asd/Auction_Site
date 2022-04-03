@@ -7,7 +7,7 @@
 
 <head>
 <meta charset="utf-8">
-<title>BuyMe - Generate Alert</title>
+<title>BuyMe - Create Offer Alert Criteria</title>
 <link rel="stylesheet" href="../style.css">
 <script>
 	function onCategoryChange() {
@@ -21,8 +21,9 @@
 <body>
 
     <%
-    CategoryAndField
-            .getCategoryField(DBBase.getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
+    CategoryAndField.getCategoryField(
+            DBBase.getListOfStringsFromParamMap(
+                    "categoryName", 1, request.getParameterMap(), ""));
     %>
 
     <%@include file="../header.jsp"%>
