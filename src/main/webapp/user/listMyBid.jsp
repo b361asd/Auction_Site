@@ -9,7 +9,7 @@
 
 <head>
 <meta charset="utf-8">
-<title>BuyMe - Search Offers</title>
+<title>BuyMe - List My Bids</title>
 <link rel="stylesheet" href='../style.css' />
 
 <script>
@@ -23,17 +23,14 @@
 <body>
 
     <%
-    String userID = (String) request.getSession().getAttribute("user");
-    //
     Map data = null;
+    String userID = (String) request.getSession().getAttribute("user");
     TableData dataTable;
-    //
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equals("sort")) {
         data = (Map) request.getSession().getAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP);
         if (data != null) {
             dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
-            //
             if (dataTable != null) {
                 String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
                 dataTable.sortRowPerHeader(sort);
@@ -42,14 +39,11 @@
             }
         }
     }
-    //
     if (data == null) {
         data = Bid.searchBid(null, null, userID);
         request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     }
-    //
     dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
-    //
     request.setAttribute("dataTable", dataTable);
     %>
 
