@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
@@ -239,14 +240,13 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 
     public static void oneConditionDesc(
             StringBuilder sb, String columnName, String op, String value, String valueAdd) {
-        if (columnName == null) {
-            columnName = "Unknown_Field";
-        }
+        Objects.requireNonNull(columnName, "Unknown_Field");
+        Objects.requireNonNull(value);
         if (op.equalsIgnoreCase(OP_BOOL_TRUE)) {
             sb.append(columnName).append("; ");
         } else if (op.equalsIgnoreCase(OP_BOOL_FALSE)) {
             sb.append("not ").append(columnName).append("; ");
-        } else if (value != null && value.trim().length() != 0) {
+        } else if (value.trim().length() != 0) {
             if (op.equalsIgnoreCase(OP_ANY)) {
                 sb.append("any ").append(columnName).append("; ");
             } else if (op.equalsIgnoreCase(OP_SZ_EQUAL)) {
@@ -270,7 +270,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
             } else if (op.equalsIgnoreCase(OP_INT_EQUAL_OR_UNDER)) {
                 sb.append(columnName).append(" is equal or under ").append(value).append("; ");
             } else if (op.equalsIgnoreCase(OP_INT_BETWEEN)) {
-                if (valueAdd != null && valueAdd.trim().length() != 0) {
+                if (valueAdd.trim().length() != 0) {
                     sb.append(columnName)
                             .append(" is between ")
                             .append(value)
@@ -289,57 +289,56 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 
     public static BigDecimal getBigDecimalFromParamMap(
             String name, Map<String, String[]> parameters) {
-        if (parameters != null && name != null) {
-            String[] temps = parameters.get(name);
-            if (temps != null && temps.length > 0 && temps[0].length() > 0) {
-                return new BigDecimal(temps[0].trim());
-            } else {
-                return new BigDecimal(-1);
-            }
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(parameters);
+        String[] temps = parameters.get(name);
+        Objects.requireNonNull(temps);
+        if (temps.length > 0 && temps[0].length() > 0) {
+            return new BigDecimal(temps[0].trim());
         } else {
-            return new BigDecimal(-2);
+            return new BigDecimal(-1);
         }
     }
 
     public static String getStringFromParamMap(String name, Map<String, String[]> parameters) {
-        if (parameters != null && name != null) {
-            String[] temps = parameters.get(name);
-            if (temps != null && temps.length > 0) {
-                return temps[0].trim();
-            }
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(parameters);
+        String[] temps = parameters.get(name);
+        Objects.requireNonNull(temps);
+        if (temps.length > 0) {
+            return temps[0].trim();
         }
         return "";
     }
 
     public static int getIntFromParamMap(String name, Map<String, String[]> parameters) {
-        if (parameters != null && name != null) {
-            String[] temps = parameters.get(name);
-            if (temps != null && temps.length > 0 && temps[0].length() > 0) {
-                int iTemp = -1;
-                try {
-                    iTemp = Integer.parseInt(temps[0].trim());
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
-                return iTemp;
-            } else {
-                return -2;
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(parameters);
+        String[] temps = parameters.get(name);
+        Objects.requireNonNull(temps);
+        if (temps.length > 0 && temps[0].length() > 0) {
+            int iTemp = -1;
+            try {
+                iTemp = Integer.parseInt(temps[0].trim());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
+            return iTemp;
         } else {
-            return -3;
+            return -2;
         }
     }
 
     public static String getListOfStringsFromSet(Set<String> set, String delimiter) {
+        Objects.requireNonNull(set);
         StringBuilder out = new StringBuilder();
-        if (set != null) {
-            for (String one : set) {
-                if (one != null && one.length() > 0) {
-                    if (out.toString().equals("")) {
-                        out = new StringBuilder(delimiter + one + delimiter);
-                    } else {
-                        out.append(",").append(delimiter).append(one).append(delimiter);
-                    }
+        for (String one : set) {
+            Objects.requireNonNull(one);
+            if (one.length() > 0) {
+                if (out.toString().equals("")) {
+                    out = new StringBuilder(delimiter + one + delimiter);
+                } else {
+                    out.append(",").append(delimiter).append(one).append(delimiter);
                 }
             }
         }
@@ -349,19 +348,18 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
     public static String getListOfStringsFromParamMap(
             String name, int startIndex, Map<String, String[]> parameters, String delimiter) {
         StringBuilder out = new StringBuilder();
-        if (parameters != null) {
-            String[] temps;
-            for (int i = startIndex; i < MAX_CATEGORY_COUNT; i++) {
-                temps = parameters.get(name + i);
-                if (temps != null) {
-                    String one = temps[0];
-                    if (one != null && one.length() > 0) {
-                        if (out.toString().equals("")) {
-                            out = new StringBuilder(delimiter + one + delimiter);
-                        } else {
-                            out.append(",").append(delimiter).append(one).append(delimiter);
-                        }
-                    }
+        Objects.requireNonNull(parameters);
+        String[] temps;
+        for (int i = startIndex; i < MAX_CATEGORY_COUNT; i++) {
+            temps = parameters.get(name + i);
+            Objects.requireNonNull(temps);
+            String one = temps[0];
+            Objects.requireNonNull(one);
+            if (one.length() > 0) {
+                if (out.toString().equals("")) {
+                    out = new StringBuilder(delimiter + one + delimiter);
+                } else {
+                    out.append(",").append(delimiter).append(one).append(delimiter);
                 }
             }
         }
