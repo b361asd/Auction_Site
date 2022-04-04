@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 public class User extends DBBase {
 
@@ -40,7 +42,9 @@ public class User extends DBBase {
         Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
         String in_username =
-                parameters == null ? "" : getStringFromParamMap("username", parameters);
+                Optional.ofNullable(parameters)
+                        .map(stringMap -> getStringFromParamMap("username", stringMap))
+                        .orElse("");
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt =
                         con.prepareStatement(
@@ -262,6 +266,8 @@ public class User extends DBBase {
             String phone,
             int usertype) {
         Map<String, Object> output = new HashMap<>();
+        Objects.requireNonNull(username);
+        Objects.requireNonNull(password);
         if (email == null) {
             email = " ";
         }
@@ -283,10 +289,10 @@ public class User extends DBBase {
         if (phone == null) {
             phone = " ";
         }
-        if (username == null || username.trim().length() == 0) {
+        if (username.trim().length() == 0) {
             output.put(IConstant.DATA_NAME_STATUS, false);
             output.put(IConstant.DATA_NAME_MESSAGE, "username is mandatory.");
-        } else if (password == null || password.trim().length() == 0) {
+        } else if (password.trim().length() == 0) {
             output.put(IConstant.DATA_NAME_STATUS, false);
             output.put(IConstant.DATA_NAME_MESSAGE, "password is mandatory.");
         } else {
