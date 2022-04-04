@@ -27,15 +27,12 @@
     <%
     Map data = null;
     TableData dataTable;
-    //
     String userID = (String) session.getAttribute(IConstant.SESSION_ATTRIBUTE_USER);
-    //
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equals("sort")) {
         data = (Map) request.getSession().getAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP);
         if (data != null) {
             dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
-            //
             if (dataTable != null) {
                 String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
                 dataTable.sortRowPerHeader(sort);
@@ -46,18 +43,14 @@
     } else {
         if (action.equals("deleteOfferAlert")) {
             OfferAlert.deleteOfferAlert(request.getParameterMap());
-            //request.getSession().setAttribute(SESSION_ATTRIBUTE_DATA_MAP, data);
         } else if (action.equals("createAlertCriterion")) {
-            //String userID = (String) request.getSession().getAttribute("user");
             OfferAlert.doGenerateNewOfferAlertCriterion(userID, request.getParameterMap());
         }
     }
-    //
     if (data == null) {
         data = OfferAlert.selectOfferAlert(userID, true);
         request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     }
-    //
     dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
     %>
 
@@ -76,14 +69,15 @@
             if (dataTable.rowCount() > 0) {
                 for (int i = 0; i < dataTable.rowCount(); i++) {
                     out.println(dataTable.printRowStart(i));
-                    //
                     out.println("<td>");
-                    out.println(Helper.getButton("form-deleteOfferAlert", "input-deleteOfferAlert", "" + dataTable.getOneCell(i, 0),
-                    "Delete"));
+                    out.println(
+                            Helper.getButton(
+                                    "form-deleteOfferAlert",
+                                    "input-deleteOfferAlert",
+                                    "" + dataTable.getOneCell(i, 0),
+                                    "Delete"));
                     out.println("</td>");
-                    //
                     out.println(dataTable.printOneRowInTable(i));
-                    //
                     out.println("</tr>");
                 }
             }
