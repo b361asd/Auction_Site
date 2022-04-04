@@ -20,7 +20,9 @@
 <body>
 
     <%
-    CategoryAndField.getCategoryField(DBBase.getListOfStringsFromParamMap("categoryName", 1, request.getParameterMap(), ""));
+    CategoryAndField.getCategoryField(
+            DBBase.getListOfStringsFromParamMap(
+                    "categoryName", 1, request.getParameterMap(), ""));
     %>
 
     <%@include file="../header.jsp"%>
