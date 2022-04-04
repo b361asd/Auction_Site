@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -90,18 +91,16 @@ public class TableData {
     }
 
     public void sortRowPerHeader(String header) {
-        if (header != null && header.startsWith(SUB_TABLE_HEADER_SIGN)) {
-            if (lstRows != null) {
-                for (Object one : lstRows) {
-                    List lst = (List) one;
-                    TableData tableData = (TableData) lst.get(lst.size() - 1);
-                    if (tableData != null) {
-                        tableData.sortRowPerHeader(
-                                header.substring(SUB_TABLE_HEADER_SIGN.length()));
-                    }
-                }
+        Objects.requireNonNull(header);
+        Objects.requireNonNull(lstRows);
+        if (header.startsWith(SUB_TABLE_HEADER_SIGN)) {
+            for (Object one : lstRows) {
+                List lst = (List) one;
+                TableData tableData = (TableData) lst.get(lst.size() - 1);
+                Objects.requireNonNull(tableData)
+                    .sortRowPerHeader(header.substring(SUB_TABLE_HEADER_SIGN.length()));
             }
-        } else if (header != null) {
+        } else {
             int index = mapHeaderToIndex.get(header);
             if (index >= 0 && index < lstHeader.size()) {
                 Comparator<Object> comparatorNorm =
@@ -142,8 +141,10 @@ public class TableData {
     }
 
     private String internalPrintHeaderForTable(boolean subTable) {
+        Objects.requireNonNull(lstHeader);
+        Objects.requireNonNull(colSeq);
         StringBuilder out = new StringBuilder();
-        if (lstHeader != null && lstHeader.size() > 0 && colSeq != null && colSeq.length > 0) {
+        if (lstHeader.size() > 0 && colSeq.length > 0) {
             for (int value : colSeq) {
                 Object one = lstHeader.get(value);
                 String oneItem = one == null ? "" : one.toString();
@@ -166,7 +167,9 @@ public class TableData {
     private String internalPrintOneRowInTable(int index) {
         List row = (List) lstRows.get(index);
         StringBuilder out = new StringBuilder();
-        if (row != null && row.size() > 0 && colSeq != null && colSeq.length > 0) {
+        Objects.requireNonNull(row);
+        Objects.requireNonNull(colSeq);
+        if (row.size() > 0 && colSeq.length > 0) {
             for (int value : colSeq) {
                 Object one = row.get(value);
                 String oneItem = one == null ? "" : one.toString();
