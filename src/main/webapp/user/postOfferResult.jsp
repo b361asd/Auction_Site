@@ -16,7 +16,6 @@
     <%
     String userID = (String) request.getSession().getAttribute("user");
     Map data = Offer.doCreateOrModifyOffer(userID, request.getParameterMap(), true);
-    //
     String message;
     if ((Boolean) data.get(IConstant.DATA_NAME_STATUS)) {
         message = "Offer Posted.";

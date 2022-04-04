@@ -15,9 +15,10 @@
 
     <%
     String userID = (String) request.getSession().getAttribute("user");
-    Map data = Question.insertQuestion(userID, DBBase.getStringFromParamMap("question", request.getParameterMap()));
-    //
-    //
+    Map data =
+            Question.insertQuestion(
+                    userID,
+                    DBBase.getStringFromParamMap("question", request.getParameterMap()));
     String message;
     if ((Boolean) data.get(IConstant.DATA_NAME_STATUS)) {
         message = "Question Posted.";
