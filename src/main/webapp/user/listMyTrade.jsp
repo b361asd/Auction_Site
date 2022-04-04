@@ -8,7 +8,7 @@
 
 <head>
 <meta charset="utf-8">
-<title>BuyMe - Search Offers</title>
+<title>BuyMe - List My Trades</title>
 <link rel="stylesheet" href='../style.css' />
 </head>
 
@@ -17,39 +17,31 @@
     <%
     Map data = null;
     TableData dataTable = null;
-    //
     String userID = (String) session.getAttribute(IConstant.SESSION_ATTRIBUTE_USER);
-    //
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equals("sort")) {
         data = (Map) request.getSession().getAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP);
-        //
         if (data != null) {
             dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
-            //
             if (dataTable != null) {
-        String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
-        dataTable.sortRowPerHeader(sort);
+                String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
+                dataTable.sortRowPerHeader(sort);
             } else {
-        data = null;
+                data = null;
             }
         }
     }
-    //
     int lookbackdays = DBBase.getIntFromParamMap("lookbackdays", request.getParameterMap());
     if (lookbackdays < 1) {
         lookbackdays = 30;
     }
-    //
     int limit = DBBase.getIntFromParamMap("limit", request.getParameterMap());
     if (limit < 1) {
         limit = 10;
     }
-    //
     if (data == null) {
         data = Trade.selectMyTrade(userID, lookbackdays, limit);
         request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
-        //
         dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
     }
     %>
@@ -65,7 +57,8 @@
         out.println("<tr>");
         out.println("<td>");
         out.println("<div align='left' class='allField'>Lookback Days");
-        out.println("<input type='NUMBER' name='lookbackdays'value='" + lookbackdays + "' /></div>");
+        out.println(
+                "<input type='NUMBER' name='lookbackdays'value='" + lookbackdays + "' /></div>");
         out.println("</td>");
         //
         out.println("<td>");
