@@ -7,7 +7,7 @@
 
 <head>
 <meta charset="utf-8">
-<title>BuyMe - Post a Bid</title>
+<title>BuyMe - Post Bid Results</title>
 <link rel="stylesheet" href='../style.css' />
 </head>
 
@@ -16,7 +16,6 @@
     <%
     String userID = (String) request.getSession().getAttribute("user");
     Map data = Bid.doCreateOrModifyBid(userID, request.getParameterMap(), true);
-    //
     String message;
     if ((Boolean) data.get(IConstant.DATA_NAME_STATUS)) {
         message = "Bid Posted.";
