@@ -14,43 +14,37 @@
 <body>
 
 	<%
-   Map data;
-   TableData dataTable = null;
-   //
-   String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
-   if (action.equalsIgnoreCase("listSimilar")) {
-      String offeridcategorynameconditioncode = DBBase.getStringFromParamMap("offeridcategorynameconditioncode", request.getParameterMap());
-      data = Offer.doSearchSimilar(offeridcategorynameconditioncode);
-      request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
-   }
-   else if (action.equalsIgnoreCase("searchOffer")) {
-      data = Offer.doSearchOffer(request.getParameterMap(), true);
-      request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
-   }
-   else if (action.equalsIgnoreCase("browseOffer")) {
-      data = Offer.doBrowseOffer();
-      request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
-   }
-   else {
-      data = (Map) request.getSession().getAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP);
-      if (data != null) {
-         dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
-      }
-      //
-      if (dataTable != null) {
-         String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
-         dataTable.sortRowPerHeader(sort);
-      }
-      else {
-         data = null;
-      }
-   }
-   //
-   if (data != null) {
-      dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
-   }
-   //
-   request.setAttribute("dataTable", dataTable);
+    Map data;
+    TableData dataTable = null;
+    String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
+    if (action.equalsIgnoreCase("listSimilar")) {
+        String oIDCnCc =
+                DBBase.getStringFromParamMap(
+                        "offeridcategorynameconditioncode", request.getParameterMap());
+        data = Offer.doSearchSimilar(oIDCnCc);
+        request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
+    } else if (action.equalsIgnoreCase("searchOffer")) {
+        data = Offer.doSearchOffer(request.getParameterMap(), true);
+        request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
+    } else if (action.equalsIgnoreCase("browseOffer")) {
+        data = Offer.doBrowseOffer();
+        request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
+    } else {
+        data = (Map) request.getSession().getAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP);
+        if (data != null) {
+            dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
+        }
+        if (dataTable != null) {
+            String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
+            dataTable.sortRowPerHeader(sort);
+        } else {
+            data = null;
+        }
+    }
+    if (data != null) {
+        dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
+    }
+    request.setAttribute("dataTable", dataTable);
 %>
 
 	<%@include file="../header.jsp"%>
