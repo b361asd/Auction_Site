@@ -16,13 +16,11 @@
     <%
     Map data = null;
     TableData dataTable;
-    //
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equals("sort")) {
         data = (Map) request.getSession().getAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP);
         if (data != null) {
             dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
-            //
             if (dataTable != null) {
                 String sort = DBBase.getStringFromParamMap("sort", request.getParameterMap());
                 dataTable.sortRowPerHeader(sort);
@@ -30,16 +28,12 @@
                 data = null;
             }
         }
-    } else if (action.equals("viewAlertDetail")) {
     }
-    //
     if (data == null) {
         data = Bid.searchBid(request.getParameterMap(), null, null);
         request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     }
-    //
     dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
-    //
     request.setAttribute("dataTable", dataTable);
     %>
 
