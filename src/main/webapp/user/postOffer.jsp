@@ -21,7 +21,9 @@
 <body>
 
     <%
-    Map data = CategoryAndField.getCategoryField(DBBase.getStringFromParamMap("categoryName", request.getParameterMap()));
+    Map data =
+            CategoryAndField.getCategoryField(
+                    DBBase.getStringFromParamMap("categoryName", request.getParameterMap()));
     data.get(CategoryAndField.DATA_CATEGORY_LIST);
     data.get(CategoryAndField.DATA_FIELD_LIST);
     %>
