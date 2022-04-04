@@ -10,13 +10,15 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Class to hold data for a 2 layer table. Provides a function to sort tables based on column
  * header.
  */
 public class TableData {
-    public static final String SUB_TABLE_HEADER_SIGN = "-";
+
+    private static final String SUB_TABLE_HEADER_SIGN = "-";
 
     Map<String, Integer> mapHeaderToIndex;
     List lstHeader;
@@ -50,11 +52,11 @@ public class TableData {
     }
 
     public int rowCount() {
-        return (lstRows == null) ? 0 : lstRows.size();
+        return Optional.ofNullable(lstRows).map(List::size).orElse(0);
     }
 
     public int colCount() {
-        return (colSeq == null) ? 0 : colSeq.length;
+        return Optional.ofNullable(colSeq).map(seq -> seq.length).orElse(0);
     }
 
     public List getRows() {
@@ -144,7 +146,7 @@ public class TableData {
         if (lstHeader != null && lstHeader.size() > 0 && colSeq != null && colSeq.length > 0) {
             for (int value : colSeq) {
                 Object one = lstHeader.get(value);
-                String oneItem = (one == null) ? "" : one.toString();
+                String oneItem = one == null ? "" : one.toString();
                 out.append("<th><div onclick=onClickHeader('")
                         .append(subTable ? SUB_TABLE_HEADER_SIGN : "")
                         .append(oneItem)
@@ -167,7 +169,7 @@ public class TableData {
         if (row != null && row.size() > 0 && colSeq != null && colSeq.length > 0) {
             for (int value : colSeq) {
                 Object one = row.get(value);
-                String oneItem = (one == null) ? "" : one.toString();
+                String oneItem = one == null ? "" : one.toString();
                 if (one instanceof BigDecimal) {
                     if (((BigDecimal) one).compareTo(new BigDecimal(-1)) == 0) {
                         oneItem = "";
@@ -188,11 +190,13 @@ public class TableData {
 
     public String printRowStart(int index) {
         List row = (List) lstRows.get(index);
-        String sign = (signStandOut == null) ? "_NULL" : signStandOut.trim();
-        sign = (sign.equals("")) ? "_EMPTY" : sign;
-        String value = (idxStandOut < 0) ? "_NONE" : (row.get(idxStandOut).toString());
+        String sign = Optional.ofNullable(signStandOut).map(String::trim).orElse("_NULL");
+        sign = sign.equals("") ? "_EMPTY" : sign;
+        String value = idxStandOut < 0 ? "_NONE" : row.get(idxStandOut).toString();
         boolean isStandOut = sign.equalsIgnoreCase(value);
         // "<tr name='standout' class='standout'>";
-        return isStandOut ? "<tr style='color: red;'>" : "<tr add='" + sign + "_" + value + "'>";
+        return isStandOut
+                ? "<tr style='color: red;'>"
+                : MessageFormat.format("<tr add=''{0}_{1}''>", sign, value);
     }
 }
