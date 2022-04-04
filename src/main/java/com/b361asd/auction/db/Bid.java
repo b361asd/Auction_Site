@@ -17,6 +17,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 public class Bid extends DBBase {
@@ -36,6 +38,9 @@ public class Bid extends DBBase {
      */
     public static Map searchBid(
             Map<String, String[]> parameters, String userActivity, String userMyBid) {
+        Objects.requireNonNull(userActivity);
+        Objects.requireNonNull(userMyBid);
+
         String offerIDCategoryName = getStringFromParamMap("offeridcategoryname", parameters);
 
         // viewAlertDetail
@@ -52,9 +57,9 @@ public class Bid extends DBBase {
         boolean _listBid_Browse = false;
         boolean _modifyBid = false;
 
-        if (userActivity != null && userActivity.length() > 0) {
+        if (userActivity.length() > 0) {
             _listActivity = true;
-        } else if (userMyBid != null && userMyBid.length() > 0) {
+        } else if (userMyBid.length() > 0) {
             _listMyBid = true;
         } else if (offerIDCategoryName.length() > 0) {
             _listBidForOffer = true;
@@ -363,8 +368,14 @@ public class Bid extends DBBase {
             } else {
                 boolean isModifyAndDoIt = !isCreate;
                 while (true) {
-                    BigDecimal last_price = last == null ? null : (BigDecimal) last[2];
-                    BigDecimal last_autoRebidLimit = last == null ? null : (BigDecimal) last[3];
+                    BigDecimal last_price =
+                            Optional.ofNullable(last)
+                                    .map(objects -> (BigDecimal) objects[2])
+                                    .orElse(null);
+                    BigDecimal last_autoRebidLimit =
+                            Optional.ofNullable(last)
+                                    .map(objects -> (BigDecimal) objects[3])
+                                    .orElse(null);
                     BigDecimal current_price = (BigDecimal) current[2];
                     // Check price meet offer
                     if (last == null) {
