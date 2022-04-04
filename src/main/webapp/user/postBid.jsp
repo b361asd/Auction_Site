@@ -4,6 +4,8 @@
 <%@ page import="com.b361asd.auction.db.Offer"%>
 <%@ page import="com.b361asd.auction.gui.TableData"%>
 <%@ page import="java.math.BigDecimal"%>
+<%@ page import="java.text.MessageFormat"%>
+<%@ page import="java.util.Optional"%>
 
 <html>
 
@@ -17,11 +19,8 @@
 
     <%
     String offerid = DBBase.getStringFromParamMap("offerid", request.getParameterMap());
-    //
     Map data = Offer.doSearchOfferByID(offerid, false);
-    //
     request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
-    //
     TableData dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
     %>
 
@@ -54,20 +53,15 @@
         method="post">
         <%
         out.println("<input type='hidden' name='offerId' value='" + offerid + "'/>");
-        //
         BigDecimal initPrice = (BigDecimal) dataTable.getOneCell(0, 5);
         BigDecimal increment = (BigDecimal) dataTable.getOneCell(0, 6);
         BigDecimal curPrice = (BigDecimal) dataTable.getOneCell(0, 11);
-        //
-        BigDecimal minPrice;
-        if (curPrice == null) {
-            minPrice = initPrice;
-        } else {
-            minPrice = curPrice.add(increment);
-        }
-        //
-        out.println("<div>Price(min " + minPrice + ")<input type='number' name='price' min='" + minPrice + "' VALUE='"
-                + minPrice + "'></div>");
+        BigDecimal minPrice =
+                Optional.ofNullable(curPrice).map(price -> price.add(increment)).orElse(initPrice);
+        out.println(
+                MessageFormat.format(
+                        "<div>Price(min {0})<input type=''number'' name=''price'' min=''{1}'' VALUE=''{2}''></div>",
+                        minPrice, minPrice, minPrice));
         %>
 
         <div>
