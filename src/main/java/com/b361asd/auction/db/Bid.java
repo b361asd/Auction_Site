@@ -263,7 +263,7 @@ public class Bid extends DBBase {
      * @param isCreate True when created, false when modified
      * @return Data for GUI rendering
      */
-    public static Map doCreateOrModifyBid(
+    public static Map<String, Object> doCreateOrModifyBid(
             String userID, Map<String, String[]> parameters, boolean isCreate) {
         Map<String, Object> output = new HashMap<>();
 

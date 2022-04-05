@@ -70,7 +70,7 @@ public class BidTest {
                 });
         parameters.put("price", new String[] {"1000"});
         parameters.put("autoRebidLimit", new String[] {"10"});
-        Map map = Bid.doCreateOrModifyBid(null, parameters, false);
+        Map<String, Object> map = Bid.doCreateOrModifyBid(null, parameters, false);
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
@@ -84,7 +84,7 @@ public class BidTest {
         parameters.put("offerId", new String[] {"d6ac071c449c46b4812dd96b9bc8f197"});
         parameters.put("price", new String[] {"550"});
         parameters.put("autoRebidLimit", new String[] {"1200"});
-        Map map = Bid.doCreateOrModifyBid("user", parameters, true);
+        Map<String, Object> map = Bid.doCreateOrModifyBid("user", parameters, true);
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));

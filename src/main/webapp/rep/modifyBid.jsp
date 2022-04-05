@@ -20,7 +20,7 @@
     String message = "";
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equals("modifyBid")) {
-        Map dataModify = Bid.doCreateOrModifyBid(null, request.getParameterMap(), false);
+        Map<String, Object> dataModify = Bid.doCreateOrModifyBid(null, request.getParameterMap(), false);
         if ((Boolean) dataModify.get(IConstant.DATA_NAME_STATUS)) {
             message = "Bid Posted.";
         } else {

@@ -15,7 +15,7 @@
 
     <%
     String userID = (String) request.getSession().getAttribute("user");
-    Map data = Bid.doCreateOrModifyBid(userID, request.getParameterMap(), true);
+    Map<String, Object> data = Bid.doCreateOrModifyBid(userID, request.getParameterMap(), true);
     String message;
     if ((Boolean) data.get(IConstant.DATA_NAME_STATUS)) {
         message = "Bid Posted.";
