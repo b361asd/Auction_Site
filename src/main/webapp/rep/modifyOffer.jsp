@@ -18,7 +18,6 @@
 <body>
     <%
     Map dataModify = null;
-    Map data;
     TableData tableData;
     String offerIDCategoryNameUser =
             DBBase.getStringFromParamMap("offeridcategorynameuser", request.getParameterMap());
@@ -30,7 +29,7 @@
     Map<String, Object> categoryAndField = CategoryAndField.getCategoryField(temps[1]);
     categoryAndField.get(CategoryAndField.DATA_CATEGORY_LIST);
     categoryAndField.get(CategoryAndField.DATA_FIELD_LIST);
-    data = Offer.doSearchOfferByID(temps[0], true);
+    Map<String, Object> data = Offer.doSearchOfferByID(temps[0], true);
     request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     tableData = (TableData) (data.get(IConstant.DATA_NAME_DATA));
     if (dataModify != null) {

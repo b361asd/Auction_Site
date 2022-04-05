@@ -19,7 +19,7 @@
 
     <%
     String offerid = DBBase.getStringFromParamMap("offerid", request.getParameterMap());
-    Map data = Offer.doSearchOfferByID(offerid, false);
+    Map<String, Object> data = Offer.doSearchOfferByID(offerid, false);
     request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     TableData dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
     %>
