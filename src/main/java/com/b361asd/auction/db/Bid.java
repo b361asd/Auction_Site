@@ -140,7 +140,7 @@ public class Bid extends DBBase {
             sql = sb.toString();
         }
         // offerID -> Bids(in List)
-        Map<String, List> tempMap = new HashMap<>();
+        Map<String, List<Object>> tempMap = new HashMap<>();
         try (Connection con = getConnection();
                 Statement statement = con.createStatement();
                 ResultSet rs = statement.executeQuery(sql)) {
@@ -152,7 +152,8 @@ public class Bid extends DBBase {
                 Object autoRebidLimit = rs.getObject(5);
                 Object bidDate = rs.getObject(6);
 
-                List lstRows = tempMap.computeIfAbsent(offerID.toString(), k -> new ArrayList<Object>());
+                List<Object> lstRows =
+                        tempMap.computeIfAbsent(offerID.toString(), k -> new ArrayList<>());
                 List<Object> currentRow = new LinkedList<>();
                 lstRows.add(currentRow);
                 currentRow.add(bidID);
