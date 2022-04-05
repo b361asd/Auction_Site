@@ -348,7 +348,7 @@ public class Offer extends DBBase {
                     if (fieldID != null) {
                         mapFields.put(
                                 "" + rowIndex + "-" + fieldID,
-                                (fieldText == null) ? "" : fieldText.toString());
+                                fieldText == null ? "" : fieldText.toString());
                     }
                     if (rowIndex == 0) {
                         lstHeader.add("offerId");
