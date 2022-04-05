@@ -57,7 +57,7 @@ public class OfferTest {
                         + "= "
                         + Offer.getListOfStringsFromParamMap("categoryName", 1, parameters, ""));
 
-        Map map = Offer.doCancelOffer(parameters);
+        Map<String, Object> map = Offer.doCancelOffer(parameters);
         System.out.println(Offer.DATA_NAME_STATUS + "= " + map.get(Offer.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));

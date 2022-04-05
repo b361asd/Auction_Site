@@ -641,7 +641,7 @@ public class Offer extends DBBase {
      * @param parameters Map of all parameters
      * @return Data for GUI rendering
      */
-    public static Map doCancelOffer(Map<String, String[]> parameters) {
+    public static Map<String, Object> doCancelOffer(Map<String, String[]> parameters) {
         String offerID = getStringFromParamMap("offerid", parameters);
         Map<String, Object> output = new HashMap<>();
         try (Connection con = getConnection();

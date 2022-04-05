@@ -14,7 +14,7 @@
 <body>
 
     <%
-        Map data = Offer.doCancelOffer(request.getParameterMap());
+        Map<String, Object> data = Offer.doCancelOffer(request.getParameterMap());
         request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
         String message;
         if ((Boolean) data.get(IConstant.DATA_NAME_STATUS)) {
