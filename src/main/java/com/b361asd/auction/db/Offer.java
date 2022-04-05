@@ -458,7 +458,7 @@ public class Offer extends DBBase {
      * @param isCreate True if a new offer is created, false if modify
      * @return Data for GUI rendering
      */
-    public static Map doCreateOrModifyOffer(
+    public static Map<String, Object> doCreateOrModifyOffer(
             String userID, Map<String, String[]> parameters, boolean isCreate) {
         Map<String, Object> output = new HashMap<>();
         String offerID;

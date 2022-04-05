@@ -24,7 +24,7 @@ public class OfferTest {
         parameters.put("fieldID_7", new String[] {""});
         parameters.put("endDate", new String[] {"2019-04-20T13:10:48"});
 
-        Map map = Offer.doCreateOrModifyOffer("user", parameters, true);
+        Map<String, Object> map = Offer.doCreateOrModifyOffer("user", parameters, true);
         System.out.println(Offer.DATA_NAME_STATUS + "= " + map.get(Offer.DATA_NAME_STATUS));
         System.out.println(Offer.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
         System.out.println(

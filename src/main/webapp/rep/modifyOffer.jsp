@@ -6,6 +6,7 @@
 <%@ page import="com.b361asd.auction.db.Offer"%>
 <%@ page import="com.b361asd.auction.gui.Helper"%>
 <%@ page import="com.b361asd.auction.gui.TableData"%>
+<%@ page import="java.util.HashMap"%>
 
 <html>
 
@@ -17,12 +18,12 @@
 
 <body>
     <%
-    Map dataModify = null;
     TableData tableData;
     String offerIDCategoryNameUser =
             DBBase.getStringFromParamMap("offeridcategorynameuser", request.getParameterMap());
     String[] temps = offerIDCategoryNameUser.split(",");
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
+    Map<String, Object> dataModify = null;
     if (action.equals("modifyOffer")) {
         dataModify = Offer.doCreateOrModifyOffer(temps[2], request.getParameterMap(), false);
     }
