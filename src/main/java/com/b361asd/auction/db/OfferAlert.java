@@ -75,7 +75,7 @@ public class OfferAlert extends DBBase {
      * @param isUser True if User
      * @return Data for GUI rendering
      */
-    public static Map selectOfferAlert(String userName, boolean isUser) {
+    public static Map<String, Object> selectOfferAlert(String userName, boolean isUser) {
         Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
         TableData tableData = new TableData(lstHeader_OfferAlert, lstRows, colSeq_OfferAlert);
