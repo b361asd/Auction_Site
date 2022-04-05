@@ -35,7 +35,7 @@ public class Question extends DBBase {
      * @param parameters Map of all parameters
      * @return Data for GUI rendering
      */
-    public static Map searchClosedQuestion(Map<String, String[]> parameters) {
+    public static Map<String, Object> searchClosedQuestion(Map<String, String[]> parameters) {
         StringBuilder sb = FormatterQuestionQuery.initQuerySearch();
         String useridOP = getStringFromParamMap("useridOP", parameters);
         String useridVal = getStringFromParamMap("useridVal", parameters);
