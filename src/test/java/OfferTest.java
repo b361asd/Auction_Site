@@ -71,7 +71,7 @@ public class OfferTest {
         parameters.put("fieldop_6", new String[] {"yes"});
         parameters.put("lstFieldIDs", new String[] {"1,2,3,4,5,6,7"});
 
-        Map map = Offer.doSearchOffer(parameters, true);
+        Map<String, Object> map = Offer.doSearchOffer(parameters, true);
         System.out.println(Offer.DATA_NAME_STATUS + "= " + map.get(Offer.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));

@@ -47,7 +47,8 @@ public class Offer extends DBBase {
      * @param showAll If true, include minPrice.
      * @return Data for GUI rendering
      */
-    public static Map doSearchByOfferIDSet(Set<String> offerIDSet, boolean showAll) {
+    public static Map<String, Object> doSearchByOfferIDSet(
+            Set<String> offerIDSet, boolean showAll) {
         StringBuilder sb;
         sb = FormatterOfferQuery.initQuerySearch();
         addCondition(
@@ -57,7 +58,7 @@ public class Offer extends DBBase {
                 getListOfStringsFromSet(offerIDSet, "'"),
                 null);
         FormatterOfferQuery.doneQuerySearch(sb);
-        Map output = doSearchOfferInternal(sb.toString(), showAll);
+        Map<String, Object> output = doSearchOfferInternal(sb.toString(), showAll);
         TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
         if (dataTable != null) {
             dataTable.setDescription("Search Bids");
@@ -71,9 +72,9 @@ public class Offer extends DBBase {
      * @param userID User ID
      * @return Data for GUI rendering
      */
-    public static Map doSearchUserActivity(String userID) {
+    public static Map<String, Object> doSearchUserActivity(String userID) {
         String sql = FormatterOfferQuery.buildSQLUserActivityOffer(userID);
-        Map output = doSearchOfferInternal(sql, false);
+        Map<String, Object> output = doSearchOfferInternal(sql, false);
         TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
         if (dataTable != null) {
             dataTable.setDescription("User Activity");
@@ -87,13 +88,13 @@ public class Offer extends DBBase {
      * @param userID User ID
      * @return Data for GUI rendering
      */
-    public static Map doSearchMyOffer(String userID) {
+    public static Map<String, Object> doSearchMyOffer(String userID) {
         StringBuilder sb = FormatterOfferQuery.initQuerySearch();
         addCondition(sb, "o.seller", OP_SZ_EQUAL, userID, null);
         addCondition(sb, "o.status", OP_INT_EQUAL, "1", null);
         FormatterOfferQuery.doneQuerySearch(sb);
         String sql = sb.toString();
-        Map output = doSearchOfferInternal(sql, true);
+        Map<String, Object> output = doSearchOfferInternal(sql, true);
         TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
         if (dataTable != null) {
             dataTable.setDescription("My Offers");
@@ -107,12 +108,12 @@ public class Offer extends DBBase {
      * @param offerIDCategoryNameConditionCode Offer ID + Category Name + Condition Code
      * @return Data for GUI rendering
      */
-    public static Map doSearchSimilar(String offerIDCategoryNameConditionCode) {
+    public static Map<String, Object> doSearchSimilar(String offerIDCategoryNameConditionCode) {
         String[] temp = offerIDCategoryNameConditionCode.split(",");
         String categoryName = temp[1];
         String conditionCode = Helper.getCodeFromCondition(temp[2]);
         String sql = FormatterOfferQuery.buildSQLSimilarOffer(categoryName, conditionCode);
-        Map output = doSearchOfferInternal(sql, false);
+        Map<String, Object> output = doSearchOfferInternal(sql, false);
         TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
         if (dataTable != null) {
             dataTable.setStandOut(temp[0], 0);
@@ -128,13 +129,13 @@ public class Offer extends DBBase {
      * @param showAll True will show minPrice
      * @return Data for GUI rendering
      */
-    public static Map doSearchOfferByID(String offerID, boolean showAll) {
+    public static Map<String, Object> doSearchOfferByID(String offerID, boolean showAll) {
         StringBuilder sb = FormatterOfferQuery.initQuerySearch();
         addCondition(sb, "o.offerID", OP_SZ_EQUAL, offerID, null);
         addCondition(sb, "o.status", OP_INT_EQUAL, "1", null);
         FormatterOfferQuery.doneQuerySearch(sb);
         String sql = sb.toString();
-        Map output = doSearchOfferInternal(sql, showAll);
+        Map<String, Object> output = doSearchOfferInternal(sql, showAll);
         TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
         if (dataTable != null) {
             dataTable.setDescription("Bids for One Offer");
@@ -147,9 +148,9 @@ public class Offer extends DBBase {
      *
      * @return Data for GUI rendering
      */
-    public static Map doBrowseOffer() {
+    public static Map<String, Object> doBrowseOffer() {
         String sql = FormatterOfferQuery.buildSQLBrowseOffer();
-        Map output = doSearchOfferInternal(sql, false);
+        Map<String, Object> output = doSearchOfferInternal(sql, false);
         TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
         if (dataTable != null) {
             dataTable.setDescription("Browse Offer");
@@ -164,10 +165,11 @@ public class Offer extends DBBase {
      * @param showAll True will show minPrice
      * @return Data for GUI rendering
      */
-    public static Map doSearchOffer(Map<String, String[]> parameters, boolean showAll) {
+    public static Map<String, Object> doSearchOffer(
+            Map<String, String[]> parameters, boolean showAll) {
         StringBuilder sb = formatSQLWithParametersForSearchOrAlert(parameters, true);
         String sql = sb.toString();
-        Map output = doSearchOfferInternal(sql, showAll);
+        Map<String, Object> output = doSearchOfferInternal(sql, showAll);
         TableData dataTable = (TableData) output.get(DATA_NAME_DATA);
         if (dataTable != null) {
             dataTable.setDescription("Search Offer");
@@ -284,7 +286,7 @@ public class Offer extends DBBase {
      * @param showAll If true, include minPrice
      * @return Data for GUI rendering
      */
-    private static Map doSearchOfferInternal(String sql, boolean showAll) {
+    private static Map<String, Object> doSearchOfferInternal(String sql, boolean showAll) {
         Map<String, Object> output = new HashMap<>();
         List<String> lstHeader = new LinkedList<>();
         List<Object> lstRows = new LinkedList<>();
