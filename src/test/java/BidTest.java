@@ -38,7 +38,7 @@ public class BidTest {
     @Test
     void testSearchBidTwo() {
         System.out.println("Start");
-        Map map = Bid.searchBid(null, "user", null);
+        Map<String, Object> map = Bid.searchBid(null, "user", null);
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
@@ -52,7 +52,7 @@ public class BidTest {
         parameters.put("action", new String[] {"repSearchBid"});
         parameters.put("buyerOP", new String[] {"any"});
         parameters.put("buyerVal", new String[] {""});
-        Map map = Bid.searchBid(parameters, null, null);
+        Map<String, Object> map = Bid.searchBid(parameters, null, null);
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));

@@ -17,8 +17,6 @@
 <body>
 
     <%
-    Map data;
-    TableData dataTable;
     String message = "";
     String action = DBBase.getStringFromParamMap("action", request.getParameterMap());
     if (action.equals("modifyBid")) {
@@ -29,11 +27,11 @@
             message = "Error in Posting Bid: " + dataModify.get(IConstant.DATA_NAME_MESSAGE);
         }
     }
-    data = Bid.searchBid(request.getParameterMap(), null, null);
+    Map<String, Object> data = Bid.searchBid(request.getParameterMap(), null, null);
     String bidIDofferIDBuyer =
             DBBase.getStringFromParamMap("bidIDofferIDBuyer", request.getParameterMap());
     BigDecimal min = Bid.getMinForModifyBid(request.getParameterMap());
-    dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
+    TableData dataTable = (TableData) (data.get(IConstant.DATA_NAME_DATA));
     request.setAttribute("dataTable", dataTable);
     %>
 

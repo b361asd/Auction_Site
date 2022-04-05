@@ -36,8 +36,10 @@ public class Bid extends DBBase {
      * @param userMyBid User ID for my bid screen
      * @return Data for GUI rendering
      */
-    public static Map searchBid(
+    public static Map<String, Object> searchBid(
             Map<String, String[]> parameters, String userActivity, String userMyBid) {
+        Map<String, Object> output = new HashMap<>();
+
         Objects.requireNonNull(userActivity);
         Objects.requireNonNull(userMyBid);
 
@@ -137,8 +139,6 @@ public class Bid extends DBBase {
             FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, offerID, null);
             sql = sb.toString();
         }
-        Map<String, Object> output = new HashMap<>();
-
         // offerID -> Bids(in List)
         Map<String, List> tempMap = new HashMap<>();
         try (Connection con = getConnection();
@@ -152,7 +152,7 @@ public class Bid extends DBBase {
                 Object autoRebidLimit = rs.getObject(5);
                 Object bidDate = rs.getObject(6);
 
-                List lstRows = tempMap.computeIfAbsent(offerID.toString(), k -> new ArrayList());
+                List lstRows = tempMap.computeIfAbsent(offerID.toString(), k -> new ArrayList<Object>());
                 List<Object> currentRow = new LinkedList<>();
                 lstRows.add(currentRow);
                 currentRow.add(bidID);
