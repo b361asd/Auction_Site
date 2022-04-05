@@ -19,7 +19,6 @@
     <%
     Map dataModify = null;
     Map data;
-    Map categoryAndField;
     TableData tableData;
     String offerIDCategoryNameUser =
             DBBase.getStringFromParamMap("offeridcategorynameuser", request.getParameterMap());
@@ -28,7 +27,7 @@
     if (action.equals("modifyOffer")) {
         dataModify = Offer.doCreateOrModifyOffer(temps[2], request.getParameterMap(), false);
     }
-    categoryAndField = CategoryAndField.getCategoryField(temps[1]);
+    Map<String, Object> categoryAndField = CategoryAndField.getCategoryField(temps[1]);
     categoryAndField.get(CategoryAndField.DATA_CATEGORY_LIST);
     categoryAndField.get(CategoryAndField.DATA_FIELD_LIST);
     data = Offer.doSearchOfferByID(temps[0], true);

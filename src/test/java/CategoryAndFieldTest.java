@@ -8,7 +8,7 @@ public class CategoryAndFieldTest {
     @Test
     void testGetCategoryField() {
         System.out.println("Start");
-        Map map = CategoryAndField.getCategoryField(null);
+        Map<String, Object> map = CategoryAndField.getCategoryField(null);
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));

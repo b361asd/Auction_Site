@@ -21,7 +21,7 @@
 <body>
 
     <%
-    Map data =
+    Map<String, Object> data =
             CategoryAndField.getCategoryField(
                     DBBase.getStringFromParamMap("categoryName", request.getParameterMap()));
     data.get(CategoryAndField.DATA_CATEGORY_LIST);
