@@ -164,7 +164,7 @@ public class Bid extends DBBase {
                 currentRow.add(bidDate);
                 offerIDSet.add(offerID.toString());
             }
-            Map offerMap;
+            Map<String, Object> offerMap;
             TableData dataTableOffer = null;
             if (_listActivity) {
                 offerMap = Offer.doSearchUserActivity(userActivity);
