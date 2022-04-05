@@ -26,7 +26,7 @@ public class Alert extends DBBase {
      * @param userID User ID
      * @return Data for GUI rendering
      */
-    public static Map selectAlert(String userID) {
+    public static Map<String, Object> selectAlert(String userID) {
         Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
         try (Connection con = getConnection();
