@@ -521,7 +521,7 @@ public class Bid extends DBBase {
      * @param parameters Map containing bidID to be deleted
      * @return Data for GUI rendering
      */
-    public static Map cancelBid(Map<String, String[]> parameters) {
+    public static Map<String, Object> cancelBid(Map<String, String[]> parameters) {
         Map<String, Object> output = new HashMap<>();
         String bidID = getStringFromParamMap("bidID", parameters);
         try (Connection con = getConnection();

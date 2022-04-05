@@ -14,7 +14,7 @@
 <body>
 
     <%
-    Map data = Bid.cancelBid(request.getParameterMap());
+    Map<String, Object> data = Bid.cancelBid(request.getParameterMap());
     request.getSession().setAttribute(IConstant.SESSION_ATTRIBUTE_DATA_MAP, data);
     String message;
     if ((Boolean) data.get(IConstant.DATA_NAME_STATUS)) {
