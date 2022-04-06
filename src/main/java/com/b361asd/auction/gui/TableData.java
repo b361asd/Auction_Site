@@ -38,7 +38,7 @@ public class TableData {
         mapHeaderToIndex = new HashMap<>();
         if (lstHeader != null) {
             for (int i = 0; i < lstHeader.size(); i++) {
-                String temp = lstHeader.get(i) == null ? "" : lstHeader.get(i).toString();
+                String temp = lstHeader.get(i) == null ? "" : lstHeader.get(i);
                 mapHeaderToIndex.put(temp, i);
             }
         }
@@ -98,7 +98,7 @@ public class TableData {
                 List lst = (List) one;
                 TableData tableData = (TableData) lst.get(lst.size() - 1);
                 Objects.requireNonNull(tableData)
-                    .sortRowPerHeader(header.substring(SUB_TABLE_HEADER_SIGN.length()));
+                        .sortRowPerHeader(header.substring(SUB_TABLE_HEADER_SIGN.length()));
             }
         } else {
             int index = mapHeaderToIndex.get(header);
@@ -147,7 +147,7 @@ public class TableData {
         if (lstHeader.size() > 0 && colSeq.length > 0) {
             for (int value : colSeq) {
                 Object one = lstHeader.get(value);
-                String oneItem = one == null ? "" : one.toString();
+                String oneItem = Optional.ofNullable(one).map(Object::toString).orElse("");
                 out.append("<th><div onclick=onClickHeader('")
                         .append(subTable ? SUB_TABLE_HEADER_SIGN : "")
                         .append(oneItem)
@@ -163,7 +163,6 @@ public class TableData {
         return internalPrintOneRowInTable(index);
     }
 
-    // timezone="America/New_York"
     private String internalPrintOneRowInTable(int index) {
         List row = (List) lstRows.get(index);
         StringBuilder out = new StringBuilder();
