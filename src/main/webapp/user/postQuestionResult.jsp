@@ -15,7 +15,7 @@
 
     <%
     String userID = (String) request.getSession().getAttribute("user");
-    Map data =
+    Map<String, Object> data =
             Question.insertQuestion(
                     userID,
                     DBBase.getStringFromParamMap("question", request.getParameterMap()));

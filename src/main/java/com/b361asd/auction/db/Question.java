@@ -116,7 +116,7 @@ public class Question extends DBBase {
      * @param question Question to insert
      * @return Data for GUI rendering
      */
-    public static Map insertQuestion(String userID, String question) {
+    public static Map<String, Object> insertQuestion(String userID, String question) {
         Map<String, Object> output = new HashMap<>();
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt = con.prepareStatement(SQL_QUESTION_INSERT)) {
