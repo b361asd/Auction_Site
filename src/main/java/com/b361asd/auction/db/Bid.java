@@ -179,7 +179,7 @@ public class Bid extends DBBase {
                 }
             }
             if (dataTableOffer != null) {
-                List lstOfferRows = dataTableOffer.getRows();
+                List<Object> lstOfferRows = dataTableOffer.getRows();
                 for (Object one : lstOfferRows) {
                     List oneOfferRow = (List) one;
                     List<Object> lstBidRows = tempMap.get(oneOfferRow.get(0));

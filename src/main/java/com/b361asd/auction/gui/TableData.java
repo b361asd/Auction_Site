@@ -22,8 +22,8 @@ public class TableData {
     private static final String SUB_TABLE_HEADER_SIGN = "-";
 
     Map<String, Integer> mapHeaderToIndex;
-    List lstHeader;
-    List lstRows;
+    List<String> lstHeader;
+    List<Object> lstRows;
     int[] colSeq;
     String description = "";
     int indexSorted = -1;
@@ -31,7 +31,7 @@ public class TableData {
     String signStandOut = null;
     int idxStandOut = -1;
 
-    public TableData(List _lstHeader, List _lstRows, int[] _colSeq) {
+    public TableData(List<String> _lstHeader, List<Object> _lstRows, int[] _colSeq) {
         lstHeader = _lstHeader;
         lstRows = _lstRows;
         colSeq = _colSeq;
@@ -60,7 +60,7 @@ public class TableData {
         return Optional.ofNullable(colSeq).map(seq -> seq.length).orElse(0);
     }
 
-    public List getRows() {
+    public List<Object> getRows() {
         return lstRows;
     }
 
@@ -70,7 +70,7 @@ public class TableData {
     }
 
     public Object getOneCell(int i, int j) {
-        return ((List) (lstRows.get(i))).get(j);
+        return ((List<?>) (lstRows.get(i))).get(j);
     }
 
     public Object getOneCell(int i, String header) {
@@ -80,7 +80,7 @@ public class TableData {
         }
         int index = objIndex;
         if (index >= 0) {
-            return ((List) lstRows.get(i)).get(index);
+            return ((List<?>) lstRows.get(i)).get(index);
         }
         return "";
     }
@@ -106,9 +106,9 @@ public class TableData {
                 Comparator<Object> comparatorNorm =
                         Comparator.comparing(
                                 o ->
-                                        ((List) o).get(index) == null
+                                        ((List<?>) o).get(index) == null
                                                 ? ""
-                                                : ((List) o).get(index).toString().trim());
+                                                : ((List<?>) o).get(index).toString().trim());
                 boolean isTheSame = indexSorted == index;
                 if (isTheSame) {
                     if (normalSorted) {
