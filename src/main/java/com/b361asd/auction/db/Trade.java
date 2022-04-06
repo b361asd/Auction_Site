@@ -160,7 +160,7 @@ public class Trade extends DBBase {
      * @param lookBackDays Look back days
      * @return Data for GUI rendering
      */
-    public static Map selectGroupSimilar(int lookBackDays) {
+    public static Map<String, Object> selectGroupSimilar(int lookBackDays) {
         Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
         TableData tableData = new TableData(lstHeader_tradeBySimilar, lstRows, colSeq_tradeBy);
