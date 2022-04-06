@@ -219,7 +219,7 @@ public class Trade extends DBBase {
      * @param isBestSelling True for best-selling, false for most recent
      * @return Data for GUI rendering
      */
-    public static Map selectBestSellingMostRecentItems(
+    public static Map<String, Object> selectBestSellingMostRecentItems(
             int lookBackDays, int limit, boolean isBestSelling) {
         Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();

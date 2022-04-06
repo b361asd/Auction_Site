@@ -10,7 +10,7 @@ public class TradeTest {
     void testSelectBestSellingMostRecentItems() {
         Map<String, String[]> parameters = new HashMap<>();
         parameters.put("bidID", new String[] {"11fe20aabc7a4025928e9522544be2e3"});
-        Map map = Trade.selectBestSellingMostRecentItems(30, 10, true);
+        Map<String, Object> map = Trade.selectBestSellingMostRecentItems(30, 10, true);
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
