@@ -38,7 +38,7 @@ public class User extends DBBase {
      * @param userType See {@link com.b361asd.auction.gui.UserType}
      * @return Data for GUI rendering
      */
-    public static Map selectUser(Map<String, String[]> parameters, int userType) {
+    public static Map<String, Object> selectUser(Map<String, String[]> parameters, int userType) {
         Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
         String in_username =

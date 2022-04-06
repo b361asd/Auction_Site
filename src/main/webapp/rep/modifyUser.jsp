@@ -16,7 +16,7 @@
 <body>
 
     <%
-    Map data = null;
+    Map<String, Object> data = null;
     TableData dataTable;
     String _userType = (String) session.getAttribute(IConstant.SESSION_ATTRIBUTE_USERTYPE);
     int targetUsrType = UserType.USER.getDatabaseUserType();
