@@ -24,7 +24,7 @@
     String state = request.getParameter("state");
     String zipCode = request.getParameter("zipCode");
     String phone = request.getParameter("phoneNumber");
-    Map data =
+    Map<String, Object> data =
             User.doAddUser(
                     username,
                     password,

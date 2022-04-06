@@ -25,7 +25,7 @@ public class HomeServlet extends HttpServlet implements IConstant {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        Map map;
+        Map<String, Object> map;
         boolean isRegister =
                 request.getParameter("register") != null
                         && request.getParameter("register").equalsIgnoreCase("YES");
@@ -87,7 +87,7 @@ public class HomeServlet extends HttpServlet implements IConstant {
                 }
             } else {
                 // Session attributes already set
-                map = new HashMap();
+                map = new HashMap<>();
                 map.put(DATA_NAME_STATUS, true);
                 map.put(DATA_NAME_MESSAGE, "Already login.");
             }

@@ -9,7 +9,7 @@ public class UserTest {
 
     @Test
     void testDoVerifyLogin() {
-        Map map = User.doVerifyLogin("user", "user_pwd");
+        Map<String, Object> map = User.doVerifyLogin("user", "user_pwd");
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
@@ -19,7 +19,7 @@ public class UserTest {
 
     @Test
     void testDoAddUser() {
-        Map map =
+        Map<String, Object> map =
                 User.doAddUser(
                         "abc",
                         "123",

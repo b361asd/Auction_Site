@@ -253,7 +253,7 @@ public class User extends DBBase {
      * @param usertype User type
      * @return Data for GUI rendering
      */
-    public static Map doAddUser(
+    public static Map<String, Object> doAddUser(
             String username,
             String password,
             String email,
@@ -348,7 +348,7 @@ public class User extends DBBase {
      * @param pwd Password
      * @return Data for GUI rendering
      */
-    public static Map doVerifyLogin(String userID, String pwd) {
+    public static Map<String, Object> doVerifyLogin(String userID, String pwd) {
         Map<String, Object> output = new HashMap<>();
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt = con.prepareStatement(SQL_USER_AUTH)) {
