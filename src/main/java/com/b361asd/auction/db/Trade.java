@@ -53,7 +53,7 @@ public class Trade extends DBBase {
      * @param isUser If true, then run user report (buyer and seller)
      * @return Data for GUI rendering
      */
-    public static Map summaryBy(
+    public static Map<String, Object> summaryBy(
             int lookBackDays,
             boolean isTotal,
             boolean isCategoryName,
