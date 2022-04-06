@@ -27,7 +27,7 @@ public class BidTest {
         Map<String, String[]> parameters = new HashMap<>();
         parameters.put(
                 "offeridcategoryname", new String[] {"9dee3107cdf444a7b4f0cd79524cfe53,car"});
-        Map map = Bid.searchBid(parameters, null, null);
+        Map<String, Object> map = Bid.searchBid(parameters, null, null);
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));
