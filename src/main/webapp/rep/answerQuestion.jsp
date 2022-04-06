@@ -22,7 +22,7 @@
     if (!questionID.equals("") && !answer.equals("")) {
         Question.answerQuestion(questionID, answer, repID);
     }
-    Map data = Question.retrieveOpenQuestion();
+    Map<String, Object> data = Question.retrieveOpenQuestion();
     List lstRows = (List) Helper.getData(data);
     %>
 

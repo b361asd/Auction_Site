@@ -200,7 +200,7 @@ public class Question extends DBBase {
      *
      * @return Data for GUI rendering
      */
-    public static Map retrieveOpenQuestion() {
+    public static Map<String, Object> retrieveOpenQuestion() {
         Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new LinkedList<>();
         Helper.setData(output, lstRows);
