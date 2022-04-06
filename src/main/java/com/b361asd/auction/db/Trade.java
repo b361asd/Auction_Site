@@ -294,7 +294,7 @@ public class Trade extends DBBase {
      * @param limit Limit how many rows returned
      * @return Data for GUI rendering
      */
-    public static Map selectMyTrade(String userName, int lookBackDays, int limit) {
+    public static Map<String, Object> selectMyTrade(String userName, int lookBackDays, int limit) {
         Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
         TableData tableData =
