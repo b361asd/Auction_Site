@@ -49,7 +49,7 @@ public class UserTest {
         parameters.put("lastname", new String[] {"Lnuser"});
         parameters.put("address", new String[] {"123 Main St., Nowhere Town, NJ 56789"});
         parameters.put("phone", new String[] {"2365678909"});
-        Map map = User.modifyUser(parameters, UserType.USER.getDatabaseUserType());
+        Map<String, Object> map = User.modifyUser(parameters, UserType.USER.getDatabaseUserType());
         System.out.println(IConstant.DATA_NAME_STATUS + "= " + map.get(IConstant.DATA_NAME_STATUS));
         System.out.println(
                 IConstant.DATA_NAME_MESSAGE + "= " + map.get(IConstant.DATA_NAME_MESSAGE));

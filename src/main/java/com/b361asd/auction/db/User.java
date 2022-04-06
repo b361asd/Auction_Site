@@ -178,7 +178,7 @@ public class User extends DBBase {
      * @param userType 2 for user, 3 for rep
      * @return Data for GUI rendering
      */
-    public static Map modifyUser(Map<String, String[]> parameters, int userType) {
+    public static Map<String, Object> modifyUser(Map<String, String[]> parameters, int userType) {
         Map<String, Object> output = new HashMap<>();
 
         String username = getStringFromParamMap("username", parameters);
