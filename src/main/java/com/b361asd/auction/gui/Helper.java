@@ -225,23 +225,23 @@ public class Helper implements IConstant {
         return out.toString();
     }
 
-    public static void setStatus(Map data, boolean status) {
+    public static void setStatus(Map<String, Object> data, boolean status) {
         data.put(DATA_NAME_STATUS, status);
     }
 
-    public static void appendMessage(Map data, String message) {
+    public static void appendMessage(Map<String, Object> data, String message) {
         data.put(DATA_NAME_MESSAGE, getMessage(data) + " " + message);
     }
 
-    public static void setData(Map data, Object payload) {
+    public static void setData(Map<String, Object> data, Object payload) {
         data.put(DATA_NAME_DATA, payload);
     }
 
-    public static boolean getStatus(Map data) {
+    public static boolean getStatus(Map<String, Object> data) {
         return (Boolean) data.get(DATA_NAME_STATUS);
     }
 
-    public static String getMessage(Map data) {
+    public static String getMessage(Map<String, Object> data) {
         return (String) data.get(DATA_NAME_MESSAGE);
     }
 
