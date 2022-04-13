@@ -14,7 +14,7 @@ public class Helper implements IConstant {
         "Manufacturer Refurbished",
         "Seller Refurbished",
         "Used",
-        "For parts " + "or Not " + "Working"
+        "For parts or Not Working"
     };
 
     private static final String SELECT_OP_SZ_TYPE =
@@ -147,56 +147,37 @@ public class Helper implements IConstant {
     }
 
     public static String getConditionFromCode(String code) {
-        switch (code) {
-            case "1":
-                return S_CONDITIONS[0];
-            case "2":
-                return S_CONDITIONS[1];
-            case "3":
-                return S_CONDITIONS[2];
-            case "4":
-                return S_CONDITIONS[3];
-            case "5":
-                return S_CONDITIONS[4];
-            case "6":
-                return S_CONDITIONS[5];
-            default:
-                return "Unknown";
-        }
+        return switch (code) {
+            case "1" -> S_CONDITIONS[0];
+            case "2" -> S_CONDITIONS[1];
+            case "3" -> S_CONDITIONS[2];
+            case "4" -> S_CONDITIONS[3];
+            case "5" -> S_CONDITIONS[4];
+            case "6" -> S_CONDITIONS[5];
+            default -> "Unknown";
+        };
     }
 
     public static String getCodeFromCondition(String condition) {
-        switch (condition) {
-            case "New":
-                return "1";
-            case "Like New":
-                return "2";
-            case "Manufacturer Refurbished":
-                return "3";
-            case "Seller Refurbished":
-                return "4";
-            case "Used":
-                return "5";
-            case "For parts or Not Working":
-                return "6";
-            default:
-                return "9";
-        }
+        return switch (condition) {
+            case "New" -> "1";
+            case "Like New" -> "2";
+            case "Manufacturer Refurbished" -> "3";
+            case "Seller Refurbished" -> "4";
+            case "Used" -> "5";
+            case "For parts or Not Working" -> "6";
+            default -> "9";
+        };
     }
 
     public static String getStatusFromCode(String status) {
-        switch (status) {
-            case "1":
-                return "Active";
-            case "3":
-                return "Completed";
-            case "4":
-                return "No Bid";
-            case "5":
-                return "Min Not Met";
-            default:
-                return "Unknown";
-        }
+        return switch (status) {
+            case "1" -> "Active";
+            case "3" -> "Completed";
+            case "4" -> "No Bid";
+            case "5" -> "Min Not Met";
+            default -> "Unknown";
+        };
     }
 
     public static String getButton(
