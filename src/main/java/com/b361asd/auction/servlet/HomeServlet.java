@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import java.util.Map;
 public class HomeServlet extends HttpServlet implements IConstant {
 
     /** Serial Version UID */
-    private static final long serialVersionUID = -8617808045057289714L;
+    @Serial private static final long serialVersionUID = -8617808045057289714L;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
