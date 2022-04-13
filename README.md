@@ -7,7 +7,7 @@ It is implemented using Java, [JSP](https://en.wikipedia.org/wiki/JavaServer_Pag
 
 ## Prerequisites
 
--   Java 11
+-   Java 17
 -   [Apache Maven](https://maven.apache.org/)
 -   MySQL Workbench
 -   MySQL Server
