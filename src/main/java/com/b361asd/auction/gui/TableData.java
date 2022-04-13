@@ -176,8 +176,7 @@ public class TableData {
                     if (((BigDecimal) one).compareTo(new BigDecimal(-1)) == 0) {
                         oneItem = "";
                     }
-                } else if (one instanceof Timestamp) {
-                    Timestamp ts = (Timestamp) one;
+                } else if (one instanceof Timestamp ts) {
                     LocalDateTime ldt =
                             LocalDateTime.ofInstant(ts.toInstant(), ZoneId.of("America/New_York"));
                     DateTimeFormatter formatter =
