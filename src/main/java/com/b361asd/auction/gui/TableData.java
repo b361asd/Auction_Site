@@ -172,8 +172,8 @@ public class TableData {
             for (int value : colSeq) {
                 Object one = row.get(value);
                 String oneItem = one == null ? "" : one.toString();
-                if (one instanceof BigDecimal) {
-                    if (((BigDecimal) one).compareTo(new BigDecimal(-1)) == 0) {
+                if (one instanceof BigDecimal bd) {
+                    if (bd.compareTo(new BigDecimal(-1)) == 0) {
                         oneItem = "";
                     }
                 } else if (one instanceof Timestamp ts) {
