@@ -1,4 +1,4 @@
-FROM 3.8.5-openjdk-17 AS maven_build
+FROM maven:3.8.5-openjdk-17 AS maven_build
 WORKDIR /app
 COPY . /app
 RUN mvn -f /app/pom.xml package
