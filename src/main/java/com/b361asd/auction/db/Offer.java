@@ -385,7 +385,7 @@ public class Offer extends DBBase {
                 }
             }
             int[] colSeq;
-            if (lstHeader.size() == 0) {
+            if (lstHeader.isEmpty()) {
                 lstHeader = lstHeader_OfferDefault;
                 colSeq = colSeq_OfferDefault;
             } else {

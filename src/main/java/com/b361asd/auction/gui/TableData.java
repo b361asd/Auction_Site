@@ -144,7 +144,7 @@ public class TableData {
         Objects.requireNonNull(lstHeader);
         Objects.requireNonNull(colSeq);
         StringBuilder out = new StringBuilder();
-        if (lstHeader.size() > 0 && colSeq.length > 0) {
+        if (!lstHeader.isEmpty() && colSeq.length > 0) {
             for (int value : colSeq) {
                 Object one = lstHeader.get(value);
                 String oneItem = Optional.ofNullable(one).map(Object::toString).orElse("");
@@ -168,7 +168,7 @@ public class TableData {
         StringBuilder out = new StringBuilder();
         Objects.requireNonNull(row);
         Objects.requireNonNull(colSeq);
-        if (row.size() > 0 && colSeq.length > 0) {
+        if (!row.isEmpty() && colSeq.length > 0) {
             for (int value : colSeq) {
                 Object one = row.get(value);
                 String oneItem = one == null ? "" : one.toString();

@@ -171,7 +171,7 @@ public class Bid extends DBBase {
                 dataTableOffer = (TableData) offerMap.get(IConstant.DATA_NAME_DATA);
                 dataTableOffer.setStandOut(userActivity, 1);
             } else {
-                if (offerIDSet.size() > 0) {
+                if (!offerIDSet.isEmpty()) {
                     offerMap =
                             Offer.doSearchByOfferIDSet(
                                     offerIDSet, _listBid_Search || _listBid_Browse || _modifyBid);
