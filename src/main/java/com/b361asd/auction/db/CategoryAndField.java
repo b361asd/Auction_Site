@@ -49,11 +49,9 @@ public class CategoryAndField extends DBBase {
                 }
                 boolean isSelected =
                         ("," + categoryNamesFromParam + ",").contains("," + sz_categoryName + ",");
-                if (isSelected) {
-                    if (!fieldIDSet.contains("" + i_fieldID)) {
-                        lstField.add(new Field(i_fieldID, sz_fieldName, i_fieldType));
-                        fieldIDSet.add("" + i_fieldID);
-                    }
+                if (isSelected && !fieldIDSet.contains("" + i_fieldID)) {
+                    lstField.add(new Field(i_fieldID, sz_fieldName, i_fieldType));
+                    fieldIDSet.add("" + i_fieldID);
                 }
                 if (!categoryNameSet.contains(sz_categoryName)) {
                     lstCategory.add(new Category(sz_categoryName, isSelected));
