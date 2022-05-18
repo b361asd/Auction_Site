@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class Question extends DBBase {
 
-    private static final List<String> lstHeader_question =
+    private static final List<String> LST_HEADER_QUESTION =
             Arrays.asList(
                     "questionID",
                     "userID",
@@ -27,7 +27,7 @@ public class Question extends DBBase {
                     "questionDate",
                     "answerDate");
 
-    private static final int[] colSeq_question = {1, 4, 2, 3, 5, 6};
+    private static final int[] COL_SEQ_QUESTION = {1, 4, 2, 3, 5, 6};
 
     /**
      * Search Questions
@@ -62,7 +62,7 @@ public class Question extends DBBase {
         String sql = sb.toString();
         Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
-        TableData tableData = new TableData(lstHeader_question, lstRows, colSeq_question);
+        TableData tableData = new TableData(LST_HEADER_QUESTION, lstRows, COL_SEQ_QUESTION);
         output.put(DATA_NAME_DATA, tableData);
         try (Connection con = getConnection();
                 Statement statement = con.createStatement();

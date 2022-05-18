@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public class OfferAlert extends DBBase {
-    private static final List<String> lstHeader_OfferAlert =
+    private static final List<String> LST_HEADER_OFFER_ALERT =
             Arrays.asList(
                     "criterionID",
                     "buyer",
@@ -23,7 +23,7 @@ public class OfferAlert extends DBBase {
                     "description",
                     "generateDate");
 
-    private static final int[] colSeq_OfferAlert = {1, 2, 4, 5};
+    private static final int[] COL_SEQ_OFFER_ALERT = {1, 2, 4, 5};
 
     /**
      * Generate Offer Alert Criterion
@@ -78,7 +78,7 @@ public class OfferAlert extends DBBase {
     public static Map<String, Object> selectOfferAlert(String userName, boolean isUser) {
         Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
-        TableData tableData = new TableData(lstHeader_OfferAlert, lstRows, colSeq_OfferAlert);
+        TableData tableData = new TableData(LST_HEADER_OFFER_ALERT, lstRows, COL_SEQ_OFFER_ALERT);
         output.put(DATA_NAME_DATA, tableData);
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt =
