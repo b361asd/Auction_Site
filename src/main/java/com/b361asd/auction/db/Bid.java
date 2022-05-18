@@ -23,10 +23,10 @@ import java.util.Set;
 
 public class Bid extends DBBase {
 
-    private static final List<String> lstHeader_bid =
+    private static final List<String> LST_HEADER_BID =
             Arrays.asList("bidID", "offerID", "buyer", "price", "autoRebidLimit", "bidDate");
-    private static final int[] colSeq_bid = {2, 3, 5};
-    private static final int[] colSeq_bid_add = {2, 3, 4, 5};
+    private static final int[] COL_SEQ_BID = {2, 3, 5};
+    private static final int[] COL_SEQ_BID_ADD = {2, 3, 4, 5};
 
     /**
      * Search bid and their relevant offers
@@ -48,55 +48,55 @@ public class Bid extends DBBase {
         // viewAlertDetail
         String offerIDBidID = getStringFromParamMap("offerIDbidID", parameters);
 
-        String _action = getStringFromParamMap("action", parameters);
+        String action = getStringFromParamMap("action", parameters);
         String bidIDOfferIDBuyer = getStringFromParamMap("bidIDofferIDBuyer", parameters);
 
-        boolean _listActivity = false;
-        boolean _listMyBid = false;
-        boolean _listBidForOffer = false;
-        boolean _viewAlertDetail = false;
-        boolean _listBid_Search = false;
-        boolean _listBid_Browse = false;
-        boolean _modifyBid = false;
+        boolean listActivity = false;
+        boolean listMyBid = false;
+        boolean listBidForOffer = false;
+        boolean viewAlertDetail = false;
+        boolean listBidSearch = false;
+        boolean listBidBrowse = false;
+        boolean modifyBid = false;
 
         if (userActivity.length() > 0) {
-            _listActivity = true;
+            listActivity = true;
         } else if (userMyBid.length() > 0) {
-            _listMyBid = true;
+            listMyBid = true;
         } else if (offerIDCategoryName.length() > 0) {
-            _listBidForOffer = true;
+            listBidForOffer = true;
         } else if (offerIDBidID.length() > 0) {
-            _viewAlertDetail = true;
-        } else if (_action.equals("repSearchBid")) {
-            _listBid_Search = true;
-        } else if (_action.equals("repBrowseBid")) {
-            _listBid_Browse = true;
+            viewAlertDetail = true;
+        } else if (action.equals("repSearchBid")) {
+            listBidSearch = true;
+        } else if (action.equals("repBrowseBid")) {
+            listBidBrowse = true;
         } else if (!bidIDOfferIDBuyer.equals("")) {
-            _modifyBid = true;
+            modifyBid = true;
         }
         String sql;
         String bidIDStandout = null;
         String userStandout = null;
         Set<String> offerIDSet = new HashSet<>();
-        if (_listActivity) {
+        if (listActivity) {
             // User: ListActivity.jsp
             StringBuilder sb = FormatterBidQuery.buildQueryUserActivity(userActivity);
             sql = sb.toString();
             userStandout = userActivity;
-        } else if (_listMyBid) {
+        } else if (listMyBid) {
             // User: listMyBid.jsp
             StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
             FormatterOfferQuery.addCondition(sb, "buyer", OP_SZ_EQUAL, userMyBid, null);
             FormatterOfferQuery.addCondition(sb, "status", OP_INT_EQUAL, "1", null);
             sql = sb.toString();
             userStandout = userMyBid;
-        } else if (_listBidForOffer) {
+        } else if (listBidForOffer) {
             StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
             String[] temps = offerIDCategoryName.split(",");
             FormatterOfferQuery.addCondition(sb, "o.offerID", OP_SZ_EQUAL, temps[0], null);
             sql = sb.toString();
             offerIDSet.add(temps[0]);
-        } else if (_listBid_Search) {
+        } else if (listBidSearch) {
             // repSearchBid for cancel and modify, should be
             // active Offer
             StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
@@ -104,13 +104,13 @@ public class Bid extends DBBase {
             FormatterOfferQuery.addCondition(sb, "buyer", OP_SZ_EQUAL, userRepBidSearch, null);
             FormatterOfferQuery.addCondition(sb, "status", OP_INT_EQUAL, "1", null);
             sql = sb.toString();
-        } else if (_listBid_Browse) {
+        } else if (listBidBrowse) {
             // repSearchBid for cancel and modify, should be
             // active Offer
             StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
             FormatterOfferQuery.addCondition(sb, "status", OP_INT_EQUAL, "1", null);
             sql = sb.toString();
-        } else if (_viewAlertDetail) {
+        } else if (viewAlertDetail) {
             // user: listAlert.jsp(offerIDbidID) ->
             // viewAlertDetail.jsp
             StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
@@ -122,7 +122,7 @@ public class Bid extends DBBase {
             }
             sql = sb.toString();
             offerIDSet.add(temps[0]);
-        } else if (_modifyBid) {
+        } else if (modifyBid) {
             // Rep: ListBid.jsp(bidIDofferIDBuyer) ->
             // modifyBid.jsp
             StringBuilder sb = FormatterBidQuery.initQuerySearchAll();
@@ -166,7 +166,7 @@ public class Bid extends DBBase {
             }
             Map<String, Object> offerMap;
             TableData dataTableOffer = null;
-            if (_listActivity) {
+            if (listActivity) {
                 offerMap = Offer.doSearchUserActivity(userActivity);
                 dataTableOffer = (TableData) offerMap.get(IConstant.DATA_NAME_DATA);
                 dataTableOffer.setStandOut(userActivity, 1);
@@ -174,7 +174,7 @@ public class Bid extends DBBase {
                 if (!offerIDSet.isEmpty()) {
                     offerMap =
                             Offer.doSearchByOfferIDSet(
-                                    offerIDSet, _listBid_Search || _listBid_Browse || _modifyBid);
+                                    offerIDSet, listBidSearch || listBidBrowse || modifyBid);
                     dataTableOffer = (TableData) offerMap.get(IConstant.DATA_NAME_DATA);
                 }
             }
@@ -188,11 +188,11 @@ public class Bid extends DBBase {
                     } else {
                         TableData tableDataBiD =
                                 new TableData(
-                                        lstHeader_bid,
+                                        LST_HEADER_BID,
                                         lstBidRows,
-                                        ((_listActivity || _viewAlertDetail || _listBidForOffer)
-                                                ? colSeq_bid
-                                                : colSeq_bid_add));
+                                        listActivity || viewAlertDetail || listBidForOffer
+                                                ? COL_SEQ_BID
+                                                : COL_SEQ_BID_ADD);
                         if (bidIDStandout != null) {
                             tableDataBiD.setStandOut(bidIDStandout, 0); // bidID
                         } else if (userStandout != null) {
@@ -208,19 +208,19 @@ public class Bid extends DBBase {
                                 new LinkedList<>(),
                                 Offer.colSeq_OfferDefault);
             }
-            if (_listActivity) {
+            if (listActivity) {
                 dataTableOffer.setDescription("User Activities for " + userActivity);
-            } else if (_listMyBid) {
+            } else if (listMyBid) {
                 dataTableOffer.setDescription("My Open Bids");
-            } else if (_listBidForOffer) {
+            } else if (listBidForOffer) {
                 dataTableOffer.setDescription("Bids for One Open Offer");
-            } else if (_viewAlertDetail) {
+            } else if (viewAlertDetail) {
                 dataTableOffer.setDescription("Offer and Its Bids for an Alert");
-            } else if (_listBid_Search) {
+            } else if (listBidSearch) {
                 dataTableOffer.setDescription("Search Bids");
-            } else if (_listBid_Browse) {
+            } else if (listBidBrowse) {
                 dataTableOffer.setDescription("Browse Bids");
-            } else if (_modifyBid) {
+            } else if (modifyBid) {
                 dataTableOffer.setDescription("Bid To Be Modify");
             } else {
                 dataTableOffer.setDescription("List of Bids");
@@ -326,31 +326,31 @@ public class Bid extends DBBase {
                 }
                 try (ResultSet rs = preparedStmtMaxPriceBid.executeQuery()) {
                     if (rs.next()) {
-                        Object _seller = rs.getObject(2);
-                        Object _categoryName = rs.getObject(3);
-                        Object _conditionCode = rs.getObject(4);
-                        Object _description = rs.getObject(5);
-                        Object _initPrice = rs.getObject(6);
-                        Object _increment = rs.getObject(7);
-                        Object _status = rs.getObject(11);
-                        Object _bidID = rs.getObject(12);
-                        Object _buyer = rs.getObject(13);
-                        Object _price = rs.getObject(14);
-                        Object _autoRebidLimit = rs.getObject(15);
-                        initPrice = (BigDecimal) _initPrice;
-                        increment = (BigDecimal) _increment;
-                        seller = _seller == null ? "" : _seller.toString();
-                        categoryName = _categoryName == null ? "" : _categoryName.toString();
-                        conditionCode = _conditionCode == null ? "" : _conditionCode.toString();
-                        description = _description == null ? "" : _description.toString();
-                        status = (Integer) _status;
-                        if (_bidID == null || _bidID.toString().length() == 0) {
+                        Object dbSeller = rs.getObject(2);
+                        Object dbCategoryName = rs.getObject(3);
+                        Object dbConditionCode = rs.getObject(4);
+                        Object dbDescription = rs.getObject(5);
+                        Object dbInitPrice = rs.getObject(6);
+                        Object dbIncrement = rs.getObject(7);
+                        Object dbStatus = rs.getObject(11);
+                        Object dbBidID = rs.getObject(12);
+                        Object dbBuyer = rs.getObject(13);
+                        Object dbPrice = rs.getObject(14);
+                        Object dbAutoRebidLimit = rs.getObject(15);
+                        initPrice = (BigDecimal) dbInitPrice;
+                        increment = (BigDecimal) dbIncrement;
+                        seller = dbSeller == null ? "" : dbSeller.toString();
+                        categoryName = dbCategoryName == null ? "" : dbCategoryName.toString();
+                        conditionCode = dbConditionCode == null ? "" : dbConditionCode.toString();
+                        description = dbDescription == null ? "" : dbDescription.toString();
+                        status = (Integer) dbStatus;
+                        if (dbBidID == null || dbBidID.toString().length() == 0) {
                             lastMaxBid = null;
                         } else {
-                            lastMaxBid[0] = _bidID;
-                            lastMaxBid[1] = _buyer;
-                            lastMaxBid[2] = _price;
-                            lastMaxBid[3] = _autoRebidLimit;
+                            lastMaxBid[0] = dbBidID;
+                            lastMaxBid[1] = dbBuyer;
+                            lastMaxBid[2] = dbPrice;
+                            lastMaxBid[3] = dbAutoRebidLimit;
                         }
                     }
                 }
@@ -369,24 +369,24 @@ public class Bid extends DBBase {
             } else {
                 boolean isModifyAndDoIt = !isCreate;
                 while (true) {
-                    BigDecimal last_price =
+                    BigDecimal lastPrice =
                             Optional.ofNullable(last)
                                     .map(objects -> (BigDecimal) objects[2])
                                     .orElse(null);
-                    BigDecimal last_autoRebidLimit =
+                    BigDecimal lastAutoRebidLimit =
                             Optional.ofNullable(last)
                                     .map(objects -> (BigDecimal) objects[3])
                                     .orElse(null);
-                    BigDecimal current_price = (BigDecimal) current[2];
+                    BigDecimal currentPrice = (BigDecimal) current[2];
                     // Check price meet offer
                     if (last == null) {
-                        if (current_price.compareTo(initPrice) < 0) {
+                        if (currentPrice.compareTo(initPrice) < 0) {
                             outcome = CreateModifyBidOutcome.NOT_MEET_INIT_PRICE;
                             break;
                         }
                     } else {
-                        BigDecimal lastPlusDelta = last_price.add(increment);
-                        if (current_price.compareTo(lastPlusDelta) < 0) {
+                        BigDecimal lastPlusDelta = lastPrice.add(increment);
+                        if (currentPrice.compareTo(lastPlusDelta) < 0) {
                             outcome = CreateModifyBidOutcome.LESS_THAN_LAST_PLUS_DELTA;
                             break;
                         }
@@ -415,11 +415,11 @@ public class Bid extends DBBase {
                         outcome = CreateModifyBidOutcome.OK;
                         break;
                     } else {
-                        BigDecimal new_bid = current_price.add(increment);
-                        if (last_autoRebidLimit.compareTo(new_bid) >= 0) {
+                        BigDecimal theNewBid = currentPrice.add(increment);
+                        if (lastAutoRebidLimit.compareTo(theNewBid) >= 0) {
                             // Continue
                             last[0] = getUUID();
-                            last[2] = new_bid;
+                            last[2] = theNewBid;
                         } else {
                             // Out bid alert
                             String context =
@@ -580,14 +580,14 @@ public class Bid extends DBBase {
             preparedStmtMaxPriceBid.setString(3, bidID);
             try (ResultSet rs = preparedStmtMaxPriceBid.executeQuery()) {
                 if (rs.next()) {
-                    Object _initPrice = rs.getObject(6);
-                    Object _increment = rs.getObject(7);
-                    Object _bidID = rs.getObject(12);
-                    Object _price = rs.getObject(14);
-                    initPrice = (BigDecimal) _initPrice;
-                    increment = (BigDecimal) _increment;
-                    if (_bidID != null && _bidID.toString().length() != 0) {
-                        price = (BigDecimal) _price;
+                    Object dbInitPrice = rs.getObject(6);
+                    Object dbIncrement = rs.getObject(7);
+                    Object dbBidID = rs.getObject(12);
+                    Object dbPrice = rs.getObject(14);
+                    initPrice = (BigDecimal) dbInitPrice;
+                    increment = (BigDecimal) dbIncrement;
+                    if (dbBidID != null && dbBidID.toString().length() != 0) {
+                        price = (BigDecimal) dbPrice;
                     }
                 }
             }
