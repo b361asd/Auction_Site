@@ -40,18 +40,18 @@ public class CategoryAndField extends DBBase {
                 Object fieldName = rs.getObject(3);
                 Object fieldType = rs.getObject(4);
                 String sz_categoryName = categoryName.toString();
-                int i_fieldID = (Integer) fieldID;
-                String sz_fieldName = fieldName.toString();
-                int i_fieldType = (Integer) fieldType;
+                int iFieldID = (Integer) fieldID;
+                String szFieldName = fieldName.toString();
+                int iFieldType = (Integer) fieldType;
                 // Default the first one
                 if (categoryNamesFromParam.equals("")) {
                     categoryNamesFromParam = sz_categoryName;
                 }
                 boolean isSelected =
                         ("," + categoryNamesFromParam + ",").contains("," + sz_categoryName + ",");
-                if (isSelected && !fieldIDSet.contains("" + i_fieldID)) {
-                    lstField.add(new Field(i_fieldID, sz_fieldName, i_fieldType));
-                    fieldIDSet.add("" + i_fieldID);
+                if (isSelected && !fieldIDSet.contains("" + iFieldID)) {
+                    lstField.add(new Field(iFieldID, szFieldName, iFieldType));
+                    fieldIDSet.add("" + iFieldID);
                 }
                 if (!categoryNameSet.contains(sz_categoryName)) {
                     lstCategory.add(new Category(sz_categoryName, isSelected));
