@@ -23,23 +23,23 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
     private static final int MAX_CATEGORY_COUNT = 16;
 
     private static final HashMap<String, String> sqlTokens;
-    public static String OP_ANY = "any";
+    private static final String OP_ANY = "any";
 
-    public static String OP_SZ_EQUAL = "szequal";
-    public static String OP_SZ_EQUAL_MULTI_NO_ESCAPE = "szequalmultine";
-    public static String OP_SZ_NOT_EQUAL = "sznotequal";
-    public static String OP_SZ_START_WITH = "startwith";
-    public static String OP_SZ_CONTAIN = "contain";
+    public static final String OP_SZ_EQUAL = "szequal";
+    public static final String OP_SZ_EQUAL_MULTI_NO_ESCAPE = "szequalmultine";
+    private static final String OP_SZ_NOT_EQUAL = "sznotequal";
+    private static final String OP_SZ_START_WITH = "startwith";
+    private static final String OP_SZ_CONTAIN = "contain";
 
-    public static String OP_INT_EQUAL = "intequal";
-    public static String OP_INT_EQUAL_MULTI = "intequalmulti";
-    public static String OP_INT_NOT_EQUAL = "intnotequal";
-    public static String OP_INT_EQUAL_OR_OVER = "equalorover";
-    public static String OP_INT_EQUAL_OR_UNDER = "equalorunder";
-    public static String OP_INT_BETWEEN = "between";
+    public static final String OP_INT_EQUAL = "intequal";
+    public static final String OP_INT_EQUAL_MULTI = "intequalmulti";
+    private static final String OP_INT_NOT_EQUAL = "intnotequal";
+    private static final String OP_INT_EQUAL_OR_OVER = "equalorover";
+    private static final String OP_INT_EQUAL_OR_UNDER = "equalorunder";
+    private static final String OP_INT_BETWEEN = "between";
 
-    public static String OP_BOOL_TRUE = "yes";
-    public static String OP_BOOL_FALSE = "no";
+    private static final String OP_BOOL_TRUE = "yes";
+    private static final String OP_BOOL_FALSE = "no";
     private static final Pattern sqlTokenPattern;
 
     static {
