@@ -112,83 +112,92 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
     private static String oneCondition(
             String columnName, String op, String value, String valueAdd, boolean isCasting) {
         String output = "";
-        // String
-        if (op.equals(OP_SZ_EQUAL)
-                || op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)
-                || op.equals(OP_SZ_NOT_EQUAL)
-                || op.equals(OP_SZ_START_WITH)
-                || op.equals(OP_SZ_CONTAIN)) {
-            if (op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
-                value = toUpperCaseTrimNoNull(value);
-            } else {
+        switch (op) {
+            case OP_SZ_EQUAL:
+            case OP_SZ_EQUAL_MULTI_NO_ESCAPE:
+            case OP_SZ_NOT_EQUAL:
+            case OP_SZ_START_WITH:
+            case OP_SZ_CONTAIN:
+                // String
+                if (op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
+                    value = toUpperCaseTrimNoNull(value);
+                } else {
+                    value = escapeToUpperCaseTrimNoNull(value);
+                }
+                if (value.equals("")) {
+                    output = "";
+                } else {
+                    columnName = "UPPER(%s)".formatted(columnName);
+                    output =
+                            switch (op) {
+                                case OP_SZ_EQUAL -> "(%s = '%s')".formatted(columnName, value);
+                                    // No quote in input
+                                case OP_SZ_EQUAL_MULTI_NO_ESCAPE -> "(%s in (%s))"
+                                        .formatted(columnName, value);
+                                case OP_SZ_NOT_EQUAL -> "(NOT %s = '%s')"
+                                        .formatted(columnName, value);
+                                case OP_SZ_START_WITH -> "(%s LIKE '%s%%')"
+                                        .formatted(columnName, value);
+                                case OP_SZ_CONTAIN -> "(%s LIKE '%%%s%%')"
+                                        .formatted(columnName, value);
+                                default -> output;
+                            };
+                }
+                break;
+            case OP_INT_EQUAL:
+            case OP_INT_EQUAL_MULTI:
+            case OP_INT_NOT_EQUAL:
+            case OP_INT_EQUAL_OR_OVER:
+            case OP_INT_EQUAL_OR_UNDER:
+            case OP_INT_BETWEEN:
+                // Integer
                 value = escapeToUpperCaseTrimNoNull(value);
-            }
-            if (value.equals("")) {
-                output = "";
-            } else {
-                columnName = "UPPER(" + columnName + ")";
-                if (op.equals(OP_SZ_EQUAL)) {
-                    output = "(" + columnName + " = '" + value + "')";
-                }
-                // No quote in input
-                else if (op.equals(OP_SZ_EQUAL_MULTI_NO_ESCAPE)) {
-                    output = "(" + columnName + " in (" + value + "))";
-                } else if (op.equals(OP_SZ_NOT_EQUAL)) {
-                    output = "(NOT " + columnName + " = '" + value + "')";
-                } else if (op.equals(OP_SZ_START_WITH)) {
-                    output = "(" + columnName + " LIKE '" + value + "%')";
-                } else if (op.equals(OP_SZ_CONTAIN)) {
-                    output = "(" + columnName + " LIKE '%" + value + "%')";
-                }
-            }
-        } else if (op.equals(OP_INT_EQUAL)
-                || op.equals(OP_INT_EQUAL_MULTI)
-                || op.equals(OP_INT_NOT_EQUAL)
-                || op.equals(OP_INT_EQUAL_OR_OVER)
-                || op.equals(OP_INT_EQUAL_OR_UNDER)
-                || op.equals(OP_INT_BETWEEN)) {
-            // Integer
-            value = escapeToUpperCaseTrimNoNull(value);
-            if (value.equals("")) {
-                output = "";
-            } else {
-                if (isCasting) {
-                    columnName = "CAST(" + columnName + " AS SIGNED)";
-                }
-                if (op.equals(OP_INT_EQUAL)) {
-                    output = "(" + columnName + " = " + value + ")";
-                } else if (op.equals(OP_INT_EQUAL_MULTI)) {
-                    output = "(" + columnName + " IN (" + value + "))";
-                } else if (op.equals(OP_INT_NOT_EQUAL)) {
-                    output = "(NOT " + columnName + " = " + value + ")";
-                } else if (op.equals(OP_INT_EQUAL_OR_OVER)) {
-                    output = "(" + columnName + " >= " + value + ")";
-                } else if (op.equals(OP_INT_EQUAL_OR_UNDER)) {
-                    output = "(" + columnName + " <= " + value + ")";
-                } else if (op.equals(OP_INT_BETWEEN)) {
-                    valueAdd = escapeToUpperCaseTrimNoNull(valueAdd);
-                    if (valueAdd.equals("")) {
-                        output = "";
-                    } else {
-                        output = "(" + columnName + " BETWEEN " + value + " AND " + valueAdd + ")";
+                if (value.equals("")) {
+                    output = "";
+                } else {
+                    if (isCasting) {
+                        columnName = "CAST(%s AS SIGNED)".formatted(columnName);
+                    }
+                    switch (op) {
+                        case OP_INT_EQUAL -> output = "(%s = %s)".formatted(columnName, value);
+                        case OP_INT_EQUAL_MULTI -> output =
+                                "(%s IN (%s))".formatted(columnName, value);
+                        case OP_INT_NOT_EQUAL -> output =
+                                "(NOT %s = %s)".formatted(columnName, value);
+                        case OP_INT_EQUAL_OR_OVER -> output =
+                                "(%s >= %s)".formatted(columnName, value);
+                        case OP_INT_EQUAL_OR_UNDER -> output =
+                                "(%s <= %s)".formatted(columnName, value);
+                        case OP_INT_BETWEEN -> {
+                            valueAdd = escapeToUpperCaseTrimNoNull(valueAdd);
+                            if (valueAdd.equals("")) {
+                                output = "";
+                            } else {
+                                output =
+                                        "(%s BETWEEN %s AND %s)"
+                                                .formatted(columnName, value, valueAdd);
+                            }
+                        }
                     }
                 }
-            }
-        } else if (op.equals(OP_BOOL_TRUE) || op.equals(OP_BOOL_FALSE)) {
-            // Boolean
-            if (op.equals(OP_BOOL_TRUE)) {
-                if (isCasting) {
-                    output = "(UPPER(" + columnName + ") = 'YES')"; // UPPER('yes')
+                break;
+            case OP_BOOL_TRUE:
+            case OP_BOOL_FALSE:
+                // Boolean
+                if (op.equals(OP_BOOL_TRUE)) {
+                    if (isCasting) {
+                        output = "(UPPER(%s) = 'YES')".formatted(columnName);
+                    } else {
+                        output = "(%s)".formatted(columnName);
+                    }
                 } else {
-                    output = "(" + columnName + ")";
+                    if (isCasting) {
+                        output = "(NOT UPPER(%s) = 'YES')".formatted(columnName);
+                    } else {
+                        output = "(NOT %s)".formatted(columnName);
+                    }
                 }
-            } else {
-                if (isCasting) {
-                    output = "(NOT UPPER(" + columnName + ") = 'YES')"; // UPPER('no')
-                } else {
-                    output = "(NOT " + columnName + ")";
-                }
-            }
+                break;
         }
         return output;
     }
