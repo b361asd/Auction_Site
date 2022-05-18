@@ -15,22 +15,22 @@ import java.util.List;
 import java.util.Map;
 
 public class Trade extends DBBase {
-    private static final List<String> lstHeader_tradeTotal =
+    private static final List<String> LST_HEADER_TRADE_TOTAL =
             Arrays.asList("Period", "Total", "Average", "Count");
-    private static final List<String> lstHeader_tradeByCategoryName =
+    private static final List<String> LST_HEADER_TRADE_BY_CATEGORY_NAME =
             Arrays.asList("categoryName", "Total", "Average", "Count");
-    private static final List<String> lstHeader_tradeBySimilar =
+    private static final List<String> LST_HEADER_TRADE_BY_SIMILAR =
             Arrays.asList("Similar", "Total", "Average", "Count");
-    private static final List<String> lstHeader_tradeByBuyer =
+    private static final List<String> LST_HEADER_TRADE_BY_BUYER =
             Arrays.asList("Buyer", "Total", "Average", "Count");
-    private static final List<String> lstHeader_tradeBySeller =
+    private static final List<String> LST_HEADER_TRADE_BY_SELLER =
             Arrays.asList("Seller", "Total", "Average", "Count");
-    private static final List<String> lstHeader_tradeByUser =
+    private static final List<String> LST_HEADER_TRADE_BY_USER =
             Arrays.asList("User", "Total", "Average", "Count");
 
-    private static final int[] colSeq_tradeBy = {0, 1, 2, 3};
+    private static final int[] COL_SEQ_TRADE_BY = {0, 1, 2, 3};
 
-    private static final List<String> lstHeader_tradeByBestSellingItem =
+    private static final List<String> LST_HEADER_TRADE_BY_BEST_SELLING_ITEM =
             Arrays.asList(
                     "price",
                     "categoryName",
@@ -40,7 +40,7 @@ public class Trade extends DBBase {
                     "buyer",
                     "tradeDate");
 
-    private static final int[] colSeq_tradeByBestSellingItem = {0, 1, 2, 3, 4, 5, 6};
+    private static final int[] COL_SEQ_TRADE_BY_BEST_SELLING_ITEM = {0, 1, 2, 3, 4, 5, 6};
 
     /**
      * Summary of Trade for Report
@@ -64,17 +64,17 @@ public class Trade extends DBBase {
         List<Object> lstRows = new ArrayList<>();
         List<String> lstHeader = null;
         if (isTotal) {
-            lstHeader = lstHeader_tradeTotal;
+            lstHeader = LST_HEADER_TRADE_TOTAL;
         } else if (isCategoryName) {
-            lstHeader = lstHeader_tradeByCategoryName;
+            lstHeader = LST_HEADER_TRADE_BY_CATEGORY_NAME;
         } else if (isBuyer) {
-            lstHeader = lstHeader_tradeByBuyer;
+            lstHeader = LST_HEADER_TRADE_BY_BUYER;
         } else if (isSeller) {
-            lstHeader = lstHeader_tradeBySeller;
+            lstHeader = LST_HEADER_TRADE_BY_SELLER;
         } else if (isUser) {
-            lstHeader = lstHeader_tradeByUser;
+            lstHeader = LST_HEADER_TRADE_BY_USER;
         }
-        TableData tableData = new TableData(lstHeader, lstRows, colSeq_tradeBy);
+        TableData tableData = new TableData(lstHeader, lstRows, COL_SEQ_TRADE_BY);
         output.put(DATA_NAME_DATA, tableData);
         try (Connection con = getConnection()) {
             String sql = null;
@@ -105,15 +105,15 @@ public class Trade extends DBBase {
                 try (ResultSet rs = preparedStmt.executeQuery()) {
                     while (rs.next()) {
                         Object person = rs.getObject(1);
-                        Object Total = rs.getObject(2);
-                        Object Average = rs.getObject(3);
-                        Object Count = rs.getObject(4);
+                        Object total = rs.getObject(2);
+                        Object average = rs.getObject(3);
+                        Object count = rs.getObject(4);
                         List<Object> currentRow = new LinkedList<>();
                         lstRows.add(currentRow);
                         currentRow.add(person);
-                        currentRow.add(Total);
-                        currentRow.add(Average);
-                        currentRow.add(Count);
+                        currentRow.add(total);
+                        currentRow.add(average);
+                        currentRow.add(count);
                     }
                     output.put(DATA_NAME_STATUS, true);
                     output.put(DATA_NAME_MESSAGE, "OK");
@@ -163,7 +163,7 @@ public class Trade extends DBBase {
     public static Map<String, Object> selectGroupSimilar(int lookBackDays) {
         Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
-        TableData tableData = new TableData(lstHeader_tradeBySimilar, lstRows, colSeq_tradeBy);
+        TableData tableData = new TableData(LST_HEADER_TRADE_BY_SIMILAR, lstRows, COL_SEQ_TRADE_BY);
         output.put(DATA_NAME_DATA, tableData);
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt =
@@ -173,18 +173,18 @@ public class Trade extends DBBase {
                 while (rs.next()) {
                     Object categoryName = rs.getObject(1);
                     Object conditionCode = rs.getObject(2);
-                    Object Total = rs.getObject(3);
-                    Object Average = rs.getObject(4);
-                    Object Count = rs.getObject(5);
+                    Object total = rs.getObject(3);
+                    Object average = rs.getObject(4);
+                    Object count = rs.getObject(5);
                     List<Object> currentRow = new LinkedList<>();
                     lstRows.add(currentRow);
                     currentRow.add(
                             categoryName
                                     + ", "
                                     + Helper.getConditionFromCode(conditionCode.toString()));
-                    currentRow.add(Total);
-                    currentRow.add(Average);
-                    currentRow.add(Count);
+                    currentRow.add(total);
+                    currentRow.add(average);
+                    currentRow.add(count);
                 }
             }
             output.put(DATA_NAME_STATUS, true);
@@ -225,7 +225,9 @@ public class Trade extends DBBase {
         List<Object> lstRows = new ArrayList<>();
         TableData tableData =
                 new TableData(
-                        lstHeader_tradeByBestSellingItem, lstRows, colSeq_tradeByBestSellingItem);
+                        LST_HEADER_TRADE_BY_BEST_SELLING_ITEM,
+                        lstRows,
+                        COL_SEQ_TRADE_BY_BEST_SELLING_ITEM);
         output.put(DATA_NAME_DATA, tableData);
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt =
@@ -299,7 +301,9 @@ public class Trade extends DBBase {
         List<Object> lstRows = new ArrayList<>();
         TableData tableData =
                 new TableData(
-                        lstHeader_tradeByBestSellingItem, lstRows, colSeq_tradeByBestSellingItem);
+                        LST_HEADER_TRADE_BY_BEST_SELLING_ITEM,
+                        lstRows,
+                        COL_SEQ_TRADE_BY_BEST_SELLING_ITEM);
         output.put(DATA_NAME_DATA, tableData);
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt = con.prepareStatement(SQL_TRADE_MY_TRADE)) {
