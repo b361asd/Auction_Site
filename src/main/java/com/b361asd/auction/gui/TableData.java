@@ -31,14 +31,14 @@ public class TableData {
     String signStandOut = null;
     int idxStandOut = -1;
 
-    public TableData(List<String> _lstHeader, List<Object> _lstRows, int[] _colSeq) {
-        lstHeader = _lstHeader;
-        lstRows = _lstRows;
-        colSeq = _colSeq;
+    public TableData(List<String> lstHeader, List<Object> lstRows, int[] colSeq) {
+        this.lstHeader = lstHeader;
+        this.lstRows = lstRows;
+        this.colSeq = colSeq;
         mapHeaderToIndex = new HashMap<>();
-        if (lstHeader != null) {
-            for (int i = 0; i < lstHeader.size(); i++) {
-                String temp = lstHeader.get(i) == null ? "" : lstHeader.get(i);
+        if (this.lstHeader != null) {
+            for (int i = 0; i < this.lstHeader.size(); i++) {
+                String temp = this.lstHeader.get(i) == null ? "" : this.lstHeader.get(i);
                 mapHeaderToIndex.put(temp, i);
             }
         }
