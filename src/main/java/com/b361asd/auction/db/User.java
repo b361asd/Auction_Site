@@ -372,9 +372,7 @@ public class User extends DBBase {
                         output.put(IConstant.DATA_NAME_STATUS, true);
                         output.put(
                                 IConstant.DATA_NAME_MESSAGE,
-                                MessageFormat.format(
-                                        "Welcome, {0} {1}!",
-                                        firstname.toString(), lastname.toString()));
+                                MessageFormat.format("Welcome, {0} {1}!", firstname, lastname));
                         output.put(IConstant.DATA_NAME_USER_TYPE, usertype);
                         output.put(IConstant.DATA_NAME_FIRST_NAME, firstname);
                         output.put(IConstant.DATA_NAME_LAST_NAME, lastname);
