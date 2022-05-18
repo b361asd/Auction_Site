@@ -480,14 +480,14 @@ public class Offer extends DBBase {
                     BigDecimal increment = getBigDecimalFromParamMap("increment", parameters);
                     BigDecimal minPrice = getBigDecimalFromParamMap("minPrice", parameters);
                     if (initPrice.compareTo(new BigDecimal(0)) <= 0) {
-                        throw new Exception("initPrice is invalid: " + initPrice);
+                        throw new IllegalArgumentException("initPrice is invalid: " + initPrice);
                     }
                     if (increment.compareTo(new BigDecimal(0)) <= 0) {
-                        throw new Exception("increment is invalid: " + increment);
+                        throw new IllegalArgumentException("increment is invalid: " + increment);
                     }
                     if (minPrice.compareTo(new BigDecimal(0)) > 0
                             && minPrice.compareTo(initPrice) < 0) {
-                        throw new Exception(
+                        throw new IllegalArgumentException(
                                 MessageFormat.format(
                                         "minPrice is invalid: {0} less than {1}",
                                         minPrice, initPrice));
