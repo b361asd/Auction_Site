@@ -204,9 +204,9 @@ public class Bid extends DBBase {
             } else {
                 dataTableOffer =
                         new TableData(
-                                Offer.lstHeader_OfferDefault,
+                                Offer.LST_HEADER_OFFER_DEFAULT,
                                 new LinkedList<>(),
-                                Offer.colSeq_OfferDefault);
+                                Offer.COL_SEQ_OFFER_DEFAULT);
             }
             if (listActivity) {
                 dataTableOffer.setDescription("User Activities for " + userActivity);
@@ -305,7 +305,8 @@ public class Bid extends DBBase {
             BigDecimal price = (BigDecimal) newBid[2];
             BigDecimal autoRebidLimit = (BigDecimal) newBid[3];
             if (price.compareTo(new BigDecimal(0)) <= 0) {
-                throw new IllegalArgumentException("Invalid bid: price needs to be greater than 0: " + price);
+                throw new IllegalArgumentException(
+                        "Invalid bid: price needs to be greater than 0: " + price);
             }
             if (autoRebidLimit.compareTo(new BigDecimal(0)) > 0
                     && autoRebidLimit.compareTo(price) < 0) {

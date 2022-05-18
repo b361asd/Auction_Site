@@ -23,7 +23,7 @@ public class Offer extends DBBase {
 
     private static final int FIELD_START_INDEX = 12;
 
-    public static List<String> lstHeader_OfferDefault =
+    public static final List<String> LST_HEADER_OFFER_DEFAULT =
             Arrays.asList(
                     "offerId",
                     "Seller",
@@ -38,7 +38,7 @@ public class Offer extends DBBase {
                     "status",
                     "CurrBid");
 
-    public static int[] colSeq_OfferDefault = {2, 3, 4, 1, 5, 6, 11, 8, 9, 10};
+    public static final int[] COL_SEQ_OFFER_DEFAULT = {2, 3, 4, 1, 5, 6, 11, 8, 9, 10};
 
     /**
      * Get Offers records for a set of offerIDs
@@ -386,8 +386,8 @@ public class Offer extends DBBase {
             }
             int[] colSeq;
             if (lstHeader.isEmpty()) {
-                lstHeader = lstHeader_OfferDefault;
-                colSeq = colSeq_OfferDefault;
+                lstHeader = LST_HEADER_OFFER_DEFAULT;
+                colSeq = COL_SEQ_OFFER_DEFAULT;
             } else {
                 if (showAll) {
                     colSeq = new int[lstHeader.size() - 1]; // 1 less than headers
@@ -403,9 +403,9 @@ public class Offer extends DBBase {
                     colSeq[9] = 9; // End
                     colSeq[10] = 10; // status
                     // lstHeader.add("offerId");		0
-                    int FIELD_STARTING_INDEX = 11; // 11 Starting Index for property
+                    int fieldStartingIndex = 11; // 11 Starting Index for property
                     for (int i = FIELD_START_INDEX; i < lstHeader.size(); i++) {
-                        colSeq[i + FIELD_STARTING_INDEX - FIELD_START_INDEX] = i;
+                        colSeq[i + fieldStartingIndex - FIELD_START_INDEX] = i;
                     }
                 } else {
                     colSeq = new int[lstHeader.size() - 2]; // 2 less than headers
@@ -421,9 +421,9 @@ public class Offer extends DBBase {
                     colSeq[9] = 10; // status
                     // lstHeader.add("offerId");		0
                     // lstHeader.add("minPrice");		7
-                    int FIELD_STARTING_INDEX = 10; // 10 Starting Index for property
+                    int fieldStartingIndex = 10; // 10 Starting Index for property
                     for (int i = FIELD_START_INDEX; i < lstHeader.size(); i++) {
-                        colSeq[i + FIELD_STARTING_INDEX - FIELD_START_INDEX] = i;
+                        colSeq[i + fieldStartingIndex - FIELD_START_INDEX] = i;
                     }
                 }
             }
