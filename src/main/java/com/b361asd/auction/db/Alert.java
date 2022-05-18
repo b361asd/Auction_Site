@@ -15,10 +15,10 @@ import java.util.Map;
 
 public class Alert extends DBBase {
 
-    private static final List<String> lstHeader_alert =
+    private static final List<String> LST_HEADER_ALERT =
             Arrays.asList("alertID", "receiver", "offerID", "bidID", "content", "alertDate");
 
-    private static final int[] colSeq_alert = {4, 5};
+    private static final int[] COL_SEQ_ALERT = {4, 5};
 
     /**
      * Select alert for a user
@@ -50,7 +50,7 @@ public class Alert extends DBBase {
                     currentRow.add(alertDate);
                 }
             }
-            TableData tableData = new TableData(lstHeader_alert, lstRows, colSeq_alert);
+            TableData tableData = new TableData(LST_HEADER_ALERT, lstRows, COL_SEQ_ALERT);
             output.put(DATA_NAME_DATA, tableData);
             output.put(DATA_NAME_STATUS, true);
             output.put(DATA_NAME_MESSAGE, "OK");
