@@ -18,7 +18,7 @@ import java.util.Optional;
 
 public class User extends DBBase {
 
-    private static final List<String> lstHeader_user =
+    private static final List<String> LST_HEADER_USER =
             Arrays.asList(
                     "username",
                     "password",
@@ -29,7 +29,7 @@ public class User extends DBBase {
                     "phone",
                     "active");
 
-    private static final int[] colSeq_user = {0, 1, 2, 3, 4, 5, 6, 7};
+    private static final int[] COL_SEQ_USER = {0, 1, 2, 3, 4, 5, 6, 7};
 
     /**
      * Select a list of Users
@@ -41,18 +41,16 @@ public class User extends DBBase {
     public static Map<String, Object> selectUser(Map<String, String[]> parameters, int userType) {
         Map<String, Object> output = new HashMap<>();
         List<Object> lstRows = new ArrayList<>();
-        String in_username =
+        String inUsername =
                 Optional.ofNullable(parameters)
                         .map(stringMap -> getStringFromParamMap("username", stringMap))
                         .orElse("");
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt =
                         con.prepareStatement(
-                                in_username.length() != 0
-                                        ? SQL_USER_SELECT_ONE
-                                        : SQL_USER_SELECT)) {
-            if (in_username.length() != 0) {
-                preparedStmt.setString(1, in_username);
+                                inUsername.length() != 0 ? SQL_USER_SELECT_ONE : SQL_USER_SELECT)) {
+            if (inUsername.length() != 0) {
+                preparedStmt.setString(1, inUsername);
                 preparedStmt.setInt(2, userType);
             } else {
                 preparedStmt.setInt(1, userType);
@@ -80,7 +78,7 @@ public class User extends DBBase {
                     currentRow.add(active);
                 }
             }
-            TableData tableData = new TableData(lstHeader_user, lstRows, colSeq_user);
+            TableData tableData = new TableData(LST_HEADER_USER, lstRows, COL_SEQ_USER);
             output.put(IConstant.DATA_NAME_DATA, tableData);
             output.put(IConstant.DATA_NAME_STATUS, true);
             output.put(IConstant.DATA_NAME_MESSAGE, "OK");
