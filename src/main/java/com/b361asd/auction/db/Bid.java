@@ -305,11 +305,11 @@ public class Bid extends DBBase {
             BigDecimal price = (BigDecimal) newBid[2];
             BigDecimal autoRebidLimit = (BigDecimal) newBid[3];
             if (price.compareTo(new BigDecimal(0)) <= 0) {
-                throw new Exception("Invalid bid: price needs to be greater than 0: " + price);
+                throw new IllegalArgumentException("Invalid bid: price needs to be greater than 0: " + price);
             }
             if (autoRebidLimit.compareTo(new BigDecimal(0)) > 0
                     && autoRebidLimit.compareTo(price) < 0) {
-                throw new Exception(
+                throw new IllegalArgumentException(
                         MessageFormat.format(
                                 "Invalid bid: autoRebidLimit needs to be greater than price: {0} less than {1}",
                                 autoRebidLimit, price));
@@ -424,7 +424,7 @@ public class Bid extends DBBase {
                             // Out bid alert
                             String context =
                                     MessageFormat.format(
-                                            "Your bid for a {0} ({1}, {2}) by seller {3} is outbidded.",
+                                            "Your bid for a {0} ({1}, {2}) by seller {3} is outbid.",
                                             categoryName,
                                             Helper.getConditionFromCode(conditionCode),
                                             description,
