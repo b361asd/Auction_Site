@@ -44,7 +44,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 
     static {
         // MySQL escape sequences: https://dev.mysql.com/doc/refman/8.0/en/string-literals.html
-        String[][] search_regex_replacement =
+        String[][] searchRegexReplacement =
                 new String[][] {
                     // Search string       Search regex        SQL replacement regex
                     {"\u0000", "\\x00", "\\\\0"},
@@ -59,7 +59,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
                 };
         sqlTokens = new HashMap<>();
         StringBuilder patternStr = new StringBuilder();
-        for (String[] srr : search_regex_replacement) {
+        for (String[] srr : searchRegexReplacement) {
             sqlTokens.put(srr[0], srr[2]);
             patternStr.append((patternStr.length() == 0) ? "" : "|").append(srr[1]);
         }
@@ -73,13 +73,13 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
             Properties properties = new Properties();
             properties.load(inputStream);
 
-            String MySQL_JDBC_DRIVER = properties.getProperty("jdbc.driver");
-            String MySQL_URL = properties.getProperty("jdbc.url");
-            String MySQL_USERNAME = properties.getProperty("jdbc.username");
-            String MySQL_PASSWORD = properties.getProperty("jdbc.password");
+            String MYSQL_JDBC_DRIVER = properties.getProperty("jdbc.driver");
+            String MYSQL_URL = properties.getProperty("jdbc.url");
+            String MYSQL_USERNAME = properties.getProperty("jdbc.username");
+            String MYSQL_PASSWORD = properties.getProperty("jdbc.password");
 
-            Class.forName(MySQL_JDBC_DRIVER);
-            connection = DriverManager.getConnection(MySQL_URL, MySQL_USERNAME, MySQL_PASSWORD);
+            Class.forName(MYSQL_JDBC_DRIVER);
+            connection = DriverManager.getConnection(MYSQL_URL, MYSQL_USERNAME, MYSQL_PASSWORD);
         } catch (IOException e) {
             e.printStackTrace();
         }
