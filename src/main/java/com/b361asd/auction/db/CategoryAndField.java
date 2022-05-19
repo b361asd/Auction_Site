@@ -14,6 +14,10 @@ import java.util.Set;
 
 public class CategoryAndField extends DBBase {
 
+    public record Category(String categoryName, boolean isCurr) {}
+
+    public record Field(int fieldID, String fieldName, int fieldType) {}
+
     public static final String DATA_CATEGORY_LIST = "DATA_CATEGORY_LIST";
     public static final String DATA_FIELD_LIST = "DATA_FIELD_LIST";
 
@@ -98,47 +102,5 @@ public class CategoryAndField extends DBBase {
             e.printStackTrace();
         }
         return output;
-    }
-
-    public static class Category {
-        String categoryName;
-        boolean isCurr;
-
-        public Category(String categoryName, boolean isCurr) {
-            this.categoryName = categoryName;
-            this.isCurr = isCurr;
-        }
-
-        public String getCategoryName() {
-            return categoryName;
-        }
-
-        public boolean isCurr() {
-            return isCurr;
-        }
-    }
-
-    public static class Field {
-        int fieldID;
-        String fieldName;
-        int fieldType;
-
-        public Field(int fieldID, String fieldName, int fieldType) {
-            this.fieldID = fieldID;
-            this.fieldName = fieldName;
-            this.fieldType = fieldType;
-        }
-
-        public int getFieldID() {
-            return fieldID;
-        }
-
-        public String getFieldName() {
-            return fieldName;
-        }
-
-        public int getFieldType() {
-            return fieldType;
-        }
     }
 }

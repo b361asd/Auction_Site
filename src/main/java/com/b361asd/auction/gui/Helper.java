@@ -68,20 +68,20 @@ public class Helper implements IConstant {
         for (int i = 0; i < lstCategoryName.size(); i++) {
             CategoryAndField.Category one = (CategoryAndField.Category) (lstCategoryName.get(i));
             sb.append("<input onchange='onCategoryChange();' type='checkbox' id='")
-                    .append(one.getCategoryName())
+                    .append(one.categoryName())
                     .append("' name='")
                     .append(name)
                     .append(i + 1)
                     .append("' value='")
-                    .append(one.getCategoryName());
+                    .append(one.categoryName());
             if (one.isCurr()) {
                 sb.append("' checked><label for='");
             } else {
                 sb.append("'><label for='");
             }
-            sb.append(one.getCategoryName())
+            sb.append(one.categoryName())
                     .append("'>")
-                    .append(one.getCategoryName())
+                    .append(one.categoryName())
                     .append("</label>");
         }
         sb.append("</div>");

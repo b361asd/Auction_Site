@@ -62,9 +62,9 @@
         List lstField = (List) data.get(CategoryAndField.DATA_FIELD_LIST);
         StringBuilder lstFieldIDs = null;
         for (Object o : lstField) {
-            String fieldName = ((CategoryAndField.Field) o).getFieldName();
-            int fieldID = ((CategoryAndField.Field) o).getFieldID();
-            int fieldType = ((CategoryAndField.Field) o).getFieldType();
+            int fieldID = ((CategoryAndField.Field) o).fieldID();
+            String fieldName = ((CategoryAndField.Field) o).fieldName();
+            int fieldType = ((CategoryAndField.Field) o).fieldType();
             if (lstFieldIDs == null) {
                 lstFieldIDs = new StringBuilder("" + fieldID);
             } else {
