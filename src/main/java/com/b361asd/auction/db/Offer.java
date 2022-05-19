@@ -13,7 +13,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -288,8 +287,8 @@ public class Offer extends DBBase {
      */
     private static Map<String, Object> doSearchOfferInternal(String sql, boolean showAll) {
         Map<String, Object> output = new HashMap<>();
-        List<String> lstHeader = new LinkedList<>();
-        List<Object> lstRows = new LinkedList<>();
+        List<String> lstHeader = new ArrayList<>();
+        List<Object> lstRows = new ArrayList<>();
 
         // RowID-fieldID : fieldText
         Map<String, String> mapFields = new HashMap<>();
@@ -327,7 +326,7 @@ public class Offer extends DBBase {
                     }
                 } else {
                     // New Row
-                    List<Object> currentRow = new LinkedList<>();
+                    List<Object> currentRow = new ArrayList<>();
                     lstRows.add(currentRow);
                     rowIndex++;
                     currentOfferID = offerID.toString();

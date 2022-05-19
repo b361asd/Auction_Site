@@ -11,7 +11,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -75,7 +74,7 @@ public class Question extends DBBase {
                 Object repID = rs.getObject(5);
                 Object questionDate = rs.getObject(6);
                 Object answerDate = rs.getObject(7);
-                List<Object> currentRow = new LinkedList<>();
+                List<Object> currentRow = new ArrayList<>();
                 lstRows.add(currentRow);
                 currentRow.add(questionID);
                 currentRow.add(userID);
@@ -202,7 +201,7 @@ public class Question extends DBBase {
      */
     public static Map<String, Object> retrieveOpenQuestion() {
         Map<String, Object> output = new HashMap<>();
-        List<Object> lstRows = new LinkedList<>();
+        List<Object> lstRows = new ArrayList<>();
         Helper.setData(output, lstRows);
         try (Connection con = getConnection();
                 PreparedStatement preparedStmt = con.prepareStatement(SQL_QUESTION_QUERY_OPEN);
@@ -212,7 +211,7 @@ public class Question extends DBBase {
                 Object userID = rs.getObject(2);
                 Object question = rs.getObject(3);
                 Object questionDate = rs.getObject(4);
-                List<Object> currentRow = new LinkedList<>();
+                List<Object> currentRow = new ArrayList<>();
                 lstRows.add(currentRow);
                 currentRow.add(questionID);
                 currentRow.add(userID);

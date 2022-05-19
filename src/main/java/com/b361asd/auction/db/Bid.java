@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -154,7 +153,7 @@ public class Bid extends DBBase {
 
                 List<Object> lstRows =
                         tempMap.computeIfAbsent(offerID.toString(), k -> new ArrayList<>());
-                List<Object> currentRow = new LinkedList<>();
+                List<Object> currentRow = new ArrayList<>();
                 lstRows.add(currentRow);
                 currentRow.add(bidID);
                 currentRow.add(offerID);
@@ -205,7 +204,7 @@ public class Bid extends DBBase {
                 dataTableOffer =
                         new TableData(
                                 Offer.LST_HEADER_OFFER_DEFAULT,
-                                new LinkedList<>(),
+                                new ArrayList<>(),
                                 Offer.COL_SEQ_OFFER_DEFAULT);
             }
             if (listActivity) {

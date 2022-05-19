@@ -9,7 +9,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +39,7 @@ public class Alert extends DBBase {
                     Object bidID = rs.getObject(4);
                     Object content = rs.getObject(5);
                     Object alertDate = rs.getObject(6);
-                    List<Object> currentRow = new LinkedList<>();
+                    List<Object> currentRow = new ArrayList<>();
                     lstRows.add(currentRow);
                     currentRow.add(alertID);
                     currentRow.add(receiver);

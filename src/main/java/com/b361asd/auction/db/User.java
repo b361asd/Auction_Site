@@ -10,7 +10,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -66,7 +65,7 @@ public class User extends DBBase {
                     Object phone = rs.getObject(7);
                     Object active = rs.getObject(8);
 
-                    List<Object> currentRow = new LinkedList<>();
+                    List<Object> currentRow = new ArrayList<>();
                     lstRows.add(currentRow);
                     currentRow.add(username);
                     currentRow.add(password);

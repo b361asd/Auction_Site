@@ -10,7 +10,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -108,7 +107,7 @@ public class Trade extends DBBase {
                         Object total = rs.getObject(2);
                         Object average = rs.getObject(3);
                         Object count = rs.getObject(4);
-                        List<Object> currentRow = new LinkedList<>();
+                        List<Object> currentRow = new ArrayList<>();
                         lstRows.add(currentRow);
                         currentRow.add(person);
                         currentRow.add(total);
@@ -176,7 +175,7 @@ public class Trade extends DBBase {
                     Object total = rs.getObject(3);
                     Object average = rs.getObject(4);
                     Object count = rs.getObject(5);
-                    List<Object> currentRow = new LinkedList<>();
+                    List<Object> currentRow = new ArrayList<>();
                     lstRows.add(currentRow);
                     currentRow.add(
                             categoryName
@@ -244,7 +243,7 @@ public class Trade extends DBBase {
                     Object seller = rs.getObject(5);
                     Object buyer = rs.getObject(6);
                     Object tradeDate = rs.getObject(7);
-                    List<Object> currentRow = new LinkedList<>();
+                    List<Object> currentRow = new ArrayList<>();
                     lstRows.add(currentRow);
                     currentRow.add(price);
                     currentRow.add(categoryName);
@@ -320,7 +319,7 @@ public class Trade extends DBBase {
                     Object seller = rs.getObject(5);
                     Object buyer = rs.getObject(6);
                     Object tradeDate = rs.getObject(7);
-                    List<Object> currentRow = new LinkedList<>();
+                    List<Object> currentRow = new ArrayList<>();
                     lstRows.add(currentRow);
                     currentRow.add(price);
                     currentRow.add(categoryName);

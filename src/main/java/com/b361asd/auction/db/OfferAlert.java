@@ -9,7 +9,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -95,7 +94,7 @@ public class OfferAlert extends DBBase {
                     Object triggerTxt = rs.getObject(4);
                     Object description = rs.getObject(5);
                     Object generateDate = rs.getObject(6);
-                    List<Object> currentRow = new LinkedList<>();
+                    List<Object> currentRow = new ArrayList<>();
                     lstRows.add(currentRow);
                     currentRow.add(criterionID);
                     currentRow.add(buyer);
