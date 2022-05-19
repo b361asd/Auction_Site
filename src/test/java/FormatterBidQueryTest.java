@@ -1,7 +1,7 @@
 import com.b361asd.auction.db.FormatterBidQuery;
 import org.junit.jupiter.api.Test;
 
-public class FormatterBidQueryTest {
+class FormatterBidQueryTest {
 
     @Test
     void testBuildQueryUserActivity() {

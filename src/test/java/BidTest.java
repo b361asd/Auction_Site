@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
-public class BidTest {
+class BidTest {
 
     @Test
     void testMinForModifyBid() {

@@ -2,7 +2,7 @@ import com.b361asd.auction.db.DBBase;
 import com.b361asd.auction.db.FormatterQuestionQuery;
 import org.junit.jupiter.api.Test;
 
-public class FormatterQuestionQueryTest {
+class FormatterQuestionQueryTest {
 
     @Test
     void testFormatQuestionQuery() {

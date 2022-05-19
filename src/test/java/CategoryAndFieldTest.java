@@ -3,7 +3,7 @@ import com.b361asd.auction.servlet.IConstant;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
-public class CategoryAndFieldTest {
+class CategoryAndFieldTest {
 
     @Test
     void testGetCategoryField() {

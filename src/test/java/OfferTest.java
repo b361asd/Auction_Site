@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
-public class OfferTest {
+class OfferTest {
 
     @Test
     void testDoCreateOrModifyOffer() {

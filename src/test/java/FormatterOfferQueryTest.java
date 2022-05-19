@@ -2,7 +2,7 @@ import com.b361asd.auction.db.DBBase;
 import com.b361asd.auction.db.FormatterOfferQuery;
 import org.junit.jupiter.api.Test;
 
-public class FormatterOfferQueryTest {
+class FormatterOfferQueryTest {
 
     @Test
     void testBuildSQLUserActivityOffer() {
