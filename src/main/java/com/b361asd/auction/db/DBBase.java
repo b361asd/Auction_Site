@@ -352,19 +352,18 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 
     public static String getListOfStringsFromParamMap(
             String name, int startIndex, Map<String, String[]> parameters, String delimiter) {
+        Objects.requireNonNull(parameters);
         StringBuilder out = new StringBuilder();
-        if (parameters != null) {
-            String[] temps;
-            for (int i = startIndex; i < MAX_CATEGORY_COUNT; i++) {
-                temps = parameters.get(name + i);
-                if (temps != null) {
-                    String one = temps[0];
-                    if (one != null && one.length() > 0) {
-                        if (out.toString().equals("")) {
-                            out = new StringBuilder(delimiter + one + delimiter);
-                        } else {
-                            out.append(",").append(delimiter).append(one).append(delimiter);
-                        }
+        String[] temps;
+        for (int i = startIndex; i < MAX_CATEGORY_COUNT; i++) {
+            temps = parameters.get(name + i);
+            if (temps != null) {
+                String one = temps[0];
+                if (one != null && one.length() > 0) {
+                    if (out.toString().equals("")) {
+                        out = new StringBuilder(delimiter + one + delimiter);
+                    } else {
+                        out.append(",").append(delimiter).append(one).append(delimiter);
                     }
                 }
             }
