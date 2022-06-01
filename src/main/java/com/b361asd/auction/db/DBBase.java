@@ -301,8 +301,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
         Objects.requireNonNull(name);
         Objects.requireNonNull(parameters);
         String[] temps = parameters.get(name);
-        Objects.requireNonNull(temps);
-        if (temps.length > 0 && temps[0].length() > 0) {
+        if (temps != null && temps.length > 0 && temps[0].length() > 0) {
             return new BigDecimal(temps[0].trim());
         } else {
             return new BigDecimal(-1);
@@ -313,8 +312,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
         Objects.requireNonNull(name);
         Objects.requireNonNull(parameters);
         String[] temps = parameters.get(name);
-        Objects.requireNonNull(temps);
-        if (temps.length > 0) {
+        if (temps != null && temps.length > 0) {
             return temps[0].trim();
         }
         return "";
@@ -324,8 +322,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
         Objects.requireNonNull(name);
         Objects.requireNonNull(parameters);
         String[] temps = parameters.get(name);
-        Objects.requireNonNull(temps);
-        if (temps.length > 0 && temps[0].length() > 0) {
+        if (temps != null && temps.length > 0 && temps[0].length() > 0) {
             int iTemp = -1;
             try {
                 iTemp = Integer.parseInt(temps[0].trim());
@@ -342,8 +339,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
         Objects.requireNonNull(set);
         StringBuilder out = new StringBuilder();
         for (String one : set) {
-            Objects.requireNonNull(one);
-            if (one.length() > 0) {
+            if (one != null && one.length() > 0) {
                 if (out.toString().equals("")) {
                     out = new StringBuilder(delimiter + one + delimiter);
                 } else {
@@ -357,18 +353,19 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
     public static String getListOfStringsFromParamMap(
             String name, int startIndex, Map<String, String[]> parameters, String delimiter) {
         StringBuilder out = new StringBuilder();
-        Objects.requireNonNull(parameters);
-        String[] temps;
-        for (int i = startIndex; i < MAX_CATEGORY_COUNT; i++) {
-            temps = parameters.get(name + i);
-            Objects.requireNonNull(temps);
-            String one = temps[0];
-            Objects.requireNonNull(one);
-            if (one.length() > 0) {
-                if (out.toString().equals("")) {
-                    out = new StringBuilder(delimiter + one + delimiter);
-                } else {
-                    out.append(",").append(delimiter).append(one).append(delimiter);
+        if (parameters != null) {
+            String[] temps;
+            for (int i = startIndex; i < MAX_CATEGORY_COUNT; i++) {
+                temps = parameters.get(name + i);
+                if (temps != null) {
+                    String one = temps[0];
+                    if (one != null && one.length() > 0) {
+                        if (out.toString().equals("")) {
+                            out = new StringBuilder(delimiter + one + delimiter);
+                        } else {
+                            out.append(",").append(delimiter).append(one).append(delimiter);
+                        }
+                    }
                 }
             }
         }
