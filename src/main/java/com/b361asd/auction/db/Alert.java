@@ -11,8 +11,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Alert extends DBBase {
+
+    private static final Logger LOGGER = Logger.getLogger(Alert.class.getName());
 
     private static final List<String> LST_HEADER_ALERT =
             Arrays.asList("alertID", "receiver", "offerID", "bidID", "content", "alertDate");
@@ -60,7 +64,7 @@ public class Alert extends DBBase {
                     MessageFormat.format(
                             "ERROR: {0}, SQL_STATE: {1}, DETAILS: {2}",
                             e.getErrorCode(), e.getSQLState(), exceptionToString(e)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.toString(), e);
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
@@ -68,7 +72,7 @@ public class Alert extends DBBase {
                     MessageFormat.format(
                             "ERROR: ClassNotFoundException, SQL_STATE: {0}, DETAILS: {1}",
                             e.getMessage(), exceptionToString(e)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.toString(), e);
         }
         return output;
     }
@@ -103,7 +107,7 @@ public class Alert extends DBBase {
                             e.getSQLState(),
                             e.getMessage(),
                             dumpParamMap(parameters)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
@@ -111,7 +115,7 @@ public class Alert extends DBBase {
                     MessageFormat.format(
                             "ERROR: Code=ClassNotFoundException, Message={0}, {1}",
                             e.getMessage(), dumpParamMap(parameters)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 }
