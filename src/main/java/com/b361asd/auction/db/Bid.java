@@ -19,8 +19,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Bid extends DBBase {
+
+    private static final Logger LOGGER = Logger.getLogger(Bid.class.getName());
 
     private static final List<String> LST_HEADER_BID =
             Arrays.asList("bidID", "offerID", "buyer", "price", "autoRebidLimit", "bidDate");
@@ -234,14 +238,14 @@ public class Bid extends DBBase {
                     MessageFormat.format(
                             "ERROR={0}, SQL_STATE={1}, SQL={2}",
                             e.getErrorCode(), e.getSQLState(), sql));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (ClassNotFoundException e) {
             output.put(IConstant.DATA_NAME_STATUS, false);
             output.put(
                     IConstant.DATA_NAME_MESSAGE,
                     MessageFormat.format(
                             "ERROR=ClassNotFoundException, SQL_STATE={0}", e.getMessage()));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
@@ -496,7 +500,7 @@ public class Bid extends DBBase {
                             e.getSQLState(),
                             e.getMessage(),
                             dumpParamMap(parameters)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (ClassNotFoundException e) {
             output.put(IConstant.DATA_NAME_STATUS, false);
             output.put(
@@ -504,13 +508,13 @@ public class Bid extends DBBase {
                     MessageFormat.format(
                             "ERROR: Code=ClassNotFoundException, Message={0}, {1}",
                             e.getMessage(), dumpParamMap(parameters)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (Exception e) {
             output.put(IConstant.DATA_NAME_STATUS, false);
             output.put(
                     IConstant.DATA_NAME_MESSAGE,
                     MessageFormat.format("ERROR: Code=Exception, Message={0}", e.getMessage()));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
@@ -544,7 +548,7 @@ public class Bid extends DBBase {
                     MessageFormat.format(
                             "ERROR: {0}, SQL_STATE: {1}, DETAILS: {2}",
                             e.getErrorCode(), e.getSQLState(), exceptionToString(e)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (ClassNotFoundException e) {
             output.put(IConstant.DATA_NAME_STATUS, false);
             output.put(
@@ -552,7 +556,7 @@ public class Bid extends DBBase {
                     MessageFormat.format(
                             "ERROR: ClassNotFoundException, SQL_STATE: {0}, DETAILS: {1}",
                             e.getMessage(), exceptionToString(e)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
@@ -598,8 +602,8 @@ public class Bid extends DBBase {
                     output = price.add(increment);
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException | SQLException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
