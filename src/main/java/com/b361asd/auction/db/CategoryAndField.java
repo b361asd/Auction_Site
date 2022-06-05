@@ -11,12 +11,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CategoryAndField extends DBBase {
 
     public record Category(String categoryName, boolean isCurr) {}
 
     public record Field(int fieldID, String fieldName, int fieldType) {}
+
+    private static final Logger LOGGER = Logger.getLogger(CategoryAndField.class.getName());
 
     public static final String DATA_CATEGORY_LIST = "DATA_CATEGORY_LIST";
     public static final String DATA_FIELD_LIST = "DATA_FIELD_LIST";
@@ -70,14 +74,14 @@ public class CategoryAndField extends DBBase {
                     DATA_NAME_MESSAGE,
                     MessageFormat.format(
                             "ERROR: {0}, SQL_STATE: {1}", e.getErrorCode(), e.getSQLState()));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
                     MessageFormat.format(
                             "ERROR: ClassNotFoundException, SQL_STATE: {0}", e.getMessage()));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
@@ -99,7 +103,7 @@ public class CategoryAndField extends DBBase {
                 output.put(fieldID.toString(), fieldName.toString());
             }
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
