@@ -17,8 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Offer extends DBBase {
+
+    private static final Logger LOGGER = Logger.getLogger(Offer.class.getName());
 
     private static final int FIELD_START_INDEX = 12;
 
@@ -437,14 +441,14 @@ public class Offer extends DBBase {
                     MessageFormat.format(
                             "ERROR={0}, SQL_STATE={1}, SQL={2}",
                             e.getErrorCode(), e.getSQLState(), sql));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
                     MessageFormat.format(
                             "ERROR=ClassNotFoundException, SQL_STATE={0}", e.getMessage()));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
@@ -562,7 +566,7 @@ public class Offer extends DBBase {
                             e.getSQLState(),
                             e.getMessage(),
                             dumpParamMap(parameters)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
@@ -570,11 +574,11 @@ public class Offer extends DBBase {
                     MessageFormat.format(
                             "ERROR: Code=ClassNotFoundException, Message={0}, {1}",
                             e.getMessage(), dumpParamMap(parameters)));
-            e.printStackTrace();
-        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getMessage());
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         if ((boolean) output.get(DATA_NAME_STATUS)) {
             if (isCreate) {
@@ -630,7 +634,7 @@ public class Offer extends DBBase {
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -665,7 +669,7 @@ public class Offer extends DBBase {
                             e.getSQLState(),
                             e.getMessage(),
                             dumpParamMap(parameters)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
@@ -673,7 +677,7 @@ public class Offer extends DBBase {
                     MessageFormat.format(
                             "ERROR: Code=ClassNotFoundException, Message={0}, {1}",
                             e.getMessage(), dumpParamMap(parameters)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
