@@ -11,8 +11,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class OfferAlert extends DBBase {
+
+    private static final Logger LOGGER = Logger.getLogger(OfferAlert.class.getName());
     private static final List<String> LST_HEADER_OFFER_ALERT =
             Arrays.asList(
                     "criterionID",
@@ -56,14 +60,14 @@ public class OfferAlert extends DBBase {
                     DATA_NAME_MESSAGE,
                     MessageFormat.format(
                             "ERROR={0}, SQL_STATE={1}", e.getErrorCode(), e.getSQLState()));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
                     DATA_NAME_MESSAGE,
                     MessageFormat.format(
                             "ERROR=ClassNotFoundException, SQL_STATE={0}", e.getMessage()));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -114,7 +118,7 @@ public class OfferAlert extends DBBase {
                     MessageFormat.format(
                             "ERROR: {0}, SQL_STATE: {1}, DETAILS: {2}",
                             e.getErrorCode(), e.getSQLState(), exceptionToString(e)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
@@ -122,7 +126,7 @@ public class OfferAlert extends DBBase {
                     MessageFormat.format(
                             "ERROR: ClassNotFoundException, SQL_STATE: {0}, DETAILS: {1}",
                             e.getMessage(), exceptionToString(e)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
@@ -158,7 +162,7 @@ public class OfferAlert extends DBBase {
                             e.getSQLState(),
                             e.getMessage(),
                             dumpParamMap(parameters)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (ClassNotFoundException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(
@@ -166,7 +170,7 @@ public class OfferAlert extends DBBase {
                     MessageFormat.format(
                             "ERROR: Code=ClassNotFoundException, Message={0}, {1}",
                             e.getMessage(), dumpParamMap(parameters)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 }
