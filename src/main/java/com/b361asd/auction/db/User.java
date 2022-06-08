@@ -14,8 +14,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class User extends DBBase {
+
+    private static final Logger LOGGER = Logger.getLogger(User.class.getName());
 
     private static final List<String> LST_HEADER_USER =
             Arrays.asList(
@@ -88,7 +92,7 @@ public class User extends DBBase {
                     MessageFormat.format(
                             "ERROR: {0}, SQL_STATE: {1}, DETAILS: {2}",
                             e.getErrorCode(), e.getSQLState(), exceptionToString(e)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (ClassNotFoundException e) {
             output.put(IConstant.DATA_NAME_STATUS, false);
             output.put(
@@ -96,7 +100,7 @@ public class User extends DBBase {
                     MessageFormat.format(
                             "ERROR: ClassNotFoundException, SQL_STATE: {0}, DETAILS: {1}",
                             e.getMessage(), exceptionToString(e)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
@@ -116,7 +120,7 @@ public class User extends DBBase {
                 lst.add(username);
             }
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return lst;
     }
@@ -156,7 +160,7 @@ public class User extends DBBase {
                             e.getSQLState(),
                             e.getMessage(),
                             dumpParamMap(parameters)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (ClassNotFoundException e) {
             output.put(IConstant.DATA_NAME_STATUS, false);
             output.put(
@@ -164,7 +168,7 @@ public class User extends DBBase {
                     MessageFormat.format(
                             "ERROR: Code=ClassNotFoundException, Message={0}, {1}",
                             e.getMessage(), dumpParamMap(parameters)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -221,7 +225,7 @@ public class User extends DBBase {
                             e.getSQLState(),
                             e.getMessage(),
                             dumpParamMap(parameters)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (ClassNotFoundException e) {
             output.put(IConstant.DATA_NAME_STATUS, false);
             output.put(
@@ -229,7 +233,7 @@ public class User extends DBBase {
                     MessageFormat.format(
                             "ERROR: Code=ClassNotFoundException, Message={0}, {1}",
                             e.getMessage(), dumpParamMap(parameters)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
@@ -324,7 +328,7 @@ public class User extends DBBase {
                         MessageFormat.format(
                                 "ERROR: {0}, SQL_STATE: {1}, DETAILS: {2}",
                                 e.getErrorCode(), e.getSQLState(), exceptionToString(e)));
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
             } catch (ClassNotFoundException e) {
                 output.put(IConstant.DATA_NAME_STATUS, false);
                 output.put(
@@ -332,7 +336,7 @@ public class User extends DBBase {
                         MessageFormat.format(
                                 "ERROR: ClassNotFoundException, SQL_STATE: {0}, DETAILS: {1}",
                                 e.getMessage(), exceptionToString(e)));
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
         }
         return output;
@@ -390,7 +394,7 @@ public class User extends DBBase {
                     MessageFormat.format(
                             "ERROR: {0}, SQL_STATE: {1}, DETAILS: {2}",
                             e.getErrorCode(), e.getSQLState(), exceptionToString(e)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (ClassNotFoundException e) {
             output.put(IConstant.DATA_NAME_STATUS, false);
             output.put(
@@ -398,7 +402,7 @@ public class User extends DBBase {
                     MessageFormat.format(
                             "ERROR: ClassNotFoundException, SQL_STATE: {0}, DETAILS: {1}",
                             e.getMessage(), exceptionToString(e)));
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
