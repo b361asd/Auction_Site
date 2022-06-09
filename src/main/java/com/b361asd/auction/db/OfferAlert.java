@@ -61,13 +61,6 @@ public class OfferAlert extends DBBase {
                     MessageFormat.format(
                             "ERROR={0}, SQL_STATE={1}", e.getErrorCode(), e.getSQLState()));
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-            output.put(DATA_NAME_STATUS, false);
-            output.put(
-                    DATA_NAME_MESSAGE,
-                    MessageFormat.format(
-                            "ERROR=ClassNotFoundException, SQL_STATE={0}", e.getMessage()));
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -119,14 +112,6 @@ public class OfferAlert extends DBBase {
                             "ERROR: {0}, SQL_STATE: {1}, DETAILS: {2}",
                             e.getErrorCode(), e.getSQLState(), exceptionToString(e)));
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-            output.put(DATA_NAME_STATUS, false);
-            output.put(
-                    DATA_NAME_MESSAGE,
-                    MessageFormat.format(
-                            "ERROR: ClassNotFoundException, SQL_STATE: {0}, DETAILS: {1}",
-                            e.getMessage(), exceptionToString(e)));
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
@@ -162,14 +147,6 @@ public class OfferAlert extends DBBase {
                             e.getSQLState(),
                             e.getMessage(),
                             dumpParamMap(parameters)));
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-            output.put(DATA_NAME_STATUS, false);
-            output.put(
-                    DATA_NAME_MESSAGE,
-                    MessageFormat.format(
-                            "ERROR: Code=ClassNotFoundException, Message={0}, {1}",
-                            e.getMessage(), dumpParamMap(parameters)));
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }

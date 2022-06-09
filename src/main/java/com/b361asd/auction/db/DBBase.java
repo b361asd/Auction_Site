@@ -66,7 +66,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
         sqlTokenPattern = Pattern.compile('(' + patternStr.toString() + ')');
     }
 
-    public static Connection getConnection() throws ClassNotFoundException, SQLException {
+    public static Connection getConnection() throws SQLException {
         Connection connection = null;
         try (InputStream inputStream =
                 DBBase.class.getClassLoader().getResourceAsStream("mysql.properties")) {
@@ -80,7 +80,7 @@ public class DBBase extends Utils implements ISQLConstant, IConstant {
 
             Class.forName(MYSQL_JDBC_DRIVER);
             connection = DriverManager.getConnection(MYSQL_URL, MYSQL_USERNAME, MYSQL_PASSWORD);
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return connection;

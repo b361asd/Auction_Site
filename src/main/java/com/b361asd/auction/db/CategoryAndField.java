@@ -75,13 +75,6 @@ public class CategoryAndField extends DBBase {
                     MessageFormat.format(
                             "ERROR: {0}, SQL_STATE: {1}", e.getErrorCode(), e.getSQLState()));
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-            output.put(DATA_NAME_STATUS, false);
-            output.put(
-                    DATA_NAME_MESSAGE,
-                    MessageFormat.format(
-                            "ERROR: ClassNotFoundException, SQL_STATE: {0}", e.getMessage()));
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
@@ -102,7 +95,7 @@ public class CategoryAndField extends DBBase {
                 rs.getObject(3);
                 output.put(fieldID.toString(), fieldName.toString());
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;

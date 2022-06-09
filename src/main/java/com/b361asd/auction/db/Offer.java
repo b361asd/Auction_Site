@@ -442,13 +442,6 @@ public class Offer extends DBBase {
                             "ERROR={0}, SQL_STATE={1}, SQL={2}",
                             e.getErrorCode(), e.getSQLState(), sql));
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-            output.put(DATA_NAME_STATUS, false);
-            output.put(
-                    DATA_NAME_MESSAGE,
-                    MessageFormat.format(
-                            "ERROR=ClassNotFoundException, SQL_STATE={0}", e.getMessage()));
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
@@ -567,14 +560,6 @@ public class Offer extends DBBase {
                             e.getMessage(),
                             dumpParamMap(parameters)));
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-            output.put(DATA_NAME_STATUS, false);
-            output.put(
-                    DATA_NAME_MESSAGE,
-                    MessageFormat.format(
-                            "ERROR: Code=ClassNotFoundException, Message={0}, {1}",
-                            e.getMessage(), dumpParamMap(parameters)));
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (IllegalArgumentException e) {
             output.put(DATA_NAME_STATUS, false);
             output.put(DATA_NAME_MESSAGE, "ERROR: ErrorCode=" + e.getMessage());
@@ -633,7 +618,7 @@ public class Offer extends DBBase {
                     pStmtInsertAlert.execute();
                 }
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
@@ -669,14 +654,6 @@ public class Offer extends DBBase {
                             e.getSQLState(),
                             e.getMessage(),
                             dumpParamMap(parameters)));
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-            output.put(DATA_NAME_STATUS, false);
-            output.put(
-                    DATA_NAME_MESSAGE,
-                    MessageFormat.format(
-                            "ERROR: Code=ClassNotFoundException, Message={0}, {1}",
-                            e.getMessage(), dumpParamMap(parameters)));
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;

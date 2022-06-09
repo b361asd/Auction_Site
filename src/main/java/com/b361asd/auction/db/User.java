@@ -93,14 +93,6 @@ public class User extends DBBase {
                             "ERROR: {0}, SQL_STATE: {1}, DETAILS: {2}",
                             e.getErrorCode(), e.getSQLState(), exceptionToString(e)));
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-            output.put(IConstant.DATA_NAME_STATUS, false);
-            output.put(
-                    IConstant.DATA_NAME_MESSAGE,
-                    MessageFormat.format(
-                            "ERROR: ClassNotFoundException, SQL_STATE: {0}, DETAILS: {1}",
-                            e.getMessage(), exceptionToString(e)));
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
@@ -119,7 +111,7 @@ public class User extends DBBase {
                 Object username = rs.getObject(1);
                 lst.add(username);
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return lst;
@@ -160,14 +152,6 @@ public class User extends DBBase {
                             e.getSQLState(),
                             e.getMessage(),
                             dumpParamMap(parameters)));
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-            output.put(IConstant.DATA_NAME_STATUS, false);
-            output.put(
-                    IConstant.DATA_NAME_MESSAGE,
-                    MessageFormat.format(
-                            "ERROR: Code=ClassNotFoundException, Message={0}, {1}",
-                            e.getMessage(), dumpParamMap(parameters)));
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
@@ -225,14 +209,6 @@ public class User extends DBBase {
                             e.getSQLState(),
                             e.getMessage(),
                             dumpParamMap(parameters)));
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-            output.put(IConstant.DATA_NAME_STATUS, false);
-            output.put(
-                    IConstant.DATA_NAME_MESSAGE,
-                    MessageFormat.format(
-                            "ERROR: Code=ClassNotFoundException, Message={0}, {1}",
-                            e.getMessage(), dumpParamMap(parameters)));
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
@@ -329,14 +305,6 @@ public class User extends DBBase {
                                 "ERROR: {0}, SQL_STATE: {1}, DETAILS: {2}",
                                 e.getErrorCode(), e.getSQLState(), exceptionToString(e)));
                 LOGGER.log(Level.SEVERE, e.getMessage(), e);
-            } catch (ClassNotFoundException e) {
-                output.put(IConstant.DATA_NAME_STATUS, false);
-                output.put(
-                        IConstant.DATA_NAME_MESSAGE,
-                        MessageFormat.format(
-                                "ERROR: ClassNotFoundException, SQL_STATE: {0}, DETAILS: {1}",
-                                e.getMessage(), exceptionToString(e)));
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
         }
         return output;
@@ -394,14 +362,6 @@ public class User extends DBBase {
                     MessageFormat.format(
                             "ERROR: {0}, SQL_STATE: {1}, DETAILS: {2}",
                             e.getErrorCode(), e.getSQLState(), exceptionToString(e)));
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-            output.put(IConstant.DATA_NAME_STATUS, false);
-            output.put(
-                    IConstant.DATA_NAME_MESSAGE,
-                    MessageFormat.format(
-                            "ERROR: ClassNotFoundException, SQL_STATE: {0}, DETAILS: {1}",
-                            e.getMessage(), exceptionToString(e)));
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;

@@ -239,13 +239,6 @@ public class Bid extends DBBase {
                             "ERROR={0}, SQL_STATE={1}, SQL={2}",
                             e.getErrorCode(), e.getSQLState(), sql));
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-            output.put(IConstant.DATA_NAME_STATUS, false);
-            output.put(
-                    IConstant.DATA_NAME_MESSAGE,
-                    MessageFormat.format(
-                            "ERROR=ClassNotFoundException, SQL_STATE={0}", e.getMessage()));
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
     }
@@ -501,14 +494,6 @@ public class Bid extends DBBase {
                             e.getMessage(),
                             dumpParamMap(parameters)));
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-            output.put(IConstant.DATA_NAME_STATUS, false);
-            output.put(
-                    IConstant.DATA_NAME_MESSAGE,
-                    MessageFormat.format(
-                            "ERROR: Code=ClassNotFoundException, Message={0}, {1}",
-                            e.getMessage(), dumpParamMap(parameters)));
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } catch (Exception e) {
             output.put(IConstant.DATA_NAME_STATUS, false);
             output.put(
@@ -548,14 +533,6 @@ public class Bid extends DBBase {
                     MessageFormat.format(
                             "ERROR: {0}, SQL_STATE: {1}, DETAILS: {2}",
                             e.getErrorCode(), e.getSQLState(), exceptionToString(e)));
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-            output.put(IConstant.DATA_NAME_STATUS, false);
-            output.put(
-                    IConstant.DATA_NAME_MESSAGE,
-                    MessageFormat.format(
-                            "ERROR: ClassNotFoundException, SQL_STATE: {0}, DETAILS: {1}",
-                            e.getMessage(), exceptionToString(e)));
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
@@ -602,7 +579,7 @@ public class Bid extends DBBase {
                     output = price.add(increment);
                 }
             }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
