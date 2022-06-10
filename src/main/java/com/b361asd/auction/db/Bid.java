@@ -494,11 +494,12 @@ public class Bid extends DBBase {
                             e.getMessage(),
                             dumpParamMap(parameters)));
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             output.put(IConstant.DATA_NAME_STATUS, false);
             output.put(
                     IConstant.DATA_NAME_MESSAGE,
-                    MessageFormat.format("ERROR: Code=Exception, Message={0}", e.getMessage()));
+                    MessageFormat.format(
+                            "ERROR: Code=IllegalArgumentException, Message={0}", e.getMessage()));
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return output;
