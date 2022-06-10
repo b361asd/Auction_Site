@@ -199,8 +199,7 @@ public class Offer extends DBBase {
         String sellerVal = getStringFromParamMap("sellerVal", parameters);
         addCondition(sb, "o.seller", sellerOP, sellerVal, null);
         String categoryNames = getListOfStringsFromParamMap("categoryName", 1, parameters, "'");
-        String categoryNameOP = OP_SZ_EQUAL_MULTI_NO_ESCAPE;
-        addCondition(sb, "o.categoryName", categoryNameOP, categoryNames, null);
+        addCondition(sb, "o.categoryName", OP_SZ_EQUAL_MULTI_NO_ESCAPE, categoryNames, null);
         StringBuilder lstConditionCode = new StringBuilder();
         for (int i = 1; i <= 6; i++) {
             String temp = getStringFromParamMap("conditionCode_" + i, parameters);
@@ -216,12 +215,11 @@ public class Offer extends DBBase {
         String descriptionOP = getStringFromParamMap("descriptionOP", parameters);
         String descriptionVal = getStringFromParamMap("descriptionVal", parameters);
         addCondition(sb, "o.description", descriptionOP, descriptionVal, null);
-        String statusOP = OP_INT_EQUAL;
 
         // Active
         String statusVal = "1";
 
-        addCondition(sb, "o.status", statusOP, statusVal, null);
+        addCondition(sb, "o.status", OP_INT_EQUAL, statusVal, null);
         FormatterOfferQuery.initFieldCondition(sb);
         String lstFieldIDs = getStringFromParamMap("lstFieldIDs", parameters);
         String[] fieldIDs = lstFieldIDs.split(",");
@@ -251,9 +249,8 @@ public class Offer extends DBBase {
         String sellerOP = getStringFromParamMap("sellerOP", parameters);
         String sellerVal = getStringFromParamMap("sellerVal", parameters);
         oneConditionDesc(sb, "seller", sellerOP, sellerVal, null);
-        String categoryNameOP = OP_SZ_EQUAL_MULTI_NO_ESCAPE;
         String categoryNames = getListOfStringsFromParamMap("categoryName", 1, parameters, "");
-        oneConditionDesc(sb, "categoryName", categoryNameOP, categoryNames, null);
+        oneConditionDesc(sb, "categoryName", OP_SZ_EQUAL_MULTI_NO_ESCAPE, categoryNames, null);
         StringBuilder lstCondition = new StringBuilder();
         for (int i = 1; i <= 6; i++) {
             String temp = getStringFromParamMap("conditionCode_" + i, parameters);
