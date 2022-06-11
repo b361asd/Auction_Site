@@ -1,6 +1,6 @@
 <%@ page import="com.b361asd.auction.db.CategoryAndField"%>
 <%@ page import="com.b361asd.auction.gui.Helper"%>
-<%@ page import="com.b361asd.auction.gui.HelperDatetime"%>
+<%@ page import="com.b361asd.auction.gui.HelperDateTime"%>
 <%@ page import="com.b361asd.auction.gui.TableData"%>
 <%@ page import="com.b361asd.auction.gui.UserType"%>
 <%@ page import="java.text.MessageFormat"%>
@@ -116,7 +116,7 @@ if (userType.equalsIgnoreCase(UserType.USER.getSessionUserType())) {
     out.println(
             MessageFormat.format(
                     "<input type=''datetime-local'' name=''endDate'' value=''{0}'' />",
-                    HelperDatetime.getDatetimeSZ(7)));
+                    HelperDateTime.getDatetimeSZ(7)));
     out.println("</td>");
     out.println("</tr>");
 } else {
