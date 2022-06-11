@@ -8,7 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -341,10 +340,6 @@ public class Offer extends DBBase {
                     currentRow.add(minPrice);
                     currentRow.add(startDate);
                     currentRow.add(endDate);
-
-                    Timestamp tmsTimestamp = (Timestamp) endDate;
-                    System.out.println(tmsTimestamp);
-
                     currentRow.add(Helper.getStatusFromCode(status.toString()));
                     currentRow.add(price);
                     if (fieldID != null) {
